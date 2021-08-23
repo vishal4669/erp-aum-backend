@@ -42,6 +42,13 @@ Route::group(['middleware'=>['jwt.verify'], 'prefix'=>'v1'], function () {
     Route::post('editEmployee/{id}', 'App\Http\Controllers\v1\EmployeeController@update');
     Route::post('deleteEmployee/{id}', 'App\Http\Controllers\v1\EmployeeController@destroy');
 
+    // Customer Masters
+    Route::get('listCustomer', 'App\Http\Controllers\v1\CustomerController@index');
+    Route::post('addCustomer', 'App\Http\Controllers\v1\CustomerController@store');
+    Route::get('getCustomer/{id}', 'App\Http\Controllers\v1\CustomerController@show');
+    Route::post('editCustomer/{id}', 'App\Http\Controllers\v1\CustomerController@update');
+    Route::post('deleteCustomer/{id}', 'App\Http\Controllers\v1\CustomerController@destroy');
+
     // Company Masters
     Route::get('listCompany', 'App\Http\Controllers\v1\CompanyController@index');
     Route::post('addCompany', 'App\Http\Controllers\v1\CompanyController@store');
