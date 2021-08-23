@@ -6,12 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 
-class Company extends Model
+class Country extends Model
 {
 
-    use SoftDeletes;
+    protected $timestamp = false;
 
-    protected $table = 'mst_companies';
+    protected $table = 'mst_countries';
 
     /**
      * The attributes that are mass assignable.
@@ -19,14 +19,8 @@ class Company extends Model
      * @var array
      */
     protected $fillable = [
-        'company_name',      
-        'selected_year',
-        'copied_from_year',
+        'country_name', 
         'is_active',
-        'created_by',
-        'updated_by',
-        'created_at',
-        'updated_at',
     ];
 
 

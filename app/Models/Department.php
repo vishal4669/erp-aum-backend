@@ -7,12 +7,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 
 
-class Group extends Model
+class Department extends Model
 {
 
     use SoftDeletes;
 
-    protected $table = 'mst_groups';
+    protected $table = 'mst_departments';
 
     /**
      * The attributes that are mass assignable.
@@ -21,9 +21,8 @@ class Group extends Model
      */
     protected $fillable = [
         'mst_companies_id',
-        'group_name',
-        'group_code',
-        'parent_group',        
+        'mst_branches_id',
+        'department_name',       
         'selected_year',
         'copied_from_year',
         'is_active',

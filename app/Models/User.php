@@ -18,6 +18,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
+        'mst_companies_id',
         'first_name',
         'middle_name',
         'last_name',
@@ -47,10 +48,9 @@ class User extends Authenticatable implements JWTSubject
         'postal_address',
         'emergency_contact_name',
         'emergency_contact_number',
-        'current_year',
+        'selected_year',
         'copied_from_year',
         'is_active',
-        'is_deleted',
         'created_by',
         'updated_by',
         'created_at',

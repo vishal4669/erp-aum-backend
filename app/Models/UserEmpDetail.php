@@ -3,16 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+//use Illuminate\Database\Eloquent\SoftDeletes;
 
-
-
-class Group extends Model
+class UserEmpDetail extends Model
 {
+    //use SoftDeletes;
 
-    use SoftDeletes;
+    protected $table = 'user_emp_details';
 
-    protected $table = 'mst_groups';
 
     /**
      * The attributes that are mass assignable.
@@ -20,12 +18,12 @@ class Group extends Model
      * @var array
      */
     protected $fillable = [
-        'mst_companies_id',
-        'group_name',
-        'group_code',
-        'parent_group',        
-        'selected_year',
-        'copied_from_year',
+        'users_id',
+        'organisation',
+        'designation',
+        'emp_from_year',
+        'emp_to_year',        
+        'annual_ctc',
         'is_active',
         'created_by',
         'updated_by',
