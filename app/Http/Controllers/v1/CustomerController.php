@@ -11,6 +11,8 @@ use Auth;
 use Log;
 use Illuminate\Support\Facades\Validator;
 use DB;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Hash;
 
 class CustomerController extends Controller
 {
@@ -45,14 +47,27 @@ class CustomerController extends Controller
         DB::beginTransaction();
         try{
 
-            $validator = Validator::make($request->all(), [
-                'first_name' => 'required|string|max:255',
-                'middle_name' => 'required|string|max:255',
-                'last_name' => 'required|string|max:255',
-                'username' => 'required|string|max:255',
-                'password' => 'required|string|min:6',
-                'blood_group' => 'string|max:50'
-            ]);
+            $rules = [
+                'company_name' => 'required|string|max:255',
+                'gst_number' => 'nullable|regex:/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/',
+                'user_name' => 'required|string|max:255',
+                'password' => 'required|min:6|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/',
+                'logo' => 'image|mimes:jpeg,png,jpg,svg|max:2048',
+            ];
+
+            $messages = [
+                'company_name.required' => 'Company name field is required.',
+                'company_name.max' => 'Company name should not me greater than 255 characters.',
+                'gst_number.regex' => 'it is invalid GST (Goods and Services Tax) number',
+                'user_name.required' => 'User name field is required.',
+                'user_name.max' => 'User name should not me greater than 255 characters.',
+                'password.required' => 'password field is required.',
+                'password.regex' => 'Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character:',
+                'logo.mimes' => 'image type must be jpeg,png,jpg,svg',
+                'logo.max' => 'image size must be less than 2048 kb',
+                
+            ];
+            $validator = Validator::make( $request->all(), $rules, $messages );
 
             if($validator->fails()){
                 $data = array();
@@ -60,10 +75,13 @@ class CustomerController extends Controller
             }
 
             $loggedInUserData = Helper::getUserData();
-            
+            $files = $request->file('logo');
+            $imageName = date('YmdHis') . "." . $files->getClientOriginalExtension();
+            $files->move(public_path('images\customers\logo'), $imageName);
+
             $data = Customer::create([
-                    // 'mst_companies_id' => $loggedInUserData['company_id'],
-                    'company_name' => $request->get('first_name'),
+                    'mst_companies_id' => $loggedInUserData['company_id'],
+                    'company_name' => $request->get('company_name'),
                     'gst_number' => $request->get('gst_number'),
                     'contact_person_name' => $request->get('contact_person_name'),
                     'tally_alias_name' => $request->get('tally_alias_name'),
@@ -74,7 +92,7 @@ class CustomerController extends Controller
                     'priority' => $request->get('priority'),
                     'notes' => $request->get('notes'),
                     'notes' => $request->get('notes'),
-                    'logo' => $request->get('logo'),
+                    'logo' => $imageName,
                     'home_street_1' => $request->get('home_street_1'),
                     'home_street_2' => $request->get('home_street_2'),
                     'home_area' => $request->get('home_area'),
@@ -108,6 +126,7 @@ class CustomerController extends Controller
                     'company_cust_discount' => $request->get('company_cust_discount'),
                     'selected_year' => $loggedInUserData['selected_year'],
                     'is_active' => 1,
+                    'created_by'=>1,//edited
                     'updated_by' => $loggedInUserData['logged_in_user_id']
                 ]);
 

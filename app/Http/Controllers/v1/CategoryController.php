@@ -129,7 +129,7 @@ class CategoryController extends Controller
 
             $input = $request->all();
             $input_data['category_name'] = $input['category_name'];  
-            $input_data['parent_category_id'] = $input['parent_category_id'];  
+            $input_data['parent_category_id'] = (isset($input['parent_category_id']) && $input['parent_category_id']!='' && $input['parent_category_id']!=null) ? $input['parent_category_id'] : 0;  
             $input_data['selected_year'] = $loggedInUserData['selected_year'];  
             $input_data['mst_companies_id'] = $loggedInUserData['company_id'];
             $input_data['is_active'] = 1;  
@@ -198,7 +198,7 @@ class CategoryController extends Controller
 
             $input = $request->all();
             $input_data['category_name'] = $input['category_name'];  
-            $input_data['parent_category_id'] = $input['parent_category_id']; 
+            $input_data['parent_category_id'] = (isset($input['parent_category_id']) && $input['parent_category_id']!='' && $input['parent_category_id']!=null) ? $input['parent_category_id'] : 0;  
             $input_data['updated_by'] = $loggedInUserData['logged_in_user_id']; 
 
             Log::info("Category updated with details : ".json_encode(array('data' => $input_data, 'id' => $id)));
