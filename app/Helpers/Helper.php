@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Models\TrainerCafeBooking;
 use Illuminate\Http\Response;
 use JWTAuth;
 

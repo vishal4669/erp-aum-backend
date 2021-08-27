@@ -40,8 +40,8 @@ class EmployeeController extends Controller
             if($is_dropdown){
                 $data = Employee::with(['address','right', 'company','education','employment','document'])
                             ->where('users.is_resigned',0)
-                            ->where('users.is_active',1)
-                            ->where('users.mst_companies_id', $loggedInUserData['company_id']);
+                            ->where('users.is_active',1);
+                           // ->where('users.mst_companies_id', $loggedInUserData['company_id']);
                 if($is_reporting_authority){
                     $data  = $data->where('users.is_reporting_authority', 1);
                 }            
@@ -51,8 +51,8 @@ class EmployeeController extends Controller
             } else {
                 $data = Employee::with(['address','right', 'company','education','employment','document'])
                             ->where('users.is_active',1)                            
-                            ->where('users.selected_year', $loggedInUserData['selected_year'])
-                            ->where('users.mst_companies_id', $loggedInUserData['company_id']);
+                            ->where('users.selected_year', $loggedInUserData['selected_year']);
+                          //  ->where('users.mst_companies_id', $loggedInUserData['company_id']);
                 if($is_reporting_authority){
                     $data  = $data->where('users.is_reporting_authority', 1);
                 }            
