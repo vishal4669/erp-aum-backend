@@ -26,8 +26,32 @@ class CustomerController extends Controller
      */
     public function index(Request $request)
     {
-        //
-        
+        // try{
+        //     $loggedInUserData = Helper::getUserData();
+        //     $is_dropdown = (isset($request->is_dropdown) && $request->is_dropdown==1) ? 1 : 0;
+        //     $is_reporting_authority = (isset($request->is_reporting_authority) && $request->is_reporting_authority==1) ? 1 : 0;
+        //     if(!$is_dropdown){
+        //         $data = Customer::leftJoin('mst_customers_contact_info as c_info', 'c_info.mst_customer_id', '=', 'mst_customers.id')
+        //                 ->where('c_info.contact_info_type', '1')
+        //                 ->select('company_name','contact_person_name','contact_type','tally_alias_name', 'c_info.contact_no', 'is_active')                        
+        //                 ->where('mst_customers.selected_year', $loggedInUserData['selected_year'])
+        //                 ->orderBy('mst_customers.id', 'desc')
+        //                 ->paginate(10);
+        //     } else {
+        //         $data = Customer::wiht('id','company_name')
+        //                 ->where('c_info.contact_info_type', '1')
+        //                 ->select('company_name','contact_person_name','contact_type','tally_alias_name', 'c_info.contact_no', 'is_active')
+        //                 ->where('mst_customers.selected_year', $loggedInUserData['selected_year'])
+        //                 ->orderBy('mst_customers.id', 'desc')
+        //                 ->get();
+        //     }           
+
+    
+        //     return Helper::response("Customer List Shown Successfully", Response::HTTP_OK, true, $data);
+        // } catch (Exception $e) {
+        //     $data = array();
+        //     return Helper::response(trans("message.something_went_wrong"),$e->getStatusCode(),false,$data);
+        // }      
     }
 
     /**
@@ -58,9 +82,10 @@ class CustomerController extends Controller
                 'user_name' => 'required|string|max:255',
                 'password' => 'required|min:6|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/',
                 'logo' => 'nullable|image|mimes:jpeg,png,jpg,svg|max:2048',
-                'company_tin_no' => ['nullable','regex:/^(9\d{2})([ \-]?)([7]\d|8[0-8])([ \-]?)(\d{4})$/'],
-                'customer_contact_info.other_contact_info.email' => 'email',
-                'customer_contact_info.other_contact_info.other_qc_email' => 'email',
+                'home_pan_card' => 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/',
+                'company_tin_no' => ['nullable', 'regex:/^(9\d{2})([ \-]?)([7]\d|8[0-8])([ \-]?)(\d{4})$/'],
+                'customer_contact_info.other_contact_info.email' => 'nullable|email',
+                'customer_contact_info.other_contact_info.other_qc_email' => 'nullable|email',
                 'other_pan_card_copy' => 'nullable|mimes:jpeg,png,jpg,pdf|max:2048',
 
             ];
@@ -73,6 +98,7 @@ class CustomerController extends Controller
                 'user_name.max' => 'User name should not me greater than 255 characters.',
                 'password.required' => 'password field is required.',
                 'password.regex' => 'password invalid : minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character:',
+                'home_pan_card.regex' => 'Please enter valid Pan',
                 'logo.mimes' => 'image type must be jpeg,png,jpg,svg',
                 'logo.max' => 'image size must be less than 2048 kb',
                 'company_tin_no.regex' => 'Please enter valid Tin number <u>example</u>: "900700000" or "900 70 0000" or "900-70-0000"',
@@ -121,7 +147,7 @@ class CustomerController extends Controller
                 'updated_by' => $loggedInUserData['logged_in_user_id']
             ]);
 
-            
+
             $customer_id = $data->id;
             //add customer contact-information
             $this->addCustomerContactInfo($request->customer_contact_info, $customer_id);
@@ -168,8 +194,8 @@ class CustomerController extends Controller
      */
     public function addCustomerContactInfo($contact_data, $customer_id)
     {
-        $home_contact_infos = $contact_data['home_contact_info'][0];
-        $other_contact_infos = $contact_data['other_contact_info'][0];
+        $home_contact_infos = $contact_data['home_contact_info'];
+        $other_contact_infos = $contact_data['other_contact_info'];
 
         if (!empty($contact_data)) {
             if (!empty($home_contact_infos)) {
@@ -177,7 +203,7 @@ class CustomerController extends Controller
 
                 // check if data already present for the customer contact info
                 $home_contact_count = count($home_contact_infos);
-                
+
                 if ($home_contact_count) {
                     if ($home_contact_infos['contact_info_type'] == 1) {
                         $home_contactArray = array(
@@ -243,7 +269,6 @@ class CustomerController extends Controller
                 }
             }
         }
-        return Helper::response("other_contact_info added Successfully", Response::HTTP_CREATED, true, $othercontactArray);
     }
     public function addCustomerContactPerson($contact_person_data, $customer_id)
     {

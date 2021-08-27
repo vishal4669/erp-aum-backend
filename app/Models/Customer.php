@@ -45,4 +45,14 @@ class Customer extends Model
     protected $hidden = [
         'password'
     ];
+    
+    // Customer Contact Info
+    public function contact_info(){
+        return $this->hasMany('App\Models\CustomerContactInfo', 'mst_customer_id');
+  }
+    // Customer Contact Info
+    public function contact_person(){
+        return $this->hasMany('App\Models\CustomerContactPerson', 'mst_customer_id');
+  }
+
 }
