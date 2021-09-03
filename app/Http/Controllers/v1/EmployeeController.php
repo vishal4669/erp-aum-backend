@@ -83,7 +83,7 @@ class EmployeeController extends Controller
             $validator = Validator::make($request->all(), [
                 'first_name' => 'required|string|max:255',
                 'last_name' => 'required|string|max:255',
-                'email' => 'required|string|email|unique:users',
+                // 'email' => 'required|string|email|unique:users',
                 'password' => 'required|string|min:6',
                 'mobile' => 'required'
             ]);
@@ -354,7 +354,7 @@ class EmployeeController extends Controller
      * @return \Illuminate\Http\Response
      */
     function addUserEducationDetails($edu_data, $users_id = ''){
-
+        // dd($edu_data);
         if(!empty($edu_data)){
             $loggedInUserData = Helper::getUserData();
 
