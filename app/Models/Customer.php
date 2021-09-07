@@ -10,6 +10,7 @@ class Customer extends Model
     use SoftDeletes;
     protected $table = "mst_customers";
     protected $fillable = [
+        'id',
         'mst_companies_id',
         'company_name',
         'gst_number',

@@ -79,7 +79,7 @@ class CustomerController extends Controller
 
     public function store(Request $request)
     {
-        //dd($request->all());
+
 
         DB::beginTransaction();
         try {
@@ -89,7 +89,7 @@ class CustomerController extends Controller
                 'gst_number' => 'nullable|regex:/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/',
                 'user_name' => 'required|string|max:255',
                 'password' => 'required|min:6|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,15}$/',
-                'customer_contact_info.home_contact_info.*.home_pan_card' => 'nullable|regex:/[A-Z]{5}[0-9]{4}[A-Z]{1}/',
+                'customer_contact_info.home_contact_info.*.home_pan_card' => 'regex:/[A-Z]{5}[0-9]{4}[A-Z]{1}/',
                 'logo' => 'nullable|image|mimes:jpeg,png,jpg,svg|max:2048',
                 'company_tin_no' => ['nullable', 'regex:/^(9\d{2})([ \-]?)([7]\d|8[0-8])([ \-]?)(\d{4})$/'],
                 'customer_contact_info.other_contact_info.*.email' => 'nullable|email',
@@ -176,7 +176,7 @@ class CustomerController extends Controller
             $all_req = $request->all();
             // //add customer contact-information
             $this->addupdateCustomerContactInfo($all_req, $request->customer_contact_info, $customer_id);
-            $this->addupdateCustomerContactPerson($request->contact_person_data, $customer_id);
+            //$this->addupdateCustomerContactPerson($request->customer_contact_person, $customer_id);
 
             DB::commit();
             Log::info("Customer Created with details : " . json_encode($request->all()));
@@ -217,6 +217,7 @@ class CustomerController extends Controller
      */
     public function update(Request $request, $id)
     {
+
         //
         try {
             $rules = [
@@ -313,7 +314,7 @@ class CustomerController extends Controller
             $all_req = $request->all();
             // //add customer contact-information
             $this->addupdateCustomerContactInfo($all_req, $request->get('customer_contact_info'), $customer_id);
-            // $this->addupdateCustomerContactPerson($request->get('customer_contact_person'), $customer_id);
+           // $this->addupdateCustomerContactPerson($request->get('customer_contact_person'), $customer_id);
 
             Log::info("Customer updated with details : " . json_encode(array('data' => $input_data, 'id' => $customer_id)));
 
@@ -452,12 +453,9 @@ class CustomerController extends Controller
             }
         }
     }
-    public function addupdateCustomerContactPerson($contact_person_data, $customer_id)
+    public function addupdateCustomerContactPerson($contact_person_data,$customer_id)
     {
-       
-    
-        //$contact_person_data = $request->contact_person_data;
-        //$customer_id = $request->customer_id;
+
         if (!empty($contact_person_data) || $contact_person_data != NULL || $contact_person_data != "") {
 
             // Delete all old   
@@ -467,11 +465,11 @@ class CustomerController extends Controller
             $loggedInUserData = Helper::getUserData();
 
             // check if data already present for the customers contact person
-            $contact_person_count = count(array($contact_person_data));
+            $contact_person_count = count($contact_person_data);
 
             if ($contact_person_count) {
 
-                foreach ((array) $contact_person_data as $contact_data) {
+                foreach ($contact_person_data as $contact_data) {
                     if (
                         !empty($contact_data['contact_person_name']) or
                         !empty($contact_data['contact_person_mobile']) or
@@ -492,7 +490,6 @@ class CustomerController extends Controller
                         CustomerContactPerson::create($contactpersonArray);
                     }
                 }
-                return Helper::response("Customer added successfully", Response::HTTP_CREATED, true);
             }
         }
     }
