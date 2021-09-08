@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CustomerContactPerson extends Model
 {
-    use HasFactory;
+    use SoftDeletes;
     use HasFactory;
     protected $table = "mst_customers_contact_person";
     protected $fillable = [

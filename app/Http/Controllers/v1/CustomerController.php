@@ -79,14 +79,14 @@ class CustomerController extends Controller
 
     public function store(Request $request)
     {
-        //dd($request->all());
+        // dd($all_req);
 
         DB::beginTransaction();
         try {
             $rules = [
 
                 'company_name' => 'required|string|max:255',
-                'gst_number' => 'nullable|regex:/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/',
+                'gst_number' => 'nullable|max:15|regex:/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/',
                 'user_name' => 'required|string|max:255',
                 'password' => 'required|min:6|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,15}$/',
                 'customer_contact_info.home_contact_info.*.home_pan_card' => 'nullable|regex:/[A-Z]{5}[0-9]{4}[A-Z]{1}/',
@@ -139,6 +139,17 @@ class CustomerController extends Controller
                 $data = array();
                 return Helper::response($validator->errors()->all(), Response::HTTP_OK, false, $data);
             }
+            // $mydata = $request->contact_person_data;
+            // $mydata = json_decode($mydata, true);
+
+            // $mydata_arr = $mydata[0]["contact_person_mobile"];
+            // return Helper::response("Customer added Successfully", Response::HTTP_CREATED, true, $mydata_arr);
+            // exit();
+
+            
+            #echo json_encode(array("data" => $mydata));exit;
+
+
             $imageName = '';
             $loggedInUserData = Helper::getUserData();
             if ($request->logo != "") {
@@ -171,9 +182,26 @@ class CustomerController extends Controller
                 'created_by' => $loggedInUserData['logged_in_user_id'], //edited
                 'updated_by' => $loggedInUserData['logged_in_user_id']
             ]);
-
+            // $contact_person_data = json_decode($request->contact_person_data, true);
+            $mydata = $request->contact_person_data;
+                $mydata = json_decode($mydata, true);
+    
+                // $mydata_arr = $mydata[0]["contact_person_mobile"];
+                foreach($mydata as $newdata){
+                    $contactpersonArray[] = array(
+                        'mydata' => [
+                            'contact_person_mobile' => $newdata['contact_person_mobile'],
+                            'contact_person_email' => $newdata['contact_person_email'],
+                        
+                        ]
+                        
+                    );
+                }
+                return Helper::response("Customer added Successfully", Response::HTTP_CREATED, true, $contactpersonArray);
+    
             $customer_id = $data->id;
             $all_req = $request->all();
+
             // //add customer contact-information
             $this->addupdateCustomerContactInfo($all_req, $request->customer_contact_info, $customer_id);
             $this->addupdateCustomerContactPerson($request->contact_person_data, $customer_id);
@@ -454,10 +482,51 @@ class CustomerController extends Controller
     }
     public function addupdateCustomerContactPerson($contact_person_data, $customer_id)
     {
-       
-    
-        //$contact_person_data = $request->contact_person_data;
-        //$customer_id = $request->customer_id;
+
+        $contact_person_data = json_decode($contact_person_data, true);
+        // $mydata = $request->contact_person_data;
+            // $mydata = json_decode($mydata, true);
+
+            // $mydata_arr = $mydata[0]["contact_person_mobile"];
+            foreach($contact_person_data as $newdata){
+                $contactpersonArray = array(
+                    'mydata' => array(
+                        'contact_person_mobile' => $newdata['contact_person_mobile'],
+                        'contact_person_email' => $newdata['contact_person_email'],
+                    )
+                    
+                );
+            }
+            return Helper::response("Customer added Successfully", Response::HTTP_CREATED, true, $contactpersonArray);
+        // $contact_person_arr = array(
+        //     'contact_person_mobile':
+        // );
+        // $this->validate($contact_person_data, [
+        //     'contact_person_mobile' => 'max:10',
+        //     'contact_person_email' => 'required',
+        // ]);
+        // $rules1 = [
+
+        //     'customer_contact_person.*.contact_person_mobile' => 'min:10|max:10',
+        //         'customer_contact_person.*.contact_person_email' => 'email',
+        // ];
+
+        // $messages1 = [
+        //     'customer_contact_person.*.contact_person_mobile.min' => 'please enter minimum 10 digits for contact person mobile no',
+        //     'customer_contact_person.*.contact_person_mobile.max' => 'please enter maximum 10 digits for contact person mobile no',
+        //     'customer_contact_person.*.contact_person_email.email' => 'Please enter valid email for contact person',
+        // ];
+
+        $validator = Validator::make($contactpersonArray, [
+            "mydata.*.contact_person_email"    => "required",
+            "mydata.*.contact_person_mobile"  => "required|max:10",
+        ]);
+        // $validator = Validator::make($contact_person_data, $rules1, $messages1);
+
+        if ($validator->fails()) {
+            $data = array();
+            return Helper::response($validator->errors()->all(), Response::HTTP_OK, false, $data);
+        }
         if (!empty($contact_person_data) || $contact_person_data != NULL || $contact_person_data != "") {
 
             // Delete all old   
@@ -492,7 +561,6 @@ class CustomerController extends Controller
                         CustomerContactPerson::create($contactpersonArray);
                     }
                 }
-                return Helper::response("Customer added successfully", Response::HTTP_CREATED, true);
             }
         }
     }
@@ -509,11 +577,19 @@ class CustomerController extends Controller
         try {
             $data = array();
             $customer = Customer::find($id);
+            $CustomerContactInfo = CustomerContactInfo::where("mst_customer_id", $id);
+            $CustomerContactPerson = CustomerContactPerson::where("mst_customer_id", $id);
 
             Log::info("Customer deleted with : " . json_encode(array('id' => $id)));
 
             if (!empty($customer)) {
                 $customer->delete();
+                if (!empty($CustomerContactInfo)) {
+                    $CustomerContactInfo->delete();
+                }
+                if (!empty($CustomerContactPerson)) {
+                    $CustomerContactPerson->delete();
+                }
                 return Helper::response("Customer deleted successfully", Response::HTTP_OK, true, $data);
             }
 

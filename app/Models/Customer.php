@@ -44,7 +44,7 @@ class Customer extends Model
      * @var array
      */
     protected $hidden = [
-        'password'
+       
     ];
     
     // Customer Contact Info
