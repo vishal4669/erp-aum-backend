@@ -80,6 +80,9 @@ class CustomerController extends Controller
     public function store(Request $request)
     {
         // dd($all_req);
+        $req = $request->all();
+        $someArray = json_decode($req['contact_person_data'], true);
+        $req['contact_person_data'] = $someArray;
 
         DB::beginTransaction();
         try {
@@ -99,8 +102,8 @@ class CustomerController extends Controller
                 'customer_contact_info.home_contact_info.*.home_qc_contact_no' => 'nullable|min:10|max:10',
                 'customer_contact_info.home_contact_info.*.home_landline' => 'nullable|regex:/^[0-9]\d{2,4}-\d{6,8}$/',
                 'customer_contact_info.other_contact_info.*.contact_no' => 'nullable|min:10|max:10',
-                'customer_contact_person.*.contact_person_mobile' => 'nullable|min:10|max:10',
-                'customer_contact_person.*.contact_person_email' => 'nullable|email',
+                'contact_person_data.*.contact_person_mobile' => 'nullable|min:10|max:10',
+                'contact_person_data.*.contact_person_email' => 'nullable|email',
             ];
 
             $messages = [
@@ -128,28 +131,27 @@ class CustomerController extends Controller
                 'customer_contact_info.home_contact_info.*.home_landline.regex' => 'please enter valid landline number for home',
                 'customer_contact_info.other_contact_info.*.contact_no.min' => 'please enter minimum 10 digits for other contact no',
                 'customer_contact_info.other_contact_info.*.contact_no.max' => 'please enter maximum 10 digits for other contact no',
-                'customer_contact_person.*.contact_person_mobile.min' => 'please enter minimum 10 digits for contact person mobile no',
-                'customer_contact_person.*.contact_person_mobile.max' => 'please enter maximum 10 digits for contact person mobile no',
-                'customer_contact_person.*.contact_person_email.email' => 'Please enter valid email for contact person',
+                'contact_person_data.*.contact_person_mobile.min' => 'please enter minimum 10 digits for contact person mobile no',
+                'contact_person_data.*.contact_person_mobile.max' => 'please enter maximum 10 digits for contact person mobile no',
+                'contact_person_data.*.contact_person_email.email' => 'Please enter valid email for contact person',
             ];
 
-            $validator = Validator::make($request->all(), $rules, $messages);
+            $validator = Validator::make($req, $rules, $messages);
 
             if ($validator->fails()) {
                 $data = array();
                 return Helper::response($validator->errors()->all(), Response::HTTP_OK, false, $data);
             }
-            // $mydata = $request->contact_person_data;
-            // $mydata = json_decode($mydata, true);
-
-            // $mydata_arr = $mydata[0]["contact_person_mobile"];
-            // return Helper::response("Customer added Successfully", Response::HTTP_CREATED, true, $mydata_arr);
-            // exit();
-
             
-            #echo json_encode(array("data" => $mydata));exit;
-
-
+            // $someArray = array($someArray);
+            // return Helper::response("Customer added Successfully", Response::HTTP_CREATED, true, $someArray);
+            // // $validator = Validator::make($someArray,[
+            // //     '*.contact_person_mobile' => 'max:10'
+            // // ]);
+            // if ($validator->fails()) {
+            //     $data = array();
+            //     return Helper::response($validator->errors()->all(), Response::HTTP_OK, false, $data);
+            // }
             $imageName = '';
             $loggedInUserData = Helper::getUserData();
             if ($request->logo != "") {
@@ -182,23 +184,8 @@ class CustomerController extends Controller
                 'created_by' => $loggedInUserData['logged_in_user_id'], //edited
                 'updated_by' => $loggedInUserData['logged_in_user_id']
             ]);
-            // $contact_person_data = json_decode($request->contact_person_data, true);
-            $mydata = $request->contact_person_data;
-                $mydata = json_decode($mydata, true);
-    
-                // $mydata_arr = $mydata[0]["contact_person_mobile"];
-                foreach($mydata as $newdata){
-                    $contactpersonArray[] = array(
-                        'mydata' => [
-                            'contact_person_mobile' => $newdata['contact_person_mobile'],
-                            'contact_person_email' => $newdata['contact_person_email'],
-                        
-                        ]
-                        
-                    );
-                }
-                return Helper::response("Customer added Successfully", Response::HTTP_CREATED, true, $contactpersonArray);
-    
+
+ 
             $customer_id = $data->id;
             $all_req = $request->all();
 
@@ -229,7 +216,73 @@ class CustomerController extends Controller
         try {
 
             $customerData = Customer::with(['contact_info', 'contact_person'])->find($id);
+            // dd($customerData);
+                //homecustom arr key
+                $customerData['contact_info'][0]['homestreet'] = $customerData['contact_info'][0]['street_1'];         
+                $customerData['contact_info'][0]['pincode'] = $customerData['contact_info'][0]['pin'];
+                $customerData['contact_info'][0]['country_id'] = $customerData['contact_info'][0]['country'];
+                $customerData['contact_info'][0]['admin_contact'] = $customerData['contact_info'][0]['contact_no'];
+                $customerData['contact_info'][0]['admin_email'] = $customerData['contact_info'][0]['email'];
+                $customerData['contact_info'][0]['homestreet2'] = $customerData['contact_info'][0]['street_2'];               
+                $customerData['contact_info'][0]['state_id'] = $customerData['contact_info'][0]['state'];
+                $customerData['contact_info'][0]['landline'] = $customerData['contact_info'][0]['home_landline'];
+                $customerData['contact_info'][0]['qc_contact'] = $customerData['contact_info'][0]['home_qc_contact_no'];
+                $customerData['contact_info'][0]['pancard_no'] = $customerData['contact_info'][0]['home_pan_card'];
+               //othercustom arr key
+                $customerData['contact_info'][1]['street'] = $customerData['contact_info'][1]['street_1'];
+                $customerData['contact_info'][1]['area1'] = $customerData['contact_info'][1]['area'];
+                $customerData['contact_info'][1]['pincode1'] = $customerData['contact_info'][1]['pin'];
+                $customerData['contact_info'][1]['corr_country_id'] = $customerData['contact_info'][1]['country'];
+                $customerData['contact_info'][1]['qa_contact'] = $customerData['contact_info'][1]['contact_no'];
+                $customerData['contact_info'][1]['qa_email'] = $customerData['contact_info'][1]['email'];
+                $customerData['contact_info'][1]['street2'] = $customerData['contact_info'][1]['street_2'];
+                $customerData['contact_info'][1]['city1'] = $customerData['contact_info'][1]['city'];
+                $customerData['contact_info'][1]['corr_state_id'] = $customerData['contact_info'][1]['state'];
+                $customerData['contact_info'][1]['website'] = $customerData['contact_info'][1]['other_website'];
+                $customerData['contact_info'][1]['qc_email'] = $customerData['contact_info'][1]['other_qc_email'];
+               
+ 
+                unset(
+                    $customerData['contact_info'][0]['street_1'],
+                    $customerData['contact_info'][0]['pin'],
+                    $customerData['contact_info'][0]['country'],
+                    $customerData['contact_info'][0]['contact_no'],
+                    $customerData['contact_info'][0]['email'],
+                    $customerData['contact_info'][0]['street_2'],
+                    $customerData['contact_info'][0]['state'],
+                    $customerData['contact_info'][0]['home_landline'],
+                    $customerData['contact_info'][0]['home_qc_contact_no'],
+                    $customerData['contact_info'][0]['home_pan_card'],
+                   
+                    $customerData['contact_info'][1]['street_1'],
+                    $customerData['contact_info'][1]['area'],
+                    $customerData['contact_info'][1]['pin'],
+                    $customerData['contact_info'][1]['country'],
+                    $customerData['contact_info'][1]['contact_no'],
+                    $customerData['contact_info'][1]['email'],
+                    $customerData['contact_info'][1]['street_2'],
+                    $customerData['contact_info'][1]['city'],
+                    $customerData['contact_info'][1]['state'],
+                    $customerData['contact_info'][1]['other_website'],
+                    $customerData['contact_info'][1]['other_qc_email'],
+        
+                );
+          
 
+            foreach ($customerData['contact_person'] as $conatct_person) {
+                $conatct_person['contact_person_name'] = $conatct_person['name'];
+                $conatct_person['contact_person_mobile'] = $conatct_person['mobile'];
+                $conatct_person['contact_person_email'] = $conatct_person['email'];
+                $conatct_person['mst_departments_id'] = $conatct_person['department'];
+                $conatct_person['mst_positions_id'] = $conatct_person['position'];
+                unset(
+                    $conatct_person['name'],
+                    $conatct_person['mobile'],
+                    $conatct_person['email'],
+                    $conatct_person['department'],
+                    $conatct_person['position']
+                );
+            }
             return Helper::response("Customer Data Shown Successfully", Response::HTTP_OK, true, $customerData);
         } catch (Exception $e) {
             $data = array();
@@ -312,7 +365,7 @@ class CustomerController extends Controller
                 $data['logo'] = $imageName;
             }
 
-
+            
             $input_data = [
                 'mst_companies_id' => $loggedInUserData['company_id'],
                 'company_name' => $request->get('company_name'),
@@ -325,7 +378,7 @@ class CustomerController extends Controller
                 'contact_type' => $request->get('contact_type'),
                 'priority' => $request->get('priority'),
                 'notes' => $request->get('notes'),
-                'logo' => ($request->file('logo')) ? $imageName : '',
+                'logo' => ($request->file('logo')) ? $imageName : $request->get('logo'),
                 'education_details' => $request->get('education_details'),
                 'prev_details' => $request->get('prev_details'),
                 'company_tin_no' => $request->get('company_tin_no'),
@@ -451,7 +504,7 @@ class CustomerController extends Controller
                                     'contact_info_type' => (isset($other_contact_infos['contact_info_type'])) ? $other_contact_infos['contact_info_type'] : '',
                                     'contact_no' => (isset($other_contact_infos['contact_no'])) ? $other_contact_infos['contact_no'] : '',
                                     'email' => (isset($other_contact_infos['email'])) ? $other_contact_infos['email'] : '',
-                                    'other_pan_card_copy' => (isset($files)) ? $imageName : '',
+                                    'other_pan_card_copy' => (isset($files)) ? $imageName : $files,
                                     'created_by' => $loggedInUserData['logged_in_user_id'], //edited
                                     'updated_by' => $loggedInUserData['logged_in_user_id']
                                 );
@@ -483,50 +536,9 @@ class CustomerController extends Controller
     public function addupdateCustomerContactPerson($contact_person_data, $customer_id)
     {
 
-        $contact_person_data = json_decode($contact_person_data, true);
-        // $mydata = $request->contact_person_data;
-            // $mydata = json_decode($mydata, true);
+        // $contact_person_data = json_decode($contact_person_data, true);
 
-            // $mydata_arr = $mydata[0]["contact_person_mobile"];
-            foreach($contact_person_data as $newdata){
-                $contactpersonArray = array(
-                    'mydata' => array(
-                        'contact_person_mobile' => $newdata['contact_person_mobile'],
-                        'contact_person_email' => $newdata['contact_person_email'],
-                    )
-                    
-                );
-            }
-            return Helper::response("Customer added Successfully", Response::HTTP_CREATED, true, $contactpersonArray);
-        // $contact_person_arr = array(
-        //     'contact_person_mobile':
-        // );
-        // $this->validate($contact_person_data, [
-        //     'contact_person_mobile' => 'max:10',
-        //     'contact_person_email' => 'required',
-        // ]);
-        // $rules1 = [
-
-        //     'customer_contact_person.*.contact_person_mobile' => 'min:10|max:10',
-        //         'customer_contact_person.*.contact_person_email' => 'email',
-        // ];
-
-        // $messages1 = [
-        //     'customer_contact_person.*.contact_person_mobile.min' => 'please enter minimum 10 digits for contact person mobile no',
-        //     'customer_contact_person.*.contact_person_mobile.max' => 'please enter maximum 10 digits for contact person mobile no',
-        //     'customer_contact_person.*.contact_person_email.email' => 'Please enter valid email for contact person',
-        // ];
-
-        $validator = Validator::make($contactpersonArray, [
-            "mydata.*.contact_person_email"    => "required",
-            "mydata.*.contact_person_mobile"  => "required|max:10",
-        ]);
-        // $validator = Validator::make($contact_person_data, $rules1, $messages1);
-
-        if ($validator->fails()) {
-            $data = array();
-            return Helper::response($validator->errors()->all(), Response::HTTP_OK, false, $data);
-        }
+   
         if (!empty($contact_person_data) || $contact_person_data != NULL || $contact_person_data != "") {
 
             // Delete all old   
