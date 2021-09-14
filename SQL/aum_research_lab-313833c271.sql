@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
--- Host: sdb-e.hosting.stackcp.net
--- Generation Time: Aug 27, 2021 at 02:56 PM
--- Server version: 10.4.18-MariaDB-log
--- PHP Version: 7.1.33
+-- Host: 127.0.0.1
+-- Generation Time: Sep 14, 2021 at 03:30 PM
+-- Server version: 10.4.20-MariaDB
+-- PHP Version: 8.0.8
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -522,7 +522,7 @@ INSERT INTO `mst_countries` (`id`, `country_name`, `ISO`, `ISO3`, `is_active`) V
 
 CREATE TABLE `mst_customers` (
   `id` int(11) NOT NULL,
-  `mst_companies_id` int(11) NOT NULL,
+  `mst_companies_id` int(11) DEFAULT NULL,
   `company_name` varchar(512) NOT NULL,
   `gst_number` varchar(15) DEFAULT NULL,
   `contact_person_name` varchar(100) DEFAULT NULL,
@@ -539,15 +539,30 @@ CREATE TABLE `mst_customers` (
   `company_tin_no` varchar(155) DEFAULT NULL,
   `company_service_tax_no` varchar(155) DEFAULT NULL,
   `company_cust_discount` varchar(55) DEFAULT NULL,
-  `created_by` int(11) NOT NULL,
-  `updated_by` int(11) NOT NULL,
-  `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL,
+  `created_by` int(11) DEFAULT NULL,
+  `updated_by` int(11) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp(),
   `selected_year` varchar(25) NOT NULL,
   `copied_from_year` int(4) DEFAULT NULL,
   `is_active` int(1) NOT NULL DEFAULT 1,
   `deleted_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `mst_customers`
+--
+
+INSERT INTO `mst_customers` (`id`, `mst_companies_id`, `company_name`, `gst_number`, `contact_person_name`, `tally_alias_name`, `user_name`, `password`, `birth_date`, `contact_type`, `priority`, `notes`, `logo`, `education_details`, `prev_details`, `company_tin_no`, `company_service_tax_no`, `company_cust_discount`, `created_by`, `updated_by`, `created_at`, `updated_at`, `selected_year`, `copied_from_year`, `is_active`, `deleted_at`) VALUES
+(1, 1, 'apple', '06BZAHM6385P6Z2', NULL, NULL, 'labafna', '$2y$10$U6zc2i8Ume6G6w7YP7ekY.M3DeGFi3bn./2jy8prQykp8my88zjxq', NULL, 'customer', NULL, NULL, '20210907132116.jpg', NULL, NULL, '900700000', NULL, '100', 1, 1, '2021-09-07 13:21:16', '2021-09-07 13:21:16', '2019-20', NULL, 1, NULL),
+(2, 1, 'apple', '06BZAHM6385P6Z2', NULL, NULL, 'labafna', '$2y$10$npdAygi7CALZMzUq1Z1gBuBqXtR6RVgB9rDUqGyK9ImKNc2.seTJq', NULL, 'customer', NULL, NULL, '20210907132217.jpg', NULL, NULL, '900700000', NULL, '100', 1, 1, '2021-09-07 13:22:17', '2021-09-08 07:07:24', '2019-20', NULL, 1, NULL),
+(3, 1, 'apple', '06BZAHM6385P6Z2', NULL, NULL, 'labafna', '$2y$10$294iQQP88VzDr6ELDCwyW.KDt60F3vja2XqoV9a69GDRyJ94x618q', NULL, 'customer', NULL, NULL, '20210907132224.jpg', NULL, NULL, '900700000', NULL, '100', 1, 1, '2021-09-07 13:22:24', '2021-09-08 06:55:49', '2019-20', NULL, 1, NULL),
+(4, 1, 'apple', '06BZAHM6385P6Z2', NULL, NULL, 'labafna', '$2y$10$6ExGMuEdhobX1rhM9z8k3.Lw4Px0GQc/MjWhLFu3nA3psedeQOpTW', NULL, 'customer', NULL, NULL, '20210907132348.jpg', NULL, NULL, '900700000', NULL, '100', 1, 1, '2021-09-07 13:23:48', '2021-09-08 07:03:30', '2019-20', NULL, 1, NULL),
+(7, 1, 'apple', '06BZAHM6385P6Z2', NULL, NULL, 'labafna', '$2y$10$ddLGneW/kgw2n4Y/nz6FR./Hj9XEtBu1qqgv0/Abi3Mt4poQe5tJ2', NULL, 'customer', NULL, NULL, '20210907132629.jpg', NULL, NULL, '900700000', NULL, '100', 1, 1, '2021-09-07 13:26:30', '2021-09-08 07:24:58', '2019-20', NULL, 1, NULL),
+(9, 1, 'apple', '06BZAHM6385P6Z2', NULL, NULL, 'labafna', '$2y$10$f57ITu4Nn9hxfucMa5D.tudPn34LEfBBvluuQYxBnSNPpLpfdlR8O', NULL, 'customer', NULL, NULL, '20210908072744.jpg', NULL, NULL, '900700000', NULL, '100', 1, 1, '2021-09-08 07:27:44', '2021-09-08 07:28:12', '2019-20', NULL, 1, NULL),
+(10, 1, 'apple', '06BZAHM6385P6Z2', NULL, NULL, 'labafna', '$2y$10$8anS8pGbViB0DnkL6PDpZOY/dbf7tj0IEELmfCpCuPFC5u2bUYkZ6', NULL, 'customer', NULL, NULL, '20210908091553.jpg', NULL, NULL, '900700000', NULL, '100', 1, 1, '2021-09-08 09:15:53', '2021-09-08 09:16:35', '2019-20', NULL, 1, NULL),
+(11, 1, 'apple', '06BZAHM6385P6Z2', NULL, NULL, 'labafna', '$2y$10$3cAsZ30K1ASocbL.kSYXUOs0NMmzMNGE6LWig00Ct9luu/fVk/E5W', NULL, 'customer', NULL, NULL, '20210908091555.jpg', NULL, NULL, '900700000', NULL, '100', 1, 1, '2021-09-08 09:15:55', '2021-09-08 09:25:18', '2019-20', NULL, 1, NULL),
+(12, 1, 'kiwis', '06BZAHM6385P6Z2', NULL, NULL, 'labafna', '$2y$10$N7PIDZPqIfVoAn9LZEtrhOVBE8cEw7reHTgyPFgpCOUfmZSotqIRO', NULL, 'customer', NULL, NULL, NULL, NULL, NULL, '900700000', NULL, '100', 1, 1, '2021-09-08 09:15:56', '2021-09-09 07:39:05', '2019-20', NULL, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -557,7 +572,7 @@ CREATE TABLE `mst_customers` (
 
 CREATE TABLE `mst_customers_contact_info` (
   `id` int(11) NOT NULL,
-  `mst_customer_id` int(11) NOT NULL,
+  `mst_customer_id` int(11) DEFAULT NULL,
   `street_1` varchar(100) DEFAULT NULL,
   `street_2` varchar(100) DEFAULT NULL,
   `area` varchar(40) DEFAULT NULL,
@@ -574,12 +589,39 @@ CREATE TABLE `mst_customers_contact_info` (
   `contact_no` varchar(15) DEFAULT NULL COMMENT 'Home(Account/Admin Contact No)/Other Contact No(QA Contact No)',
   `home_qc_contact_no` varchar(55) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL COMMENT 'Home email(Account/Admin E-mail)/Other email(QA E-mail)',
-  `created_by` int(11) NOT NULL,
-  `updated_by` int(11) NOT NULL,
-  `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL,
+  `created_by` int(11) DEFAULT NULL,
+  `updated_by` int(11) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp(),
   `deleted_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `mst_customers_contact_info`
+--
+
+INSERT INTO `mst_customers_contact_info` (`id`, `mst_customer_id`, `street_1`, `street_2`, `area`, `pin`, `city`, `state`, `country`, `home_landline`, `other_website`, `other_qc_email`, `home_pan_card`, `other_pan_card_copy`, `contact_info_type`, `contact_no`, `home_qc_contact_no`, `email`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 1, 'Visat', 'Motera', 'Avni Bhavan', '380019', 'Ahmedabad', 1, 1, '079-27507178', NULL, NULL, 'BNZAA2318J', NULL, 1, '9408072555', '0987654321', 'MS@gmail.com', 1, 1, '2021-09-07 13:21:17', '2021-09-07 13:21:17', NULL),
+(2, 1, 'Visat', 'Motera', '', '', '', 0, 0, NULL, '', 'p@gmail.com', NULL, '20210907132117.jpg', 2, '', NULL, 'p@gmail.com', 1, 1, '2021-09-07 13:21:17', '2021-09-07 13:21:17', NULL),
+(3, 2, 'Visat', 'Motera', 'Avni Bhavan', '380019', 'Ahmedabad', 1, 1, '079-27507178', NULL, NULL, 'BNZAA2318J', NULL, 1, '9408072555', '0987654321', 'MS@gmail.com', 1, 1, '2021-09-07 13:22:17', '2021-09-07 13:22:17', NULL),
+(4, 2, 'Visat', 'Motera', '', '', '', 0, 0, NULL, '', 'p@gmail.com', NULL, '20210907132217.jpg', 2, '', NULL, 'p@gmail.com', 1, 1, '2021-09-07 13:22:17', '2021-09-07 13:22:17', NULL),
+(5, 3, 'Visat', 'Motera', 'Avni Bhavan', '380019', 'Ahmedabad', 1, 1, '079-27507178', NULL, NULL, 'BNZAA2318J', NULL, 1, '9408072555', '0987654321', 'MS@gmail.com', 1, 1, '2021-09-07 13:22:24', '2021-09-07 13:22:24', NULL),
+(6, 3, 'Visat', 'Motera', '', '', '', 0, 0, NULL, '', 'p@gmail.com', NULL, '20210907132224.jpg', 2, '', NULL, 'p@gmail.com', 1, 1, '2021-09-07 13:22:24', '2021-09-07 13:22:24', NULL),
+(7, 4, 'Visat', 'Motera', 'Avni Bhavan', '380019', 'Ahmedabad', 1, 1, '079-27507178', NULL, NULL, 'BNZAA2318J', NULL, 1, '9408072555', '0987654321', 'MS@gmail.com', 1, 1, '2021-09-07 13:23:48', '2021-09-07 13:23:48', NULL),
+(8, 4, 'Visat', 'Motera', '', '', '', 0, 0, NULL, '', 'p@gmail.com', NULL, '20210907132348.jpg', 2, '', NULL, 'p@gmail.com', 1, 1, '2021-09-07 13:23:48', '2021-09-07 13:23:48', NULL),
+(13, 7, 'Visat', 'Motera', 'Avni Bhavan', '380019', 'Ahmedabad', 1, 1, '079-27507178', NULL, NULL, 'BNZAA2318J', NULL, 1, '9408072555', '0987654321', 'MS@gmail.com', 1, 1, '2021-09-07 13:26:30', '2021-09-07 13:26:30', NULL),
+(14, 7, 'Visat', 'Motera', '', '', '', 0, 0, NULL, '', 'p@gmail.com', NULL, '20210907132630.jpg', 2, '', NULL, 'p@gmail.com', 1, 1, '2021-09-07 13:26:30', '2021-09-07 13:26:30', NULL),
+(17, 9, 'Visat', 'Motera', 'Avni Bhavan', '380019', 'Ahmedabad', 1, 1, '079-27507178', NULL, NULL, 'BNZAA2318J', NULL, 1, '9408072555', '0987654321', 'MS@gmail.com', 1, 1, '2021-09-08 07:27:44', '2021-09-08 07:28:12', '2021-09-08 07:28:12'),
+(18, 9, 'Visat', 'Motera', '', '', '', 0, 0, NULL, '', 'p@gmail.com', NULL, '20210908072744.jpg', 2, '', NULL, 'p@gmail.com', 1, 1, '2021-09-08 07:27:44', '2021-09-08 07:28:12', '2021-09-08 07:28:12'),
+(19, 10, 'Visat', 'Motera', 'Avni Bhavan', '380019', 'Ahmedabad', 1, 1, '079-27507178', NULL, NULL, 'BNZAA2318J', NULL, 1, '9408072555', '0987654321', 'MS@gmail.com', 1, 1, '2021-09-08 09:15:53', '2021-09-08 09:16:35', '2021-09-08 09:16:35'),
+(20, 10, 'Visat', 'Motera', '', '', '', 0, 0, NULL, '', 'p@gmail.com', NULL, '20210908091553.jpg', 2, '', NULL, 'p@gmail.com', 1, 1, '2021-09-08 09:15:53', '2021-09-08 09:16:35', '2021-09-08 09:16:35'),
+(21, 11, 'Visat', 'Motera', 'Avni Bhavan', '380019', 'Ahmedabad', 1, 1, '079-27507178', NULL, NULL, 'BNZAA2318J', NULL, 1, '9408072555', '0987654321', 'MS@gmail.com', 1, 1, '2021-09-08 09:15:55', '2021-09-08 09:25:18', '2021-09-08 09:25:18'),
+(22, 11, 'Visat', 'Motera', '', '', '', 0, 0, NULL, '', 'p@gmail.com', NULL, '20210908091555.jpg', 2, '', NULL, 'p@gmail.com', 1, 1, '2021-09-08 09:15:55', '2021-09-08 09:25:18', '2021-09-08 09:25:18'),
+(23, 12, 'Vice', 'VEGAS', 'Avni Bhavan', '380019', 'Ahmedabad', 1, 1, '079-27507178', NULL, NULL, 'ABCTY1234D', NULL, 1, '9408072555', '0987654321', 'MS@gmail.com', 1, 1, '2021-09-08 09:15:56', '2021-09-09 07:39:05', NULL),
+(24, 12, 'Visat', 'Motera', '', '', '', 0, 0, NULL, '', 'p@gmail.com', NULL, '20210908091556.jpg', 2, '', NULL, 'p@gmail.com', 1, 1, '2021-09-08 09:15:56', '2021-09-08 09:15:56', NULL),
+(25, 11, 'Vice', 'VEGAS', 'Avni Bhavan', '380019', 'Ahmedabad', 1, 1, '079-27507178', NULL, NULL, 'ABCTY1234D', NULL, 1, '9408072555', '0987654321', 'MS@gmail.com', 1, 1, '2021-09-08 10:42:55', '2021-09-09 07:41:01', NULL),
+(26, 10, 'LAS VEGAS', 'VEGAS', 'Avni Bhavan', '380019', 'Ahmedabad', 1, 1, '079-27507178', NULL, NULL, 'ABCTY1234D', NULL, 1, '9408072555', '0987654321', 'MS@gmail.com', 1, 1, '2021-09-08 10:44:52', '2021-09-08 10:44:52', NULL),
+(27, 9, 'LAS VEGAS', 'VEGAS', 'Avni Bhavan', '380019', 'Ahmedabad', 1, 1, '079-27507178', NULL, NULL, 'ABCTY1234D', NULL, 1, '9408072555', '0987654321', 'MS@gmail.com', 1, 1, '2021-09-08 10:45:05', '2021-09-08 10:48:36', NULL);
 
 -- --------------------------------------------------------
 
@@ -589,18 +631,32 @@ CREATE TABLE `mst_customers_contact_info` (
 
 CREATE TABLE `mst_customers_contact_person` (
   `id` int(11) NOT NULL,
-  `mst_customer_id` int(11) NOT NULL,
+  `mst_customer_id` int(11) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
   `mobile` varchar(10) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `department` int(11) DEFAULT NULL,
   `position` int(11) DEFAULT NULL,
-  `created_by` int(11) NOT NULL,
-  `updated_by` int(11) NOT NULL,
-  `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL,
-  `deleted_at` int(11) DEFAULT NULL
+  `created_by` int(11) DEFAULT NULL,
+  `updated_by` int(11) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `deleted_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `mst_customers_contact_person`
+--
+
+INSERT INTO `mst_customers_contact_person` (`id`, `mst_customer_id`, `name`, `mobile`, `email`, `department`, `position`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(3, 9, 'Pragnesh', '', 'p@gmail.com', 0, 0, 1, 1, '2021-09-08 07:27:44', '2021-09-08 07:28:12', NULL),
+(4, 9, 'sgd', '', '', 0, 0, 1, 1, '2021-09-08 07:27:44', '2021-09-08 07:28:12', NULL),
+(5, 10, 'Pragnesh', '', 'p@gmail.com', 0, 0, 1, 1, '2021-09-08 09:15:53', '2021-09-08 09:16:35', NULL),
+(6, 10, 'sgd', '', '', 0, 0, 1, 1, '2021-09-08 09:15:53', '2021-09-08 09:16:35', NULL),
+(7, 11, 'Pragnesh', '', 'p@gmail.com', 0, 0, 1, 1, '2021-09-08 09:15:55', '2021-09-08 09:25:18', NULL),
+(8, 11, 'sgd', '', '', 0, 0, 1, 1, '2021-09-08 09:15:55', '2021-09-08 09:25:18', NULL),
+(9, 12, 'Pragnesh', '', 'p@gmail.com', 0, 0, 1, 1, '2021-09-08 09:15:56', '2021-09-08 09:15:56', NULL),
+(10, 12, 'sgd', '', '', 0, 0, 1, 1, '2021-09-08 09:15:56', '2021-09-08 09:15:56', NULL);
 
 -- --------------------------------------------------------
 
@@ -805,17 +861,6 @@ CREATE TABLE `mst_materials` (
   `deleted_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `mst_materials`
---
-
-INSERT INTO `mst_materials` (`id`, `mst_companies_id`, `material_type`, `material_name`, `material_purchase_rate`, `material_code`, `category_id`, `sub_category_id`, `sub_sub_category_id`, `material_rate`, `material_amount`, `material_qty`, `mst_units_id`, `material_use_before_date`, `material_case_number`, `created_by`, `updated_by`, `created_at`, `updated_at`, `selected_year`, `copied_from_year`, `is_active`, `deleted_at`) VALUES
-(1, 1, 'asfdf', 'sodium sulphur potassium', 1000.000, '1212', 2, 3, 4, 10.000, 10000.000, 1000, 123, '2019-06-01', 321654, 1, NULL, '2021-08-05 07:55:33', '2021-08-06 10:30:45', '2019-20', NULL, 1, '2021-08-06 10:30:45'),
-(2, 1, 'Liquid', 'test material', 100.000, '2500AB', 1, 2, 3, 2500.000, 85235.000, 100, 1, '2021-08-19', 5555555, 3, NULL, '2021-08-06 09:16:41', '2021-08-06 09:16:41', '2019-20', NULL, 1, NULL),
-(3, 1, 'Liquid', 'Sodium Cloride Fosfet1', 300523.000, '582020er', 12, 13, 3, 855545.000, 25689000.000, 100, 1, '2021-08-03', 89952500, 3, 3, '2021-08-06 09:21:28', '2021-08-09 09:36:58', '2019-20', NULL, 1, NULL),
-(4, 1, 'Other', 'test material Check', 300.000, '2500AB', 1, 2, 3, 8555.000, 25689000.000, 10, 2, '2021-09-01', 899525, 3, 3, '2021-08-19 10:58:37', '2021-08-19 13:21:28', '2019-20', NULL, 1, '2021-08-19 13:21:28'),
-(5, 1, 'Liquid', 'test material123', 100000.000, '582028', 12, 13, NULL, 25000.000, 85235584.000, 101, 1, '2021-08-29', 89952555, 3, NULL, '2021-08-19 10:59:19', '2021-08-19 10:59:19', '2019-20', NULL, 1, NULL);
-
 -- --------------------------------------------------------
 
 --
@@ -890,6 +935,80 @@ INSERT INTO `mst_positions` (`id`, `mst_departments_id`, `mst_companies_id`, `po
 (6, 5, 1, 'test position', 3, 3, '2019-20', NULL, 1, NULL, '2021-06-08 11:12:39', '2021-07-28 07:08:57'),
 (7, 5, 1, 'QA', 3, NULL, '2019-20', NULL, 1, NULL, '2021-06-08 13:22:23', '2021-06-08 12:22:23'),
 (8, 5, 1, 'HR Executive', 3, NULL, '2019-20', NULL, 1, NULL, '2021-06-11 05:55:58', '2021-06-11 04:55:58');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `mst_product_list`
+--
+
+CREATE TABLE `mst_product_list` (
+  `id` int(23) NOT NULL,
+  `mst_companies_id` int(11) NOT NULL,
+  `product_name` varchar(255) NOT NULL,
+  `product_generic` varchar(55) NOT NULL,
+  `marker_specification` varchar(255) NOT NULL,
+  `pharmacopiea_id` int(5) NOT NULL,
+  `generic_product_id` int(23) NOT NULL,
+  `packing_detail` varchar(255) NOT NULL,
+  `sample_description` text NOT NULL,
+  `hsn_Code` varchar(55) NOT NULL,
+  `is_generic` tinyint(1) NOT NULL,
+  `selected_year` varchar(25) NOT NULL,
+  `copied_from_year` int(4) DEFAULT NULL,
+  `is_active` tinyint(1) NOT NULL,
+  `created_by` int(11) NOT NULL,
+  `updated_by` int(11) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  `deleted_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `mst_product_list`
+--
+
+INSERT INTO `mst_product_list` (`id`, `mst_companies_id`, `product_name`, `product_generic`, `marker_specification`, `pharmacopiea_id`, `generic_product_id`, `packing_detail`, `sample_description`, `hsn_Code`, `is_generic`, `selected_year`, `copied_from_year`, `is_active`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(67, 1, 'PARACITAMALL', 'Raw Metrial', 'motion sickness', 2, 3, 'Shipped', 'motion sickness', '342356', 1, '2019-20', NULL, 1, 1, 1, '2021-09-14 12:57:07', '2021-09-14 12:57:07', NULL),
+(68, 1, 'PARACITAMALL', 'Raw Metrial', 'motion sickness', 2, 3, 'Shipped', 'motion sickness', '342356', 1, '2019-20', NULL, 1, 1, 1, '2021-09-14 13:03:59', '2021-09-14 13:03:59', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `mst_product_parent_list`
+--
+
+CREATE TABLE `mst_product_parent_list` (
+  `id` int(11) NOT NULL,
+  `parent_name` varchar(155) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `mst_product_parent_list`
+--
+
+INSERT INTO `mst_product_parent_list` (`id`, `parent_name`) VALUES
+(2, 'Related'),
+(13, 'By KFR'),
+(14, 'By IC'),
+(15, 'By ELSD DETECTOR'),
+(16, 'By FLD DETECTOR'),
+(17, 'By GCMS'),
+(18, 'By RID DETECTOR'),
+(19, 'By ICPMS'),
+(20, 'By GC'),
+(21, 'By MPAES'),
+(22, 'By UV'),
+(23, 'By HPLC'),
+(24, 'By I.R.'),
+(25, 'BY CHEMICAL'),
+(26, 'By Microbiological Assay'),
+(27, 'By Potentiometric Titration'),
+(28, 'By RT'),
+(29, 'BY TLC'),
+(30, 'By Titration'),
+(31, 'By microbiology'),
+(32, 'By AES');
 
 -- --------------------------------------------------------
 
@@ -990,6 +1109,72 @@ CREATE TABLE `password_resets` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `product_sample_details_list`
+--
+
+CREATE TABLE `product_sample_details_list` (
+  `id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `by_pass` tinyint(1) NOT NULL,
+  `parent` varchar(55) NOT NULL,
+  `product_sample_parameter_id` int(11) NOT NULL,
+  `label_claim` varchar(155) NOT NULL,
+  `min_limit` varchar(155) NOT NULL,
+  `max_limit` varchar(155) NOT NULL,
+  `amount` varchar(155) NOT NULL,
+  `method` varchar(155) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `division` varchar(155) NOT NULL,
+  `nabl` varchar(155) NOT NULL,
+  `formula` varchar(155) NOT NULL,
+  `created_by` int(11) NOT NULL,
+  `updated_by` int(11) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  `deleted_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `product_sample_details_list`
+--
+
+INSERT INTO `product_sample_details_list` (`id`, `product_id`, `by_pass`, `parent`, `product_sample_parameter_id`, `label_claim`, `min_limit`, `max_limit`, `amount`, `method`, `description`, `division`, `nabl`, `formula`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(8, 67, 1, 'By UV', 6, 'label claim', '10', '100', '500', 'method', 'description', 'A', 'nabl', 'formula', 1, 1, '2021-09-14 12:57:07', '2021-09-14 12:57:07', NULL),
+(9, 67, 2, 'By UV', 7, 'label claim', '10', '100', '500', 'method', 'description', 'A', 'nabl', 'formula', 1, 1, '2021-09-14 12:57:07', '2021-09-14 12:57:07', NULL),
+(10, 68, 1, 'By UV', 6, 'label claim', '10', '100', '500', 'method', 'description', 'A', 'nabl', 'formula', 1, 1, '2021-09-14 13:03:59', '2021-09-14 13:03:59', NULL),
+(11, 68, 2, 'By UV', 7, 'label claim', '10', '100', '500', 'method', 'description', 'A', 'nabl', 'formula', 1, 1, '2021-09-14 13:03:59', '2021-09-14 13:03:59', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `product_sample_parameters_list`
+--
+
+CREATE TABLE `product_sample_parameters_list` (
+  `id` int(11) NOT NULL,
+  `parameter_name` varchar(255) NOT NULL,
+  `mst_companies_id` int(11) NOT NULL,
+  `is_active` tinyint(1) NOT NULL,
+  `selected_year` varchar(25) NOT NULL,
+  `copied_from_year` int(4) DEFAULT NULL,
+  `created_by` int(11) NOT NULL,
+  `updated_by` int(11) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  `deleted_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `product_sample_parameters_list`
+--
+
+INSERT INTO `product_sample_parameters_list` (`id`, `parameter_name`, `mst_companies_id`, `is_active`, `selected_year`, `copied_from_year`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(6, 'newpara', 1, 1, '2019-20', NULL, 1, 1, '2021-09-14 12:57:07', '2021-09-14 12:57:07', NULL),
+(7, 'newpara1', 1, 1, '2019-20', NULL, 1, 1, '2021-09-14 12:57:07', '2021-09-14 12:57:07', NULL);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -1043,7 +1228,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `mst_companies_id`, `title`, `first_name`, `middle_name`, `last_name`, `email`, `email_verified_at`, `username`, `password`, `remember_token`, `blood_group`, `gender`, `birth_date`, `marital_status`, `photo`, `machine_code`, `phone`, `mobile`, `notes`, `attendance`, `signature`, `booking_action`, `booking_sms`, `booking_email`, `is_resigned`, `booking_copy`, `nationality`, `religion`, `caste`, `is_reporting_authority`, `deposit`, `booking_rate`, `created_by`, `updated_by`, `selected_year`, `copied_from_year`, `is_active`, `is_admin`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, NULL, NULL, 'Manoj', 'Kumar', 'Patel', 'manojp.divine@gmail.com', NULL, 'manojp.divine@gmail.com', '$2y$10$4PhhTLKUvtTNSeYODq1w6e/jbFPErnGKXXLtLngZKnQUnPGBn1TCu', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 0, NULL, 0, NULL, NULL, NULL, NULL, 1, 0, NULL, '2021-05-07 14:40:35', '2021-05-07 09:10:35'),
+(1, NULL, NULL, 'Manoj', 'Kumar', 'Patel', 'manojp.divine@gmail.com', NULL, 'manojp.divine@gmail.com', '$2y$10$4PhhTLKUvtTNSeYODq1w6e/jbFPErnGKXXLtLngZKnQUnPGBn1TCu', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 0, NULL, 0, NULL, NULL, NULL, NULL, 1, 0, '2021-09-02 11:27:39', '2021-05-07 14:40:35', '2021-09-02 05:57:39'),
 (2, NULL, NULL, 'Sanjay', 'Kumar', 'Patel', 'sanjayp.divine@gmail.com', NULL, 'sanjayp.divine@gmail.com', '$2y$10$4PhhTLKUvtTNSeYODq1w6e/jbFPErnGKXXLtLngZKnQUnPGBn1TCu', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 0, NULL, 0, NULL, NULL, NULL, NULL, 1, 0, NULL, '2021-05-07 14:40:35', '2021-05-07 09:10:35'),
 (3, 1, 'Ms.', 'Prexa', 'S', 'Shah', 'preksha.divine@gmail.com', NULL, 'preksha.divine@gmail.com', '$2y$10$C.DBkJxKGx9d3gd8MG6CNOyHwqQ6siFRJLN4Rad.B/YKor5t5gKgC', NULL, 'B+', 'M', '1988-07-11', 'Married', NULL, 'M01', '4545454545554', '4545454545554', 'lorem Ipsum dor simit de nur', 1, 'MSP', 1, 1, 1, 1, 1, 'Indian', 'Hindu', 'Hindu', 1, 100, 1, NULL, 1, '2019-20', NULL, 1, 0, NULL, '2021-05-07 14:40:35', '2021-07-20 11:29:45'),
 (4, 1, NULL, 'Manoj', 'D', 'Patel', 'manojp.divine@gmail.com', NULL, 'manojp.divine@gmail.com', '$2y$10$e6tbMQLOpGtM2pG4fdKAge6GMFCXpCugsNeUq9C8n.5W9h7fyN60W', NULL, 'B+ve', 'M', '1988-07-11', 'Married', NULL, 'M01', '4545454545554', '4545454545554', 'lorem Ipsum dor simit de nur1111', 1, 'MSP', 1, 1, 1, 0, 1, 'Indian', 'Hindu', NULL, 1, 100, 0, NULL, 1, '2019-20', NULL, 1, 0, '2021-05-20 10:45:29', '2021-05-20 10:44:45', '2021-05-20 09:45:29'),
@@ -1054,7 +1239,22 @@ INSERT INTO `users` (`id`, `mst_companies_id`, `title`, `first_name`, `middle_na
 (82, 1, 'Mr.', 'Mayank', 'Ajit', 'Shah', 'mayank@gmail.com', NULL, 'mayank@gmail.com', '$2y$10$Yh1QDK2eGMmxR8jkeKDfY.S1VjKhZCpwQthJBQMrA9AXz88KoNMdS', NULL, 'None', 'M', NULL, 'Single', NULL, NULL, '1234567890', '6549872315', NULL, 1, NULL, 0, 0, 0, 0, 0, NULL, NULL, NULL, 0, 0, 0, NULL, 3, '2019-20', NULL, 1, 0, NULL, '2021-07-19 11:07:39', '2021-07-19 10:07:39'),
 (84, 1, 'Miss', 'Roohi', 'Raj', 'Sachdeva', 'roohi@gmail.com', NULL, 'roohi@gmail.com', '$2y$10$yhCJ2dYPrZQXcMnwVIN8/Oap941BOymYIvpU3LtskA/1SA2sliAze', NULL, 'O+', 'F', '1990-07-02', 'Single', NULL, NULL, '7895642315', '7895640000', NULL, 1, NULL, 0, 0, 0, 0, 0, NULL, NULL, NULL, 0, 0, 0, NULL, 3, '2019-20', NULL, 1, 0, NULL, '2021-07-19 11:15:56', '2021-07-19 10:15:56'),
 (85, 1, 'Mr.', 'Arnav', 'Mahendra', 'Shah', 'arnav@gmail.com', NULL, 'arnav@gmail.com', '$2y$10$NV46ASPh0Znt0yChq9fqu.v5JTsciVzziLLR4BzroFgwGLUuw4R1m', NULL, 'None', 'M', '1993-07-08', 'Single', NULL, 'M035', '6549872315', '7895642315', 'Test.....', 1, NULL, 0, 0, 0, 0, 0, 'Indian', 'Hindu', 'Hindu', 0, 0, 0, NULL, 3, '2019-20', NULL, 1, 0, NULL, '2021-07-19 11:19:29', '2021-07-19 10:19:29'),
-(86, 1, 'Mr.', 'Siay', 'S', 'Shah', 'manojp123@yopmail.com', NULL, 'manojp123@yopmail.com', '$2y$10$dTZmNtx2Xk3IIRmGXtjAPuYr1eYQ5r3EhPAb3dz1GxQ5TZfKekIxG', NULL, 'B+ve', 'F', '1988-07-11', 'Married', NULL, 'M01', '4545454545554', '4545454545554', 'lorem Ipsum dor simit de nur', 1, 'MSP', 1, 1, 1, 1, 1, 'Indian', 'Hindu', 'Hindu', 1, 100, 1, NULL, 1, '2019-20', NULL, 1, 0, NULL, '2021-07-20 12:28:54', '2021-07-20 11:28:54');
+(86, 1, 'Mr.', 'Siay', 'S', 'Shah', 'manojp123@yopmail.com', NULL, 'manojp123@yopmail.com', '$2y$10$dTZmNtx2Xk3IIRmGXtjAPuYr1eYQ5r3EhPAb3dz1GxQ5TZfKekIxG', NULL, 'B+ve', 'F', '1988-07-11', 'Married', NULL, 'M01', '4545454545554', '4545454545554', 'lorem Ipsum dor simit de nur', 1, 'MSP', 1, 1, 1, 1, 1, 'Indian', 'Hindu', 'Hindu', 1, 100, 1, NULL, 1, '2019-20', NULL, 1, 0, NULL, '2021-07-20 12:28:54', '2021-07-20 11:28:54'),
+(87, 1, 'Mr.', 'Siay', 'S', 'Shah', 'manojp13@yopmail.com', NULL, 'manojp13@yopmail.com', '$2y$10$EcdETZII3KlitH0CaCiie.GovGba02zILvUAYOM7S9uAyDUIPC9aW', NULL, 'B+ve', 'F', '1988-07-11', 'Married', NULL, 'M01', '4545454545554', '4545454545554', 'lorem Ipsum dor simit de nur', 1, 'MSP', 1, 1, 1, 1, 1, 'Indian', 'Hindu', 'Hindu', 1, 100, 1, NULL, 1, '2019-20', NULL, 1, 0, NULL, '2021-08-25 12:40:43', '2021-08-25 07:10:43'),
+(88, 1, 'Mr.', 'Siay', 'S', 'Shah', 'manojp3@yopmail.com', NULL, 'manojp3@yopmail.com', '$2y$10$GtcaY2n2TUC9zyC2/hfb6u62IvPvkwqbJLRx2TKrH3LjC3RNXEAiS', NULL, 'B+ve', 'F', '1988-07-11', 'Married', NULL, 'M01', '4545454545554', '4545454545554', 'lorem Ipsum dor simit de nur', 1, 'MSP', 1, 1, 1, 1, 1, 'Indian', 'Hindu', 'Hindu', 1, 100, 1, NULL, 1, '2019-20', NULL, 1, 0, NULL, '2021-08-25 12:42:28', '2021-08-25 07:12:28'),
+(89, 1, 'Mr.', 'Siay', 'S', 'Shah', 'manojp00@yopmail.com', NULL, 'manojp00@yopmail.com', '$2y$10$L0QJt9pHW/h6WXciNF5G9OqFfLqdHYSX8aClHkiHQrbm4EZ7RlScK', NULL, 'B+ve', 'F', '1988-07-11', 'Married', NULL, 'M01', '4545454545554', '4545454545554', 'lorem Ipsum dor simit de nur', 1, 'MSP', 1, 1, 1, 1, 1, 'Indian', 'Hindu', 'Hindu', 1, 100, 1, NULL, 1, '2019-20', NULL, 1, 0, NULL, '2021-08-25 12:42:56', '2021-08-25 07:12:56'),
+(90, 1, 'Mr.', 'Siay', 'S', 'Shah', 'manojp131@yopmail.com', NULL, 'manojp131@yopmail.com', '$2y$10$jpJOO7TOJEWQ3aqHIeVZPu/zhVPeMcbeX0Y.ebutK8RORhvMSRvum', NULL, 'B+ve', 'F', '1988-07-11', 'Married', NULL, 'M01', '4545454545554', '4545454545554', 'lorem Ipsum dor simit de nur', 1, 'MSP', 1, 1, 1, 1, 1, 'Indian', 'Hindu', 'Hindu', 1, 100, 1, NULL, 1, '2019-20', NULL, 1, 0, NULL, '2021-09-01 09:33:24', '2021-09-01 04:03:24'),
+(91, 1, 'Mr.', 'Siay', 'S', 'Shah', 'manojp132@yopmail.com', NULL, 'manojp132@yopmail.com', '$2y$10$ut/w99.A0XdlNwcE99byS.XJnFdPiVZgRkc48sAdb7FNrijaUz..e', NULL, 'B+ve', 'F', '1988-07-11', 'Married', NULL, 'M01', '4545454545554', '4545454545554', 'lorem Ipsum dor simit de nur', 1, 'MSP', 1, 1, 1, 1, 1, 'Indian', 'Hindu', 'Hindu', 1, 100, 1, NULL, 1, '2019-20', NULL, 1, 0, NULL, '2021-09-01 09:33:50', '2021-09-01 04:03:50'),
+(92, 1, 'Mr.', 'Siay', 'S', 'Shah', 'manojp1323@yopmail.com', NULL, 'manojp1323@yopmail.com', '$2y$10$VQ7FqV7MvkWMnVIWhCdSvO9npDZxFQDD22ShMvs1UaVOtkRyO7aPy', NULL, 'B+ve', 'F', '1988-07-11', 'Married', NULL, 'M01', '4545454545554', '4545454545554', 'lorem Ipsum dor simit de nur', 1, 'MSP', 1, 1, 1, 1, 1, 'Indian', 'Hindu', 'Hindu', 1, 100, 1, NULL, 1, '2019-20', NULL, 1, 0, NULL, '2021-09-01 09:34:48', '2021-09-01 04:04:48'),
+(93, 1, 'Mr.', 'Siay', 'S', 'Shah', 'manojp13234@yopmail.com', NULL, 'manojp13234@yopmail.com', '$2y$10$6CMymMaxr567hbFU/NYbb.9dkiRFrOH38AlL7qSbYi5zeudvR1Oc.', NULL, 'B+ve', 'F', '1988-07-11', 'Married', NULL, 'M01', '4545454545554', '4545454545554', 'lorem Ipsum dor simit de nur', 1, 'MSP', 1, 1, 1, 1, 1, 'Indian', 'Hindu', 'Hindu', 1, 100, 1, NULL, 1, '2019-20', NULL, 1, 0, NULL, '2021-09-01 09:36:06', '2021-09-01 04:06:06'),
+(94, 1, 'Mr.', 'Siay', 'S', 'Shah', 'manojp12@yopmail.com', NULL, 'manojp12@yopmail.com', '$2y$10$cMbNh08SHSRoHSOdJ0TsTeGetTWibtAMXQzXqnwCmzRcRyD1PclOa', NULL, 'B+ve', 'F', '1988-07-11', 'Married', NULL, 'M01', '4545454545554', '4545454545554', 'lorem Ipsum dor simit de nur', 1, 'MSP', 1, 1, 1, 1, 1, 'Indian', 'Hindu', 'Hindu', 1, 100, 1, NULL, 1, '2019-20', NULL, 1, 0, NULL, '2021-09-01 09:36:24', '2021-09-01 04:06:24'),
+(95, 1, 'Mr.', 'Siay', 'S', 'Shah', 'manojp1223@yopmail.com', NULL, 'manojp1223@yopmail.com', '$2y$10$RDnie4qorwxfnBww1KMv.O.9sjYknKcCRgUmPGyUfXThbgLO1sXCq', NULL, 'B+ve', 'F', '1988-07-11', 'Married', NULL, 'M01', '4545454545554', '4545454545554', 'lorem Ipsum dor simit de nur', 1, 'MSP', 1, 1, 1, 1, 1, 'Indian', 'Hindu', 'Hindu', 1, 100, 1, NULL, 1, '2019-20', NULL, 1, 0, NULL, '2021-09-01 09:37:02', '2021-09-01 04:07:02'),
+(96, 1, 'Mr.', 'Siay', 'S', 'Shah', NULL, NULL, NULL, '$2y$10$qU1jF6F2L6UK4jtnyID3Xeo5/oo1wPWaTibrbJmJvXKYexlZde5Lu', NULL, 'B+ve', 'F', '1988-07-11', 'Married', NULL, 'M01', '4545454545554', '4545454545554', 'lorem Ipsum dor simit de nur', 1, 'MSP', 1, 1, 1, 1, 1, 'Indian', 'Hindu', 'Hindu', 1, 100, 1, NULL, 1, '2019-20', NULL, 1, 0, NULL, '2021-09-01 09:38:23', '2021-09-01 04:08:23'),
+(97, 1, 'Mr.', 'Siay', 'S', 'Shah', NULL, NULL, NULL, '$2y$10$PRd3onVkhPR4NjwXsvEQv.ntxJE7DYaJ63iw.jw6DrNNgV.bvCbXi', NULL, 'B+ve', 'F', '1988-07-11', 'Married', NULL, 'M01', '4545454545554', '4545454545554', 'lorem Ipsum dor simit de nur', 1, 'MSP', 1, 1, 1, 1, 1, 'Indian', 'Hindu', 'Hindu', 1, 100, 1, NULL, 1, '2019-20', NULL, 1, 0, NULL, '2021-09-01 09:38:40', '2021-09-01 04:08:40'),
+(98, 1, 'Mr.', 'Siay', 'S', 'Shah', NULL, NULL, NULL, '$2y$10$dmfSbG40VIRQoqPp2liQKO/Lfzh5du/gi314aV4rRhWZ5bW.BehL.', NULL, 'B+ve', 'F', '1988-07-11', 'Married', NULL, 'M01', '4545454545554', '4545454545554', 'lorem Ipsum dor simit de nur', 1, 'MSP', 1, 1, 1, 1, 1, 'Indian', 'Hindu', 'Hindu', 1, 100, 1, NULL, 1, '2019-20', NULL, 1, 0, NULL, '2021-09-01 09:39:07', '2021-09-01 04:09:07'),
+(99, 1, 'Mr.', 'Siay', 'S', 'Shah', NULL, NULL, NULL, '$2y$10$4AjfZO7FjsURagnbPJZRceoJCsNaOL5SU0kMot1xucRsEOeBRZlhG', NULL, 'B+ve', 'F', '1988-07-11', 'Married', NULL, 'M01', '4545454545554', '4545454545554', 'lorem Ipsum dor simit de nur', 1, 'MSP', 1, 1, 1, 1, 1, 'Indian', 'Hindu', 'Hindu', 1, 100, 1, NULL, 1, '2019-20', NULL, 1, 0, NULL, '2021-09-01 09:40:15', '2021-09-01 04:10:15'),
+(100, 1, 'Mr.', 'Siay', 'S', 'Shah', NULL, NULL, NULL, '$2y$10$w3EoJj90Qm3LIoKyTx.dA.uo8ZqaA6cca9KFkp8/AbdmKfeiMjL4S', NULL, 'B+ve', 'F', '1988-07-11', 'Married', NULL, 'M01', '4545454545554', '4545454545554', 'lorem Ipsum dor simit de nur', 1, 'MSP', 1, 1, 1, 1, 1, 'Indian', 'Hindu', 'Hindu', 1, 100, 1, NULL, 1, '2019-20', NULL, 1, 0, NULL, '2021-09-01 09:40:27', '2021-09-01 04:10:27'),
+(101, 1, 'Mr.', 'Siay', 'S', 'Shah', NULL, NULL, NULL, '$2y$10$QSFB0uZnVsz/lxbr42jyFeyu2kuLR2nfgyhQRro8vv53zBGol0BqK', NULL, 'B+ve', 'F', '1988-07-11', 'Married', NULL, 'M01', '4545454545554', '4545454545554', 'lorem Ipsum dor simit de nur', 1, 'MSP', 1, 1, 1, 1, 1, 'Indian', 'Hindu', 'Hindu', 1, 100, 1, NULL, 1, '2019-20', NULL, 1, 0, NULL, '2021-09-01 09:41:42', '2021-09-01 04:11:42');
 
 -- --------------------------------------------------------
 
@@ -1110,7 +1310,37 @@ INSERT INTO `user_address_details` (`id`, `users_id`, `mst_countries_id`, `mst_s
 (116, 3, 102, 7, 'Street 1 Test', 'Street 2 Test', 'Sudama Nagar', 'Indore', '123456', '', 'test', '454545554545', '', 1, 3, 1, NULL, '2021-07-20 12:03:19', '2021-07-20 12:29:45'),
 (117, 3, 102, 7, 'Cor Street 1', 'Cor Street 2', 'Gumasta nagar', 'Indore', '452001', 'email@yopmail.com', '', '454545554545', 'test.com', 2, 3, 1, NULL, '2021-07-20 12:03:19', '2021-07-20 12:29:45'),
 (118, 86, 102, 12, 'Street 1 Test', 'Street 2 Test', 'Sudama Nagar', 'Indore', '123456', '', 'test', '454545554545', '', 1, 1, NULL, NULL, '2021-07-20 12:28:54', '2021-07-28 10:24:38'),
-(119, 86, 102, 12, 'Street 1 Test', 'Street 2 Test', 'Sudama Nagar', 'Indore', '123456', '', '', '454545554545', '', 2, 1, NULL, NULL, '2021-07-20 12:28:54', '2021-07-28 10:24:41');
+(119, 86, 102, 12, 'Street 1 Test', 'Street 2 Test', 'Sudama Nagar', 'Indore', '123456', '', '', '454545554545', '', 2, 1, NULL, NULL, '2021-07-20 12:28:54', '2021-07-28 10:24:41'),
+(120, 87, 102, 50, 'Sabermati', 'Street 2 Test', 'Sudama Nagar', 'Indore', '123456', '', 'test', '454545554545', '', 1, 1, NULL, NULL, '2021-08-25 12:40:43', '2021-08-25 12:40:43'),
+(121, 87, 102, 50, 'Street 1 Test', 'Street 2 Test', 'Sudama Nagar', 'Indore', '123456', '', '', '454545554545', '', 2, 1, NULL, NULL, '2021-08-25 12:40:43', '2021-08-25 12:40:43'),
+(122, 88, 102, 50, 'Sabermati', 'Street 2 Test', 'Sudama Nagar', 'Indore', '123456', '', 'test', '454545554545', '', 1, 1, NULL, NULL, '2021-08-25 12:42:28', '2021-08-25 12:42:28'),
+(123, 88, 102, 50, 'Street 1 Test', 'Street 2 Test', 'Sudama Nagar', 'Indore', '123456', '', '', '454545554545', '', 2, 1, NULL, NULL, '2021-08-25 12:42:28', '2021-08-25 12:42:28'),
+(124, 89, 102, 50, 'Sabermati', 'Street 2 Test', 'Sudama Nagar', 'Indore', '123456', '', 'test', '454545554545', '', 1, 1, NULL, NULL, '2021-08-25 12:42:56', '2021-08-25 12:42:56'),
+(125, 89, 102, 50, 'Street 1 Test', 'Street 2 Test', 'Sudama Nagar', 'Indore', '123456', '', '', '454545554545', '', 2, 1, NULL, NULL, '2021-08-25 12:42:56', '2021-08-25 12:42:56'),
+(126, 90, 102, 50, 'Sabermati', 'Street 2 Test', 'Sudama Nagar', 'Indore', '123456', '', 'test', '454545554545', '', 1, 1, NULL, NULL, '2021-09-01 09:33:24', '2021-09-01 09:33:24'),
+(127, 90, 102, 50, 'Street 1 Test', 'Street 2 Test', 'Sudama Nagar', 'Indore', '123456', '', '', '454545554545', '', 2, 1, NULL, NULL, '2021-09-01 09:33:24', '2021-09-01 09:33:24'),
+(128, 91, 102, 50, 'Sabermati', 'Street 2 Test', 'Sudama Nagar', 'Indore', '123456', '', 'test', '454545554545', '', 1, 1, NULL, NULL, '2021-09-01 09:33:50', '2021-09-01 09:33:50'),
+(129, 91, 102, 50, 'Street 1 Test', 'Street 2 Test', 'Sudama Nagar', 'Indore', '123456', '', '', '454545554545', '', 2, 1, NULL, NULL, '2021-09-01 09:33:51', '2021-09-01 09:33:51'),
+(130, 92, 102, 50, 'Sabermati', 'Street 2 Test', 'Sudama Nagar', 'Indore', '123456', '', 'test', '454545554545', '', 1, 1, NULL, NULL, '2021-09-01 09:34:48', '2021-09-01 09:34:48'),
+(131, 92, 102, 50, 'Street 1 Test', 'Street 2 Test', 'Sudama Nagar', 'Indore', '123456', '', '', '454545554545', '', 2, 1, NULL, NULL, '2021-09-01 09:34:49', '2021-09-01 09:34:49'),
+(132, 93, 102, 50, 'Sabermati', 'Street 2 Test', 'Sudama Nagar', 'Indore', '123456', '', 'test', '454545554545', '', 1, 1, NULL, NULL, '2021-09-01 09:36:06', '2021-09-01 09:36:06'),
+(133, 93, 102, 50, 'Street 1 Test', 'Street 2 Test', 'Sudama Nagar', 'Indore', '123456', '', '', '454545554545', '', 2, 1, NULL, NULL, '2021-09-01 09:36:06', '2021-09-01 09:36:06'),
+(134, 94, 102, 50, 'Sabermati', 'Street 2 Test', 'Sudama Nagar', 'Indore', '123456', '', 'test', '454545554545', '', 1, 1, NULL, NULL, '2021-09-01 09:36:24', '2021-09-01 09:36:24'),
+(135, 94, 102, 50, 'Street 1 Test', 'Street 2 Test', 'Sudama Nagar', 'Indore', '123456', '', '', '454545554545', '', 2, 1, NULL, NULL, '2021-09-01 09:36:24', '2021-09-01 09:36:24'),
+(136, 95, 102, 50, 'Sabermati', 'Street 2 Test', 'Sudama Nagar', 'Indore', '123456', '', 'test', '454545554545', '', 1, 1, NULL, NULL, '2021-09-01 09:37:02', '2021-09-01 09:37:02'),
+(137, 95, 102, 50, 'Street 1 Test', 'Street 2 Test', 'Sudama Nagar', 'Indore', '123456', '', '', '454545554545', '', 2, 1, NULL, NULL, '2021-09-01 09:37:02', '2021-09-01 09:37:02'),
+(138, 96, 102, 50, 'Sabermati', 'Street 2 Test', 'Sudama Nagar', 'Indore', '123456', '', 'test', '454545554545', '', 1, 1, NULL, NULL, '2021-09-01 09:38:23', '2021-09-01 09:38:23'),
+(139, 96, 102, 50, 'Street 1 Test', 'Street 2 Test', 'Sudama Nagar', 'Indore', '123456', '', '', '454545554545', '', 2, 1, NULL, NULL, '2021-09-01 09:38:23', '2021-09-01 09:38:23'),
+(140, 97, 102, 50, 'Sabermati', 'Street 2 Test', 'Sudama Nagar', 'Indore', '123456', '', 'test', '454545554545', '', 1, 1, NULL, NULL, '2021-09-01 09:38:40', '2021-09-01 09:38:40'),
+(141, 97, 102, 50, 'Street 1 Test', 'Street 2 Test', 'Sudama Nagar', 'Indore', '123456', '', '', '454545554545', '', 2, 1, NULL, NULL, '2021-09-01 09:38:40', '2021-09-01 09:38:40'),
+(142, 98, 102, 50, 'Sabermati', 'Street 2 Test', 'Sudama Nagar', 'Indore', '123456', '', 'test', '454545554545', '', 1, 1, NULL, NULL, '2021-09-01 09:39:07', '2021-09-01 09:39:07'),
+(143, 98, 102, 50, 'Street 1 Test', 'Street 2 Test', 'Sudama Nagar', 'Indore', '123456', '', '', '454545554545', '', 2, 1, NULL, NULL, '2021-09-01 09:39:07', '2021-09-01 09:39:07'),
+(144, 99, 102, 50, 'Sabermati', 'Street 2 Test', 'Sudama Nagar', 'Indore', '123456', '', 'test', '454545554545', '', 1, 1, NULL, NULL, '2021-09-01 09:40:15', '2021-09-01 09:40:15'),
+(145, 99, 102, 50, 'Street 1 Test', 'Street 2 Test', 'Sudama Nagar', 'Indore', '123456', '', '', '454545554545', '', 2, 1, NULL, NULL, '2021-09-01 09:40:15', '2021-09-01 09:40:15'),
+(146, 100, 102, 50, 'Sabermati', 'Street 2 Test', 'Sudama Nagar', 'Indore', '123456', '', 'test', '454545554545', '', 1, 1, NULL, NULL, '2021-09-01 09:40:27', '2021-09-01 09:40:27'),
+(147, 100, 102, 50, 'Street 1 Test', 'Street 2 Test', 'Sudama Nagar', 'Indore', '123456', '', '', '454545554545', '', 2, 1, NULL, NULL, '2021-09-01 09:40:27', '2021-09-01 09:40:27'),
+(148, 101, 102, 50, 'Sabermati', 'Street 2 Test', 'Sudama Nagar', 'Indore', '123456', '', 'test', '454545554545', '', 1, 1, NULL, NULL, '2021-09-01 09:41:42', '2021-09-01 09:41:42'),
+(149, 101, 102, 50, 'Street 1 Test', 'Street 2 Test', 'Sudama Nagar', 'Indore', '123456', '', '', '454545554545', '', 2, 1, NULL, NULL, '2021-09-01 09:41:42', '2021-09-01 09:41:42');
 
 -- --------------------------------------------------------
 
@@ -1177,7 +1407,11 @@ INSERT INTO `user_company_info` (`id`, `mst_companies_id`, `users_id`, `reportin
 (8, NULL, 47, 2, 2, 1, '2020-05-20', '2021-06-20', 'Bank Name Ltd', 'Vijay Nagar', '5000', '454545554545', 1, 3, NULL, NULL, '2021-07-02 10:13:01', '2021-07-02 10:13:01'),
 (9, 4, 81, 5, 5, 4, '2018-07-19', '2021-07-19', 'ICICI Bank', 'Thaltej', '25000', '12345678958', 1, 3, NULL, NULL, '2021-07-19 10:43:21', '2021-07-19 10:43:21'),
 (10, 2, 85, 3, 3, 8, '2018-07-07', '2021-07-19', 'Kalupur Bank', 'Paldi', '27000', '12345678000', 1, 3, NULL, NULL, '2021-07-19 11:19:29', '2021-07-19 11:19:29'),
-(11, 1, 86, 2, 2, 1, '2020-05-20', '2021-06-20', 'Bank Name Ltd', 'Vijay Nagar', '5000', '454545554545', 1, 1, NULL, NULL, '2021-07-20 12:28:54', '2021-07-20 12:28:54');
+(11, 1, 86, 2, 2, 1, '2020-05-20', '2021-06-20', 'Bank Name Ltd', 'Vijay Nagar', '5000', '454545554545', 1, 1, NULL, NULL, '2021-07-20 12:28:54', '2021-07-20 12:28:54'),
+(12, 1, 90, 2, 2, 1, '2020-05-20', '2021-06-20', 'Bank Name Ltd', 'Vijay Nagar', '5000', '454545554545', 1, 1, NULL, NULL, '2021-09-01 09:33:24', '2021-09-01 09:33:24'),
+(13, 1, 91, 2, 2, 1, '2020-05-20', '2021-06-20', 'Bank Name Ltd', 'Vijay Nagar', '5000', '454545554545', 1, 1, NULL, NULL, '2021-09-01 09:33:51', '2021-09-01 09:33:51'),
+(14, 1, 94, 2, 2, 1, '2020-05-20', '2021-06-20', 'Bank Name Ltd', 'Vijay Nagar', '5000', '454545554545', 1, 1, NULL, NULL, '2021-09-01 09:36:24', '2021-09-01 09:36:24'),
+(15, 1, 99, 2, 2, 1, '2020-05-20', '2021-06-20', 'Bank Name Ltd', 'Vijay Nagar', '5000', '454545554545', 1, 1, NULL, NULL, '2021-09-01 09:40:15', '2021-09-01 09:40:15');
 
 -- --------------------------------------------------------
 
@@ -1400,6 +1634,18 @@ ALTER TABLE `mst_positions`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `mst_product_list`
+--
+ALTER TABLE `mst_product_list`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `mst_product_parent_list`
+--
+ALTER TABLE `mst_product_parent_list`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `mst_states`
 --
 ALTER TABLE `mst_states`
@@ -1416,6 +1662,18 @@ ALTER TABLE `mst_units`
 --
 ALTER TABLE `password_resets`
   ADD KEY `password_resets_email_index` (`email`);
+
+--
+-- Indexes for table `product_sample_details_list`
+--
+ALTER TABLE `product_sample_details_list`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `product_sample_parameters_list`
+--
+ALTER TABLE `product_sample_parameters_list`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `users`
@@ -1509,19 +1767,19 @@ ALTER TABLE `mst_countries`
 -- AUTO_INCREMENT for table `mst_customers`
 --
 ALTER TABLE `mst_customers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `mst_customers_contact_info`
 --
 ALTER TABLE `mst_customers_contact_info`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `mst_customers_contact_person`
 --
 ALTER TABLE `mst_customers_contact_person`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `mst_departments`
@@ -1572,6 +1830,18 @@ ALTER TABLE `mst_positions`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
+-- AUTO_INCREMENT for table `mst_product_list`
+--
+ALTER TABLE `mst_product_list`
+  MODIFY `id` int(23) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
+
+--
+-- AUTO_INCREMENT for table `mst_product_parent_list`
+--
+ALTER TABLE `mst_product_parent_list`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+
+--
 -- AUTO_INCREMENT for table `mst_states`
 --
 ALTER TABLE `mst_states`
@@ -1584,16 +1854,28 @@ ALTER TABLE `mst_units`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT for table `product_sample_details_list`
+--
+ALTER TABLE `product_sample_details_list`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT for table `product_sample_parameters_list`
+--
+ALTER TABLE `product_sample_parameters_list`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=102;
 
 --
 -- AUTO_INCREMENT for table `user_address_details`
 --
 ALTER TABLE `user_address_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=120;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=150;
 
 --
 -- AUTO_INCREMENT for table `user_assign_rights`
@@ -1605,7 +1887,7 @@ ALTER TABLE `user_assign_rights`
 -- AUTO_INCREMENT for table `user_company_info`
 --
 ALTER TABLE `user_company_info`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `user_doc_details`

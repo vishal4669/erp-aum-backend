@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -144,6 +145,13 @@ Route::group(['middleware'=>['jwt.verify'], 'prefix'=>'v1'], function () {
     Route::get('getLocation/{id}', 'App\Http\Controllers\v1\LocationController@show');
     Route::post('editLocation/{id}', 'App\Http\Controllers\v1\LocationController@update');
     Route::post('deleteLocation/{id}', 'App\Http\Controllers\v1\LocationController@destroy');
+
+    // Product Masters
+    Route::post('addProduct', 'App\Http\Controllers\v1\ProductController@store');
+    // Route::get('listLocation', 'App\Http\Controllers\v1\LocationController@index');
+    // Route::get('getLocation/{id}', 'App\Http\Controllers\v1\LocationController@show');
+    // Route::post('editLocation/{id}', 'App\Http\Controllers\v1\LocationController@update');
+    // Route::post('deleteLocation/{id}', 'App\Http\Controllers\v1\LocationController@destroy');
   
 });
 
