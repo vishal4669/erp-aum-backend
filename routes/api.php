@@ -148,8 +148,10 @@ Route::group(['middleware'=>['jwt.verify'], 'prefix'=>'v1'], function () {
 
     // Product Masters
     Route::post('addProduct', 'App\Http\Controllers\v1\ProductController@store');
-    // Route::get('listLocation', 'App\Http\Controllers\v1\LocationController@index');
-    // Route::get('getLocation/{id}', 'App\Http\Controllers\v1\LocationController@show');
+    Route::get('listproduct', 'App\Http\Controllers\v1\ProductController@index');
+    Route::get('paramsList', 'App\Http\Controllers\v1\ProductController@param_list');
+    Route::get('parentList', 'App\Http\Controllers\v1\ProductController@parent_list');
+    Route::get('getproduct/{id}', 'App\Http\Controllers\v1\ProductController@show');
     // Route::post('editLocation/{id}', 'App\Http\Controllers\v1\LocationController@update');
     // Route::post('deleteLocation/{id}', 'App\Http\Controllers\v1\LocationController@destroy');
   

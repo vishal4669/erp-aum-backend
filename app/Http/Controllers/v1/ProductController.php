@@ -12,6 +12,7 @@ use DB;
 use App\Models\Product;
 use App\Models\Productdetails;
 use App\Models\Productparameters;
+use App\Models\Productparent;
 
 
 class ProductController extends Controller
@@ -21,11 +22,77 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         //
-    }
+        try {
 
+            $loggedInUserData = Helper::getUserData();
+            $is_dropdown = (isset($request->is_dropdown) && $request->is_dropdown == 1) ? 1 : 0;
+
+            if (!$is_dropdown) {
+
+                $data = Product::where('is_generic', 1)->where('is_active', 1)
+                    ->select('mst_product_list.id', 'product_name', 'product_generic', 'marker_specification', 'is_generic', 'is_active')
+                    ->where('mst_product_list.selected_year', $loggedInUserData['selected_year'])
+                    ->orderBy('mst_product_list.id', 'desc')
+                    ->paginate(10);
+            } elseif ($is_dropdown) {
+
+                $data = Product::where('is_generic', 1)->where('is_active', 1)
+                    ->select('mst_product_list.id', 'product_name', 'product_generic', 'marker_specification', 'is_generic', 'is_active')
+                    ->where('mst_product_list.selected_year', $loggedInUserData['selected_year'])
+                    ->orderBy('mst_product_list.id', 'desc')
+                    ->paginate(10);
+            }
+
+            $data_arr = $data->toArray();
+            if ((isset($data_arr["total"])) && $data_arr["total"] == 0) {
+
+                return Helper::response("Product List is Empty", Response::HTTP_OK, true, $data);
+            } else {
+
+                return Helper::response("Product List Shown Successfully", Response::HTTP_OK, true, $data);
+            }
+        } catch (Exception $e) {
+
+            $data = array();
+            return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);
+        }
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function param_list()
+    {
+        try {
+
+            $paramData = Productparameters::all();
+
+            return Helper::response("Parameter Data Shown Successfully", Response::HTTP_OK, true, $paramData);
+        } catch (Exception $e) {
+            $data = array();
+            return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $paramData);
+        }
+    }
+   /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function parent_list()
+    {
+        try {
+            $parentData = Productparent::all();
+
+            return Helper::response("Parameter Data Shown Successfully", Response::HTTP_OK, true, $parentData);
+        } catch (Exception $e) {
+            $data = array();
+            return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $parentData);
+        }
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -211,6 +278,16 @@ class ProductController extends Controller
     public function show($id)
     {
         //
+        Log::info("Fetch customer details : " . json_encode(array('id' => $id)));
+        try {
+
+            $productData = Product::with(['sample_details'])->find($id);
+
+            return Helper::response("Product Data Shown Successfully", Response::HTTP_OK, true, $productData);
+        } catch (Exception $e) {
+            $data = array();
+            return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $productData);
+        }
     }
 
     /**

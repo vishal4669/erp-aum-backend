@@ -28,4 +28,15 @@ class Product extends Model
         'created_at',
         'updated_at',
     ];
+
+    // Customer Contact Info
+    public function sample_details()
+    {
+        return $this->hasMany('App\Models\Productdetails', 'product_id');
+    }
+    // Customer Contact Info
+    public function param_list()
+    {
+        return $this->hasMany('App\Models\Productparameters', 'id');
+    }
 }
