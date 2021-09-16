@@ -152,7 +152,7 @@ Route::group(['middleware'=>['jwt.verify'], 'prefix'=>'v1'], function () {
     Route::get('paramsList', 'App\Http\Controllers\v1\ProductController@param_list');
     Route::get('parentList', 'App\Http\Controllers\v1\ProductController@parent_list');
     Route::get('getproduct/{id}', 'App\Http\Controllers\v1\ProductController@show');
-    // Route::post('editLocation/{id}', 'App\Http\Controllers\v1\LocationController@update');
+    Route::post('editProduct/{id}', 'App\Http\Controllers\v1\ProductController@update');
     // Route::post('deleteLocation/{id}', 'App\Http\Controllers\v1\LocationController@destroy');
   
 });
