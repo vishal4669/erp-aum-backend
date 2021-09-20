@@ -47,8 +47,9 @@ class CustomerController extends Controller
                     ->get();
             }
 
-            $data_arr = $data->toArray();
-            if ((isset($data_arr["total"])) && $data_arr["total"] == 0) {
+            $data_arr = $data->isEmpty();
+            
+            if ($data_arr) {
                 return Helper::response("Customer List is Empty", Response::HTTP_OK, true, $data);
             } else {
                 return Helper::response("Customer List Shown Successfully", Response::HTTP_OK, true, $data);
@@ -328,7 +329,7 @@ class CustomerController extends Controller
         // return Helper::response("DEBUG", Response::HTTP_OK, true, $request->other_pan_card_copy );
         $reqpan = $req['customer_contact_info']['other_contact_info'][0]['other_pan_card_copy'];
         // return Helper::response("Customer", Response::HTTP_OK, true, $reqpan);
-        if ( $reqpan == $apipan || $reqpan == null || $reqpan == "null" || $reqpan == "undefined" ) {
+        if ($reqpan == $apipan || $reqpan == null || $reqpan == "null" || $reqpan == "undefined") {
             $panrule = '';
         } else {
             $panrule = 'nullable|mimes:jpeg,png,jpg,svg,pdf|max:2048';
@@ -374,8 +375,8 @@ class CustomerController extends Controller
                 'logo.image' => 'please select image file for logo',
                 'logo.mimes' => 'image type must be jpeg,png,jpg,svg',
                 'logo.max' => 'image size must be less than 2048 kb',
-                'user_name.email' => 'Please enter valid email for User name', 
-                'customer_contact_info.home_contact_info.*.email.email' => 'Please enter valid email for Account/Admin E-mail',             
+                'user_name.email' => 'Please enter valid email for User name',
+                'customer_contact_info.home_contact_info.*.email.email' => 'Please enter valid email for Account/Admin E-mail',
                 'company_tin_no.regex' => 'Please enter valid Tin number <u>example</u>: "900700000" or "900 70 0000" or "900-70-0000"',
                 'customer_contact_info.home_contact_info.*.street_1.max' => 'please enter maximum 100 words for home street_1',
                 'customer_contact_info.home_contact_info.*.street_2.max' => 'please enter maximum 100 words for home street_2',
@@ -521,8 +522,8 @@ class CustomerController extends Controller
                             'area' => (isset($home_contact_infos['area'])) ? $home_contact_infos['area'] : '',
                             'pin' => (isset($home_contact_infos['pin'])) ? $home_contact_infos['pin'] : '',
                             'city' => (isset($home_contact_infos['city'])) ? $home_contact_infos['city'] : '',
-                            'state' => (isset($home_contact_infos['state'])) ? $h_state: 0,
-                            'country' => (isset($home_contact_infos['country'])) ? $o_country: 0,
+                            'state' => (isset($home_contact_infos['state'])) ? $h_state : 0,
+                            'country' => (isset($home_contact_infos['country'])) ? $o_country : 0,
                             'home_landline' => (isset($home_contact_infos['home_landline'])) ? $home_contact_infos['home_landline'] : '',
                             'home_pan_card' => (isset($home_contact_infos['home_pan_card'])) ? $home_contact_infos['home_pan_card'] : '',
                             'contact_info_type' => (isset($home_contact_infos['contact_info_type'])) ? $home_contact_infos['contact_info_type'] : '',

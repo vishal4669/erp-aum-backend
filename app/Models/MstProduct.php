@@ -4,11 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Product extends Model
+class MstProduct extends Model
 {
     use HasFactory;
-    protected $table = "mst_product_list";
+    use SoftDeletes;
     protected $fillable = [
         'mst_companies_id',
         'product_name',
@@ -29,14 +30,8 @@ class Product extends Model
         'updated_at',
     ];
 
-    // Customer Contact Info
-    public function sample_details()
+    public function samples()
     {
-        return $this->hasMany('App\Models\Productdetails', 'product_id');
-    }
-    // Customer Contact Info
-    public function param_list()
-    {
-        return $this->hasMany('App\Models\Productparameters', 'id');
+        return $this->hasMany(MstProductSample::class);
     }
 }
