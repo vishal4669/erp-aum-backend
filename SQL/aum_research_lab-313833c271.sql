@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 14, 2021 at 03:30 PM
+-- Generation Time: Sep 20, 2021 at 04:11 PM
 -- Server version: 10.4.20-MariaDB
 -- PHP Version: 8.0.8
 
@@ -549,21 +549,6 @@ CREATE TABLE `mst_customers` (
   `deleted_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `mst_customers`
---
-
-INSERT INTO `mst_customers` (`id`, `mst_companies_id`, `company_name`, `gst_number`, `contact_person_name`, `tally_alias_name`, `user_name`, `password`, `birth_date`, `contact_type`, `priority`, `notes`, `logo`, `education_details`, `prev_details`, `company_tin_no`, `company_service_tax_no`, `company_cust_discount`, `created_by`, `updated_by`, `created_at`, `updated_at`, `selected_year`, `copied_from_year`, `is_active`, `deleted_at`) VALUES
-(1, 1, 'apple', '06BZAHM6385P6Z2', NULL, NULL, 'labafna', '$2y$10$U6zc2i8Ume6G6w7YP7ekY.M3DeGFi3bn./2jy8prQykp8my88zjxq', NULL, 'customer', NULL, NULL, '20210907132116.jpg', NULL, NULL, '900700000', NULL, '100', 1, 1, '2021-09-07 13:21:16', '2021-09-07 13:21:16', '2019-20', NULL, 1, NULL),
-(2, 1, 'apple', '06BZAHM6385P6Z2', NULL, NULL, 'labafna', '$2y$10$npdAygi7CALZMzUq1Z1gBuBqXtR6RVgB9rDUqGyK9ImKNc2.seTJq', NULL, 'customer', NULL, NULL, '20210907132217.jpg', NULL, NULL, '900700000', NULL, '100', 1, 1, '2021-09-07 13:22:17', '2021-09-08 07:07:24', '2019-20', NULL, 1, NULL),
-(3, 1, 'apple', '06BZAHM6385P6Z2', NULL, NULL, 'labafna', '$2y$10$294iQQP88VzDr6ELDCwyW.KDt60F3vja2XqoV9a69GDRyJ94x618q', NULL, 'customer', NULL, NULL, '20210907132224.jpg', NULL, NULL, '900700000', NULL, '100', 1, 1, '2021-09-07 13:22:24', '2021-09-08 06:55:49', '2019-20', NULL, 1, NULL),
-(4, 1, 'apple', '06BZAHM6385P6Z2', NULL, NULL, 'labafna', '$2y$10$6ExGMuEdhobX1rhM9z8k3.Lw4Px0GQc/MjWhLFu3nA3psedeQOpTW', NULL, 'customer', NULL, NULL, '20210907132348.jpg', NULL, NULL, '900700000', NULL, '100', 1, 1, '2021-09-07 13:23:48', '2021-09-08 07:03:30', '2019-20', NULL, 1, NULL),
-(7, 1, 'apple', '06BZAHM6385P6Z2', NULL, NULL, 'labafna', '$2y$10$ddLGneW/kgw2n4Y/nz6FR./Hj9XEtBu1qqgv0/Abi3Mt4poQe5tJ2', NULL, 'customer', NULL, NULL, '20210907132629.jpg', NULL, NULL, '900700000', NULL, '100', 1, 1, '2021-09-07 13:26:30', '2021-09-08 07:24:58', '2019-20', NULL, 1, NULL),
-(9, 1, 'apple', '06BZAHM6385P6Z2', NULL, NULL, 'labafna', '$2y$10$f57ITu4Nn9hxfucMa5D.tudPn34LEfBBvluuQYxBnSNPpLpfdlR8O', NULL, 'customer', NULL, NULL, '20210908072744.jpg', NULL, NULL, '900700000', NULL, '100', 1, 1, '2021-09-08 07:27:44', '2021-09-08 07:28:12', '2019-20', NULL, 1, NULL),
-(10, 1, 'apple', '06BZAHM6385P6Z2', NULL, NULL, 'labafna', '$2y$10$8anS8pGbViB0DnkL6PDpZOY/dbf7tj0IEELmfCpCuPFC5u2bUYkZ6', NULL, 'customer', NULL, NULL, '20210908091553.jpg', NULL, NULL, '900700000', NULL, '100', 1, 1, '2021-09-08 09:15:53', '2021-09-08 09:16:35', '2019-20', NULL, 1, NULL),
-(11, 1, 'apple', '06BZAHM6385P6Z2', NULL, NULL, 'labafna', '$2y$10$3cAsZ30K1ASocbL.kSYXUOs0NMmzMNGE6LWig00Ct9luu/fVk/E5W', NULL, 'customer', NULL, NULL, '20210908091555.jpg', NULL, NULL, '900700000', NULL, '100', 1, 1, '2021-09-08 09:15:55', '2021-09-08 09:25:18', '2019-20', NULL, 1, NULL),
-(12, 1, 'kiwis', '06BZAHM6385P6Z2', NULL, NULL, 'labafna', '$2y$10$N7PIDZPqIfVoAn9LZEtrhOVBE8cEw7reHTgyPFgpCOUfmZSotqIRO', NULL, 'customer', NULL, NULL, NULL, NULL, NULL, '900700000', NULL, '100', 1, 1, '2021-09-08 09:15:56', '2021-09-09 07:39:05', '2019-20', NULL, 1, NULL);
-
 -- --------------------------------------------------------
 
 --
@@ -596,33 +581,6 @@ CREATE TABLE `mst_customers_contact_info` (
   `deleted_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `mst_customers_contact_info`
---
-
-INSERT INTO `mst_customers_contact_info` (`id`, `mst_customer_id`, `street_1`, `street_2`, `area`, `pin`, `city`, `state`, `country`, `home_landline`, `other_website`, `other_qc_email`, `home_pan_card`, `other_pan_card_copy`, `contact_info_type`, `contact_no`, `home_qc_contact_no`, `email`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 1, 'Visat', 'Motera', 'Avni Bhavan', '380019', 'Ahmedabad', 1, 1, '079-27507178', NULL, NULL, 'BNZAA2318J', NULL, 1, '9408072555', '0987654321', 'MS@gmail.com', 1, 1, '2021-09-07 13:21:17', '2021-09-07 13:21:17', NULL),
-(2, 1, 'Visat', 'Motera', '', '', '', 0, 0, NULL, '', 'p@gmail.com', NULL, '20210907132117.jpg', 2, '', NULL, 'p@gmail.com', 1, 1, '2021-09-07 13:21:17', '2021-09-07 13:21:17', NULL),
-(3, 2, 'Visat', 'Motera', 'Avni Bhavan', '380019', 'Ahmedabad', 1, 1, '079-27507178', NULL, NULL, 'BNZAA2318J', NULL, 1, '9408072555', '0987654321', 'MS@gmail.com', 1, 1, '2021-09-07 13:22:17', '2021-09-07 13:22:17', NULL),
-(4, 2, 'Visat', 'Motera', '', '', '', 0, 0, NULL, '', 'p@gmail.com', NULL, '20210907132217.jpg', 2, '', NULL, 'p@gmail.com', 1, 1, '2021-09-07 13:22:17', '2021-09-07 13:22:17', NULL),
-(5, 3, 'Visat', 'Motera', 'Avni Bhavan', '380019', 'Ahmedabad', 1, 1, '079-27507178', NULL, NULL, 'BNZAA2318J', NULL, 1, '9408072555', '0987654321', 'MS@gmail.com', 1, 1, '2021-09-07 13:22:24', '2021-09-07 13:22:24', NULL),
-(6, 3, 'Visat', 'Motera', '', '', '', 0, 0, NULL, '', 'p@gmail.com', NULL, '20210907132224.jpg', 2, '', NULL, 'p@gmail.com', 1, 1, '2021-09-07 13:22:24', '2021-09-07 13:22:24', NULL),
-(7, 4, 'Visat', 'Motera', 'Avni Bhavan', '380019', 'Ahmedabad', 1, 1, '079-27507178', NULL, NULL, 'BNZAA2318J', NULL, 1, '9408072555', '0987654321', 'MS@gmail.com', 1, 1, '2021-09-07 13:23:48', '2021-09-07 13:23:48', NULL),
-(8, 4, 'Visat', 'Motera', '', '', '', 0, 0, NULL, '', 'p@gmail.com', NULL, '20210907132348.jpg', 2, '', NULL, 'p@gmail.com', 1, 1, '2021-09-07 13:23:48', '2021-09-07 13:23:48', NULL),
-(13, 7, 'Visat', 'Motera', 'Avni Bhavan', '380019', 'Ahmedabad', 1, 1, '079-27507178', NULL, NULL, 'BNZAA2318J', NULL, 1, '9408072555', '0987654321', 'MS@gmail.com', 1, 1, '2021-09-07 13:26:30', '2021-09-07 13:26:30', NULL),
-(14, 7, 'Visat', 'Motera', '', '', '', 0, 0, NULL, '', 'p@gmail.com', NULL, '20210907132630.jpg', 2, '', NULL, 'p@gmail.com', 1, 1, '2021-09-07 13:26:30', '2021-09-07 13:26:30', NULL),
-(17, 9, 'Visat', 'Motera', 'Avni Bhavan', '380019', 'Ahmedabad', 1, 1, '079-27507178', NULL, NULL, 'BNZAA2318J', NULL, 1, '9408072555', '0987654321', 'MS@gmail.com', 1, 1, '2021-09-08 07:27:44', '2021-09-08 07:28:12', '2021-09-08 07:28:12'),
-(18, 9, 'Visat', 'Motera', '', '', '', 0, 0, NULL, '', 'p@gmail.com', NULL, '20210908072744.jpg', 2, '', NULL, 'p@gmail.com', 1, 1, '2021-09-08 07:27:44', '2021-09-08 07:28:12', '2021-09-08 07:28:12'),
-(19, 10, 'Visat', 'Motera', 'Avni Bhavan', '380019', 'Ahmedabad', 1, 1, '079-27507178', NULL, NULL, 'BNZAA2318J', NULL, 1, '9408072555', '0987654321', 'MS@gmail.com', 1, 1, '2021-09-08 09:15:53', '2021-09-08 09:16:35', '2021-09-08 09:16:35'),
-(20, 10, 'Visat', 'Motera', '', '', '', 0, 0, NULL, '', 'p@gmail.com', NULL, '20210908091553.jpg', 2, '', NULL, 'p@gmail.com', 1, 1, '2021-09-08 09:15:53', '2021-09-08 09:16:35', '2021-09-08 09:16:35'),
-(21, 11, 'Visat', 'Motera', 'Avni Bhavan', '380019', 'Ahmedabad', 1, 1, '079-27507178', NULL, NULL, 'BNZAA2318J', NULL, 1, '9408072555', '0987654321', 'MS@gmail.com', 1, 1, '2021-09-08 09:15:55', '2021-09-08 09:25:18', '2021-09-08 09:25:18'),
-(22, 11, 'Visat', 'Motera', '', '', '', 0, 0, NULL, '', 'p@gmail.com', NULL, '20210908091555.jpg', 2, '', NULL, 'p@gmail.com', 1, 1, '2021-09-08 09:15:55', '2021-09-08 09:25:18', '2021-09-08 09:25:18'),
-(23, 12, 'Vice', 'VEGAS', 'Avni Bhavan', '380019', 'Ahmedabad', 1, 1, '079-27507178', NULL, NULL, 'ABCTY1234D', NULL, 1, '9408072555', '0987654321', 'MS@gmail.com', 1, 1, '2021-09-08 09:15:56', '2021-09-09 07:39:05', NULL),
-(24, 12, 'Visat', 'Motera', '', '', '', 0, 0, NULL, '', 'p@gmail.com', NULL, '20210908091556.jpg', 2, '', NULL, 'p@gmail.com', 1, 1, '2021-09-08 09:15:56', '2021-09-08 09:15:56', NULL),
-(25, 11, 'Vice', 'VEGAS', 'Avni Bhavan', '380019', 'Ahmedabad', 1, 1, '079-27507178', NULL, NULL, 'ABCTY1234D', NULL, 1, '9408072555', '0987654321', 'MS@gmail.com', 1, 1, '2021-09-08 10:42:55', '2021-09-09 07:41:01', NULL),
-(26, 10, 'LAS VEGAS', 'VEGAS', 'Avni Bhavan', '380019', 'Ahmedabad', 1, 1, '079-27507178', NULL, NULL, 'ABCTY1234D', NULL, 1, '9408072555', '0987654321', 'MS@gmail.com', 1, 1, '2021-09-08 10:44:52', '2021-09-08 10:44:52', NULL),
-(27, 9, 'LAS VEGAS', 'VEGAS', 'Avni Bhavan', '380019', 'Ahmedabad', 1, 1, '079-27507178', NULL, NULL, 'ABCTY1234D', NULL, 1, '9408072555', '0987654321', 'MS@gmail.com', 1, 1, '2021-09-08 10:45:05', '2021-09-08 10:48:36', NULL);
-
 -- --------------------------------------------------------
 
 --
@@ -643,20 +601,6 @@ CREATE TABLE `mst_customers_contact_person` (
   `updated_at` datetime NOT NULL DEFAULT current_timestamp(),
   `deleted_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `mst_customers_contact_person`
---
-
-INSERT INTO `mst_customers_contact_person` (`id`, `mst_customer_id`, `name`, `mobile`, `email`, `department`, `position`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(3, 9, 'Pragnesh', '', 'p@gmail.com', 0, 0, 1, 1, '2021-09-08 07:27:44', '2021-09-08 07:28:12', NULL),
-(4, 9, 'sgd', '', '', 0, 0, 1, 1, '2021-09-08 07:27:44', '2021-09-08 07:28:12', NULL),
-(5, 10, 'Pragnesh', '', 'p@gmail.com', 0, 0, 1, 1, '2021-09-08 09:15:53', '2021-09-08 09:16:35', NULL),
-(6, 10, 'sgd', '', '', 0, 0, 1, 1, '2021-09-08 09:15:53', '2021-09-08 09:16:35', NULL),
-(7, 11, 'Pragnesh', '', 'p@gmail.com', 0, 0, 1, 1, '2021-09-08 09:15:55', '2021-09-08 09:25:18', NULL),
-(8, 11, 'sgd', '', '', 0, 0, 1, 1, '2021-09-08 09:15:55', '2021-09-08 09:25:18', NULL),
-(9, 12, 'Pragnesh', '', 'p@gmail.com', 0, 0, 1, 1, '2021-09-08 09:15:56', '2021-09-08 09:15:56', NULL),
-(10, 12, 'sgd', '', '', 0, 0, 1, 1, '2021-09-08 09:15:56', '2021-09-08 09:15:56', NULL);
 
 -- --------------------------------------------------------
 
@@ -939,10 +883,10 @@ INSERT INTO `mst_positions` (`id`, `mst_departments_id`, `mst_companies_id`, `po
 -- --------------------------------------------------------
 
 --
--- Table structure for table `mst_product_list`
+-- Table structure for table `mst_products`
 --
 
-CREATE TABLE `mst_product_list` (
+CREATE TABLE `mst_products` (
   `id` int(23) NOT NULL,
   `mst_companies_id` int(11) NOT NULL,
   `product_name` varchar(255) NOT NULL,
@@ -965,29 +909,30 @@ CREATE TABLE `mst_product_list` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `mst_product_list`
+-- Dumping data for table `mst_products`
 --
 
-INSERT INTO `mst_product_list` (`id`, `mst_companies_id`, `product_name`, `product_generic`, `marker_specification`, `pharmacopiea_id`, `generic_product_id`, `packing_detail`, `sample_description`, `hsn_Code`, `is_generic`, `selected_year`, `copied_from_year`, `is_active`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(67, 1, 'PARACITAMALL', 'Raw Metrial', 'motion sickness', 2, 3, 'Shipped', 'motion sickness', '342356', 1, '2019-20', NULL, 1, 1, 1, '2021-09-14 12:57:07', '2021-09-14 12:57:07', NULL),
-(68, 1, 'PARACITAMALL', 'Raw Metrial', 'motion sickness', 2, 3, 'Shipped', 'motion sickness', '342356', 1, '2019-20', NULL, 1, 1, 1, '2021-09-14 13:03:59', '2021-09-14 13:03:59', NULL);
+INSERT INTO `mst_products` (`id`, `mst_companies_id`, `product_name`, `product_generic`, `marker_specification`, `pharmacopiea_id`, `generic_product_id`, `packing_detail`, `sample_description`, `hsn_Code`, `is_generic`, `selected_year`, `copied_from_year`, `is_active`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 1, 'PARACITAMALL', 'Raw Metrial', 'motion sickness', 2, 3, 'Shipped', 'motion sickness', '342356', 0, '2019-20', NULL, 1, 1, 1, '2021-09-20 11:17:22', '2021-09-20 11:17:22', NULL),
+(2, 1, 'PARACITAMALL', 'Raw Metrial', 'motion sickness', 2, 3, 'Shipped', 'motion sickness', '342356', 0, '2019-20', NULL, 0, 1, 1, '2021-09-20 11:17:27', '2021-09-20 11:28:04', '2021-09-20 11:28:04'),
+(3, 1, 'PARACITAMALL', 'Raw Metrial', 'motion sickness', 2, 3, 'Shipped', 'motion sickness', '342356', 1, '2019-20', NULL, 1, 1, 1, '2021-09-20 11:17:34', '2021-09-20 11:17:34', NULL);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `mst_product_parent_list`
+-- Table structure for table `mst_product_parents`
 --
 
-CREATE TABLE `mst_product_parent_list` (
+CREATE TABLE `mst_product_parents` (
   `id` int(11) NOT NULL,
   `parent_name` varchar(155) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `mst_product_parent_list`
+-- Dumping data for table `mst_product_parents`
 --
 
-INSERT INTO `mst_product_parent_list` (`id`, `parent_name`) VALUES
+INSERT INTO `mst_product_parents` (`id`, `parent_name`) VALUES
 (2, 'Related'),
 (13, 'By KFR'),
 (14, 'By IC'),
@@ -1009,6 +954,73 @@ INSERT INTO `mst_product_parent_list` (`id`, `parent_name`) VALUES
 (30, 'By Titration'),
 (31, 'By microbiology'),
 (32, 'By AES');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `mst_product_samples`
+--
+
+CREATE TABLE `mst_product_samples` (
+  `id` int(11) NOT NULL,
+  `mst_product_id` int(11) NOT NULL,
+  `by_pass` tinyint(1) NOT NULL,
+  `parent` int(11) NOT NULL,
+  `mst_sample_parameter_id` int(11) DEFAULT NULL,
+  `label_claim` varchar(155) NOT NULL,
+  `min_limit` varchar(155) NOT NULL,
+  `max_limit` varchar(155) NOT NULL,
+  `amount` varchar(155) NOT NULL,
+  `method` varchar(155) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `division` varchar(155) NOT NULL,
+  `nabl` varchar(155) NOT NULL,
+  `formula` varchar(155) NOT NULL,
+  `created_by` int(11) NOT NULL,
+  `updated_by` int(11) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  `deleted_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `mst_product_samples`
+--
+
+INSERT INTO `mst_product_samples` (`id`, `mst_product_id`, `by_pass`, `parent`, `mst_sample_parameter_id`, `label_claim`, `min_limit`, `max_limit`, `amount`, `method`, `description`, `division`, `nabl`, `formula`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 1, 1, 2, 1, 'label claim', '10', '100', '500', 'method', 'description', 'A', 'nabl', 'formula', 1, 1, '2021-09-20 11:17:22', '2021-09-20 11:17:22', NULL),
+(2, 1, 2, 13, 1, 'label claim', '10', '100', '500', 'method', 'description', 'A', 'nabl', 'formula', 1, 1, '2021-09-20 11:17:22', '2021-09-20 11:17:22', NULL),
+(3, 2, 1, 2, 1, 'label claim', '10', '100', '500', 'method', 'description', 'A', 'nabl', 'formula', 1, 1, '2021-09-20 11:17:27', '2021-09-20 11:28:04', '2021-09-20 11:28:04'),
+(4, 2, 2, 13, 1, 'label claim', '10', '100', '500', 'method', 'description', 'A', 'nabl', 'formula', 1, 1, '2021-09-20 11:17:27', '2021-09-20 11:28:04', '2021-09-20 11:28:04'),
+(5, 3, 1, 2, 1, 'label claim', '10', '100', '500', 'method', 'description', 'A', 'nabl', 'formula', 1, 1, '2021-09-20 11:17:34', '2021-09-20 11:17:34', NULL),
+(6, 3, 2, 13, 1, 'label claim', '10', '100', '500', 'method', 'description', 'A', 'nabl', 'formula', 1, 1, '2021-09-20 11:17:34', '2021-09-20 11:17:34', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `mst_sample_parameters`
+--
+
+CREATE TABLE `mst_sample_parameters` (
+  `id` int(11) NOT NULL,
+  `parameter_name` varchar(255) NOT NULL,
+  `mst_companies_id` int(11) NOT NULL,
+  `is_active` tinyint(1) NOT NULL,
+  `selected_year` varchar(25) NOT NULL,
+  `copied_from_year` int(4) DEFAULT NULL,
+  `created_by` int(11) NOT NULL,
+  `updated_by` int(11) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  `deleted_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `mst_sample_parameters`
+--
+
+INSERT INTO `mst_sample_parameters` (`id`, `parameter_name`, `mst_companies_id`, `is_active`, `selected_year`, `copied_from_year`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'newparams11', 1, 1, '2019-20', NULL, 1, 1, '2021-09-20 11:17:22', '2021-09-20 11:17:22', NULL);
 
 -- --------------------------------------------------------
 
@@ -1105,72 +1117,6 @@ CREATE TABLE `password_resets` (
   `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `product_sample_details_list`
---
-
-CREATE TABLE `product_sample_details_list` (
-  `id` int(11) NOT NULL,
-  `product_id` int(11) NOT NULL,
-  `by_pass` tinyint(1) NOT NULL,
-  `parent` varchar(55) NOT NULL,
-  `product_sample_parameter_id` int(11) NOT NULL,
-  `label_claim` varchar(155) NOT NULL,
-  `min_limit` varchar(155) NOT NULL,
-  `max_limit` varchar(155) NOT NULL,
-  `amount` varchar(155) NOT NULL,
-  `method` varchar(155) NOT NULL,
-  `description` varchar(255) NOT NULL,
-  `division` varchar(155) NOT NULL,
-  `nabl` varchar(155) NOT NULL,
-  `formula` varchar(155) NOT NULL,
-  `created_by` int(11) NOT NULL,
-  `updated_by` int(11) NOT NULL,
-  `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL,
-  `deleted_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `product_sample_details_list`
---
-
-INSERT INTO `product_sample_details_list` (`id`, `product_id`, `by_pass`, `parent`, `product_sample_parameter_id`, `label_claim`, `min_limit`, `max_limit`, `amount`, `method`, `description`, `division`, `nabl`, `formula`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(8, 67, 1, 'By UV', 6, 'label claim', '10', '100', '500', 'method', 'description', 'A', 'nabl', 'formula', 1, 1, '2021-09-14 12:57:07', '2021-09-14 12:57:07', NULL),
-(9, 67, 2, 'By UV', 7, 'label claim', '10', '100', '500', 'method', 'description', 'A', 'nabl', 'formula', 1, 1, '2021-09-14 12:57:07', '2021-09-14 12:57:07', NULL),
-(10, 68, 1, 'By UV', 6, 'label claim', '10', '100', '500', 'method', 'description', 'A', 'nabl', 'formula', 1, 1, '2021-09-14 13:03:59', '2021-09-14 13:03:59', NULL),
-(11, 68, 2, 'By UV', 7, 'label claim', '10', '100', '500', 'method', 'description', 'A', 'nabl', 'formula', 1, 1, '2021-09-14 13:03:59', '2021-09-14 13:03:59', NULL);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `product_sample_parameters_list`
---
-
-CREATE TABLE `product_sample_parameters_list` (
-  `id` int(11) NOT NULL,
-  `parameter_name` varchar(255) NOT NULL,
-  `mst_companies_id` int(11) NOT NULL,
-  `is_active` tinyint(1) NOT NULL,
-  `selected_year` varchar(25) NOT NULL,
-  `copied_from_year` int(4) DEFAULT NULL,
-  `created_by` int(11) NOT NULL,
-  `updated_by` int(11) NOT NULL,
-  `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL,
-  `deleted_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `product_sample_parameters_list`
---
-
-INSERT INTO `product_sample_parameters_list` (`id`, `parameter_name`, `mst_companies_id`, `is_active`, `selected_year`, `copied_from_year`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(6, 'newpara', 1, 1, '2019-20', NULL, 1, 1, '2021-09-14 12:57:07', '2021-09-14 12:57:07', NULL),
-(7, 'newpara1', 1, 1, '2019-20', NULL, 1, 1, '2021-09-14 12:57:07', '2021-09-14 12:57:07', NULL);
 
 -- --------------------------------------------------------
 
@@ -1634,15 +1580,27 @@ ALTER TABLE `mst_positions`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `mst_product_list`
+-- Indexes for table `mst_products`
 --
-ALTER TABLE `mst_product_list`
+ALTER TABLE `mst_products`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `mst_product_parent_list`
+-- Indexes for table `mst_product_parents`
 --
-ALTER TABLE `mst_product_parent_list`
+ALTER TABLE `mst_product_parents`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `mst_product_samples`
+--
+ALTER TABLE `mst_product_samples`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `mst_sample_parameters`
+--
+ALTER TABLE `mst_sample_parameters`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -1662,18 +1620,6 @@ ALTER TABLE `mst_units`
 --
 ALTER TABLE `password_resets`
   ADD KEY `password_resets_email_index` (`email`);
-
---
--- Indexes for table `product_sample_details_list`
---
-ALTER TABLE `product_sample_details_list`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `product_sample_parameters_list`
---
-ALTER TABLE `product_sample_parameters_list`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `users`
@@ -1767,19 +1713,19 @@ ALTER TABLE `mst_countries`
 -- AUTO_INCREMENT for table `mst_customers`
 --
 ALTER TABLE `mst_customers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `mst_customers_contact_info`
 --
 ALTER TABLE `mst_customers_contact_info`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `mst_customers_contact_person`
 --
 ALTER TABLE `mst_customers_contact_person`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `mst_departments`
@@ -1830,16 +1776,28 @@ ALTER TABLE `mst_positions`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
--- AUTO_INCREMENT for table `mst_product_list`
+-- AUTO_INCREMENT for table `mst_products`
 --
-ALTER TABLE `mst_product_list`
-  MODIFY `id` int(23) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
+ALTER TABLE `mst_products`
+  MODIFY `id` int(23) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `mst_product_parent_list`
+-- AUTO_INCREMENT for table `mst_product_parents`
 --
-ALTER TABLE `mst_product_parent_list`
+ALTER TABLE `mst_product_parents`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+
+--
+-- AUTO_INCREMENT for table `mst_product_samples`
+--
+ALTER TABLE `mst_product_samples`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `mst_sample_parameters`
+--
+ALTER TABLE `mst_sample_parameters`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `mst_states`
@@ -1852,18 +1810,6 @@ ALTER TABLE `mst_states`
 --
 ALTER TABLE `mst_units`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- AUTO_INCREMENT for table `product_sample_details_list`
---
-ALTER TABLE `product_sample_details_list`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
-
---
--- AUTO_INCREMENT for table `product_sample_parameters_list`
---
-ALTER TABLE `product_sample_parameters_list`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `users`
