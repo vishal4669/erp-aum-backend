@@ -30,24 +30,34 @@ class MstProductController extends Controller
             $is_dropdown = (isset($request->is_dropdown) && $request->is_dropdown == 1) ? 1 : 0;
             $is_generic = (isset($request->is_generic) && $request->is_generic == 1) ? 1 : 0;
             if (!$is_dropdown && !$is_generic) {
-                $data = MstProduct::where('is_active', 1)
-                    ->select('mst_products.id', 'product_name', 'product_generic', 'marker_specification', 'is_generic', 'is_active')
-                    ->where('mst_products.selected_year', $loggedInUserData['selected_year'])
-                    ->orderBy('mst_products.id', 'desc')
+                $data = DB::table('mst_products as master_product')
+                    ->join('mst_pharmacopeia as pharma', 'master_product.pharmacopiea_id', '=', 'pharma.id')
+                    ->join('mst_products as generic_product', 'generic_product.generic_product_id', '=', 'master_product.id')
+                    ->select('master_product.id', 'master_product.product_name', 'master_product.product_generic', 'master_product.pharmacopiea_id', 'master_product.marker_specification', 'master_product.is_generic', 'master_product.is_active', 'pharma.pharmacopeia_name', 'generic_product.product_name as generic_name')
+                    ->where('master_product.is_active', 1)
+                    ->where('master_product.selected_year', $loggedInUserData['selected_year'])
+                    ->orderBy('master_product.id', 'desc')
                     ->paginate(10);
+
             } elseif ($is_dropdown) {
-                $data = MstProduct::where('is_active', 1)
-                    ->select('mst_products.id', 'product_name', 'product_generic', 'marker_specification', 'is_generic', 'is_active')
-                    ->where('mst_products.selected_year', $loggedInUserData['selected_year'])
-                    ->orderBy('mst_products.id', 'desc')
+                $data = DB::table('mst_products as master_product')
+                    ->join('mst_pharmacopeia as pharma', 'master_product.pharmacopiea_id', '=', 'pharma.id')
+                    ->join('mst_products as generic_product', 'generic_product.generic_product_id', '=', 'master_product.id')
+                    ->select('master_product.id', 'master_product.product_name', 'master_product.product_generic', 'master_product.pharmacopiea_id', 'master_product.marker_specification', 'master_product.is_generic', 'master_product.is_active', 'pharma.pharmacopeia_name', 'generic_product.product_name as generic_name')
+                    ->where('master_product.is_active', 1)
+                    ->where('master_product.selected_year', $loggedInUserData['selected_year'])
+                    ->orderBy('master_product.id', 'desc')
                     ->get();
             }
 
             if ($is_generic) {
-                $data = MstProduct::where('is_generic', 1)->where('is_active', 1)
-                    ->select('mst_products.id', 'product_name', 'product_generic', 'marker_specification', 'is_generic', 'is_active')
-                    ->where('mst_products.selected_year', $loggedInUserData['selected_year'])
-                    ->orderBy('mst_products.id', 'desc')
+                $data = DB::table('mst_products as master_product')
+                    ->join('mst_pharmacopeia as pharma', 'master_product.pharmacopiea_id', '=', 'pharma.id')
+                    ->join('mst_products as generic_product', 'generic_product.generic_product_id', '=', 'master_product.id')
+                    ->select('master_product.id', 'master_product.product_name', 'master_product.product_generic', 'master_product.pharmacopiea_id', 'master_product.marker_specification', 'master_product.is_generic', 'master_product.is_active', 'pharma.pharmacopeia_name', 'generic_product.product_name as generic_name')
+                    ->where('master_product.is_active', 1)
+                    ->where('master_product.selected_year', $loggedInUserData['selected_year'])
+                    ->orderBy('master_product.id', 'desc')
                     ->get();
             }
 
@@ -175,63 +185,67 @@ class MstProductController extends Controller
 
                 foreach ($samples as $sample) {
                     if (
-                        !empty($sample['parent']) or
-                        !empty($sample['by_pass']) or
-                        !empty($sample['mst_sample_parameter_id']) or
-                        !empty($sample['parameter_name']) or
-                        !empty($sample['label_claim']) or
-                        !empty($sample['min_limit']) or
-                        !empty($sample['max_limit']) or
-                        !empty($sample['amount']) or
-                        !empty($sample['method']) or
-                        !empty($sample['description']) or
-                        !empty($sample['division']) or
-                        !empty($sample['nabl']) or
-                        !empty($sample['formula'])
+                        !empty($sample['by_pass'])
+
                     ) {
+                        if (
+                            !empty($sample['parent']) or
+                            !empty($sample['mst_sample_parameter_id']) or
+                            !empty($sample['parameter_name']) or
+                            !empty($sample['label_claim']) or
+                            !empty($sample['min_limit']) or
+                            !empty($sample['max_limit']) or
+                            !empty($sample['amount']) or
+                            !empty($sample['method']) or
+                            !empty($sample['description']) or
+                            !empty($sample['division']) or
+                            !empty($sample['nabl']) or
+                            !empty($sample['formula'])
+                        ) {
 
-                        $is_exists = MstSampleParameter::where('parameter_name', '=', $sample['parameter_name'])->first();
-                        $parameter_id = NULL;
+                            $is_exists = MstSampleParameter::where('parameter_name', '=', $sample['parameter_name'])->first();
+                            $parameter_id = NULL;
 
-                        if ($sample['parameter_name'] != '') {
+                            if ($sample['parameter_name'] != '') {
 
-                            if ($is_exists == null) {
+                                if ($is_exists == null) {
 
-                                $parameterArray = array(
-                                    'mst_companies_id' => $loggedInUserData['company_id'],
-                                    'parameter_name' => ($sample['parameter_name']) ? $sample['parameter_name'] : '',
-                                    'is_active' => 1,
-                                    'selected_year' => $loggedInUserData['selected_year'],
-                                    'created_by' => $loggedInUserData['logged_in_user_id'], //edited
-                                    'updated_by' => $loggedInUserData['logged_in_user_id']
-                                );
+                                    $parameterArray = array(
+                                        'mst_companies_id' => $loggedInUserData['company_id'],
+                                        'parameter_name' => ($sample['parameter_name']) ? $sample['parameter_name'] : '',
+                                        'is_active' => 1,
+                                        'selected_year' => $loggedInUserData['selected_year'],
+                                        'created_by' => $loggedInUserData['logged_in_user_id'], //edited
+                                        'updated_by' => $loggedInUserData['logged_in_user_id']
+                                    );
 
-                                $parameters = MstSampleParameter::create($parameterArray);
-                                $parameter_id = $parameters->id;
-                            } else {
-                                $parameter_id = $is_exists->id;
+                                    $parameters = MstSampleParameter::create($parameterArray);
+                                    $parameter_id = $parameters->id;
+                                } else {
+                                    $parameter_id = $is_exists->id;
+                                }
                             }
+
+                            $sample_data = array(
+                                'mst_product_id' => $product_id,
+                                'by_pass' => (isset($sample['by_pass'])) ? $sample['by_pass'] : 2,
+                                'parent' => (isset($sample['parent'])) ? $sample['parent'] : '',
+                                'mst_sample_parameter_id' => $parameter_id,
+                                'label_claim' => (isset($sample['label_claim'])) ? $sample['label_claim'] : '',
+                                'min_limit' => (isset($sample['min_limit'])) ? $sample['min_limit'] : '',
+                                'max_limit' => (isset($sample['max_limit'])) ? $sample['max_limit'] : '',
+                                'amount' => (isset($sample['amount'])) ? $sample['amount'] : '',
+                                'method' => (isset($sample['method'])) ? $sample['method'] : '',
+                                'description' => (isset($sample['description'])) ? $sample['description'] : '',
+                                'division' => (isset($sample['division'])) ? $sample['division'] : '',
+                                'nabl' => (isset($sample['nabl'])) ? $sample['nabl'] : '',
+                                'formula' => (isset($sample['formula'])) ? $sample['formula'] : '',
+                                'created_by' => $loggedInUserData['logged_in_user_id'], //edited
+                                'updated_by' => $loggedInUserData['logged_in_user_id']
+                            );
+
+                            MstProductSample::create($sample_data);
                         }
-
-                        $sample_data = array(
-                            'mst_product_id' => $product_id,
-                            'by_pass' => (isset($sample['by_pass'])) ? $sample['by_pass'] : 2,
-                            'parent' => (isset($sample['parent'])) ? $sample['parent'] : '',
-                            'mst_sample_parameter_id' => $parameter_id,
-                            'label_claim' => (isset($sample['label_claim'])) ? $sample['label_claim'] : '',
-                            'min_limit' => (isset($sample['min_limit'])) ? $sample['min_limit'] : '',
-                            'max_limit' => (isset($sample['max_limit'])) ? $sample['max_limit'] : '',
-                            'amount' => (isset($sample['amount'])) ? $sample['amount'] : '',
-                            'method' => (isset($sample['method'])) ? $sample['method'] : '',
-                            'description' => (isset($sample['description'])) ? $sample['description'] : '',
-                            'division' => (isset($sample['division'])) ? $sample['division'] : '',
-                            'nabl' => (isset($sample['nabl'])) ? $sample['nabl'] : '',
-                            'formula' => (isset($sample['formula'])) ? $sample['formula'] : '',
-                            'created_by' => $loggedInUserData['logged_in_user_id'], //edited
-                            'updated_by' => $loggedInUserData['logged_in_user_id']
-                        );
-
-                        MstProductSample::create($sample_data);
                     }
                 }
             }
