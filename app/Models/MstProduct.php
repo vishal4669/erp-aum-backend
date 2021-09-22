@@ -34,4 +34,14 @@ class MstProduct extends Model
     {
         return $this->hasMany(MstProductSample::class);
     }
+
+    public function pharmacopiea()
+    {
+        return $this->hasOne(Pharmacopeia::class, 'id', 'pharmacopiea_id');
+    }
+
+    public function generic()
+    {
+        return $this->hasOne(MstProduct::class, 'id', 'generic_product_id');
+    }
 }

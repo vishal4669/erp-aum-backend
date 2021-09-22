@@ -14,6 +14,7 @@ use App\Models\MstProductSample;
 use App\Models\MstSampleParameter;
 use App\Models\MstProductParent;
 
+
 class MstProductController extends Controller
 {
     /**
@@ -23,45 +24,36 @@ class MstProductController extends Controller
      */
     public function index(Request $request)
     {
-        //
         try {
 
             $loggedInUserData = Helper::getUserData();
             $is_dropdown = (isset($request->is_dropdown) && $request->is_dropdown == 1) ? 1 : 0;
             $is_generic = (isset($request->is_generic) && $request->is_generic == 1) ? 1 : 0;
-            if (!$is_dropdown && !$is_generic) {
-                $data = DB::table('mst_products as master_product')
-                    ->join('mst_pharmacopeia as pharma', 'master_product.pharmacopiea_id', '=', 'pharma.id')
-                    ->join('mst_products as generic_product', 'generic_product.generic_product_id', '=', 'master_product.id')
-                    ->select('master_product.id', 'master_product.product_name', 'master_product.product_generic', 'master_product.pharmacopiea_id', 'master_product.marker_specification', 'master_product.is_generic', 'master_product.is_active', 'pharma.pharmacopeia_name', 'generic_product.product_name as generic_name')
-                    ->where('master_product.is_active', 1)
-                    ->where('master_product.selected_year', $loggedInUserData['selected_year'])
-                    ->orderBy('master_product.id', 'desc')
-                    ->paginate(10);
 
+            if (!$is_dropdown && !$is_generic) {
+                $data = MstProduct::select('id', 'product_name', 'product_generic', 'marker_specification', 'is_generic', 'is_active', 'pharmacopiea_id', 'generic_product_id')->with('pharmacopiea:id,pharmacopeia_name', 'generic:id,product_name')
+                    ->where('is_active', 1)
+                    ->where('selected_year', $loggedInUserData['selected_year'])
+                    ->orderBy('id', 'desc')
+                    ->paginate(10);
             } elseif ($is_dropdown) {
-                $data = DB::table('mst_products as master_product')
-                    ->join('mst_pharmacopeia as pharma', 'master_product.pharmacopiea_id', '=', 'pharma.id')
-                    ->join('mst_products as generic_product', 'generic_product.generic_product_id', '=', 'master_product.id')
-                    ->select('master_product.id', 'master_product.product_name', 'master_product.product_generic', 'master_product.pharmacopiea_id', 'master_product.marker_specification', 'master_product.is_generic', 'master_product.is_active', 'pharma.pharmacopeia_name', 'generic_product.product_name as generic_name')
-                    ->where('master_product.is_active', 1)
-                    ->where('master_product.selected_year', $loggedInUserData['selected_year'])
-                    ->orderBy('master_product.id', 'desc')
+                $data = MstProduct::select('id', 'product_name', 'product_generic', 'marker_specification', 'is_generic', 'is_active', 'pharmacopiea_id', 'generic_product_id')->with('pharmacopiea:id,pharmacopeia_name', 'generic:id,product_name')
+                    ->where('is_active', 1)
+                    ->where('selected_year', $loggedInUserData['selected_year'])
+                    ->orderBy('id', 'desc')
                     ->get();
             }
-
             if ($is_generic) {
-                $data = DB::table('mst_products as master_product')
-                    ->join('mst_pharmacopeia as pharma', 'master_product.pharmacopiea_id', '=', 'pharma.id')
-                    ->join('mst_products as generic_product', 'generic_product.generic_product_id', '=', 'master_product.id')
-                    ->select('master_product.id', 'master_product.product_name', 'master_product.product_generic', 'master_product.pharmacopiea_id', 'master_product.marker_specification', 'master_product.is_generic', 'master_product.is_active', 'pharma.pharmacopeia_name', 'generic_product.product_name as generic_name')
-                    ->where('master_product.is_active', 1)
-                    ->where('master_product.selected_year', $loggedInUserData['selected_year'])
-                    ->orderBy('master_product.id', 'desc')
+                $data = MstProduct::select('id', 'product_name', 'product_generic', 'marker_specification', 'is_generic', 'is_active', 'pharmacopiea_id', 'generic_product_id')->with('pharmacopiea:id,pharmacopeia_name', 'generic:id,product_name')
+                    ->where('is_generic', 1)
+                    ->where('is_active', 1)
+                    ->where('selected_year', $loggedInUserData['selected_year'])
+                    ->orderBy('id', 'desc')
                     ->get();
             }
 
             $data_arr = $data->isEmpty();
+
             if ($data_arr) {
 
                 return Helper::response("Product List is Empty", Response::HTTP_OK, true, $data);
@@ -87,7 +79,7 @@ class MstProductController extends Controller
 
             return Helper::response("Parameter Data Shown Successfully", Response::HTTP_OK, true, $paramData);
         } catch (Exception $e) {
-            $data = array();
+            $paramData = array();
             return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $paramData);
         }
     }
@@ -103,7 +95,7 @@ class MstProductController extends Controller
 
             return Helper::response("Parameter Data Shown Successfully", Response::HTTP_OK, true, $parentData);
         } catch (Exception $e) {
-            $data = array();
+            $parentData = array();
             return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $parentData);
         }
     }
