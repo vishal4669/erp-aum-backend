@@ -154,6 +154,7 @@ Route::group(['middleware'=>['jwt.verify'], 'prefix'=>'v1'], function () {
     Route::get('getproduct/{id}', 'App\Http\Controllers\v1\MstProductController@show');
     Route::post('editProduct/{id}', 'App\Http\Controllers\v1\MstProductController@update');
     Route::post('deleteProduct/{id}', 'App\Http\Controllers\v1\MstProductController@destroy');
+    Route::get('exportlist', 'App\Http\Controllers\v1\MstProductController@exportlist');
   
 });
 

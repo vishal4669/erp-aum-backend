@@ -15,7 +15,7 @@ class MstProduct extends Model
         'product_name',
         'product_generic',
         'marker_specification',
-        'pharmacopiea_id',
+        'pharmacopeia_id',
         'generic_product_id',
         'packing_detail',
         'sample_description',
@@ -35,9 +35,9 @@ class MstProduct extends Model
         return $this->hasMany(MstProductSample::class);
     }
 
-    public function pharmacopiea()
+    public function pharmacopeia()
     {
-        return $this->hasOne(Pharmacopeia::class, 'id', 'pharmacopiea_id');
+        return $this->hasOne(Pharmacopeia::class, 'id', 'pharmacopeia_id');
     }
 
     public function generic()
