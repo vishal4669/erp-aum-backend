@@ -185,7 +185,6 @@ class CustomerController extends Controller
                 'selected_year' => $loggedInUserData['selected_year'],
                 'is_active' => $request->get('is_active'),
                 'created_by' => $loggedInUserData['logged_in_user_id'], //edited
-                'updated_by' => $loggedInUserData['logged_in_user_id']
             ]);
 
 
@@ -444,7 +443,6 @@ class CustomerController extends Controller
                 'company_cust_discount' => $request->get('company_cust_discount'),
                 'selected_year' => $loggedInUserData['selected_year'],
                 'is_active' => (int)$request->get('is_active'),
-                'created_by' => $loggedInUserData['logged_in_user_id'], //edited
                 'updated_by' => $loggedInUserData['logged_in_user_id']
             ];
 

@@ -13,6 +13,8 @@ use App\Models\MstProduct;
 use App\Models\MstProductSample;
 use App\Models\MstSampleParameter;
 use App\Models\MstProductParent;
+use Illuminate\Support\Arr;
+
 
 
 class MstProductController extends Controller
@@ -155,16 +157,76 @@ class MstProductController extends Controller
                 'pharmacopeia_id',
                 'generic_product_id'
             )
-                ->with('pharmacopeia:id,pharmacopeia_name', 'generic:id,product_name')
+                ->with(
+                    'pharmacopeia:id,pharmacopeia_name',
+                    'generic:id,product_name as generic_product_name',
+                    'created_by:id,first_name,middle_name,last_name',
+                    'updated_by:id,first_name,middle_name,last_name'
+                )
                 ->where('is_active', 1)
                 ->where('selected_year', $loggedInUserData['selected_year'])
                 ->orderBy('id', 'desc')
                 ->get();
 
-            return Helper::response("Export Data Shown Successfully", Response::HTTP_OK, true, $exportData);
+            $exportData_Arr = $exportData->toArray();
+            $len = count($exportData_Arr);
+            $i = 0;
+
+            for ($i = 0; $i < $len; $i++) {
+
+                if ($exportData_Arr[$i]['generic_product_id'] == null) {
+
+                    $exportData_Arr[$i]['generic'] = array(
+                        'id' => '',
+                        'generic_product_name' => ''
+                    );
+                } else {
+
+                    $exportData_Arr[$i]['generic'] = $exportData_Arr[$i]['generic'];
+                }
+
+                if ($exportData_Arr[$i]['created_by'] == null) {
+
+                    $exportData_Arr[$i]['created_by'] = array(
+                        "id" => "",
+                        "first_name" => "",
+                        "middle_name" => "",
+                        "last_name" => ""
+                    );
+                } else {
+
+                    $exportData_Arr[$i]['created_by'] = $exportData_Arr[$i]['created_by'];
+                }
+
+                if ($exportData_Arr[$i]['updated_by'] == null) {
+
+                    $exportData_Arr[$i]['updated_by'] = array(
+                        "id" => "",
+                        "first_name" => "",
+                        "middle_name" => "",
+                        "last_name" => ""
+                    );
+                } else {
+
+                    $exportData_Arr[$i]['updated_by'] = $exportData_Arr[$i]['updated_by'];
+                }
+
+                if ($exportData_Arr[$i]['pharmacopeia'] == null) {
+
+                    $exportData_Arr[$i]['pharmacopeia'] = array(
+                        "id" => "",
+                        "pharmacopeia_name" => ""
+                    );
+                } else {
+
+                    $exportData_Arr[$i]['pharmacopeia'] = $exportData_Arr[$i]['pharmacopeia'];
+                }
+            }
+
+            return Helper::response("Export Data Shown Successfully", Response::HTTP_OK, true, $exportData_Arr);
         } catch (Exception $e) {
             $exportData = array();
-            return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $exportData);
+            return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $exportData_Arr);
         }
     }
     /**
@@ -212,7 +274,6 @@ class MstProductController extends Controller
                 "is_active" => ($request->get('is_active')) ? $request->get('is_active') : 1,
                 "selected_year" => $loggedInUserData['selected_year'],
                 'created_by' => $loggedInUserData['logged_in_user_id'],
-                'updated_by' => $loggedInUserData['logged_in_user_id']
             ]);
 
             $mst_product_id = $data->id;
@@ -372,7 +433,6 @@ class MstProductController extends Controller
                 "is_generic" => ($request->get('is_generic')) ? $request->get('is_generic') : 0,
                 "is_active" => ($request->get('is_active')) ? $request->get('is_active') : 1,
                 "selected_year" => $loggedInUserData['selected_year'],
-                'created_by' => $loggedInUserData['logged_in_user_id'],
                 'updated_by' => $loggedInUserData['logged_in_user_id']
             ];
 

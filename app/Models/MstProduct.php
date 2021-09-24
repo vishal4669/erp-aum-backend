@@ -44,4 +44,13 @@ class MstProduct extends Model
     {
         return $this->hasOne(MstProduct::class, 'id', 'generic_product_id');
     }
+
+    public function created_by()
+    {
+        return $this->hasOne(User::class, 'id', 'created_by');
+    }
+    public function updated_by()
+    {
+        return $this->hasOne(User::class, 'id', 'updated_by');
+    }
 }
