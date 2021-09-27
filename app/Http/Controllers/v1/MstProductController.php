@@ -17,6 +17,7 @@ use Illuminate\Support\Arr;
 
 
 
+
 class MstProductController extends Controller
 {
     /**
@@ -274,6 +275,7 @@ class MstProductController extends Controller
                 "is_active" => ($request->get('is_active')) ? $request->get('is_active') : 1,
                 "selected_year" => $loggedInUserData['selected_year'],
                 'created_by' => $loggedInUserData['logged_in_user_id'],
+                'updated_at' => NULL
             ]);
 
             $mst_product_id = $data->id;
