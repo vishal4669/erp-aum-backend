@@ -14,6 +14,7 @@ use App\Models\MstProductSample;
 use App\Models\MstSampleParameter;
 use App\Models\MstProductParent;
 use Illuminate\Support\Arr;
+use Exception;
 
 
 
@@ -254,6 +255,7 @@ class MstProductController extends Controller
                 "product_name" => 'required|string|max:255',
                 "product_generic" => 'required|string|max:255',
                 "pharmacopeia_id" => 'required|integer',
+                "sample_details.*.amount" => 'numeric|between:0,999999999999999999999999999.99',
             ]);
 
             if ($validator->fails()) {
@@ -327,7 +329,7 @@ class MstProductController extends Controller
                         ) {
 
                             $is_exists = MstSampleParameter::where('parameter_name', '=', $sample['parameter_name'])->first();
-                            $parameter_id = NULL;
+                            $parameter_id = 0;
 
                             if ($sample['parameter_name'] != '') {
 
@@ -352,7 +354,7 @@ class MstProductController extends Controller
                             $sample_data = array(
                                 'mst_product_id' => $product_id,
                                 'by_pass' => (isset($sample['by_pass'])) ? $sample['by_pass'] : 2,
-                                'parent' => (isset($sample['parent'])) ? $sample['parent'] : '',
+                                'parent' => (isset($sample['parent'])) ? $sample['parent'] : 0,
                                 'mst_sample_parameter_id' => $parameter_id,
                                 'label_claim' => (isset($sample['label_claim'])) ? $sample['label_claim'] : '',
                                 'min_limit' => (isset($sample['min_limit'])) ? $sample['min_limit'] : '',
@@ -384,8 +386,36 @@ class MstProductController extends Controller
     public function show($id)
     {
         $data = MstProduct::with('samples', 'samples.parameter', 'samples.parent')->find($id);
+        $data_Arr = $data->toArray();
+        $len = count($data_Arr['samples']);
+        $i = 0;
 
-        return Helper::response("This Product Shown Successfully", Response::HTTP_OK, true, $data);
+        for ($i = 0; $i < $len; $i++) {
+
+            if ($data_Arr['samples'][$i]['parent'] == null) {
+
+                $data_Arr['samples'][$i]['parent'] = array(
+                    'id' => '',
+                    'parent_name' => ''
+                );
+            } else {
+
+                $data_Arr['samples'][$i]['parent'] = $data_Arr['samples'][$i]['parent'];
+            }
+
+            if ($data_Arr['samples'][$i]['mst_sample_parameter_id'] == null || $data_Arr['samples'][$i]['mst_sample_parameter_id'] == 0) {
+
+                $data_Arr['samples'][$i]['parameter'] = array(
+                    'id' => '',
+                    'parameter_name' => ''
+                );
+            } else {
+
+                $data_Arr['samples'][$i]['parameter'] = $data_Arr['samples'][$i]['parameter'];
+            }
+        }
+
+        return Helper::response("This Product Shown Successfully", Response::HTTP_OK, true, $data_Arr);
     }
 
     /**
@@ -414,6 +444,7 @@ class MstProductController extends Controller
                 "product_name" => 'required|string|max:255',
                 "product_generic" => 'required|string|max:255',
                 "pharmacopeia_id" => 'required|integer',
+                "sample_details.*.amount" => 'numeric|between:0,999999999999999999999999999.99',
             ]);
 
             if ($validator1->fails()) {

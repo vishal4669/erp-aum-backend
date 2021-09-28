@@ -46,7 +46,6 @@ Route::group(['middleware'=>['jwt.verify'], 'prefix'=>'v1'], function () {
     // Customer Masters
     Route::get('listCustomer', 'App\Http\Controllers\v1\CustomerController@index');
     Route::post('addCustomer', 'App\Http\Controllers\v1\CustomerController@store');
-    //Route::post('addCustomerContactPerson', 'App\Http\Controllers\v1\CustomerController@addupdateCustomerContactPerson');
     Route::get('getCustomer/{id}', 'App\Http\Controllers\v1\CustomerController@show');
     Route::post('editCustomer/{id}', 'App\Http\Controllers\v1\CustomerController@update');
     Route::post('deleteCustomer/{id}', 'App\Http\Controllers\v1\CustomerController@destroy');
@@ -155,6 +154,10 @@ Route::group(['middleware'=>['jwt.verify'], 'prefix'=>'v1'], function () {
     Route::post('editProduct/{id}', 'App\Http\Controllers\v1\MstProductController@update');
     Route::post('deleteProduct/{id}', 'App\Http\Controllers\v1\MstProductController@destroy');
     Route::get('exportproductlist', 'App\Http\Controllers\v1\MstProductController@exportlist');
+
+
+    // Booking
+    Route::post('addBooking','App\Http\Controllers\v1\BookingController@store');
   
 });
 
