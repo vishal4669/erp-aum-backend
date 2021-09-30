@@ -8,4 +8,37 @@ use Illuminate\Database\Eloquent\Model;
 class BookingSampleDetail extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        "booking_id",
+        "product_id",
+        "generic_name",
+        "product_type",
+        "pharmacopiea_id",
+        "batch_no",
+        "packsize",
+        "request_quantity",
+        "sample_code",
+        "sample_description",
+        "sample_quantity",
+        "sample_location",
+        "sample_packaging",
+        "sample_type",
+        "sampling_date_from",
+        "sampling_date_from_options",
+        "sampling_date_to",
+        "sampling_date_to_options",
+        "sample_received_through",
+        "chemist",
+        "sample_condition",
+        "is_sample_condition",
+        "batch_size_qty_rec",
+        "notes",
+        "sample_drawn_by",
+        "created_by",
+        "updated_by",
+        "selected_year",
+        "copied_from_year",
+        "is_active",
+
+    ];
 }

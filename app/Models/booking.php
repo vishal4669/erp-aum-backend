@@ -5,11 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class booking extends Model
+class Booking extends Model
 {
     use HasFactory;
     protected $fillable =
     [
+        "mst_companies_id",
         "booking_type",
         "report_type",
         "receipte_date",
@@ -24,9 +25,9 @@ class booking extends Model
         "exp_date",
         "exp_options",
         "analysis_date",
-        "aum_serial",
+        "aum_serial_no",
         "d_format",
-        "mfg_options",
+        "d_format_options",
         "grade",
         "grade_options",
         "project_name",
@@ -44,7 +45,6 @@ class booking extends Model
         "statement_ofconformity",
         "is_active",
         "selected_year",
-        "copied_from_year",
         "created_by",
         "updated_by"
     ];

@@ -158,6 +158,8 @@ Route::group(['middleware'=>['jwt.verify'], 'prefix'=>'v1'], function () {
 
     // Booking
     Route::post('addBooking','App\Http\Controllers\v1\BookingController@store');
+    Route::get('booking_no','App\Http\Controllers\v1\BookingController@last_booking_no');
+    Route::post('contact_type/{type}','App\Http\Controllers\v1\BookingController@contact_type');
   
 });
 

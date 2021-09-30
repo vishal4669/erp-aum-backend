@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 20, 2021 at 04:11 PM
+-- Generation Time: Sep 30, 2021 at 04:02 PM
 -- Server version: 10.4.20-MariaDB
 -- PHP Version: 8.0.8
 
@@ -20,6 +20,193 @@ SET time_zone = "+00:00";
 --
 -- Database: `aum_research_lab-313833c271`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bookings`
+--
+
+CREATE TABLE `bookings` (
+  `id` int(11) NOT NULL,
+  `mst_companies_id` int(11) NOT NULL,
+  `booking_type` varchar(55) NOT NULL,
+  `report_type` varchar(55) NOT NULL,
+  `receipte_date` date NOT NULL,
+  `booking_no` varchar(255) NOT NULL,
+  `customer_id` int(11) NOT NULL,
+  `reference_no` varchar(55) NOT NULL,
+  `remarks` text NOT NULL,
+  `manufacturer_id` int(11) NOT NULL,
+  `supplier_id` int(11) NOT NULL,
+  `mfg_date` date NOT NULL,
+  `mfg_options` char(7) NOT NULL,
+  `exp_date` date NOT NULL,
+  `exp_options` char(7) NOT NULL,
+  `analysis_date` date NOT NULL,
+  `aum_serial_no` int(55) NOT NULL,
+  `d_format` varchar(255) NOT NULL,
+  `d_format_options` char(7) NOT NULL,
+  `grade` varchar(55) NOT NULL,
+  `grade_options` char(7) NOT NULL,
+  `project_name` varchar(255) NOT NULL,
+  `project_options` char(7) NOT NULL,
+  `mfg_lic_no` varchar(155) NOT NULL,
+  `is_report_dispacthed` tinyint(1) NOT NULL,
+  `signature` tinyint(1) NOT NULL,
+  `verified_by` varchar(10) NOT NULL,
+  `nabl_scope` tinyint(1) NOT NULL,
+  `cancel` varchar(7) NOT NULL,
+  `cancel_remarks` text NOT NULL,
+  `priority` varchar(10) NOT NULL,
+  `discipline` varchar(20) NOT NULL,
+  `booking_group` varchar(55) NOT NULL,
+  `statement_ofconformity` varchar(20) NOT NULL,
+  `created_by` int(11) NOT NULL,
+  `updated_by` int(11) DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `selected_year` varchar(25) NOT NULL,
+  `copied_from_year` int(4) DEFAULT NULL,
+  `is_active` tinyint(1) NOT NULL,
+  `deleted_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `bookings`
+--
+
+INSERT INTO `bookings` (`id`, `mst_companies_id`, `booking_type`, `report_type`, `receipte_date`, `booking_no`, `customer_id`, `reference_no`, `remarks`, `manufacturer_id`, `supplier_id`, `mfg_date`, `mfg_options`, `exp_date`, `exp_options`, `analysis_date`, `aum_serial_no`, `d_format`, `d_format_options`, `grade`, `grade_options`, `project_name`, `project_options`, `mfg_lic_no`, `is_report_dispacthed`, `signature`, `verified_by`, `nabl_scope`, `cancel`, `cancel_remarks`, `priority`, `discipline`, `booking_group`, `statement_ofconformity`, `created_by`, `updated_by`, `created_at`, `updated_at`, `selected_year`, `copied_from_year`, `is_active`, `deleted_at`) VALUES
+(1, 1, 'Received', 'FP', '2021-09-28', 'ARL/COA/hth/210420/001', 13, '2389239', 'remarks details', 2, 7, '2021-09-28', 'N/A', '2021-10-04', 'None', '2021-09-28', 0, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-09-30 07:44:08', '2021-09-30 07:44:08', '2019-20', NULL, 1, NULL),
+(2, 1, 'Received', 'FP', '2021-09-28', 'ARL/COA/hth/210420/001', 13, '2389239', 'remarks details', 2, 7, '2021-09-28', 'N/A', '2021-10-04', 'None', '2021-09-28', 0, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-09-30 07:45:07', '2021-09-30 07:45:07', '2019-20', NULL, 1, NULL),
+(3, 1, 'Received', 'FP', '2021-09-28', 'ARL/COA/hth/210420/001', 13, '2389239', 'remarks details', 2, 7, '2021-09-28', 'N/A', '2021-10-04', 'None', '2021-09-28', 1, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-09-30 07:45:31', '2021-09-30 07:45:31', '2019-20', NULL, 1, NULL),
+(4, 1, 'Received', 'FP', '2021-09-28', 'ARL/COA/hth/210420/001', 13, '2389239', 'remarks details', 2, 7, '2021-09-28', 'N/A', '2021-10-04', 'None', '2021-09-28', 1, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-09-30 08:24:02', '2021-09-30 08:24:02', '2019-20', NULL, 1, NULL),
+(7, 1, 'Received', 'FP', '2021-09-28', 'ARL/COA/hth/210420/001', 13, '2389239', 'remarks details', 2, 7, '2021-09-28', 'N/A', '2021-10-04', 'None', '2021-09-28', 1, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-09-30 08:36:44', '2021-09-30 08:36:44', '2019-20', NULL, 1, NULL),
+(9, 1, 'Received', 'FP', '2021-09-28', 'ARL/COA/hth/210420/001', 13, '2389239', 'remarks details', 2, 7, '2021-09-28', 'N/A', '2021-10-04', 'None', '2021-09-28', 1, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-09-30 08:37:13', '2021-09-30 08:37:13', '2019-20', NULL, 1, NULL),
+(35, 1, 'Received', 'FP', '2021-07-08', 'ARL/COA/hth/210420/001', 13, '2389239', 'remarks details', 2, 7, '2021-09-28', 'N/A', '2021-10-04', 'None', '2021-09-28', 1, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-09-30 10:56:27', '2021-09-30 10:56:27', '2019-20', NULL, 1, NULL),
+(39, 1, 'Received', 'FP', '2021-07-08', 'ARL/COA/hth/210420/001', 13, '2389239', 'remarks details', 2, 7, '2021-09-28', 'N/A', '2021-10-04', 'None', '2021-09-28', 1, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-09-30 12:36:28', '2021-09-30 12:36:28', '2019-20', NULL, 1, NULL),
+(40, 1, 'Received', 'FP', '2021-07-08', 'ARL/COA/hth/210420/001', 13, '2389239', 'remarks details', 2, 7, '2021-09-28', 'N/A', '2021-10-04', 'None', '2021-09-28', 1, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-09-30 13:24:26', '2021-09-30 13:24:26', '2019-20', NULL, 1, NULL),
+(41, 1, 'Received', 'FP', '2021-07-08', 'ARL/COA/hth/210420/001', 13, '2389239', 'remarks details', 2, 7, '2021-09-28', 'N/A', '2021-10-04', 'None', '2021-09-28', 1, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-09-30 13:24:32', '2021-09-30 13:24:32', '2019-20', NULL, 1, NULL),
+(42, 1, 'Received', 'FP', '2021-07-08', 'ARL/COA/hth/210420/002', 13, '2389239', 'remarks details', 2, 7, '2021-09-28', 'N/A', '2021-10-04', 'None', '2021-09-28', 1, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-09-30 13:45:32', '2021-09-30 13:45:32', '2019-20', NULL, 1, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `booking_audit_details`
+--
+
+CREATE TABLE `booking_audit_details` (
+  `id` int(11) NOT NULL,
+  `booking_id` int(11) NOT NULL,
+  `audit_remarks` text NOT NULL,
+  `reason` text NOT NULL,
+  `comments` text NOT NULL,
+  `created_by` int(11) NOT NULL,
+  `updated_by` int(11) DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `selected_year` varchar(25) NOT NULL,
+  `copied_from_year` int(4) NOT NULL,
+  `is_active` tinyint(1) NOT NULL,
+  `deleted_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `booking_sample_details`
+--
+
+CREATE TABLE `booking_sample_details` (
+  `id` int(11) NOT NULL,
+  `booking_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `generic_name` varchar(255) NOT NULL,
+  `product_type` varchar(55) NOT NULL,
+  `pharmacopiea_id` int(11) NOT NULL,
+  `batch_no` int(25) NOT NULL,
+  `packsize` varchar(55) NOT NULL,
+  `request_quantity` int(11) NOT NULL,
+  `sample_code` varchar(100) NOT NULL,
+  `sample_description` text NOT NULL,
+  `sample_quantity` int(11) NOT NULL,
+  `sample_location` varchar(150) NOT NULL,
+  `sample_packaging` varchar(255) NOT NULL,
+  `sample_type` varchar(60) NOT NULL,
+  `sampling_date_from` date NOT NULL,
+  `sampling_date_from_options` char(7) NOT NULL,
+  `sampling_date_to` date NOT NULL,
+  `sampling_date_to_options` char(7) NOT NULL,
+  `sample_received_through` varchar(25) NOT NULL,
+  `chemist` tinyint(1) NOT NULL,
+  `sample_condition` text NOT NULL,
+  `is_sample_condition` tinyint(1) NOT NULL,
+  `batch_size_qty_rec` int(11) NOT NULL,
+  `notes` text NOT NULL,
+  `sample_drawn_by` varchar(255) NOT NULL,
+  `created_by` int(11) NOT NULL,
+  `updated_by` int(11) DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `selected_year` varchar(25) NOT NULL,
+  `copied_from_year` int(4) DEFAULT NULL,
+  `is_active` tinyint(1) NOT NULL,
+  `deleted_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `booking_sample_details`
+--
+
+INSERT INTO `booking_sample_details` (`id`, `booking_id`, `product_id`, `generic_name`, `product_type`, `pharmacopiea_id`, `batch_no`, `packsize`, `request_quantity`, `sample_code`, `sample_description`, `sample_quantity`, `sample_location`, `sample_packaging`, `sample_type`, `sampling_date_from`, `sampling_date_from_options`, `sampling_date_to`, `sampling_date_to_options`, `sample_received_through`, `chemist`, `sample_condition`, `is_sample_condition`, `batch_size_qty_rec`, `notes`, `sample_drawn_by`, `created_by`, `updated_by`, `created_at`, `updated_at`, `selected_year`, `copied_from_year`, `is_active`, `deleted_at`) VALUES
+(1, 35, 2, 'generic name', 'raw material', 3, 5, '55L', 13, 'EASPORTS6913', 'EASPORTS6913', 13, 'Main Branch of company', 'Packaging', 'sample type', '2021-09-30', 'N/S', '2021-10-08', 'N/A', 'By Courier', 1, 'Secured seal with label', 1, 13, 'sample notes', 'Sample Drawn By', 1, NULL, '2021-09-30 10:56:27', '2021-09-30 10:56:27', '2019-20', NULL, 1, NULL),
+(5, 39, 2, 'generic name', 'raw material', 3, 5, '55L', 13, 'EASPORTS6913', 'EASPORTS6913', 13, 'Main Branch of company', 'Packaging', 'sample type', '2021-09-30', 'N/S', '2021-10-08', 'N/A', 'By Courier', 1, 'Secured seal with label', 1, 13, 'sample notes', 'Sample Drawn By', 1, NULL, '2021-09-30 12:36:28', '2021-09-30 12:36:28', '2019-20', NULL, 1, NULL),
+(6, 40, 2, 'generic name', 'raw material', 3, 5, '55L', 13, 'EASPORTS6913', 'EASPORTS6913', 13, 'Main Branch of company', 'Packaging', 'sample type', '2021-09-30', 'N/S', '2021-10-08', 'N/A', 'By Courier', 1, 'Secured seal with label', 1, 13, 'sample notes', 'Sample Drawn By', 1, NULL, '2021-09-30 13:24:26', '2021-09-30 13:24:26', '2019-20', NULL, 1, NULL),
+(7, 41, 2, 'generic name', 'raw material', 3, 5, '55L', 13, 'EASPORTS6913', 'EASPORTS6913', 13, 'Main Branch of company', 'Packaging', 'sample type', '2021-09-30', 'N/S', '2021-10-08', 'N/A', 'By Courier', 1, 'Secured seal with label', 1, 13, 'sample notes', 'Sample Drawn By', 1, NULL, '2021-09-30 13:24:32', '2021-09-30 13:24:32', '2019-20', NULL, 1, NULL),
+(8, 42, 2, 'generic name', 'raw material', 3, 5, '55L', 13, 'EASPORTS6913', 'EASPORTS6913', 13, 'Main Branch of company', 'Packaging', 'sample type', '2021-09-30', 'N/S', '2021-10-08', 'N/A', 'By Courier', 1, 'Secured seal with label', 1, 13, 'sample notes', 'Sample Drawn By', 1, NULL, '2021-09-30 13:45:32', '2021-09-30 13:45:32', '2019-20', NULL, 1, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `booking_tests`
+--
+
+CREATE TABLE `booking_tests` (
+  `id` int(11) NOT NULL,
+  `booking_id` int(11) NOT NULL,
+  `parent_child` char(10) NOT NULL,
+  `p_sr_no` varchar(10) NOT NULL,
+  `by_pass` tinyint(1) NOT NULL,
+  `parent` int(11) NOT NULL,
+  `product_details` text NOT NULL,
+  `test_name` varchar(255) NOT NULL,
+  `label_claim` varchar(155) NOT NULL,
+  `min_limit` varchar(55) NOT NULL,
+  `max_limit` varchar(55) NOT NULL,
+  `amount` decimal(15,2) DEFAULT NULL,
+  `created_by` int(11) NOT NULL,
+  `updated_by` int(11) DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `selected_year` varchar(25) NOT NULL,
+  `copied_from_year` int(4) DEFAULT NULL,
+  `is_active` tinyint(1) NOT NULL,
+  `deleted_at` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `booking_tests`
+--
+
+INSERT INTO `booking_tests` (`id`, `booking_id`, `parent_child`, `p_sr_no`, `by_pass`, `parent`, `product_details`, `test_name`, `label_claim`, `min_limit`, `max_limit`, `amount`, `created_by`, `updated_by`, `created_at`, `updated_at`, `selected_year`, `copied_from_year`, `is_active`, `deleted_at`) VALUES
+(1, 39, 'parent', '708', 1, 23, 'product detail', 'test 1', '20', '50', '70', '5000.00', 1, 1, '2021-09-30 12:36:28', '2021-09-30 12:36:28', '2019-20', NULL, 1, NULL),
+(2, 39, 'parent1', '708', 1, 23, 'product detail1', 'test 1', '20', '50', '70', '5000.00', 1, 1, '2021-09-30 12:36:28', '2021-09-30 12:36:28', '2019-20', NULL, 1, NULL),
+(3, 40, 'parent', '708', 1, 23, 'product detail', 'test 1', '20', '50', '70', '5000.00', 1, 1, '2021-09-30 13:24:26', '2021-09-30 13:24:26', '2019-20', NULL, 1, NULL),
+(4, 40, 'parent1', '708', 1, 23, 'product detail1', 'test 1', '20', '50', '70', '5000.00', 1, 1, '2021-09-30 13:24:26', '2021-09-30 13:24:26', '2019-20', NULL, 1, NULL),
+(5, 41, 'parent', '708', 1, 23, 'product detail', 'test 1', '20', '50', '70', '5000.00', 1, 1, '2021-09-30 13:24:32', '2021-09-30 13:24:32', '2019-20', NULL, 1, NULL),
+(6, 41, 'parent1', '708', 1, 23, 'product detail1', 'test 1', '20', '50', '70', '5000.00', 1, 1, '2021-09-30 13:24:32', '2021-09-30 13:24:32', '2019-20', NULL, 1, NULL),
+(7, 42, 'parent', '708', 1, 23, 'product detail', 'test 1', '20', '50', '70', '5000.00', 1, 1, '2021-09-30 13:45:32', '2021-09-30 13:45:32', '2019-20', NULL, 1, NULL),
+(8, 42, 'parent1', '708', 1, 23, 'product detail1', 'test 1', '20', '50', '70', '5000.00', 1, 1, '2021-09-30 13:45:32', '2021-09-30 13:45:32', '2019-20', NULL, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -892,19 +1079,19 @@ CREATE TABLE `mst_products` (
   `product_name` varchar(255) NOT NULL,
   `product_generic` varchar(55) NOT NULL,
   `marker_specification` varchar(255) NOT NULL,
-  `pharmacopiea_id` int(5) NOT NULL,
-  `generic_product_id` int(23) NOT NULL,
+  `pharmacopeia_id` int(5) NOT NULL,
+  `generic_product_id` int(23) DEFAULT NULL,
   `packing_detail` varchar(255) NOT NULL,
   `sample_description` text NOT NULL,
   `hsn_Code` varchar(55) NOT NULL,
-  `is_generic` tinyint(1) NOT NULL,
+  `is_generic` tinyint(1) NOT NULL COMMENT 'Default 0',
   `selected_year` varchar(25) NOT NULL,
   `copied_from_year` int(4) DEFAULT NULL,
-  `is_active` tinyint(1) NOT NULL,
+  `is_active` tinyint(1) NOT NULL COMMENT 'Default 1',
   `created_by` int(11) NOT NULL,
-  `updated_by` int(11) NOT NULL,
+  `updated_by` int(11) DEFAULT NULL,
   `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL,
+  `updated_at` datetime DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -912,10 +1099,17 @@ CREATE TABLE `mst_products` (
 -- Dumping data for table `mst_products`
 --
 
-INSERT INTO `mst_products` (`id`, `mst_companies_id`, `product_name`, `product_generic`, `marker_specification`, `pharmacopiea_id`, `generic_product_id`, `packing_detail`, `sample_description`, `hsn_Code`, `is_generic`, `selected_year`, `copied_from_year`, `is_active`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 1, 'PARACITAMALL', 'Raw Metrial', 'motion sickness', 2, 3, 'Shipped', 'motion sickness', '342356', 0, '2019-20', NULL, 1, 1, 1, '2021-09-20 11:17:22', '2021-09-20 11:17:22', NULL),
-(2, 1, 'PARACITAMALL', 'Raw Metrial', 'motion sickness', 2, 3, 'Shipped', 'motion sickness', '342356', 0, '2019-20', NULL, 0, 1, 1, '2021-09-20 11:17:27', '2021-09-20 11:28:04', '2021-09-20 11:28:04'),
-(3, 1, 'PARACITAMALL', 'Raw Metrial', 'motion sickness', 2, 3, 'Shipped', 'motion sickness', '342356', 1, '2019-20', NULL, 1, 1, 1, '2021-09-20 11:17:34', '2021-09-20 11:17:34', NULL);
+INSERT INTO `mst_products` (`id`, `mst_companies_id`, `product_name`, `product_generic`, `marker_specification`, `pharmacopeia_id`, `generic_product_id`, `packing_detail`, `sample_description`, `hsn_Code`, `is_generic`, `selected_year`, `copied_from_year`, `is_active`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 1, 'Viks', 'Raw Metrial', 'motion sickness', 3, NULL, 'Shipped', 'motion sickness', '342356', 1, '2019-20', NULL, 1, 2, 74, '2021-09-23 06:49:20', '2021-09-23 06:49:20', NULL),
+(2, 1, 'Viks', 'Raw Metrial', 'motion sickness', 2, 3, 'Shipped', 'motion sickness', '342356', 1, '2019-20', NULL, 1, 1, NULL, '2021-09-24 13:40:07', '2021-09-24 13:40:07', NULL),
+(3, 1, 'Viks', 'Raw Metrial', 'motion sickness', 2, NULL, 'Shipped', 'motion sickness', '342356', 1, '2019-20', NULL, 1, 1, NULL, '2021-09-24 13:40:17', '2021-09-24 13:40:17', NULL),
+(4, 1, 'Viksss', 'Raw Metriall', 'motion sicknesss', 5, 7, 'Shipped', 'motion sickness', '342356', 1, '2019-20', NULL, 1, 1, NULL, '2021-09-27 06:55:24', '2021-09-27 06:55:24', NULL),
+(5, 1, 'Viksss', 'Raw Metriall', 'motion sicknesss', 5, 7, 'Shipped', 'motion sickness', '342356', 1, '2019-20', NULL, 1, 1, NULL, '2021-09-27 07:16:15', '2021-09-27 07:16:15', NULL),
+(6, 1, 'Viksss', 'Raw Metriall', 'motion sicknesss', 5, 7, 'Shipped', 'motion sickness', '342356', 1, '2019-20', NULL, 1, 1, NULL, '2021-09-27 07:16:34', '2021-09-27 07:16:34', NULL),
+(7, 1, 'Viksss123', 'Raw Metriall', 'motion sicknesss', 5, 7, 'Shipped', 'motion sickness', '342356', 1, '2019-20', NULL, 1, 1, NULL, '2021-09-27 07:17:06', '2021-09-27 07:17:06', NULL),
+(8, 1, 'Viksss', 'Raw Metriall', 'motion sicknesss', 5, 7, 'Shipped', 'motion sickness', '342356', 1, '2019-20', NULL, 1, 1, NULL, '2021-09-27 07:19:00', NULL, NULL),
+(18, 1, 'Redbool', 'Finished Product', 'for fever', 4, 0, '', '', '', 0, '2019-20', NULL, 1, 3, 3, '2021-09-28 09:16:07', '2021-09-28 09:52:53', NULL),
+(19, 1, 'AJINO MOTTO', 'Raw Material', 'for fever', 4, 5, 'Don\'t put in sunlight', '', '', 1, '2019-20', NULL, 1, 3, 3, '2021-09-28 09:53:38', '2021-09-28 09:54:08', NULL);
 
 -- --------------------------------------------------------
 
@@ -964,13 +1158,13 @@ INSERT INTO `mst_product_parents` (`id`, `parent_name`) VALUES
 CREATE TABLE `mst_product_samples` (
   `id` int(11) NOT NULL,
   `mst_product_id` int(11) NOT NULL,
-  `by_pass` tinyint(1) NOT NULL,
+  `by_pass` tinyint(1) NOT NULL COMMENT 'Default 2',
   `parent` int(11) NOT NULL,
-  `mst_sample_parameter_id` int(11) DEFAULT NULL,
+  `mst_sample_parameter_id` int(11) NOT NULL,
   `label_claim` varchar(155) NOT NULL,
   `min_limit` varchar(155) NOT NULL,
   `max_limit` varchar(155) NOT NULL,
-  `amount` varchar(155) NOT NULL,
+  `amount` decimal(15,2) NOT NULL,
   `method` varchar(155) NOT NULL,
   `description` varchar(255) NOT NULL,
   `division` varchar(155) NOT NULL,
@@ -988,12 +1182,24 @@ CREATE TABLE `mst_product_samples` (
 --
 
 INSERT INTO `mst_product_samples` (`id`, `mst_product_id`, `by_pass`, `parent`, `mst_sample_parameter_id`, `label_claim`, `min_limit`, `max_limit`, `amount`, `method`, `description`, `division`, `nabl`, `formula`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 1, 1, 2, 1, 'label claim', '10', '100', '500', 'method', 'description', 'A', 'nabl', 'formula', 1, 1, '2021-09-20 11:17:22', '2021-09-20 11:17:22', NULL),
-(2, 1, 2, 13, 1, 'label claim', '10', '100', '500', 'method', 'description', 'A', 'nabl', 'formula', 1, 1, '2021-09-20 11:17:22', '2021-09-20 11:17:22', NULL),
-(3, 2, 1, 2, 1, 'label claim', '10', '100', '500', 'method', 'description', 'A', 'nabl', 'formula', 1, 1, '2021-09-20 11:17:27', '2021-09-20 11:28:04', '2021-09-20 11:28:04'),
-(4, 2, 2, 13, 1, 'label claim', '10', '100', '500', 'method', 'description', 'A', 'nabl', 'formula', 1, 1, '2021-09-20 11:17:27', '2021-09-20 11:28:04', '2021-09-20 11:28:04'),
-(5, 3, 1, 2, 1, 'label claim', '10', '100', '500', 'method', 'description', 'A', 'nabl', 'formula', 1, 1, '2021-09-20 11:17:34', '2021-09-20 11:17:34', NULL),
-(6, 3, 2, 13, 1, 'label claim', '10', '100', '500', 'method', 'description', 'A', 'nabl', 'formula', 1, 1, '2021-09-20 11:17:34', '2021-09-20 11:17:34', NULL);
+(1, 1, 1, 22, 1, 'label claim', '10', '100', '500.00', 'method', 'description', 'A', 'nabl', 'formula', 1, 1, '2021-09-23 06:49:20', '2021-09-23 06:49:20', NULL),
+(2, 1, 1, 13, 2, 'label claim1', '20', '200', '700.00', 'method1', 'description1', 'A1', 'nabl1', 'formula1', 1, 1, '2021-09-23 06:49:20', '2021-09-23 06:49:20', NULL),
+(3, 2, 1, 22, 1, 'label claim', '10', '100', '500.00', 'method', 'description', 'A', 'nabl', 'formula', 1, 1, '2021-09-24 13:40:07', '2021-09-24 13:40:07', NULL),
+(4, 2, 1, 13, 2, 'label claim1', '20', '200', '700.00', 'method1', 'description1', 'A1', 'nabl1', 'formula1', 1, 1, '2021-09-24 13:40:07', '2021-09-24 13:40:07', NULL),
+(5, 3, 1, 22, 1, 'label claim', '10', '100', '500.00', 'method', 'description', 'A', 'nabl', 'formula', 1, 1, '2021-09-24 13:40:17', '2021-09-24 13:40:17', NULL),
+(6, 3, 1, 13, 2, 'label claim1', '20', '200', '700.00', 'method1', 'description1', 'A1', 'nabl1', 'formula1', 1, 1, '2021-09-24 13:40:17', '2021-09-24 13:40:17', NULL),
+(7, 4, 1, 22, 3, 'label claim', '10', '100', '500.00', 'method', 'description', 'A', 'nabl', 'formula', 1, 1, '2021-09-27 06:55:25', '2021-09-27 06:55:25', NULL),
+(8, 4, 1, 13, 4, 'label claim1', '20', '200', '700.00', 'method1', 'description1', 'A1', 'nabl1', 'formula1', 1, 1, '2021-09-27 06:55:25', '2021-09-27 06:55:25', NULL),
+(9, 5, 1, 22, 3, 'label claim', '10', '100', '500.00', 'method', 'description', 'A', 'nabl', 'formula', 1, 1, '2021-09-27 07:16:15', '2021-09-27 07:16:15', NULL),
+(10, 5, 1, 13, 4, 'label claim1', '20', '200', '700.00', 'method1', 'description1', 'A1', 'nabl1', 'formula1', 1, 1, '2021-09-27 07:16:15', '2021-09-27 07:16:15', NULL),
+(11, 6, 1, 22, 3, 'label claim', '10', '100', '500.00', 'method', 'description', 'A', 'nabl', 'formula', 1, 1, '2021-09-27 07:16:34', '2021-09-27 07:16:34', NULL),
+(12, 6, 1, 13, 4, 'label claim1', '20', '200', '700.00', 'method1', 'description1', 'A1', 'nabl1', 'formula1', 1, 1, '2021-09-27 07:16:34', '2021-09-27 07:16:34', NULL),
+(13, 7, 1, 22, 3, 'label claim', '10', '100', '500.00', 'method', 'description', 'A', 'nabl', 'formula', 1, 1, '2021-09-27 07:17:06', '2021-09-27 07:17:06', NULL),
+(14, 7, 1, 13, 4, 'label claim1', '20', '200', '700.00', 'method1', 'description1', 'A1', 'nabl1', 'formula1', 1, 1, '2021-09-27 07:17:06', '2021-09-27 07:17:06', NULL),
+(15, 8, 1, 22, 3, 'label claim', '10', '100', '500.00', 'method', 'description', 'A', 'nabl', 'formula', 1, 1, '2021-09-27 07:19:00', '2021-09-27 07:19:00', NULL),
+(16, 8, 1, 13, 4, 'label claim1', '20', '200', '700.00', 'method1', 'description1', 'A1', 'nabl1', 'formula1', 1, 1, '2021-09-27 07:19:00', '2021-09-27 07:19:00', NULL),
+(19, 18, 2, 0, 0, '', '', '', '111.00', '', '', '', '', '', 3, 3, '2021-09-28 09:52:53', '2021-09-28 09:52:53', NULL),
+(21, 19, 2, 0, 0, '', '', '', '1122.01', '', '', '', '', '', 3, 3, '2021-09-28 09:54:08', '2021-09-28 09:54:08', NULL);
 
 -- --------------------------------------------------------
 
@@ -1011,7 +1217,7 @@ CREATE TABLE `mst_sample_parameters` (
   `created_by` int(11) NOT NULL,
   `updated_by` int(11) NOT NULL,
   `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL,
+  `updated_at` datetime DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -1020,7 +1226,10 @@ CREATE TABLE `mst_sample_parameters` (
 --
 
 INSERT INTO `mst_sample_parameters` (`id`, `parameter_name`, `mst_companies_id`, `is_active`, `selected_year`, `copied_from_year`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'newparams11', 1, 1, '2019-20', NULL, 1, 1, '2021-09-20 11:17:22', '2021-09-20 11:17:22', NULL);
+(1, 'newparams0', 1, 1, '2019-20', NULL, 1, 1, '2021-09-23 06:49:20', '2021-09-23 06:49:20', NULL),
+(2, 'newparams1', 1, 1, '2019-20', NULL, 1, 1, '2021-09-23 06:49:20', '2021-09-23 06:49:20', NULL),
+(3, 'newparams022', 1, 1, '2019-20', NULL, 1, 1, '2021-09-27 06:55:25', '2021-09-27 06:55:25', NULL),
+(4, 'newparams122', 1, 1, '2019-20', NULL, 1, 1, '2021-09-27 06:55:25', '2021-09-27 06:55:25', NULL);
 
 -- --------------------------------------------------------
 
@@ -1471,6 +1680,30 @@ INSERT INTO `user_emp_details` (`id`, `users_id`, `organisation`, `designation`,
 --
 
 --
+-- Indexes for table `bookings`
+--
+ALTER TABLE `bookings`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `booking_audit_details`
+--
+ALTER TABLE `booking_audit_details`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `booking_sample_details`
+--
+ALTER TABLE `booking_sample_details`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `booking_tests`
+--
+ALTER TABLE `booking_tests`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `failed_jobs`
 --
 ALTER TABLE `failed_jobs`
@@ -1668,6 +1901,30 @@ ALTER TABLE `user_emp_details`
 --
 
 --
+-- AUTO_INCREMENT for table `bookings`
+--
+ALTER TABLE `bookings`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+
+--
+-- AUTO_INCREMENT for table `booking_audit_details`
+--
+ALTER TABLE `booking_audit_details`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `booking_sample_details`
+--
+ALTER TABLE `booking_sample_details`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `booking_tests`
+--
+ALTER TABLE `booking_tests`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
 -- AUTO_INCREMENT for table `failed_jobs`
 --
 ALTER TABLE `failed_jobs`
@@ -1779,7 +2036,7 @@ ALTER TABLE `mst_positions`
 -- AUTO_INCREMENT for table `mst_products`
 --
 ALTER TABLE `mst_products`
-  MODIFY `id` int(23) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(23) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `mst_product_parents`
@@ -1791,13 +2048,13 @@ ALTER TABLE `mst_product_parents`
 -- AUTO_INCREMENT for table `mst_product_samples`
 --
 ALTER TABLE `mst_product_samples`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `mst_sample_parameters`
 --
 ALTER TABLE `mst_sample_parameters`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `mst_states`
