@@ -255,7 +255,7 @@ class MstProductController extends Controller
                 "product_name" => 'required|string|max:255',
                 "product_generic" => 'required|string|max:255',
                 "pharmacopeia_id" => 'required|integer',
-                "sample_details.*.amount" => 'numeric|between:0,999999999999999999999999999.99',
+                "sample_details.*.amount" => 'nullable|numeric|between:0,999999999999999999999999999.99',
             ]);
 
             if ($validator->fails()) {
@@ -297,7 +297,7 @@ class MstProductController extends Controller
     public function addupdateProductSample($samples, $product_id)
     {
 
-        if (!empty($samples) || $samples != NULL || $samples != "") {
+        if (!empty($samples)) {
 
             $loggedInUserData = Helper::getUserData();
             $sample_count = count($samples);
@@ -359,7 +359,7 @@ class MstProductController extends Controller
                                 'label_claim' => (isset($sample['label_claim'])) ? $sample['label_claim'] : '',
                                 'min_limit' => (isset($sample['min_limit'])) ? $sample['min_limit'] : '',
                                 'max_limit' => (isset($sample['max_limit'])) ? $sample['max_limit'] : '',
-                                'amount' => (isset($sample['amount'])) ? $sample['amount'] : '',
+                                'amount' => (isset($sample['amount'])) ? $sample['amount'] : 0,
                                 'method' => (isset($sample['method'])) ? $sample['method'] : '',
                                 'description' => (isset($sample['description'])) ? $sample['description'] : '',
                                 'division' => (isset($sample['division'])) ? $sample['division'] : '',
@@ -374,8 +374,12 @@ class MstProductController extends Controller
                     }
                 }
             }
+        } else {
+            $sampledata = MstProductSample::where('mst_product_id', $product_id);
+            $sampledata->forceDelete();
         }
-    }
+        }
+    
 
     /**
      * Display the specified resource.
@@ -444,7 +448,7 @@ class MstProductController extends Controller
                 "product_name" => 'required|string|max:255',
                 "product_generic" => 'required|string|max:255',
                 "pharmacopeia_id" => 'required|integer',
-                "sample_details.*.amount" => 'numeric|between:0,999999999999999999999999999.99',
+                "sample_details.*.amount" => 'nullable|numeric|between:0,999999999999999999999999999.99',
             ]);
 
             if ($validator1->fails()) {

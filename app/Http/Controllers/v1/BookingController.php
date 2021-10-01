@@ -47,7 +47,7 @@ class BookingController extends Controller
         return Helper::response("last booking no is generated Successfully", Response::HTTP_CREATED, true, $last_booking_no);
     }
 
-    public function contact_type(Request $request,$type)
+    public function contact_type(Request $request, $type)
     {
         //
         $loggedInUserData = Helper::getUserData();
@@ -57,7 +57,7 @@ class BookingController extends Controller
             ->where('selected_year', $loggedInUserData['selected_year'])
             ->orderBy('id', 'desc')
             ->get();
-            return Helper::response("last booking no is generated Successfully", Response::HTTP_CREATED, true, $contact_type_data);
+        return Helper::response("company name list Successfully", Response::HTTP_CREATED, true, $contact_type_data);
     }
 
     /**
@@ -78,14 +78,18 @@ class BookingController extends Controller
      */
     public function store(Request $request)
     {
-        $no =  $request->booking_no;
+
         //
         DB::beginTransaction();
         try {
             $rules = [
                 "report_type" => "required",
+                "booking_type" => "required",
+                "receipt date" => "required",
                 "customer_id" => "required",
-                'booking_no' => 'unique:bookings'
+                'booking_no'  => 'unique:bookings',
+                'mfg_date'  => 'required|date',
+                'exp_date'    => 'required|date_format:Y-m-d|after:mfg_date',
             ];
             $massage = [
                 "report_type" => "Please select 'Report type'",
@@ -205,33 +209,44 @@ class BookingController extends Controller
                 // $sampledata->forceDelete();
 
                 foreach ($booking_tests as $tests) {
-                    if (!empty($tests['by_pass']))
+                    if (!empty($tests['by_pass'])) {
+                        if (
+                            !empty($tests['parent_child']) or
+                            !empty($tests['p_sr_no']) or
+                            !empty($tests['parent']) or
+                            !empty($tests['product_details']) or
+                            !empty($tests['test_name']) or
+                            !empty($tests['label_claim']) or
+                            !empty($tests['min_limit']) or
+                            !empty($tests['max_limit']) or
+                            !empty($tests['description']) or
+                            !empty($tests['amount'])
+                        ) {
+                            $tests_data = array(
+                                "booking_id" => (isset($booking_id) ? $booking_id : 0),
+                                "parent_child" => (isset($tests['parent_child']) ? $tests['parent_child'] : ''),
+                                "p_sr_no" => (isset($tests['p_sr_no']) ? $tests['p_sr_no'] : ''),
+                                "by_pass" => (isset($tests['by_pass']) ? $tests['by_pass'] : 0),
+                                "parent" => (isset($tests['parent']) ? $tests['parent'] : 0),
+                                "product_details" => (isset($tests['product_details']) ? $tests['product_details'] : ''),
+                                "test_name" => (isset($tests['test_name']) ? $tests['test_name'] : ''),
+                                "label_claim" => (isset($tests['label_claim']) ? $tests['label_claim'] : ''),
+                                "min_limit" => (isset($tests['min_limit']) ? $tests['min_limit'] : ''),
+                                "max_limit" => (isset($tests['max_limit']) ? $tests['max_limit'] : ''),
+                                "amount" => (isset($tests['amount']) ? $tests['amount'] : 0),
+                                "selected_year" => $loggedInUserData['selected_year'],
+                                "is_active" => (isset($tests['is_active']) ? $tests['is_active'] : 1),
+                                'created_by' => $loggedInUserData['logged_in_user_id'], //edited
+                                'updated_by' => $loggedInUserData['logged_in_user_id']
+                            );
 
-                        $tests_data = array(
-                            "booking_id" => (isset($booking_id) ? $booking_id : 0),
-                            "parent_child" => (isset($tests['parent_child']) ? $tests['parent_child'] : ''),
-                            "p_sr_no" => (isset($tests['p_sr_no']) ? $tests['p_sr_no'] : ''),
-                            "by_pass" => (isset($tests['by_pass']) ? $tests['by_pass'] : 0),
-                            "parent" => (isset($tests['parent']) ? $tests['parent'] : 0),
-                            "product_details" => (isset($tests['product_details']) ? $tests['product_details'] : ''),
-                            "test_name" => (isset($tests['test_name']) ? $tests['test_name'] : ''),
-                            "label_claim" => (isset($tests['label_claim']) ? $tests['label_claim'] : ''),
-                            "min_limit" => (isset($tests['min_limit']) ? $tests['min_limit'] : ''),
-                            "max_limit" => (isset($tests['max_limit']) ? $tests['max_limit'] : ''),
-                            "amount" => (isset($tests['amount']) ? $tests['amount'] : 0),
-                            "selected_year" => $loggedInUserData['selected_year'],
-                            "is_active" => (isset($tests['is_active']) ? $tests['is_active'] : 1),
-                            'created_by' => $loggedInUserData['logged_in_user_id'], //edited
-                            'updated_by' => $loggedInUserData['logged_in_user_id']
-                        );
-
-                    BookingTest::create($tests_data);
+                            BookingTest::create($tests_data);
+                        }
+                    }
                 }
             }
         }
     }
-
-
     /**
      * Display the specified resource.
      *

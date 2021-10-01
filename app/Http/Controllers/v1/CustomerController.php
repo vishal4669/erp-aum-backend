@@ -48,7 +48,7 @@ class CustomerController extends Controller
             }
 
             $data_arr = $data->isEmpty();
-            
+
             if ($data_arr) {
                 return Helper::response("Customer List is Empty", Response::HTTP_OK, true, $data);
             } else {
@@ -623,7 +623,7 @@ class CustomerController extends Controller
     public function addupdateCustomerContactPerson($contact_person_data, $customer_id)
     {
 
-        if (!empty($contact_person_data) || $contact_person_data != NULL || $contact_person_data != "") {
+        if (!empty($contact_person_data)) {
 
             // Delete all old   
             $customercontactperson = CustomerContactPerson::where('mst_customer_id', $customer_id);
@@ -633,7 +633,6 @@ class CustomerController extends Controller
 
             // check if data already present for the customers contact person
             $contact_person_count = count($contact_person_data);
-
             if ($contact_person_count) {
 
                 foreach ($contact_person_data as $contact_data) {
@@ -658,6 +657,10 @@ class CustomerController extends Controller
                     }
                 }
             }
+        }
+        else{
+            $customercontactperson = CustomerContactPerson::where('mst_customer_id', $customer_id);
+            $customercontactperson->forceDelete();
         }
     }
 
