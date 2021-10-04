@@ -41,4 +41,18 @@ class BookingSampleDetail extends Model
         "is_active",
 
     ];
+
+    /**
+     * Get the product_id,pharmacopiea_id associated with the BookingSampleDetail
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function product_id()
+    {
+        return $this->hasOne(MstProduct::class, 'id', 'product_id');
+    }
+    public function pharmacopiea_id()
+    {
+        return $this->hasOne(Pharmacopeia::class, 'id', 'pharmacopiea_id');
+    }
 }

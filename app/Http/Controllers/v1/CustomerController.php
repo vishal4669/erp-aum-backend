@@ -657,8 +657,7 @@ class CustomerController extends Controller
                     }
                 }
             }
-        }
-        else{
+        } else {
             $customercontactperson = CustomerContactPerson::where('mst_customer_id', $customer_id);
             $customercontactperson->forceDelete();
         }

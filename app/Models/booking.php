@@ -48,4 +48,22 @@ class Booking extends Model
         "created_by",
         "updated_by"
     ];
+
+    /**
+     * Get all of the comments for the booking
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function samples()
+    {
+        return $this->hasMany(BookingSampleDetail::class);
+    }
+    public function tests()
+    {
+        return $this->hasMany(BookingTest::class);
+    }
+    public function customer_id()
+    {
+        return $this->hasOne(Customer::class, 'id', 'customer_id');
+    }
 }

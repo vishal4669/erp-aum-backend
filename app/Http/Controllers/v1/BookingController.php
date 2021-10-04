@@ -24,34 +24,92 @@ class BookingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         //
+        try {
+
+            $loggedInUserData = Helper::getUserData();
+            $is_dropdown = (isset($request->is_dropdown) && $request->is_dropdown == 1) ? 1 : 0;
+            // $is_generic = (isset($request->is_generic) && $request->is_generic == 1) ? 1 : 0;
+
+            if (!$is_dropdown) {
+
+                $data = Booking::join('booking_sample_details as samples', 'samples.booking_id', '=', 'bookings.id')
+                    ->join('mst_products', 'mst_products.id', '=', 'samples.product_id')
+                    ->select(
+                        [
+                            'bookings.id', 'bookings.aum_serial_no', 'bookings.booking_no',
+                            'bookings.booking_type',
+                            DB::raw('DATE_FORMAT(bookings.receipte_date, "%d-%b-%Y") as receipte_date'),
+                            'bookings.is_active', 'mst_products.product_name'
+                        ]
+                    )
+                    ->where('bookings.is_active', 1)
+                    ->where('bookings.selected_year', $loggedInUserData['selected_year'])
+                    ->orderBy('id', 'desc')
+                    ->paginate(10);
+            } elseif ($is_dropdown) {
+
+                $data = Booking::join('booking_sample_details as samples', 'samples.booking_id', '=', 'bookings.id')
+                    ->join('mst_products', 'mst_products.id', '=', 'samples.product_id')
+                    ->select(
+                        [
+                            'bookings.id', 'bookings.aum_serial_no', 'bookings.booking_no',
+                            'bookings.booking_type',
+                            DB::raw('DATE_FORMAT(bookings.receipte_date, "%d-%b-%Y") as receipte_date'),
+                            'bookings.is_active', 'mst_products.product_name'
+                        ]
+                    )
+                    ->where('bookings.is_active', 1)
+                    ->where('bookings.selected_year', $loggedInUserData['selected_year'])
+                    ->orderBy('id', 'desc')
+                    ->get();
+            }
+
+            $data_arr = $data->isEmpty();
+
+            if ($data_arr) {
+
+                return Helper::response("Booking List is Empty", Response::HTTP_OK, true, $data);
+            } else {
+
+                return Helper::response("Booking List Shown Successfully", Response::HTTP_OK, true, $data);
+            }
+        } catch (\Exception $e) {
+            $data = array();
+            return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);
+        }
     }
 
-    public function last_booking_no(Request $request)
+    public function last_booking_no($report_type)
     {
-        //
-        $last_booking_id = Booking::latest()->first()->id;
-        $serial_no = Booking::latest()->first()->aum_serial_no;
-        if ($serial_no == 0) {
+
+        $booking_id = Booking::all();
+        
+        if ($booking_id->isEmpty()) {
+
+            $last_booking_id = 1;
             $aum_serial_no = 1;
-        } else {
+        } {
+            $booking_id = Booking::where('report_type', $report_type)->latest()->first()->booking_no;
+            $serial_no = Booking::latest()->first()->aum_serial_no;
+
+            $latest_data = $booking_id;
+            $findlaststr = explode("/", $latest_data);
+            $last_booking_id = end($findlaststr) + 1;
             $aum_serial_no = $serial_no + 1;
         }
-        $last_booking_no = [
-            "last_booking_id" => $last_booking_id,
-            "aum_serial_no" => $aum_serial_no
-        ];
+        $booking_no = ("ARL/COA/" . $report_type . '/' . Carbon::now()->format('Ymd') . '/' . $last_booking_id);
 
-        return Helper::response("last booking no is generated Successfully", Response::HTTP_CREATED, true, $last_booking_no);
+        return Helper::response("last booking no is generated Successfully", Response::HTTP_CREATED, true, $booking_no);
     }
 
-    public function contact_type(Request $request, $type)
+    public function contact_type($type = '')
     {
         //
         $loggedInUserData = Helper::getUserData();
-        $contact_type_data = Customer::select('company_name')
+        $contact_type_data = Customer::select('id', 'company_name')
             ->where('contact_type', $type)
             ->where('is_active', 1)
             ->where('selected_year', $loggedInUserData['selected_year'])
@@ -87,7 +145,7 @@ class BookingController extends Controller
                 "booking_type" => "required",
                 "receipt date" => "required",
                 "customer_id" => "required",
-                'booking_no'  => 'unique:bookings',
+                'booking_no'  => 'required,unique:bookings',
                 'mfg_date'  => 'required|date',
                 'exp_date'    => 'required|date_format:Y-m-d|after:mfg_date',
             ];
@@ -137,7 +195,7 @@ class BookingController extends Controller
                 "discipline"    => (isset($request->discipline) ? $request->discipline : ''),
                 "booking_group" => (isset($request->booking_group) ? $request->booking_group : ''),
                 "statement_ofconformity"    => (isset($request->statement_ofconformity) ? $request->statement_ofconformity : ''),
-                "is_active" => (isset($request->is_active) ? $request->is_active : 1),
+                "is_active" => 1,
                 "selected_year" => $loggedInUserData['selected_year'],
                 "created_by"    => $loggedInUserData['logged_in_user_id'],
 
@@ -253,9 +311,28 @@ class BookingController extends Controller
      * @param  \App\Models\booking  $booking
      * @return \Illuminate\Http\Response
      */
-    public function show(booking $booking)
+    public function show(booking $booking, $id)
     {
         //
+        $loggedInUserData = Helper::getUserData();
+        $data = Booking::with(
+            'customer_id:id,company_name',
+            'samples',
+            'samples.product_id:id,product_name',
+            'samples.pharmacopiea_id:id,pharmacopeia_name',
+            'tests',
+            'tests.parent'
+        )
+            ->find($id);
+        $data['receipte_date'] = \Carbon\Carbon::parse($data['receipte_date'])->format('d/m/Y');
+        $data['mfg_date'] = \Carbon\Carbon::parse($data['mfg_date'])->format('d/m/Y');
+        $data['exp_date'] = \Carbon\Carbon::parse($data['exp_date'])->format('d/m/Y');
+        $data['analysis_date'] = \Carbon\Carbon::parse($data['analysis_date'])->format('d/m/Y');
+        $data['samples'][0]['sampling_date_from'] = \Carbon\Carbon::parse($data['samples'][0]['sampling_date_from'])->format('d/m/Y');
+        $data['samples'][0]['sampling_date_to'] = \Carbon\Carbon::parse($data['samples'][0]['sampling_date_to'])->format('d/m/Y');
+
+
+        return Helper::response("This Booking Shown Successfully", Response::HTTP_OK, true, $data);
     }
 
     /**
@@ -276,9 +353,83 @@ class BookingController extends Controller
      * @param  \App\Models\booking  $booking
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, booking $booking)
+    public function update(Request $request, $id)
     {
         //
+        try {
+
+            $rules = [
+                "report_type" => "required",
+                "booking_type" => "required",
+                "receipte_date" => "required",
+                "customer_id" => "required",
+                'mfg_date'  => 'required|date',
+                'exp_date'    => 'required|date_format:Y-m-d|after:mfg_date',
+            ];
+            $massage = [
+                "report_type" => "Please select 'Report type'",
+                "customer_id" => "Please select 'Customer'",
+            ];
+
+            $validator = Validator::make($request->all(), $rules, $massage);
+            if ($validator->fails()) {
+                $data = array();
+                return Helper::response($validator->errors()->all(), Response::HTTP_OK, false, $data);
+            }
+
+            $loggedInUserData = Helper::getUserData();
+            $booking_data = [
+                "mst_companies_id"  => $loggedInUserData['company_id'],
+                "booking_type"  => (isset($request->booking_type) ? $request->booking_type : ''),
+                "report_type"   => (isset($request->report_type) ? $request->report_type : ''),
+                "receipte_date" => (isset($request->receipte_date) ? date('Y-m-d', strtotime($request->receipte_date)) : ''),
+                "booking_no"    => (isset($request->booking_no) ? $request->booking_no : ''),
+                "customer_id"   => (isset($request->customer_id) ? $request->customer_id : 0),
+                "reference_no"  => (isset($request->reference_no) ? $request->reference_no : ''),
+                "remarks"   => (isset($request->remarks) ? $request->remarks : ''),
+                "manufacturer_id"   => (isset($request->manufacturer_id) ? $request->manufacturer_id : 0),
+                "supplier_id"   => (isset($request->supplier_id) ? $request->supplier_id : 0),
+                "mfg_date"  => (isset($request->mfg_date) ? date('Y-m-d', strtotime($request->mfg_date)) : ''),
+                "mfg_options"   => (isset($request->mfg_options) ? $request->mfg_options : ''),
+                "exp_date"  => (isset($request->exp_date) ? date('Y-m-d', strtotime($request->exp_date)) : ''),
+                "exp_options"   => (isset($request->exp_options) ? $request->exp_options : ''),
+                "analysis_date" => (isset($request->analysis_date) ? date('Y-m-d', strtotime($request->analysis_date)) : ''),
+                "aum_serial_no"    => (isset($request->aum_serial_no) ? $request->aum_serial_no : 0),
+                "d_format"  => (isset($request->d_format) ? $request->d_format : ''),
+                "d_format_options"  => (isset($request->d_format_options) ? $request->d_format_options : ''),
+                "grade" => (isset($request->grade) ? $request->grade : ''),
+                "grade_options" => (isset($request->grade_options) ? $request->grade_options : ''),
+                "project_name"  => (isset($request->project_name) ? $request->project_name : ''),
+                "project_options"   => (isset($request->project_options) ? $request->project_options : ''),
+                "mfg_lic_no"    => (isset($request->mfg_lic_no) ? $request->mfg_lic_no : ''),
+                "is_report_dispacthed"  => (isset($request->is_report_dispacthed) ? $request->is_report_dispacthed : 0),
+                "signature" => (isset($request->signature) ? $request->signature : 0),
+                "verified_by"   => (isset($request->verified_by) ? $request->verified_by : ''),
+                "nabl_scope"    => (isset($request->nabl_scope) ? $request->nabl_scope : 0),
+                "cancel"    => (isset($request->cancel) ? $request->cancel : ''),
+                "cancel_remarks"    => (isset($request->cancel_remarks) ? $request->cancel_remarks : ''),
+                "priority"  => (isset($request->priority) ? $request->priority : ''),
+                "discipline"    => (isset($request->discipline) ? $request->discipline : ''),
+                "booking_group" => (isset($request->booking_group) ? $request->booking_group : ''),
+                "statement_ofconformity"    => (isset($request->statement_ofconformity) ? $request->statement_ofconformity : ''),
+                "is_active" => 1,
+                "selected_year" => $loggedInUserData['selected_year'],
+                "updated_by"    => $loggedInUserData['logged_in_user_id'],
+            ];
+
+            // $this->addupdateBookingSample($request->booking_sample_details, $booking_data->id);
+            // $this->addupdateBookingTests($request->booking_tests, $booking_data->id);
+
+            $booking_table = Booking::find($id);
+            $booking_table->update($booking_data);
+
+            DB::commit();
+            Log::info("Booking Created with details : " . json_encode($request->all()));
+            return Helper::response("Booking updated Successfully", Response::HTTP_CREATED, true, $booking_data);
+        } catch (Exception $e) {
+            $booking_table = array();
+            return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $booking_table);
+        }
     }
 
     /**

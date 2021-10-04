@@ -27,4 +27,14 @@ class BookingTest extends Model
         "copied_from_year",
         "is_active"
     ];
+
+    /**
+     * Get the parent associated with the BookingTest
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function parent()
+    {
+        return $this->hasOne(MstProductParent::class, 'id', 'parent');
+    }
 }

@@ -14,6 +14,12 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::get('clear_cache', function () {
+    \Artisan::call('cache:clear');
+    \Artisan::call('config:clear');
+    \Artisan::call('view:clear');
+    dd("Cache is cleared");
+});
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
@@ -147,7 +153,7 @@ Route::group(['middleware'=>['jwt.verify'], 'prefix'=>'v1'], function () {
 
     // Product Masters
     Route::post('addProduct', 'App\Http\Controllers\v1\MstProductController@store');
-    Route::get('listproduct', 'App\Http\Controllers\v1\MstProductController@index');
+    Route::get('listProduct', 'App\Http\Controllers\v1\MstProductController@index');
     Route::get('paramsList', 'App\Http\Controllers\v1\MstProductController@param_list');
     Route::get('parentList', 'App\Http\Controllers\v1\MstProductController@parent_list');
     Route::get('getproduct/{id}', 'App\Http\Controllers\v1\MstProductController@show');
@@ -158,8 +164,11 @@ Route::group(['middleware'=>['jwt.verify'], 'prefix'=>'v1'], function () {
 
     // Booking
     Route::post('addBooking','App\Http\Controllers\v1\BookingController@store');
-    Route::get('booking_no','App\Http\Controllers\v1\BookingController@last_booking_no');
-    Route::post('contact_type/{type}','App\Http\Controllers\v1\BookingController@contact_type');
+    Route::post('editBooking/{id}','App\Http\Controllers\v1\BookingController@update');
+    Route::get('listBooking','App\Http\Controllers\v1\BookingController@index');
+    Route::get('getBooking/{id}','App\Http\Controllers\v1\BookingController@show');
+    Route::get('booking_no/{report_type?}','App\Http\Controllers\v1\BookingController@last_booking_no');
+    Route::get('contact_type/{type?}','App\Http\Controllers\v1\BookingController@contact_type');
   
 });
 
