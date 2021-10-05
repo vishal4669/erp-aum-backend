@@ -29,7 +29,6 @@ class MstProductController extends Controller
     public function index(Request $request)
     {
         try {
-
             $loggedInUserData = Helper::getUserData();
             $is_dropdown = (isset($request->is_dropdown) && $request->is_dropdown == 1) ? 1 : 0;
             $is_generic = (isset($request->is_generic) && $request->is_generic == 1) ? 1 : 0;
@@ -378,8 +377,8 @@ class MstProductController extends Controller
             $sampledata = MstProductSample::where('mst_product_id', $product_id);
             $sampledata->forceDelete();
         }
-        }
-    
+    }
+
 
     /**
      * Display the specified resource.
@@ -389,11 +388,21 @@ class MstProductController extends Controller
      */
     public function show($id)
     {
-        $data = MstProduct::with('samples', 'samples.parameter', 'samples.parent')->find($id);
+        $data = MstProduct::with('generic:id,product_name as generic_product_name', 'samples', 'samples.parameter', 'samples.parent')->find($id);
         $data_Arr = $data->toArray();
         $len = count($data_Arr['samples']);
         $i = 0;
 
+        if ($data_Arr['generic_product_id'] == null or $data_Arr['generic_product_id'] == 0) {
+
+            $data_Arr['generic'] = array(
+                'id' => '',
+                'generic_product_name' => ''
+            );
+        } else {
+
+            $data_Arr['generic'] = $data_Arr['generic'];
+        }
         for ($i = 0; $i < $len; $i++) {
 
             if ($data_Arr['samples'][$i]['parent'] == null) {

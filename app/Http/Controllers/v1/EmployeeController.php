@@ -126,7 +126,8 @@ class EmployeeController extends Controller
                 'selected_year' => $loggedInUserData['selected_year'],
                 'is_admin' => 0,
                 'is_active' => 1,
-                'updated_by' => $loggedInUserData['logged_in_user_id']
+                'created_by' => $loggedInUserData['logged_in_user_id'],
+                'updated_at' => NULL
             ]);
 
             //Added user id

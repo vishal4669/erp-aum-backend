@@ -185,6 +185,7 @@ class CustomerController extends Controller
                 'selected_year' => $loggedInUserData['selected_year'],
                 'is_active' => $request->get('is_active'),
                 'created_by' => $loggedInUserData['logged_in_user_id'], //edited
+                'updated_at' => NULL
             ]);
 
 
@@ -218,7 +219,7 @@ class CustomerController extends Controller
         try {
 
             $customerData = Customer::with(['contact_info', 'contact_person'])->find($id);
-            // dd($customerData);
+
             //homecustom arr key
             $customerData['contact_info'][0]['homestreet'] = $customerData['contact_info'][0]['street_1'];
             $customerData['contact_info'][0]['pincode'] = $customerData['contact_info'][0]['pin'];
@@ -325,9 +326,9 @@ class CustomerController extends Controller
         } else {
             $logorule = 'nullable|image|mimes:jpeg,png,jpg,svg|max:2048';
         }
-        // return Helper::response("DEBUG", Response::HTTP_OK, true, $request->other_pan_card_copy );
+
         $reqpan = $req['customer_contact_info']['other_contact_info'][0]['other_pan_card_copy'];
-        // return Helper::response("Customer", Response::HTTP_OK, true, $reqpan);
+
         if ($reqpan == $apipan || $reqpan == null || $reqpan == "null" || $reqpan == "undefined") {
             $panrule = '';
         } else {
@@ -404,7 +405,7 @@ class CustomerController extends Controller
                 $data1 = array();
                 return Helper::response($validator1->errors()->all(), Response::HTTP_OK, false, $data1);
             }
-            // return Helper::response("DEBUG", Response::HTTP_OK, true, $request->logo);
+
             $imageName = NULL;
             $loggedInUserData = Helper::getUserData();
             if ($apilogo !== $request->get('logo') && $request->logo !== "null") {
@@ -415,7 +416,7 @@ class CustomerController extends Controller
                     $data['logo'] = $imageName;
                 }
             }
-            // return Helper::response("DEBUG", Response::HTTP_OK, true, $imageName);
+
             $bithdate = $request->get('birth_date');
             if ($bithdate != "null" && $bithdate != null) {
                 $birth_date = $request->get('birth_date');

@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
 Route::get('clear_cache', function () {
     \Artisan::call('cache:clear');
     \Artisan::call('config:clear');
@@ -25,18 +26,17 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group(['prefix'=>'v1'], function () {
+Route::group(['prefix' => 'v1'], function () {
 
 
-Route::post('register', 'App\Http\Controllers\v1\UserController@register');
-Route::post('login', 'App\Http\Controllers\v1\UserController@authenticate');
-Route::post('logout', 'App\Http\Controllers\v1\UserController@logout');
-Route::get('open', 'App\Http\Controllers\v1\DataController@open');
-
+    Route::post('register', 'App\Http\Controllers\v1\UserController@register');
+    Route::post('login', 'App\Http\Controllers\v1\UserController@authenticate');
+    Route::post('logout', 'App\Http\Controllers\v1\UserController@logout');
+    Route::get('open', 'App\Http\Controllers\v1\DataController@open');
 });
 
 
-Route::group(['middleware'=>['jwt.verify'], 'prefix'=>'v1'], function () {
+Route::group(['middleware' => ['jwt.verify'], 'prefix' => 'v1'], function () {
 
     Route::get('user', 'App\Http\Controllers\v1\UserController@getAuthenticatedUser');
     Route::get('closed', 'App\Http\Controllers\v1\DataController@closed');
@@ -85,7 +85,7 @@ Route::group(['middleware'=>['jwt.verify'], 'prefix'=>'v1'], function () {
     Route::get('getDepartment/{id}', 'App\Http\Controllers\v1\DepartmentController@show');
     Route::post('editDepartment/{id}', 'App\Http\Controllers\v1\DepartmentController@update');
     Route::post('deleteDepartment/{id}', 'App\Http\Controllers\v1\DepartmentController@destroy');
-    
+
     // Branch Masters
     Route::get('listBranch', 'App\Http\Controllers\v1\BranchController@index');
     Route::post('addBranch', 'App\Http\Controllers\v1\BranchController@store');
@@ -153,26 +153,26 @@ Route::group(['middleware'=>['jwt.verify'], 'prefix'=>'v1'], function () {
 
     // Product Masters
     Route::post('addProduct', 'App\Http\Controllers\v1\MstProductController@store');
-    Route::get('listProduct', 'App\Http\Controllers\v1\MstProductController@index');
+    Route::get('listproduct', 'App\Http\Controllers\v1\MstProductController@index');
     Route::get('paramsList', 'App\Http\Controllers\v1\MstProductController@param_list');
     Route::get('parentList', 'App\Http\Controllers\v1\MstProductController@parent_list');
     Route::get('getproduct/{id}', 'App\Http\Controllers\v1\MstProductController@show');
     Route::post('editProduct/{id}', 'App\Http\Controllers\v1\MstProductController@update');
     Route::post('deleteProduct/{id}', 'App\Http\Controllers\v1\MstProductController@destroy');
     Route::get('exportproductlist', 'App\Http\Controllers\v1\MstProductController@exportlist');
-
-
+    
+    
     // Booking
-    Route::post('addBooking','App\Http\Controllers\v1\BookingController@store');
-    Route::post('editBooking/{id}','App\Http\Controllers\v1\BookingController@update');
-    Route::get('listBooking','App\Http\Controllers\v1\BookingController@index');
-    Route::get('getBooking/{id}','App\Http\Controllers\v1\BookingController@show');
-    Route::get('booking_no/{report_type?}','App\Http\Controllers\v1\BookingController@last_booking_no');
-    Route::get('contact_type/{type?}','App\Http\Controllers\v1\BookingController@contact_type');
-  
+    Route::post('addBooking', 'App\Http\Controllers\v1\BookingController@store');
+    Route::post('editBooking/{id}', 'App\Http\Controllers\v1\BookingController@update');
+    Route::get('listBooking', 'App\Http\Controllers\v1\BookingController@index');
+    Route::get('getBooking/{id}', 'App\Http\Controllers\v1\BookingController@show');
+    Route::get('booking_no/{report_type?}', 'App\Http\Controllers\v1\BookingController@last_booking_no');
+    Route::get('contact_type/{type?}', 'App\Http\Controllers\v1\BookingController@contact_type');
+    Route::post('deleteBooking/{id}', 'App\Http\Controllers\v1\BookingController@destroy');
 });
 
-Route::group(['prefix'=>'v1'], function () {
+Route::group(['prefix' => 'v1'], function () {
     Route::get('listYears', 'App\Http\Controllers\v1\CommonController@yearsList');
     Route::get('listCompanies', 'App\Http\Controllers\v1\CommonController@listCompanies');
 

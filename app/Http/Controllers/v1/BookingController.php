@@ -31,16 +31,15 @@ class BookingController extends Controller
 
             $loggedInUserData = Helper::getUserData();
             $is_dropdown = (isset($request->is_dropdown) && $request->is_dropdown == 1) ? 1 : 0;
-            // $is_generic = (isset($request->is_generic) && $request->is_generic == 1) ? 1 : 0;
 
             if (!$is_dropdown) {
 
-                $data = Booking::join('booking_sample_details as samples', 'samples.booking_id', '=', 'bookings.id')
-                    ->join('mst_products', 'mst_products.id', '=', 'samples.product_id')
+                $data = Booking::leftjoin('booking_sample_details as samples', 'samples.booking_id', '=', 'bookings.id')
+                    ->leftjoin('mst_products', 'mst_products.id', '=', 'samples.product_id')
                     ->select(
                         [
                             'bookings.id', 'bookings.aum_serial_no', 'bookings.booking_no',
-                            'bookings.booking_type',
+                            'bookings.booking_type','samples.product_type',
                             DB::raw('DATE_FORMAT(bookings.receipte_date, "%d-%b-%Y") as receipte_date'),
                             'bookings.is_active', 'mst_products.product_name'
                         ]
@@ -51,12 +50,12 @@ class BookingController extends Controller
                     ->paginate(10);
             } elseif ($is_dropdown) {
 
-                $data = Booking::join('booking_sample_details as samples', 'samples.booking_id', '=', 'bookings.id')
-                    ->join('mst_products', 'mst_products.id', '=', 'samples.product_id')
+                $data = Booking::leftjoin('booking_sample_details as samples', 'samples.booking_id', '=', 'bookings.id')
+                    ->leftjoin('mst_products', 'mst_products.id', '=', 'samples.product_id')
                     ->select(
                         [
                             'bookings.id', 'bookings.aum_serial_no', 'bookings.booking_no',
-                            'bookings.booking_type',
+                            'bookings.booking_type','samples.product_type',
                             DB::raw('DATE_FORMAT(bookings.receipte_date, "%d-%b-%Y") as receipte_date'),
                             'bookings.is_active', 'mst_products.product_name'
                         ]
@@ -66,7 +65,8 @@ class BookingController extends Controller
                     ->orderBy('id', 'desc')
                     ->get();
             }
-
+           
+          
             $data_arr = $data->isEmpty();
 
             if ($data_arr) {
@@ -76,7 +76,7 @@ class BookingController extends Controller
 
                 return Helper::response("Booking List Shown Successfully", Response::HTTP_OK, true, $data);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $data = array();
             return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);
         }
@@ -85,24 +85,32 @@ class BookingController extends Controller
     public function last_booking_no($report_type)
     {
 
-        $booking_id = Booking::all();
-        
-        if ($booking_id->isEmpty()) {
+        $booking_table = Booking::all();
+
+        if ($booking_table->isEmpty()) {
 
             $last_booking_id = 1;
             $aum_serial_no = 1;
         } {
-            $booking_id = Booking::where('report_type', $report_type)->latest()->first()->booking_no;
-            $serial_no = Booking::latest()->first()->aum_serial_no;
 
-            $latest_data = $booking_id;
-            $findlaststr = explode("/", $latest_data);
-            $last_booking_id = end($findlaststr) + 1;
+            if (!isset(Booking::where('report_type', $report_type)->latest()->first()->booking_no)) {
+                $last_booking_id = 1;
+            } else {
+                $latest_booking_no = Booking::where('report_type', $report_type)->latest()->first()->booking_no;
+                $latest_data = $latest_booking_no;
+                $findlaststr = explode("/", $latest_data);
+                $last_booking_id = end($findlaststr) + 1;
+            }
+
+            $serial_no = Booking::latest()->first()->aum_serial_no;
             $aum_serial_no = $serial_no + 1;
         }
-        $booking_no = ("ARL/COA/" . $report_type . '/' . Carbon::now()->format('Ymd') . '/' . $last_booking_id);
-
-        return Helper::response("last booking no is generated Successfully", Response::HTTP_CREATED, true, $booking_no);
+        $booking_no = ("ARL/COA/" . $report_type . '/' . Carbon::now()->format('ymd') . '/' . $last_booking_id);
+        $number = array(
+            'booking_no' => $booking_no,
+            'aum_serial_no' => $aum_serial_no
+        );
+        return Helper::response("last booking no is generated Successfully", Response::HTTP_CREATED, true, $number);
     }
 
     public function contact_type($type = '')
@@ -143,15 +151,21 @@ class BookingController extends Controller
             $rules = [
                 "report_type" => "required",
                 "booking_type" => "required",
-                "receipt date" => "required",
+                "receipte_date" => "required",
                 "customer_id" => "required",
-                'booking_no'  => 'required,unique:bookings',
+                'booking_no'  => 'unique:bookings',
                 'mfg_date'  => 'required|date',
                 'exp_date'    => 'required|date_format:Y-m-d|after:mfg_date',
             ];
             $massage = [
-                "report_type" => "Please select 'Report type'",
-                "customer_id" => "Please select 'Customer'",
+                "report_type.required" => "The Report Type Field Is Required.",
+                "booking_type.required" => "The Booking Type Field Is Required.",
+                "receipte_date.required" => "The Receipte Date Field Is Required.",
+                "customer_id.required" => "The Customer Id Field Is Required.",
+                // "booking_no.required" => "The Booking No Field Is Required.",
+                "booking_no.unique" => "The Booking No Field Must Be Unique.",
+                "mfg_date.required" => "The Mfg Date Field Is Required.",
+                "exp_date.required" => "The Exp Date Field Is Required.",
             ];
 
             $validator = Validator::make($request->all(), $rules, $massage);
@@ -217,13 +231,13 @@ class BookingController extends Controller
     public function addupdateBookingSample($booking_samples, $booking_id)
     {
 
-        if (!empty($booking_samples) || $booking_samples != NULL || $booking_samples != "") {
+
+        if (!empty($booking_samples)) {
 
             $loggedInUserData = Helper::getUserData();
-            $booking_sample_data = BookingSampleDetail::create([
+            $booking_sample_data = array(
                 "booking_id" => (isset($booking_id) ? $booking_id : 0),
                 "product_id"    => (isset($booking_samples['product_id']) ? $booking_samples['product_id'] : 0),
-                "generic_name"  => (isset($booking_samples['generic_name']) ? $booking_samples['generic_name'] : ''),
                 "product_type"  => (isset($booking_samples['product_type']) ? $booking_samples['product_type'] : ''),
                 "pharmacopiea_id"   => (isset($booking_samples['pharmacopiea_id']) ? $booking_samples['pharmacopiea_id'] : 0),
                 "batch_no"  => (isset($booking_samples['batch_no']) ? $booking_samples['batch_no'] : 0),
@@ -249,13 +263,21 @@ class BookingController extends Controller
                 "is_active" => 1,
                 "selected_year" => $loggedInUserData['selected_year'],
                 "created_by"    => $loggedInUserData['logged_in_user_id'],
-            ]);
+                "updated_by"    => $loggedInUserData['logged_in_user_id'],
+            );
+            $sample_detail_exist = BookingSampleDetail::where('booking_id', $booking_id)->get();
+            if (count($sample_detail_exist) > 0) {
+                $update_table = BookingSampleDetail::where('booking_id', $booking_id);
+                $update_table->update($booking_sample_data);
+            } else {
+                BookingSampleDetail::create($booking_sample_data);
+            }
         }
     }
 
     public function addupdateBookingTests($booking_tests, $booking_id)
     {
-        if (!empty($booking_tests) || $booking_tests != NULL || $booking_tests != "") {
+        if (!empty($booking_tests)) {
 
             $loggedInUserData = Helper::getUserData();
             $tests_count = count($booking_tests);
@@ -263,8 +285,8 @@ class BookingController extends Controller
             if ($tests_count) {
 
                 // Delete all old   
-                // $sampledata = MstProductSample::where('mst_product_id', $product_id);
-                // $sampledata->forceDelete();
+                $testdata = BookingTest::where('booking_id', $booking_id);
+                $testdata->forceDelete();
 
                 foreach ($booking_tests as $tests) {
                     if (!empty($tests['by_pass'])) {
@@ -303,6 +325,9 @@ class BookingController extends Controller
                     }
                 }
             }
+        } else {
+            $sampledata = BookingTest::where('booking_id', $booking_id);
+            $sampledata->forceDelete();
         }
     }
     /**
@@ -367,8 +392,12 @@ class BookingController extends Controller
                 'exp_date'    => 'required|date_format:Y-m-d|after:mfg_date',
             ];
             $massage = [
-                "report_type" => "Please select 'Report type'",
-                "customer_id" => "Please select 'Customer'",
+                "report_type.required" => "The Report Type Field Is Required.",
+                "booking_type.required" => "The Booking Type Field Is Required.",
+                "receipte_date.required" => "The Receipte Date Field Is Required.",
+                "customer_id.required" => "The Customer Id Field Is Required.",
+                "mfg_date.required" => "The Mfg Date Field Is Required.",
+                "exp_date.required" => "The Exp Date Field Is Required.",
             ];
 
             $validator = Validator::make($request->all(), $rules, $massage);
@@ -417,8 +446,8 @@ class BookingController extends Controller
                 "updated_by"    => $loggedInUserData['logged_in_user_id'],
             ];
 
-            // $this->addupdateBookingSample($request->booking_sample_details, $booking_data->id);
-            // $this->addupdateBookingTests($request->booking_tests, $booking_data->id);
+            $this->addupdateBookingSample($request->booking_sample_details, $id);
+            $this->addupdateBookingTests($request->booking_tests, $id);
 
             $booking_table = Booking::find($id);
             $booking_table->update($booking_data);
@@ -435,11 +464,35 @@ class BookingController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\booking  $booking
+     * @param  \App\Models\Booking  $booking
      * @return \Illuminate\Http\Response
      */
-    public function destroy(booking $booking)
+    public function destroy(booking $booking, $id)
     {
         //
+        try {
+            $data = array();
+            $booking = Booking::find($id);
+            $sample_details = BookingSampleDetail::where("booking_id", $id);
+            $booking_tests = BookingTest::where("booking_id", $id);
+
+            Log::info("Booking deleted with : " . json_encode(array('id' => $id)));
+
+            if (!empty($booking)) {
+                $booking->delete();
+                if (!empty($sample_details)) {
+                    $sample_details->delete();
+                }
+                if (!empty($booking_tests)) {
+                    $booking_tests->delete();
+                }
+                return Helper::response("Booking deleted successfully", Response::HTTP_OK, true, $data);
+            }
+
+            return Helper::response("Booking not exists", Response::HTTP_NOT_FOUND, false, $data);
+        } catch (Exception $e) {
+            $data = array();
+            return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);
+        }
     }
 }
