@@ -48,7 +48,8 @@ class Booking extends Model
         "is_active",
         "selected_year",
         "created_by",
-        "updated_by"
+        "updated_by",
+        "updated_at"
     ];
 
     /**
@@ -63,6 +64,10 @@ class Booking extends Model
     public function tests()
     {
         return $this->hasMany(BookingTest::class);
+    }
+    public function audit()
+    {
+        return $this->hasMany(BookingAuditDetail::class);
     }
     public function customer_id()
     {
