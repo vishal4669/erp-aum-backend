@@ -89,7 +89,6 @@ class BookingController extends Controller
         $booking_table = Booking::all();
 
         if ($booking_table->isEmpty()) {
-
             $last_booking_id = 1;
             $aum_serial_no = 1;
             $booking_no = ("ARL/COA/" . $report_type . '/' . Carbon::now()->format('ymd') . '/' . $last_booking_id);
@@ -133,6 +132,46 @@ class BookingController extends Controller
         return Helper::response("company name list Successfully", Response::HTTP_CREATED, true, $contact_type_data);
     }
 
+    public function exportlist()
+    {
+        try {
+
+            $loggedInUserData = Helper::getUserData();
+            $exportData = Booking::select(
+                'id',
+                'aum_serial_no',
+                'booking_no',
+                'receipte_date',
+                'customer_id',
+                'nabl_scope',
+                'created_by',
+                'created_at',
+                'updated_by',
+                'updated_at'
+            )
+                ->with(
+                    'customer_id:id,company_name',
+                    'samples:id,booking_id,product_id,batch_no,product_type',
+                    'samples.product_id:id,generic_product_id',
+                    'tests:booking_id,test_name,amount',
+                    'audit:booking_id,comments',
+                )
+                ->where('is_active', 1)
+                ->where('selected_year', $loggedInUserData['selected_year'])
+                ->orderBy('id', 'desc')
+                ->get();
+
+            $exportData_Arr = $exportData->toArray();
+            // $len = count($exportData_Arr);
+            // $i = 0;
+
+            return Helper::response("Export Data Shown Successfully", Response::HTTP_OK, true, $exportData_Arr);
+        } catch (Exception $e) {
+            $exportData = array();
+            return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $exportData_Arr);
+        }
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -151,7 +190,22 @@ class BookingController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        if (!isset(Booking::where('booking_no', $request->booking_no)->latest()->first()->booking_no)) {
+            $request->booking_no = $request->booking_no;
+        } else {
+            $latest_booking_no = Booking::where('booking_no', $request->booking_no)->latest()->first()->booking_no;
+            $latest_data = $latest_booking_no;
+            $findlaststr = explode("/", $latest_data);
+            $last_booking_id = end($findlaststr) + 1;
+            $request->booking_no = ("ARL/COA/" . $request->report_type . '/' . Carbon::now()->format('ymd') . '/' . $last_booking_id);
+        }
+        if (isset(Booking::where('aum_serial_no', $request->aum_serial_no)->latest()->first()->aum_serial_no)) {
+            $serial_no = Booking::latest()->first()->aum_serial_no;
+            $request->aum_serial_no = $serial_no + 1;
+        } else {
+            $request->aum_serial_no = $request->aum_serial_no;
+        }
         DB::beginTransaction();
         try {
             $rules = [
@@ -159,21 +213,23 @@ class BookingController extends Controller
                 "booking_type" => "required",
                 "receipte_date" => "required",
                 "customer_id" => "required",
-                'booking_no'  => 'unique:bookings',
+                // 'booking_no'  => 'unique:bookings',
+                // 'aum_serial_no'  => 'unique:bookings',
                 'mfg_date'  => 'required|date',
                 'exp_date'    => 'required|date_format:Y-m-d|after:mfg_date',
-                'booking_sample_details.*.sampling_date_from'  => 'date',
-                'booking_sample_details.*.sampling_date_to'    => 'date_format:Y-m-d|after:booking_sample_details.*.sampling_date_from',
+                'booking_sample_details.*.sampling_date_from'  => 'nullable|date',
+                'booking_sample_details.*.sampling_date_to'    => 'nullable|date_format:Y-m-d|after:booking_sample_details.*.sampling_date_from',
+                'booking_tests.*.amount'    => 'nullable|numeric|between:0,999999999999999999999999999.99',
             ];
             $massage = [
                 "report_type.required" => "The Report Type Field Is Required.",
                 "booking_type.required" => "The Booking Type Field Is Required.",
                 "receipte_date.required" => "The Receipte Date Field Is Required.",
                 "customer_id.required" => "The Customer Id Field Is Required.",
-                // "booking_no.required" => "The Booking No Field Is Required.",
                 "booking_no.unique" => "The Booking No Field Must Be Unique.",
                 "mfg_date.required" => "The Mfg Date Field Is Required.",
                 "exp_date.required" => "The Exp Date Field Is Required.",
+                'booking_sample_details.*.sampling_date_to.after'    => 'Sampling Date To Must Be A Date After Sampling Date From.',
             ];
 
             $validator = Validator::make($request->all(), $rules, $massage);
@@ -377,6 +433,7 @@ class BookingController extends Controller
         $loggedInUserData = Helper::getUserData();
         $data = Booking::with(
             'customer_id:id,company_name',
+            'customer_id',
             'samples',
             'samples.product_id:id,product_name',
             'samples.pharmacopiea_id:id,pharmacopeia_name',
