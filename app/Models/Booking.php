@@ -15,6 +15,7 @@ class Booking extends Model
         "mst_companies_id",
         "booking_type",
         "report_type",
+        "invoice_date",
         "receipte_date",
         "booking_no",
         "customer_id",
@@ -69,9 +70,26 @@ class Booking extends Model
     {
         return $this->hasMany(BookingAuditDetail::class);
     }
+    
     public function customer_id()
     {
         return $this->hasOne(Customer::class, 'id', 'customer_id');
     }
+    public function manufacturer_id()
+    {
+        return $this->hasOne(Customer::class, 'id', 'manufacturer_id');
+    }
+    public function supplier_id()
+    {
+        return $this->hasOne(Customer::class, 'id', 'supplier_id');
+    }
 
+    public function created_by()
+    {
+        return $this->hasOne(User::class, 'id', 'created_by');
+    }
+    public function updated_by()
+    {
+        return $this->hasOne(User::class, 'id', 'updated_by');
+    }
 }

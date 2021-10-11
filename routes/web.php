@@ -16,6 +16,12 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-
+// Route::get('clear_cache', function () {
+//     \Artisan::call('cache:clear');
+//     \Artisan::call('key:generate');
+//     \Artisan::call('config:clear');
+//     \Artisan::call('view:clear');
+//     dd("Cache is cleared");
+// });
 
 Route::get('open', 'App\Http\Controllers\DataController@open');

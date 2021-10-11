@@ -13,10 +13,12 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 use App\Helpers\Helper;
 use App\Models\BookingAuditDetail;
+use App\Models\MstProduct;
 use Auth;
 use DB;
 use Carbon\Carbon;
 use Illuminate\Validation\Rule;
+use Mockery\Undefined;
 
 class BookingController extends Controller
 {
@@ -41,6 +43,7 @@ class BookingController extends Controller
                         [
                             'bookings.id', 'bookings.aum_serial_no', 'bookings.booking_no',
                             'bookings.booking_type', 'samples.product_type',
+                            DB::raw('DATE_FORMAT(bookings.invoice_date, "%d-%b-%Y") as invoice_date'),
                             DB::raw('DATE_FORMAT(bookings.receipte_date, "%d-%b-%Y") as receipte_date'),
                             'bookings.is_active', 'mst_products.product_name'
                         ]
@@ -147,7 +150,7 @@ class BookingController extends Controller
                 'created_by',
                 'created_at',
                 'updated_by',
-                'updated_at'
+                'updated_at',
             )
                 ->with(
                     'customer_id:id,company_name',
@@ -155,6 +158,8 @@ class BookingController extends Controller
                     'samples.product_id:id,generic_product_id',
                     'tests:booking_id,test_name,amount',
                     'audit:booking_id,comments',
+                    'created_by:id,first_name,middle_name,last_name',
+                    'updated_by:id,first_name,middle_name,last_name'
                 )
                 ->where('is_active', 1)
                 ->where('selected_year', $loggedInUserData['selected_year'])
@@ -162,8 +167,49 @@ class BookingController extends Controller
                 ->get();
 
             $exportData_Arr = $exportData->toArray();
-            // $len = count($exportData_Arr);
-            // $i = 0;
+            $len = count($exportData_Arr);
+            $i = 0;
+            for ($i = 0; $i < $len; $i++) {
+
+                if ($exportData_Arr[$i]['samples'][0]['product_id'] != null) {
+                    $generic_id = $exportData_Arr[$i]['samples'][0]['product_id']['generic_product_id'];
+                    $product_id = $exportData_Arr[$i]['samples'][0]['product_id']['id'];
+                    $generic_product_name = MstProduct::where('id', '=', $generic_id)->get(['product_name']);
+                    $dageneric_product_nameta1 = $generic_product_name->toArray();
+                    $exportData_Arr[$i]['samples'][0]['product_id']['generic_product_name'] = $generic_product_name[0]['product_name'];
+                } else {
+                    $exportData_Arr[$i]['samples'][0]['product_id'] = array(
+                        'id' => '',
+                        'generic_product_id' => '',
+                        'generic_product_name' => ''
+                    );
+                }
+                if ($exportData_Arr[$i]['customer_id'] == null) {
+                    $exportData_Arr[$i]['customer_id'] = array(
+                        "id" => "",
+                        "company_name" => ""
+                    );
+                }
+
+                if ($exportData_Arr[$i]['created_by'] == null) {
+                    $exportData_Arr[$i]['created_by'] = array(
+                        "id" => "",
+                        "first_name" => "",
+                        "middle_name" => "",
+                        "last_name" => ""
+                    );
+                }
+                if ($exportData_Arr[$i]['updated_by'] == null) {
+                    $exportData_Arr[$i]['updated_by'] = array(
+                        "id" => "",
+                        "first_name" => "",
+                        "middle_name" => "",
+                        "last_name" => ""
+                    );
+                }
+            }
+
+
 
             return Helper::response("Export Data Shown Successfully", Response::HTTP_OK, true, $exportData_Arr);
         } catch (Exception $e) {
@@ -213,6 +259,7 @@ class BookingController extends Controller
                 "booking_type" => "required",
                 "receipte_date" => "required",
                 "customer_id" => "required",
+                // 'invoice_date' => 'required_if:booking_type,Invoice',
                 // 'booking_no'  => 'unique:bookings',
                 // 'aum_serial_no'  => 'unique:bookings',
                 'mfg_date'  => 'required|date',
@@ -243,7 +290,8 @@ class BookingController extends Controller
                 "mst_companies_id"  => $loggedInUserData['company_id'],
                 "booking_type"  => (isset($request->booking_type) ? $request->booking_type : ''),
                 "report_type"   => (isset($request->report_type) ? $request->report_type : ''),
-                "receipte_date" => (isset($request->receipte_date) ? date('Y-m-d', strtotime($request->receipte_date)) : ''),
+                // "invoice_date" => (isset($request->invoice_date) ? date('Y-m-d', strtotime($request->invoice_date)) : NULL),
+                "receipte_date" => (isset($request->receipte_date) ? date('Y-m-d', strtotime($request->receipte_date)) : NULL),
                 "booking_no"    => (isset($request->booking_no) ? $request->booking_no : ''),
                 "customer_id"   => (isset($request->customer_id) ? $request->customer_id : 0),
                 "reference_no"  => (isset($request->reference_no) ? $request->reference_no : ''),
@@ -433,15 +481,20 @@ class BookingController extends Controller
         $loggedInUserData = Helper::getUserData();
         $data = Booking::with(
             'customer_id:id,company_name',
-            'customer_id',
+            'manufacturer_id:id,company_name',
+            'supplier_id:id,company_name',
             'samples',
-            'samples.product_id:id,product_name',
+            'samples.product_id:id,generic_product_id',
             'samples.pharmacopiea_id:id,pharmacopeia_name',
             'tests',
             'tests.parent',
-            'audit'
+            'audit',
+            'created_by:id,first_name,middle_name,last_name',
+            'updated_by:id,first_name,middle_name,last_name'
         )
             ->find($id);
+        $data = $data->toArray();
+        $data['invoice_date'] = \Carbon\Carbon::parse($data['invoice_date'])->format('d/m/Y');
         $data['receipte_date'] = \Carbon\Carbon::parse($data['receipte_date'])->format('d/m/Y');
         $data['mfg_date'] = \Carbon\Carbon::parse($data['mfg_date'])->format('d/m/Y');
         $data['exp_date'] = \Carbon\Carbon::parse($data['exp_date'])->format('d/m/Y');
@@ -449,6 +502,63 @@ class BookingController extends Controller
         $data['samples'][0]['sampling_date_from'] = \Carbon\Carbon::parse($data['samples'][0]['sampling_date_from'])->format('d/m/Y');
         $data['samples'][0]['sampling_date_to'] = \Carbon\Carbon::parse($data['samples'][0]['sampling_date_to'])->format('d/m/Y');
 
+
+        if ($data['samples'][0]['product_id'] == null) {
+            $data['samples'][0]['product_id'] = array(
+                'id' => '',
+                'generic_product_id' => '',
+                'generic_product_name' => ''
+            );
+        } else {
+            $generic_id = $data['samples'][0]['product_id']['generic_product_id'];
+            $product_id = $data['samples'][0]['product_id']['id'];
+            $generic_product_name = MstProduct::where('id', '=', $generic_id)->get(['product_name']);
+            $data['samples'][0]['product_id']['generic_product_name'] = $generic_product_name[0]['product_name'];
+        }
+        if ($data['customer_id'] == null) {
+            $data['customer_id'] = array(
+                "id" => "",
+                "company_name" => ""
+            );
+        }
+        if ($data['supplier_id'] == null) {
+            $data['supplier_id'] = array(
+                "id" => "",
+                "company_name" => ""
+            );
+        }
+        if ($data['manufacturer_id'] == null) {
+            $data['manufacturer_id'] = array(
+                "id" => "",
+                "company_name" => ""
+            );
+        }
+        if ($data['created_by'] == null) {
+            $data['created_by'] = array(
+                "id" => "",
+                "first_name" => "",
+                "middle_name" => "",
+                "last_name" => ""
+            );
+        }
+        if ($data['updated_by'] == null) {
+            $data['updated_by'] = array(
+                "id" => "",
+                "first_name" => "",
+                "middle_name" => "",
+                "last_name" => ""
+            );
+        }
+        $len = count($data['tests']);
+        $i = 0;
+        for ($i = 0; $i < $len; $i++) {
+            if (!isset($data['tests'][$i]['parent'])) {
+                $data['tests'][$i]['parent'] = array(
+                    "id" => "",
+                    "parent_name" => ""
+                );
+            }
+        }
 
         return Helper::response("This Booking Shown Successfully", Response::HTTP_OK, true, $data);
     }
@@ -479,6 +589,7 @@ class BookingController extends Controller
             $rules = [
                 "report_type" => "required",
                 "booking_type" => "required",
+                'invoice_date' => 'required_if:booking_type,Invoice',
                 "receipte_date" => "required",
                 "customer_id" => "required",
                 'mfg_date'  => 'required|date',
@@ -504,6 +615,7 @@ class BookingController extends Controller
                 "mst_companies_id"  => $loggedInUserData['company_id'],
                 "booking_type"  => (isset($request->booking_type) ? $request->booking_type : ''),
                 "report_type"   => (isset($request->report_type) ? $request->report_type : ''),
+                "invoice_date" => (isset($request->invoice_date) ? date('Y-m-d', strtotime($request->invoice_date)) : NULL),
                 "receipte_date" => (isset($request->receipte_date) ? date('Y-m-d', strtotime($request->receipte_date)) : ''),
                 "booking_no"    => (isset($request->booking_no) ? $request->booking_no : ''),
                 "customer_id"   => (isset($request->customer_id) ? $request->customer_id : 0),
