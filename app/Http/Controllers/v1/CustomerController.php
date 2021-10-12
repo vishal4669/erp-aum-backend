@@ -654,6 +654,7 @@ class CustomerController extends Controller
                             'created_by' => $loggedInUserData['logged_in_user_id'], //edited
                             'updated_by' => $loggedInUserData['logged_in_user_id']
                         );
+
                         CustomerContactPerson::create($contactpersonArray);
                     }
                 }

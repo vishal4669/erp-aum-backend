@@ -14,6 +14,7 @@ class Booking extends Model
     [
         "mst_companies_id",
         "booking_type",
+        "invoice_no",
         "report_type",
         "invoice_date",
         "receipte_date",
@@ -37,6 +38,9 @@ class Booking extends Model
         "project_options",
         "mfg_lic_no",
         "is_report_dispacthed",
+        "dispatch_date_time",
+        "dispatch_mode",
+        "dispatch_details",
         "signature",
         "verified_by",
         "nabl_scope",
@@ -70,7 +74,7 @@ class Booking extends Model
     {
         return $this->hasMany(BookingAuditDetail::class);
     }
-    
+
     public function customer_id()
     {
         return $this->hasOne(Customer::class, 'id', 'customer_id');

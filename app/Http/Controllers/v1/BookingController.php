@@ -43,7 +43,6 @@ class BookingController extends Controller
                         [
                             'bookings.id', 'bookings.aum_serial_no', 'bookings.booking_no',
                             'bookings.booking_type', 'samples.product_type',
-                            DB::raw('DATE_FORMAT(bookings.invoice_date, "%d-%b-%Y") as invoice_date'),
                             DB::raw('DATE_FORMAT(bookings.receipte_date, "%d-%b-%Y") as receipte_date'),
                             'bookings.is_active', 'mst_products.product_name'
                         ]
@@ -51,7 +50,8 @@ class BookingController extends Controller
                     ->where('bookings.is_active', 1)
                     ->where('bookings.selected_year', $loggedInUserData['selected_year'])
                     ->orderBy('id', 'desc')
-                    ->paginate(10);
+                    ->get();
+                // ->paginate(10);
             } elseif ($is_dropdown) {
 
                 $data = Booking::leftjoin('booking_sample_details as samples', 'samples.booking_id', '=', 'bookings.id')
@@ -96,7 +96,8 @@ class BookingController extends Controller
             $aum_serial_no = 1;
             $booking_no = ("ARL/COA/" . $report_type . '/' . Carbon::now()->format('ymd') . '/' . $last_booking_id);
         } {
-
+            $mytime = Carbon::now()->format('ymd');
+            // dd($mytime);
             if (!isset(Booking::where('report_type', $report_type)->latest()->first()->booking_no)) {
                 $last_booking_id = 1;
                 $booking_no = ("ARL/COA/" . $report_type . '/' . Carbon::now()->format('ymd') . '/' . $last_booking_id);
@@ -104,8 +105,17 @@ class BookingController extends Controller
                 $latest_booking_no = Booking::where('report_type', $report_type)->latest()->first()->booking_no;
                 $latest_data = $latest_booking_no;
                 $findlaststr = explode("/", $latest_data);
-                $last_booking_id = end($findlaststr) + 1;
-                $booking_no = ("ARL/COA/" . $report_type . '/' . Carbon::now()->format('ymd') . '/' . $last_booking_id);
+                $last_booking_date = $findlaststr[3];
+                if ($mytime == $last_booking_date) {
+                    $last_booking_id = end($findlaststr) + 1;
+                    $str_pad_booking_id = str_pad($last_booking_id, 3, '0', STR_PAD_LEFT);
+                    $booking_no = ("ARL/COA/" . $report_type . '/' . Carbon::now()->format('ymd') . '/' . $str_pad_booking_id);
+                } else {
+                    $last_booking_id = 1;
+                    $str_pad_booking_id = str_pad($last_booking_id, 3, '0', STR_PAD_LEFT);
+                    $booking_no = ("ARL/COA/" . $report_type . '/' . Carbon::now()->format('ymd') . '/' . $str_pad_booking_id);
+                }
+                // dd($booking_no);
             }
             if (isset(Booking::latest()->first()->aum_serial_no)) {
                 $serial_no = Booking::latest()->first()->aum_serial_no;
@@ -238,14 +248,25 @@ class BookingController extends Controller
     {
 
         if (!isset(Booking::where('booking_no', $request->booking_no)->latest()->first()->booking_no)) {
-            $request->booking_no = $request->booking_no;
+            $last_booking_id = 1;
+            $booking_no = ("ARL/COA/" . $request->report_type . '/' . Carbon::now()->format('ymd') . '/' . $last_booking_id);
         } else {
-            $latest_booking_no = Booking::where('booking_no', $request->booking_no)->latest()->first()->booking_no;
+            $mytime = Carbon::now()->format('ymd');
+            $latest_booking_no = Booking::where('report_type', $request->report_type)->latest()->first()->booking_no;
             $latest_data = $latest_booking_no;
             $findlaststr = explode("/", $latest_data);
-            $last_booking_id = end($findlaststr) + 1;
-            $request->booking_no = ("ARL/COA/" . $request->report_type . '/' . Carbon::now()->format('ymd') . '/' . $last_booking_id);
+            $last_booking_date = $findlaststr[3];
+            if ($mytime == $last_booking_date) {
+                $last_booking_id = end($findlaststr) + 1;
+                $str_pad_booking_id = str_pad($last_booking_id, 3, '0', STR_PAD_LEFT);
+                $booking_no = ("ARL/COA/" . $request->report_type . '/' . Carbon::now()->format('ymd') . '/' . $str_pad_booking_id);
+            } else {
+                $last_booking_id = 1;
+                $str_pad_booking_id = str_pad($last_booking_id, 3, '0', STR_PAD_LEFT);
+                $booking_no = ("ARL/COA/" . $request->report_type . '/' . Carbon::now()->format('ymd') . '/' . $str_pad_booking_id);
+            }
         }
+
         if (isset(Booking::where('aum_serial_no', $request->aum_serial_no)->latest()->first()->aum_serial_no)) {
             $serial_no = Booking::latest()->first()->aum_serial_no;
             $request->aum_serial_no = $serial_no + 1;
@@ -259,9 +280,13 @@ class BookingController extends Controller
                 "booking_type" => "required",
                 "receipte_date" => "required",
                 "customer_id" => "required",
-                // 'invoice_date' => 'required_if:booking_type,Invoice',
+                'invoice_date' => 'required_if:booking_type,Invoice',
+                'invoice_no' => 'required_if:booking_type,Invoice',
                 // 'booking_no'  => 'unique:bookings',
                 // 'aum_serial_no'  => 'unique:bookings',
+                'dispatch_date_time' => 'required_if:is_report_dispacthed,1',
+                'dispatch_mode' => 'required_if:is_report_dispacthed,1',
+                'dispatch_details' => 'required_if:is_report_dispacthed,1',
                 'mfg_date'  => 'required|date',
                 'exp_date'    => 'required|date_format:Y-m-d|after:mfg_date',
                 'booking_sample_details.*.sampling_date_from'  => 'nullable|date',
@@ -273,6 +298,11 @@ class BookingController extends Controller
                 "booking_type.required" => "The Booking Type Field Is Required.",
                 "receipte_date.required" => "The Receipte Date Field Is Required.",
                 "customer_id.required" => "The Customer Id Field Is Required.",
+                'invoice_date.required_if' => 'The Invoice Date Field Is Required.',
+                'invoice_no.required_if' => 'The Invoice No Field Is Required.',
+                'dispatch_date_time.required_if' => 'The Dispatch Date Time Field Is Required.',
+                'dispatch_mode.required_if' => 'The Dispatch Mode Field Is Required.',
+                'dispatch_details.required_if' => 'The Dispatch Details Field Is Required.',
                 "booking_no.unique" => "The Booking No Field Must Be Unique.",
                 "mfg_date.required" => "The Mfg Date Field Is Required.",
                 "exp_date.required" => "The Exp Date Field Is Required.",
@@ -290,7 +320,9 @@ class BookingController extends Controller
                 "mst_companies_id"  => $loggedInUserData['company_id'],
                 "booking_type"  => (isset($request->booking_type) ? $request->booking_type : ''),
                 "report_type"   => (isset($request->report_type) ? $request->report_type : ''),
-                // "invoice_date" => (isset($request->invoice_date) ? date('Y-m-d', strtotime($request->invoice_date)) : NULL),
+                "dispatch_date_time" => (isset($request->dispatch_date_time) ? date('Y-m-d h:i:s A', strtotime($request->dispatch_date_time)) : NULL),
+                "dispatch_mode"    => (isset($request->dispatch_mode) ? $request->dispatch_mode : NULL),
+                "dispatch_details"    => (isset($request->dispatch_details) ? $request->dispatch_details : NULL),
                 "receipte_date" => (isset($request->receipte_date) ? date('Y-m-d', strtotime($request->receipte_date)) : NULL),
                 "booking_no"    => (isset($request->booking_no) ? $request->booking_no : ''),
                 "customer_id"   => (isset($request->customer_id) ? $request->customer_id : 0),
@@ -329,7 +361,9 @@ class BookingController extends Controller
 
             $this->addupdateBookingSample($request->booking_sample_details, $booking_data->id);
             $this->addupdateBookingTests($request->booking_tests, $booking_data->id);
-
+            if ($request->booking_type == "Report") {
+                $this->addupdateAuditDetails($request->booking_audit_details, $booking_data->id);
+            }
             DB::commit();
             Log::info("Booking Created with details : " . json_encode($request->all()));
             return Helper::response("Booking added Successfully", Response::HTTP_CREATED, true, $booking_data);
@@ -410,8 +444,24 @@ class BookingController extends Controller
                             !empty($tests['label_claim']) or
                             !empty($tests['min_limit']) or
                             !empty($tests['max_limit']) or
-                            !empty($tests['description']) or
-                            !empty($tests['amount'])
+                            !empty($tests['result']) or
+                            !empty($tests['label_claim_result']) or
+                            !empty($tests['label_claim_unit']) or
+                            !empty($tests['result2']) or
+                            !empty($tests['mean']) or
+                            !empty($tests['na_content']) or
+                            !empty($tests['final_na_content']) or
+                            !empty($tests['na_content']) or
+                            !empty($tests['unit']) or
+                            !empty($tests['expanded_uncertanity']) or
+                            !empty($tests['amount']) or
+                            !empty($tests['division']) or
+                            !empty($tests['method']) or
+                            !empty($tests['test_time']) or
+                            !empty($tests['test_date_time']) or
+                            !empty($tests['approval_date_time']) or
+                            !empty($tests['approved']) or
+                            !empty($tests['chemsit_name'])
                         ) {
                             $tests_data = array(
                                 "booking_id" => (isset($booking_id) ? $booking_id : 0),
@@ -424,7 +474,24 @@ class BookingController extends Controller
                                 "label_claim" => (isset($tests['label_claim']) ? $tests['label_claim'] : ''),
                                 "min_limit" => (isset($tests['min_limit']) ? $tests['min_limit'] : ''),
                                 "max_limit" => (isset($tests['max_limit']) ? $tests['max_limit'] : ''),
+                                "result" => (isset($tests['result']) ? $tests['result'] : ''),
+                                "label_claim_result" => (isset($tests['label_claim_result']) ? $tests['label_claim_result'] : ''),
+                                "label_claim_unit" => (isset($tests['label_claim_unit']) ? $tests['label_claim_unit'] : ''),
+                                "result2" => (isset($tests['result2']) ? $tests['result2'] : ''),
+                                "mean" => (isset($tests['mean']) ? $tests['mean'] : ''),
+                                "na_content" => (isset($tests['na_content']) ? $tests['na_content'] : ''),
+                                "final_na_content" => (isset($tests['final_na_content']) ? $tests['na_content'] : ''),
+                                "unit" => (isset($tests['unit']) ? $tests['unit'] : ''),
+                                "expanded_uncertanity" => (isset($tests['expanded_uncertanity']) ? $tests['expanded_uncertanity'] : ''),
                                 "amount" => (isset($tests['amount']) ? $tests['amount'] : 0),
+                                "division" => (isset($tests['division']) ? $tests['division'] : ''),
+                                "method" => (isset($tests['method']) ? $tests['method'] : ''),
+                                "division" => (isset($tests['division']) ? $tests['division'] : ''),
+                                "test_time" => (isset($tests['test_time']) ? $tests['test_time'] : NULL),
+                                "test_date_time" => (isset($tests['test_date_time']) ? $tests['test_date_time'] : NULL),
+                                "approval_date_time" => (isset($tests['approval_date_time']) ? $tests['approval_date_time'] : NULL),
+                                "approved" => (isset($tests['approved']) ? $tests['approved'] : ''),
+                                "chemsit_name" => (isset($tests['chemsit_name']) ? $tests['chemsit_name'] : NULL),
                                 "selected_year" => $loggedInUserData['selected_year'],
                                 "is_active" => (isset($tests['is_active']) ? $tests['is_active'] : 1),
                                 'created_by' => $loggedInUserData['logged_in_user_id'], //edited
@@ -549,6 +616,12 @@ class BookingController extends Controller
                 "last_name" => ""
             );
         }
+        if ($data['samples'][0]['pharmacopiea_id'] == null) {
+            $data['samples'][0]['pharmacopiea_id'] = array(
+                "id" => "",
+                "pharmacopeia_name" => ""
+            );
+        }
         $len = count($data['tests']);
         $i = 0;
         for ($i = 0; $i < $len; $i++) {
@@ -590,6 +663,10 @@ class BookingController extends Controller
                 "report_type" => "required",
                 "booking_type" => "required",
                 'invoice_date' => 'required_if:booking_type,Invoice',
+                'invoice_no' => 'required_if:booking_type,Invoice',
+                'dispatch_date_time' => 'required_if:is_report_dispacthed,1',
+                'dispatch_mode' => 'required_if:is_report_dispacthed,1',
+                'dispatch_details' => 'required_if:is_report_dispacthed,1',
                 "receipte_date" => "required",
                 "customer_id" => "required",
                 'mfg_date'  => 'required|date',
@@ -616,6 +693,7 @@ class BookingController extends Controller
                 "booking_type"  => (isset($request->booking_type) ? $request->booking_type : ''),
                 "report_type"   => (isset($request->report_type) ? $request->report_type : ''),
                 "invoice_date" => (isset($request->invoice_date) ? date('Y-m-d', strtotime($request->invoice_date)) : NULL),
+                "invoice_no" => (isset($request->invoice_no) ? $request->invoice_no : NULL),
                 "receipte_date" => (isset($request->receipte_date) ? date('Y-m-d', strtotime($request->receipte_date)) : ''),
                 "booking_no"    => (isset($request->booking_no) ? $request->booking_no : ''),
                 "customer_id"   => (isset($request->customer_id) ? $request->customer_id : 0),
@@ -637,6 +715,9 @@ class BookingController extends Controller
                 "project_options"   => (isset($request->project_options) ? $request->project_options : ''),
                 "mfg_lic_no"    => (isset($request->mfg_lic_no) ? $request->mfg_lic_no : ''),
                 "is_report_dispacthed"  => (isset($request->is_report_dispacthed) ? $request->is_report_dispacthed : 0),
+                "dispatch_date_time" => (isset($request->dispatch_date_time) ? date('Y-m-d H:i:s', strtotime($request->dispatch_date_time)) : NULL),
+                "dispatch_mode"    => (isset($request->dispatch_mode) ? $request->dispatch_mode : NULL),
+                "dispatch_details"    => (isset($request->dispatch_details) ? $request->dispatch_details : NULL),
                 "signature" => (isset($request->signature) ? $request->signature : 0),
                 "verified_by"   => (isset($request->verified_by) ? $request->verified_by : ''),
                 "nabl_scope"    => (isset($request->nabl_scope) ? $request->nabl_scope : 0),

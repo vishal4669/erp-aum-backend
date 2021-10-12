@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: sdb-e.hosting.stackcp.net
--- Generation Time: Oct 07, 2021 at 03:00 PM
+-- Generation Time: Oct 12, 2021 at 02:44 PM
 -- Server version: 10.4.18-MariaDB-log
 -- PHP Version: 7.1.33
 
@@ -31,7 +31,9 @@ CREATE TABLE `bookings` (
   `id` int(11) NOT NULL,
   `mst_companies_id` int(11) NOT NULL,
   `booking_type` varchar(55) NOT NULL,
+  `invoice_no` varchar(55) DEFAULT NULL,
   `report_type` varchar(55) NOT NULL,
+  `invoice_date` date DEFAULT NULL,
   `receipte_date` date NOT NULL,
   `booking_no` varchar(255) NOT NULL,
   `customer_id` int(11) NOT NULL,
@@ -53,6 +55,9 @@ CREATE TABLE `bookings` (
   `project_options` char(7) NOT NULL,
   `mfg_lic_no` varchar(155) NOT NULL,
   `is_report_dispacthed` tinyint(1) NOT NULL,
+  `dispatch_date_time` varchar(100) DEFAULT NULL,
+  `dispatch_mode` varchar(155) DEFAULT NULL,
+  `dispatch_details` varchar(255) DEFAULT NULL,
   `signature` tinyint(1) NOT NULL,
   `verified_by` varchar(10) NOT NULL,
   `nabl_scope` tinyint(1) NOT NULL,
@@ -76,22 +81,56 @@ CREATE TABLE `bookings` (
 -- Dumping data for table `bookings`
 --
 
-INSERT INTO `bookings` (`id`, `mst_companies_id`, `booking_type`, `report_type`, `receipte_date`, `booking_no`, `customer_id`, `reference_no`, `remarks`, `manufacturer_id`, `supplier_id`, `mfg_date`, `mfg_options`, `exp_date`, `exp_options`, `analysis_date`, `aum_serial_no`, `d_format`, `d_format_options`, `grade`, `grade_options`, `project_name`, `project_options`, `mfg_lic_no`, `is_report_dispacthed`, `signature`, `verified_by`, `nabl_scope`, `cancel`, `cancel_remarks`, `priority`, `discipline`, `booking_group`, `statement_ofconformity`, `created_by`, `updated_by`, `created_at`, `updated_at`, `selected_year`, `copied_from_year`, `is_active`, `deleted_at`) VALUES
-(1, 1, 'Received', 'TP', '2021-10-22', 'ARL/COA/TP/211007/1', 5, 'test', 'tesyt1', 11, 1, '2021-10-01', 'N/S', '2022-04-01', 'N/S', '2021-10-01', 1, '123', 'N/S', '4456', 'N/S', 'test projecct', 'N/S', '8052356', 0, 0, 'None', 0, 'None', 'cancel remarks', 'High', 'Chemical', 'Drugs and Pharmaceuticals', 'PASS', 3, NULL, '2021-10-07 05:46:38', NULL, '2019-20', NULL, 1, NULL),
-(2, 1, 'W', 'RM', '2021-10-10', 'ARL/COA/RM/211007/1', 5, '', '', 0, 0, '2021-10-07', 'N/S', '2021-10-10', 'N/S', '2021-10-08', 2, '', 'N/S', '', 'N/S', '', 'N/S', '', 0, 0, 'None', 0, 'None', '', 'High', 'Chemical', 'Drugs and Pharmaceuticals', 'PASS', 3, NULL, '2021-10-07 05:51:54', NULL, '2019-20', NULL, 1, NULL),
-(3, 1, 'Report', 'OT', '2021-10-02', 'ARL/COA/OT/211007/1', 6, '', '', 0, 0, '2021-10-01', 'N/S', '2022-03-04', 'N/S', NULL, 2, '', 'N/S', '', 'N/S', '', 'N/S', '', 0, 0, 'None', 0, 'None', '', 'High', 'Chemical', 'Drugs and Pharmaceuticals', 'PASS', 3, NULL, '2021-10-07 05:53:39', NULL, '2019-20', NULL, 1, NULL),
-(4, 1, 'Invoice', 'OT', '2021-10-01', 'ARL/COA/OT/211007/2', 5, '', '', 0, 0, '2021-10-06', 'N/S', '2022-02-03', 'N/S', NULL, 3, '', 'N/S', '', 'N/S', '', 'N/S', '', 0, 0, 'None', 0, 'None', '', 'High', 'Chemical', 'Drugs and Pharmaceuticals', 'PASS', 3, NULL, '2021-10-07 06:05:20', NULL, '2019-20', NULL, 1, NULL),
-(5, 1, 'Received', 'FP', '2021-07-10', 'ARL/COA/hth/210420/0027', 13, '2389239', 'remarks details', 2, 7, '2021-09-28', 'N/A', '2021-09-29', 'None', '2021-09-27', 1, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-10-07 06:56:46', NULL, '2019-20', NULL, 1, NULL),
-(6, 1, 'Received', 'FP', '2021-07-10', 'ARL/COA/FP/210420/0027', 13, '2389239', 'remarks details', 2, 7, '2021-09-28', 'N/A', '2021-09-29', 'None', '2021-09-27', 1, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-10-07 07:02:24', NULL, '2019-20', NULL, 1, NULL),
-(7, 1, 'Received', 'FP', '2021-07-10', 'ARL/COA/FP/210420/28', 13, '2389239', 'remarks details', 2, 7, '2021-09-28', 'N/A', '2021-09-29', 'None', '2021-09-27', 1, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-10-07 07:03:52', NULL, '2019-20', NULL, 1, NULL),
-(8, 1, 'Report', 'OT', '2021-10-15', 'ARL/COA/OT/211007/3', 6, 'test', 'test', 11, 1, '2021-10-01', 'N/S', '2022-03-04', 'N/S', '2021-10-07', 2, '123', 'N/S', '4456', 'N/S', 'test projecct12345', 'N/S', '8052356', 0, 0, 'None', 0, 'None', 'cancel tesst', 'High', 'Chemical', 'Drugs and Pharmaceuticals', 'PASS', 3, NULL, '2021-10-07 09:22:39', NULL, '2019-20', NULL, 1, NULL),
-(9, 1, 'Testing', 'OT', '2021-10-07', 'ARL/COA/OT/211007/4', 2, '', '', 11, 1, '2021-10-07', 'N/S', '2021-10-10', 'N/S', '2021-10-07', 3, '', 'N/S', '', 'N/S', '', 'N/S', '', 1, 1, 'None', 0, 'None', '', 'High', 'Chemical', 'Drugs and Pharmaceuticals', 'PASS', 3, NULL, '2021-10-07 09:24:12', NULL, '2019-20', NULL, 1, NULL),
-(13, 1, 'Received', 'ADL', '2021-10-01', 'ARL/COA/ADL/211007/1', 5, '', '', 0, 0, '2021-10-29', 'N/S', '2022-02-05', 'N/S', NULL, 4, '', 'N/S', '', 'N/S', '', 'N/S', '', 0, 0, 'None', 0, 'None', '', 'High', 'Chemical', 'Drugs and Pharmaceuticals', 'PASS', 3, NULL, '2021-10-07 09:29:44', NULL, '2019-20', NULL, 1, NULL),
-(14, 1, 'Temp', 'OT', '2021-10-07', 'ARL/COA/OT/211007/5', 13, '', '', 11, 0, '2021-10-07', 'N/S', '2021-10-10', 'N/S', '2021-10-10', 5, '', 'N/S', '', 'N/S', '', 'N/S', '', 0, 0, 'QA', 0, 'None', '', 'High', 'Chemical', 'Drugs and Pharmaceuticals', 'PASS', 3, NULL, '2021-10-07 09:45:12', NULL, '2019-20', NULL, 1, NULL),
-(15, 1, 'Testing', 'OT', '2021-10-07', 'ARL/COA/OT/211007/6', 13, '', '', 0, 0, '2021-10-08', 'N/S', '2021-10-10', 'N/S', '2021-10-10', 6, '', 'N/S', '', 'N/S', '', 'N/S', '', 0, 0, 'None', 0, 'None', '', 'High', 'Chemical', 'Drugs and Pharmaceuticals', 'PASS', 3, NULL, '2021-10-07 09:46:07', NULL, '2019-20', NULL, 1, NULL),
-(16, 1, 'Received', 'RM', '2021-10-10', 'ARL/COA/RM/211007/2', 6, 'kajsgfk', '', 0, 0, '2021-11-05', 'N/S', '2022-02-25', 'N/S', NULL, 7, '', 'N/S', '', 'N/S', '', 'N/S', '', 0, 0, 'None', 0, 'None', '', 'High', 'Chemical', 'Drugs and Pharmaceuticals', 'PASS', 3, NULL, '2021-10-07 09:46:53', NULL, '2019-20', NULL, 1, NULL),
-(17, 1, 'Received', 'ADL', '2021-09-30', 'ARL/COA/ADL/211007/2', 5, '', '', 0, 0, '2021-10-02', 'N/S', '2022-02-04', 'N/S', NULL, 8, '', 'N/S', '', 'N/S', '', 'N/S', '', 0, 0, 'None', 0, 'None', '', 'High', 'Chemical', 'Drugs and Pharmaceuticals', 'PASS', 3, NULL, '2021-10-07 09:49:22', NULL, '2019-20', NULL, 1, NULL),
-(18, 1, 'Received', 'ADL', '2021-10-07', 'ARL/COA/ADL/211007/3', 7, '', '', 0, 0, '2021-09-28', 'N/S', '2021-11-05', 'N/S', NULL, 9, '', 'N/S', '', 'N/S', '', 'N/S', '', 0, 0, 'None', 0, 'None', '', 'High', 'Chemical', 'Drugs and Pharmaceuticals', 'PASS', 3, NULL, '2021-10-07 11:38:17', NULL, '2019-20', NULL, 1, NULL);
+INSERT INTO `bookings` (`id`, `mst_companies_id`, `booking_type`, `invoice_no`, `report_type`, `invoice_date`, `receipte_date`, `booking_no`, `customer_id`, `reference_no`, `remarks`, `manufacturer_id`, `supplier_id`, `mfg_date`, `mfg_options`, `exp_date`, `exp_options`, `analysis_date`, `aum_serial_no`, `d_format`, `d_format_options`, `grade`, `grade_options`, `project_name`, `project_options`, `mfg_lic_no`, `is_report_dispacthed`, `dispatch_date_time`, `dispatch_mode`, `dispatch_details`, `signature`, `verified_by`, `nabl_scope`, `cancel`, `cancel_remarks`, `priority`, `discipline`, `booking_group`, `statement_ofconformity`, `created_by`, `updated_by`, `created_at`, `updated_at`, `selected_year`, `copied_from_year`, `is_active`, `deleted_at`) VALUES
+(1, 1, 'Received', '', 'FP', NULL, '2021-07-10', 'ARL/COA/FP/210420/1', 11, '2389239', 'remarks details', 7, 7, '2021-09-28', 'N/A', '2021-09-29', 'None', '2021-09-27', 1, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, NULL, NULL, NULL, 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-10-07 07:13:24', NULL, '2019-20', NULL, 1, NULL),
+(2, 1, 'Received', '', 'FP', NULL, '2021-07-10', 'ARL/COA/FP/211007/2', 11, '2389239', 'remarks details', 2, 7, '2021-09-28', 'N/A', '2021-09-29', 'None', '2021-09-27', 1, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, NULL, NULL, NULL, 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-10-07 07:19:15', NULL, '2019-20', NULL, 1, NULL),
+(3, 1, 'Received', '', 'FP', NULL, '2021-07-10', 'ARL/COA/FP/210420/1', 11, '2389239', 'remarks details', 9, 7, '2021-09-28', 'N/A', '2021-09-29', 'None', '2021-09-27', 1, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, NULL, NULL, NULL, 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-10-07 07:21:32', NULL, '2019-20', NULL, 1, NULL),
+(4, 1, 'Received', '', 'FP', NULL, '2021-07-10', 'ARL/COA/FP/210420/1', 11, '2389239', 'remarks details', 2, 7, '2021-09-28', 'N/A', '2021-09-29', 'None', '2021-09-27', 1, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, NULL, NULL, NULL, 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-10-07 07:22:08', NULL, '2019-20', NULL, 1, NULL),
+(5, 1, 'Received', '', 'FP', NULL, '2021-07-10', 'ARL/COA/FP/211007/2', 11, '2389239', 'remarks details', 2, 7, '2021-09-28', 'N/A', '2021-09-29', 'None', '2021-09-27', 2, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, NULL, NULL, NULL, 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-10-07 07:30:55', NULL, '2019-20', NULL, 1, NULL),
+(6, 1, 'Received', '', 'FP', NULL, '2021-07-10', 'ARL/COA/FP/211007/2', 11, '2389239', 'remarks details', 2, 7, '2021-09-28', 'N/A', '2021-09-29', 'None', '2021-09-27', 3, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, NULL, NULL, NULL, 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-10-07 07:31:17', NULL, '2019-20', NULL, 1, NULL),
+(7, 1, 'Received', '', 'FP', NULL, '2021-07-10', 'ARL/COA/FP/211007/2', 11, '2389239', 'remarks details', 2, 7, '2021-09-28', 'N/A', '2021-09-29', 'None', '2021-09-27', 4, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, NULL, NULL, NULL, 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-10-07 07:33:53', NULL, '2019-20', NULL, 1, NULL),
+(8, 1, 'Received', '', 'FP', NULL, '2021-07-10', 'ARL/COA/FP/211007/2', 11, '2389239', 'remarks details', 2, 7, '2021-09-28', 'N/A', '2021-09-29', 'None', '2021-09-27', 5, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, NULL, NULL, NULL, 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-10-07 07:34:30', NULL, '2019-20', NULL, 1, NULL),
+(9, 1, 'Received', '', 'FP', NULL, '2021-07-10', 'ARL/COA/FP/211007/2', 11, '2389239', 'remarks details', 2, 7, '2021-09-28', 'N/A', '2021-09-29', 'None', '2021-09-27', 6, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, NULL, NULL, NULL, 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-10-07 07:34:40', NULL, '2019-20', NULL, 1, NULL),
+(10, 1, 'Received', '', 'FP', NULL, '2021-07-10', 'ARL/COA/FP/211007/2', 6, '2389239', 'remarks details', 2, 7, '2021-09-28', 'N/A', '2021-09-29', 'None', '2021-09-27', 7, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, NULL, NULL, NULL, 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-10-07 07:35:14', NULL, '2019-20', NULL, 1, NULL),
+(11, 1, 'Received', '', 'FP', NULL, '2021-07-10', 'ARL/COA/FP/211007/2', 11, '2389239', 'remarks details', 2, 7, '2021-09-28', 'N/A', '2021-09-29', 'None', '2021-09-27', 8, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, NULL, NULL, NULL, 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-10-07 07:36:49', NULL, '2019-20', NULL, 1, NULL),
+(12, 1, 'Received', '', 'FP', NULL, '2021-07-10', 'ARL/COA/FP/211007/2', 11, '2389239', 'remarks details', 2, 7, '2021-09-28', 'N/A', '2021-09-29', 'None', '2021-09-27', 9, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, NULL, NULL, NULL, 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-10-07 07:37:53', NULL, '2019-20', NULL, 1, NULL),
+(13, 1, 'Received', '', 'FP', NULL, '2021-07-10', 'ARL/COA/FP/210420/4', 0, '2389239', 'remarks details', 6, 7, '2021-09-28', 'N/A', '2021-09-29', 'None', '2021-09-27', 10, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, NULL, NULL, NULL, 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-10-07 07:40:41', NULL, '2019-20', NULL, 1, NULL),
+(14, 1, 'Received', '', 'FP', NULL, '2021-07-10', 'ARL/COA/FP/211007/5', 11, '2389239', 'remarks details', 2, 7, '2021-09-28', 'N/A', '2021-09-29', 'None', '2021-09-27', 11, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, NULL, NULL, NULL, 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-10-07 07:44:42', NULL, '2019-20', NULL, 1, NULL),
+(15, 1, 'Received', '', 'FP', NULL, '2021-07-10', 'ARL/COA/FP/210420/4', 11, '2389239', 'remarks details', 2, 7, '2021-09-28', 'N/A', '2021-09-29', 'None', '2021-09-27', 1, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, NULL, NULL, NULL, 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-10-07 09:39:07', NULL, '2019-20', NULL, 1, NULL),
+(16, 1, 'Received', '', 'FP', NULL, '2021-07-10', 'ARL/COA/FP/210420/4', 11, '2389239', 'remarks details', 2, 7, '2021-09-28', 'N/A', '2021-09-29', 'None', '2021-09-27', 1, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, NULL, NULL, NULL, 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-10-07 09:39:46', NULL, '2019-20', NULL, 1, NULL),
+(17, 1, 'Invoice', '059jcnni', 'FP', '2021-10-08', '2021-10-07', 'ARL/COA/hth/210420/0015', 7, '2389239', 'remarks details', 1, 8, '2021-09-25', 'N/A', '2021-09-29', 'None', '2021-09-27', 1, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, '2021-10-08 10:07:08', 'dispatch_mode', 'dispatch_details', 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, 1, '2021-10-07 09:42:39', '2021-10-12 06:13:52', '2019-20', NULL, 1, NULL),
+(18, 1, 'Received', '', 'FP', NULL, '2021-07-10', 'ARL/COA/FP/211011/5', 13, '2389239', 'remarks details', 2, 7, '2021-09-28', 'N/A', '2021-09-29', 'None', '2021-09-27', 2, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, NULL, NULL, NULL, 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-10-11 12:58:14', NULL, '2019-20', NULL, 1, NULL),
+(19, 1, 'Received', '', 'FP', NULL, '2021-07-10', 'ARL/COA/FP/211011/5', 13, '2389239', 'remarks details', 2, 7, '2021-09-28', 'N/A', '2021-09-29', 'None', '2021-09-27', 3, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, NULL, NULL, NULL, 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-10-11 12:58:42', NULL, '2019-20', NULL, 1, NULL),
+(20, 1, 'Received', '', 'FP', NULL, '2021-07-10', 'ARL/COA/FP/211011/5', 13, '2389239', 'remarks details', 2, 7, '2021-09-28', 'N/A', '2021-09-29', 'None', '2021-09-27', 4, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, NULL, NULL, NULL, 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-10-11 13:04:12', NULL, '2019-20', NULL, 1, NULL),
+(21, 1, 'Received', '', 'FP', NULL, '2021-07-10', 'ARL/COA/FP/211011/5', 13, '2389239', 'remarks details', 2, 7, '2021-09-28', 'N/A', '2021-09-29', 'None', '2021-09-27', 5, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, NULL, NULL, NULL, 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-10-11 13:05:22', NULL, '2019-20', NULL, 1, NULL),
+(22, 1, 'Received', '', 'FP', NULL, '2021-07-10', 'ARL/COA/FP/211011/5', 13, '2389239', 'remarks details', 2, 7, '2021-09-28', 'N/A', '2021-09-29', 'None', '2021-09-27', 6, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, NULL, NULL, NULL, 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-10-11 13:20:28', NULL, '2019-20', NULL, 1, NULL),
+(23, 1, 'Received', '', 'FP', '2021-07-10', '2021-07-10', 'ARL/COA/FP/211011/5', 13, '2389239', 'remarks details', 2, 7, '2021-09-28', 'N/A', '2021-09-29', 'None', '2021-09-27', 7, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, NULL, NULL, NULL, 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-10-11 13:21:34', NULL, '2019-20', NULL, 1, NULL),
+(24, 1, 'Received', '', 'FP', NULL, '2021-07-10', 'ARL/COA/FP/211011/5', 13, '2389239', 'remarks details', 2, 7, '2021-09-28', 'N/A', '2021-09-29', 'None', '2021-09-27', 8, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, NULL, NULL, NULL, 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-10-11 13:33:49', NULL, '2019-20', NULL, 1, NULL),
+(25, 1, 'Invoice', '', 'FP', '2021-07-10', '2021-07-10', 'ARL/COA/FP/211011/5', 13, '2389239', 'remarks details', 2, 7, '2021-09-28', 'N/A', '2021-09-29', 'None', '2021-09-27', 9, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, NULL, NULL, NULL, 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-10-11 13:35:12', NULL, '2019-20', NULL, 1, NULL),
+(26, 1, 'Invoice', NULL, 'FP', NULL, '2021-07-10', 'ARL/COA/FP/211012/5', 13, '2389239', 'remarks details', 2, 7, '2021-09-28', 'N/A', '2021-09-29', 'None', '2021-09-27', 10, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, NULL, NULL, NULL, 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-10-12 05:31:55', NULL, '2019-20', NULL, 1, NULL),
+(27, 1, 'Invoice', NULL, 'FP', NULL, '2021-07-10', 'ARL/COA/FP/211012/5', 13, '2389239', 'remarks details', 2, 7, '2021-09-28', 'N/A', '2021-09-29', 'None', '2021-09-27', 11, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, NULL, NULL, NULL, 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-10-12 05:32:48', NULL, '2019-20', NULL, 1, NULL),
+(28, 1, 'Invoice', NULL, 'FP', NULL, '2021-07-10', 'ARL/COA/FP/211012/5', 13, '2389239', 'remarks details', 2, 7, '2021-09-28', 'N/A', '2021-09-29', 'None', '2021-09-27', 12, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, NULL, NULL, NULL, 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-10-12 05:33:30', NULL, '2019-20', NULL, 1, NULL),
+(29, 1, 'Invoice', NULL, 'FP', NULL, '2021-07-10', 'ARL/COA/FP/211012/5', 13, '2389239', 'remarks details', 2, 7, '2021-09-28', 'N/A', '2021-09-29', 'None', '2021-09-27', 13, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, NULL, NULL, NULL, 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-10-12 05:34:07', NULL, '2019-20', NULL, 1, NULL),
+(30, 1, 'Invoice', NULL, 'FP', NULL, '2021-07-10', 'ARL/COA/FP/211012/5', 13, '2389239', 'remarks details', 2, 7, '2021-09-28', 'N/A', '2021-09-29', 'None', '2021-09-27', 14, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, NULL, NULL, NULL, 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-10-12 05:35:03', NULL, '2019-20', NULL, 1, NULL),
+(31, 1, 'Invoice', NULL, 'FP', NULL, '2021-07-10', 'ARL/COA/FP/211012/5', 13, '2389239', 'remarks details', 2, 7, '2021-09-28', 'N/A', '2021-09-29', 'None', '2021-09-27', 15, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 0, NULL, NULL, NULL, 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-10-12 05:54:31', NULL, '2019-20', NULL, 1, NULL),
+(32, 1, 'Invoice', NULL, 'FP', NULL, '2021-07-10', 'ARL/COA/FP/211012/5', 13, '2389239', 'remarks details', 2, 7, '2021-09-28', 'N/A', '2021-09-29', 'None', '2021-09-27', 16, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 0, NULL, NULL, NULL, 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-10-12 06:00:13', NULL, '2019-20', NULL, 1, NULL),
+(33, 1, 'Invoice', NULL, 'FP', NULL, '2021-07-10', 'ARL/COA/FP/211012/5', 13, '2389239', 'remarks details', 2, 7, '2021-09-28', 'N/A', '2021-09-29', 'None', '2021-09-27', 17, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, '2021-10-08 10:07:08', 'dispatch_mode', 'dispatch_details', 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-10-12 06:11:33', NULL, '2019-20', NULL, 1, NULL),
+(34, 1, 'Invoice', NULL, 'TP', NULL, '2021-10-08', 'ARL/COA/TP/211012/1', 5, '', '', 0, 0, '2021-09-29', 'N/A', '2022-04-21', 'None', NULL, 18, '', 'N/S', '', 'N/S', '', 'N/S', '', 1, NULL, NULL, NULL, 0, 'None', 0, 'None', '', 'High', 'Chemical', 'Drugs and Pharmaceuticals', 'PASS', 3, NULL, '2021-10-12 09:07:59', NULL, '2019-20', NULL, 1, NULL),
+(35, 1, 'Invoice', NULL, 'ADL', NULL, '2021-10-30', 'ARL/COA/ADL/211012/1', 6, '', '', 0, 0, '2021-10-18', 'None', '2021-10-28', 'N/A', NULL, 19, '', 'N/S', '', 'N/S', '', 'N/S', '', 1, '2021-10-29 14:40:00', 'Collect by Party', 'test', 0, 'None', 0, 'None', '', 'High', 'Chemical', 'Drugs and Pharmaceuticals', 'PASS', 3, NULL, '2021-10-12 09:10:51', NULL, '2019-20', NULL, 1, NULL),
+(36, 1, 'Invoice', '1234556ADE', 'OT', '2021-10-21', '2021-10-22', 'ARL/COA/OT/211012/1', 2, '', '', 0, 0, '2021-10-08', 'N/S', '2021-10-13', 'N/S', NULL, 20, '', 'N/S', '', 'N/S', '', 'N/S', '', 1, '2021-10-22 14:50:00', 'By Hand Delivery', 'test dispatch details', 0, 'None', 0, 'None', '', 'High', 'Chemical', 'Drugs and Pharmaceuticals', 'PASS', 3, NULL, '2021-10-12 09:20:26', NULL, '2019-20', NULL, 1, NULL),
+(37, 1, 'W', 'eryuyuyuiyui', 'TP', '2021-10-09', '2021-10-08', 'ARL/COA/TP/211011/2', 5, '', '', 0, 0, '2021-09-29', 'None', '2021-10-22', 'None', NULL, 21, '', 'N/S', '', 'N/S', '', 'N/S', '', 0, '2021-10-05 14:51:00', 'By Courier', 'utyuyuuyiuyi', 0, 'None', 0, 'None', '', 'High', 'Chemical', 'Drugs and Pharmaceuticals', 'PASS', 3, NULL, '2021-10-12 09:22:07', NULL, '2019-20', NULL, 1, NULL),
+(38, 1, 'W', 'ytrutyuytuy', 'OT', '2021-10-01', '2021-10-08', 'ARL/COA/OT/211011/2', 7, '', '', 0, 0, '2021-09-27', 'N/S', '2021-10-13', 'N/S', NULL, 22, '', 'N/S', '', 'N/S', '', 'N/S', '', 0, NULL, NULL, NULL, 0, 'None', 0, 'None', '', 'High', 'Chemical', 'Drugs and Pharmaceuticals', 'PASS', 3, NULL, '2021-10-12 09:24:37', NULL, '2019-20', NULL, 1, NULL),
+(39, 1, 'Temp', 'ertertr', 'RM', '2021-10-16', '2021-10-09', 'ARL/COA/RM/211012/1', 7, '', '', 0, 0, '2021-10-14', 'N/S', '2021-10-16', 'N/S', NULL, 23, '', 'N/S', '', 'N/S', '', 'N/S', '', 0, NULL, NULL, NULL, 0, 'None', 0, 'None', '', 'High', 'Chemical', 'Drugs and Pharmaceuticals', 'PASS', 3, NULL, '2021-10-12 09:26:17', NULL, '2019-20', NULL, 1, NULL),
+(41, 1, 'Invoice', 'testno', 'OT', '2021-10-23', '2021-10-13', 'ARL/COA/OT/211012/3', 6, '', '', 0, 0, '2021-10-20', 'N/S', '2021-10-21', 'N/S', NULL, 24, '', 'N/S', '', 'N/S', '', 'N/S', '', 1, '2021-10-12 15:27:00', 'By Hand Delivery', 'testdetails', 0, 'None', 0, 'None', 'feryrthhjjjkujytrj', 'High', 'Chemical', 'Drugs and Pharmaceuticals', 'PASS', 3, NULL, '2021-10-12 09:56:14', NULL, '2019-20', NULL, 1, NULL),
+(42, 1, 'Report', NULL, 'RM', NULL, '2021-10-01', 'ARL/COA/RM/211012/2', 5, '', '', 0, 0, '2021-09-29', 'N/S', '2021-11-05', 'N/S', NULL, 25, '', 'N/S', '', 'N/S', '', 'N/S', '', 1, '2021-11-05 15:32:00', 'Collect by Party', 'testdetails22332432', 0, 'None', 0, 'None', '', 'High', 'Chemical', 'Drugs and Pharmaceuticals', 'PASS', 3, NULL, '2021-10-12 10:05:03', NULL, '2019-20', NULL, 1, NULL),
+(43, 1, 'Received', NULL, 'AYUSH', NULL, '2021-10-14', 'ARL/COA/AYUSH/211012/1', 4, '', '', 0, 0, '2021-10-05', 'N/S', '2022-07-20', 'N/S', NULL, 26, '', 'N/S', '', 'N/S', '', 'N/S', '', 1, '2021-10-30 15:53:00', 'By Courier', 'eggfggfffffffff', 0, 'None', 0, 'None', '', 'High', 'Chemical', 'Drugs and Pharmaceuticals', 'PASS', 3, NULL, '2021-10-12 10:24:02', NULL, '2019-20', NULL, 1, NULL),
+(44, 1, 'Cancel', NULL, 'AYUSH', NULL, '2021-10-15', 'ARL/COA/AYUSH/211012/2', 5, '', '', 0, 0, '2021-10-13', 'N/S', '2021-10-30', 'N/S', NULL, 27, '', 'N/S', '', 'N/S', '', 'N/S', '', 1, '2021-10-30 04:00:00 pm', 'Collect by Party', 'rertrtytyututyuy', 0, 'None', 0, 'None', '', 'High', 'Chemical', 'Drugs and Pharmaceuticals', 'PASS', 3, NULL, '2021-10-12 10:34:56', NULL, '2019-20', NULL, 1, NULL),
+(45, 1, 'Report', NULL, 'ADL', NULL, '2021-10-22', 'ARL/COA/ADL/211012/2', 4, '', '', 0, 0, '2021-10-21', 'N/S', '2022-04-29', 'N/S', NULL, 28, '', 'N/S', '', 'N/S', '', 'N/S', '', 1, '2021-10-12 08:06:00PM', 'Collect by Party', 'testdetails', 0, 'None', 0, 'None', '', 'High', 'Chemical', 'Drugs and Pharmaceuticals', 'PASS', 3, NULL, '2021-10-12 10:37:32', NULL, '2019-20', NULL, 1, NULL),
+(47, 1, 'Invoice', NULL, 'FP', NULL, '2021-07-10', 'ARL/COA/FP/210420/4', 13, '2389239', 'remarks details', 2, 7, '2021-09-28', 'N/A', '2021-09-29', 'None', '2021-09-27', 29, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, '2021-10-08 03:07:08 PM', 'dispatch_mode', 'dispatch_details', 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-10-12 12:09:24', NULL, '2019-20', NULL, 1, NULL),
+(48, 1, 'Invoice', NULL, 'FP', NULL, '2021-07-10', 'ARL/COA/FP/210420/4', 13, '2389239', 'remarks details', 2, 7, '2021-09-28', 'N/A', '2021-09-29', 'None', '2021-09-27', 30, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, '2021-10-08 03:07:08 PM', 'dispatch_mode', 'dispatch_details', 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-10-12 12:11:17', NULL, '2019-20', NULL, 1, NULL),
+(49, 1, 'Invoice', NULL, 'FP', NULL, '2021-07-10', 'ARL/COA/FP/210420/4', 13, '2389239', 'remarks details', 2, 7, '2021-09-28', 'N/A', '2021-09-29', 'None', '2021-09-27', 31, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, '2021-10-08 03:07:08 PM', 'dispatch_mode', 'dispatch_details', 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-10-12 12:11:20', NULL, '2019-20', NULL, 1, NULL),
+(50, 1, 'Invoice', NULL, 'FP', NULL, '2021-07-10', 'ARL/COA/FP/210420/4', 13, '2389239', 'remarks details', 2, 7, '2021-09-28', 'N/A', '2021-09-29', 'None', '2021-09-27', 32, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, '2021-10-08 03:07:08 PM', 'dispatch_mode', 'dispatch_details', 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-10-12 12:11:25', NULL, '2019-20', NULL, 1, NULL),
+(51, 1, 'Invoice', NULL, 'FP', NULL, '2021-07-10', 'ARL/COA/FP/211011/4', 13, '2389239', 'remarks details', 2, 7, '2021-09-28', 'N/A', '2021-09-29', 'None', '2021-09-27', 1, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, '2021-10-08 03:07:08 PM', 'dispatch_mode', 'dispatch_details', 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', 1, NULL, '2021-10-12 12:12:39', NULL, '2019-20', NULL, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -110,10 +149,19 @@ CREATE TABLE `booking_audit_details` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime DEFAULT NULL,
   `selected_year` varchar(25) NOT NULL,
-  `copied_from_year` int(4) NOT NULL,
+  `copied_from_year` int(4) DEFAULT NULL,
   `is_active` tinyint(1) NOT NULL,
   `deleted_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `booking_audit_details`
+--
+
+INSERT INTO `booking_audit_details` (`id`, `booking_id`, `audit_remarks`, `reason`, `comments`, `created_by`, `updated_by`, `created_at`, `updated_at`, `selected_year`, `copied_from_year`, `is_active`, `deleted_at`) VALUES
+(1, 41, '', '', '', 3, NULL, '2021-10-12 09:56:14', NULL, '2019-20', NULL, 1, NULL),
+(2, 42, 'test audit remark', 'test audit reason', 'test audit comments', 3, NULL, '2021-10-12 10:05:03', NULL, '2019-20', NULL, 1, NULL),
+(3, 45, 'eghfgh', 'yertytu', 'urtujhjytu6yu', 3, NULL, '2021-10-12 10:37:32', NULL, '2019-20', NULL, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -176,7 +224,23 @@ INSERT INTO `booking_sample_details` (`id`, `booking_id`, `product_id`, `product
 (12, 15, 2, 'Raw Material', 4, 0, '', 0, '', '', 0, '', '', '', '2021-10-07', 'N/S', '2021-10-08', 'N/S', 'By Courier', 1, '', 0, 0, '', '', 3, 3, '2021-10-07 09:46:07', '2021-10-07 09:46:07', '2019-20', NULL, 1, NULL),
 (13, 16, 0, '', 0, 0, '', 0, '', '', 0, '', '', '', NULL, 'N/S', NULL, 'N/S', 'By Courier', 1, '', 0, 0, '', '', 3, 3, '2021-10-07 09:46:53', '2021-10-07 09:46:53', '2019-20', NULL, 1, NULL),
 (14, 17, 0, '', 0, 0, '', 0, '', '', 0, '', '', '', '2021-10-01', 'N/S', '2021-10-03', 'N/S', 'By Courier', 1, '', 0, 0, '', '', 3, 3, '2021-10-07 09:49:22', '2021-10-07 09:49:22', '2019-20', NULL, 1, NULL),
-(15, 18, 0, '', 0, 0, '', 0, '', '', 0, '', '', '', NULL, 'N/S', NULL, 'N/S', 'By Courier', 1, '', 0, 0, '', '', 3, 3, '2021-10-07 11:38:17', '2021-10-07 11:38:17', '2019-20', NULL, 1, NULL);
+(15, 18, 0, '', 0, 0, '', 0, '', '', 0, '', '', '', NULL, 'N/S', NULL, 'N/S', 'By Courier', 1, '', 0, 0, '', '', 3, 3, '2021-10-07 11:38:17', '2021-10-07 11:38:17', '2019-20', NULL, 1, NULL),
+(16, 34, 0, '', 0, 0, '', 0, '', '', 0, '', '', '', NULL, 'N/S', NULL, 'N/S', 'By Courier', 1, '', 0, 0, '', '', 3, 3, '2021-10-12 09:07:59', '2021-10-12 09:07:59', '2019-20', NULL, 1, NULL),
+(17, 35, 0, '', 0, 0, '', 0, '', '', 0, '', '', '', NULL, 'N/S', NULL, 'N/S', 'By Courier', 1, '', 0, 0, '', '', 3, 3, '2021-10-12 09:10:51', '2021-10-12 09:10:51', '2019-20', NULL, 1, NULL),
+(18, 36, 0, '', 0, 0, '', 0, '', '', 0, '', '', '', NULL, 'N/S', NULL, 'N/S', 'By Courier', 1, '', 0, 0, '', '', 3, 3, '2021-10-12 09:20:26', '2021-10-12 09:20:26', '2019-20', NULL, 1, NULL),
+(19, 37, 0, '', 0, 0, '', 0, '', '', 0, '', '', '', NULL, 'N/S', NULL, 'N/S', 'By Courier', 1, '', 0, 0, '', '', 3, 3, '2021-10-12 09:22:07', '2021-10-12 09:22:07', '2019-20', NULL, 1, NULL),
+(20, 38, 0, '', 0, 0, '', 0, '', '', 0, '', '', '', NULL, 'N/S', NULL, 'N/S', 'By Courier', 1, '', 0, 0, '', '', 3, 3, '2021-10-12 09:24:37', '2021-10-12 09:24:37', '2019-20', NULL, 1, NULL),
+(21, 39, 0, '', 0, 0, '', 0, '', '', 0, '', '', '', NULL, 'N/S', NULL, 'N/S', 'By Courier', 1, '', 0, 0, '', '', 3, 3, '2021-10-12 09:26:17', '2021-10-12 09:26:17', '2019-20', NULL, 1, NULL),
+(23, 41, 0, '', 0, 0, '', 0, '', '', 0, '', '', '', NULL, 'N/S', NULL, 'N/S', 'By Courier', 1, '', 0, 0, '', '', 3, 3, '2021-10-12 09:56:14', '2021-10-12 09:56:14', '2019-20', NULL, 1, NULL),
+(24, 42, 0, '', 0, 0, '', 0, '', '', 0, '', '', '', NULL, 'N/S', NULL, 'N/S', 'By Courier', 1, '', 0, 0, '', '', 3, 3, '2021-10-12 10:05:03', '2021-10-12 10:05:03', '2019-20', NULL, 1, NULL),
+(25, 43, 0, '', 0, 0, '', 0, '', '', 0, '', '', '', NULL, 'N/S', NULL, 'N/S', 'By Courier', 1, '', 0, 0, '', '', 3, 3, '2021-10-12 10:24:02', '2021-10-12 10:24:02', '2019-20', NULL, 1, NULL),
+(26, 44, 0, '', 0, 0, '', 0, '', '', 0, '', '', '', NULL, 'N/S', NULL, 'N/S', 'By Courier', 1, '', 0, 0, '', '', 3, 3, '2021-10-12 10:34:56', '2021-10-12 10:34:56', '2019-20', NULL, 1, NULL),
+(27, 45, 0, '', 0, 0, '', 0, '', '', 0, '', '', '', NULL, 'N/S', NULL, 'N/S', 'By Courier', 1, '', 0, 0, '', '', 3, 3, '2021-10-12 10:37:32', '2021-10-12 10:37:32', '2019-20', NULL, 1, NULL),
+(29, 47, 2, 'raw material', 3, 5, '55L', 13, 'EASPORTS6913', 'EASPORTS6913', 13, 'Main Branch of company', 'Packaging', 'sample type', '2021-09-30', 'N/S', '2021-10-31', 'N/A', 'By Courier', 1, 'Secured seal with label', 1, 13, 'sample notes', 'Sample Drawn By', 1, 1, '2021-10-12 12:09:24', '2021-10-12 12:09:24', '2019-20', NULL, 1, NULL),
+(30, 48, 2, 'raw material', 3, 5, '55L', 13, 'EASPORTS6913', 'EASPORTS6913', 13, 'Main Branch of company', 'Packaging', 'sample type', '2021-09-30', 'N/S', '2021-10-31', 'N/A', 'By Courier', 1, 'Secured seal with label', 1, 13, 'sample notes', 'Sample Drawn By', 1, 1, '2021-10-12 12:11:17', '2021-10-12 12:11:17', '2019-20', NULL, 1, NULL),
+(31, 49, 2, 'raw material', 3, 5, '55L', 13, 'EASPORTS6913', 'EASPORTS6913', 13, 'Main Branch of company', 'Packaging', 'sample type', '2021-09-30', 'N/S', '2021-10-31', 'N/A', 'By Courier', 1, 'Secured seal with label', 1, 13, 'sample notes', 'Sample Drawn By', 1, 1, '2021-10-12 12:11:20', '2021-10-12 12:11:20', '2019-20', NULL, 1, NULL),
+(32, 50, 2, 'raw material', 3, 5, '55L', 13, 'EASPORTS6913', 'EASPORTS6913', 13, 'Main Branch of company', 'Packaging', 'sample type', '2021-09-30', 'N/S', '2021-10-31', 'N/A', 'By Courier', 1, 'Secured seal with label', 1, 13, 'sample notes', 'Sample Drawn By', 1, 1, '2021-10-12 12:11:25', '2021-10-12 12:11:25', '2019-20', NULL, 1, NULL),
+(33, 51, 2, 'raw material', 3, 5, '55L', 13, 'EASPORTS6913', 'EASPORTS6913', 13, 'Main Branch of company', 'Packaging', 'sample type', '2021-09-30', 'N/S', '2021-10-31', 'N/A', 'By Courier', 1, 'Secured seal with label', 1, 13, 'sample notes', 'Sample Drawn By', 1, 1, '2021-10-12 12:12:39', '2021-10-12 12:12:39', '2019-20', NULL, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -194,9 +258,26 @@ CREATE TABLE `booking_tests` (
   `product_details` text NOT NULL,
   `test_name` varchar(255) NOT NULL,
   `label_claim` varchar(155) NOT NULL,
+  `percentage_of_label_claim` decimal(15,2) DEFAULT NULL,
   `min_limit` varchar(55) NOT NULL,
   `max_limit` varchar(55) NOT NULL,
+  `result` text DEFAULT NULL,
+  `label_claim_result` varchar(255) DEFAULT NULL,
+  `label_claim_unit` varchar(60) DEFAULT NULL,
+  `result2` text DEFAULT NULL,
+  `mean` varchar(150) DEFAULT NULL,
+  `na_content` text DEFAULT NULL,
+  `final_na_content` text DEFAULT NULL,
+  `unit` varchar(60) DEFAULT NULL,
+  `expanded_uncertanity` text DEFAULT NULL,
   `amount` decimal(15,2) DEFAULT NULL,
+  `division` varchar(255) DEFAULT NULL,
+  `method` varchar(255) DEFAULT NULL,
+  `test_time` timestamp NULL DEFAULT NULL,
+  `test_date_time` datetime DEFAULT NULL,
+  `approval_date_time` datetime DEFAULT NULL,
+  `approved` varchar(20) DEFAULT NULL,
+  `chemsit_name` int(11) DEFAULT NULL,
   `created_by` int(11) NOT NULL,
   `updated_by` int(11) DEFAULT NULL,
   `created_at` datetime NOT NULL,
@@ -211,22 +292,32 @@ CREATE TABLE `booking_tests` (
 -- Dumping data for table `booking_tests`
 --
 
-INSERT INTO `booking_tests` (`id`, `booking_id`, `parent_child`, `p_sr_no`, `by_pass`, `parent`, `product_details`, `test_name`, `label_claim`, `min_limit`, `max_limit`, `amount`, `created_by`, `updated_by`, `created_at`, `updated_at`, `selected_year`, `copied_from_year`, `is_active`, `deleted_at`) VALUES
-(1, 4, 'Child', '', 1, 20, 'testing here', 'dgfdg', '202', '33', '101', '1111.00', 3, 3, '2021-10-07 06:05:20', '2021-10-07 06:05:20', '2019-20', NULL, 1, NULL),
-(2, 4, 'Parent', '1', 2, 28, 'test', '', '', '1', '200', '500.00', 3, 3, '2021-10-07 06:05:20', '2021-10-07 06:05:20', '2019-20', NULL, 1, NULL),
-(3, 5, 'sege', '', 1, 0, '', '', '7', '', '', '0.00', 1, 1, '2021-10-07 06:56:46', '2021-10-07 06:56:46', '2019-20', NULL, 1, NULL),
-(4, 5, 'egre', '', 1, 0, '', '', '7', '', '', '0.00', 1, 1, '2021-10-07 06:56:46', '2021-10-07 06:56:46', '2019-20', NULL, 1, NULL),
-(5, 6, 'sege', '', 1, 0, '', '', '7', '', '', '0.00', 1, 1, '2021-10-07 07:02:24', '2021-10-07 07:02:24', '2019-20', NULL, 1, NULL),
-(6, 6, 'egre', '', 1, 0, '', '', '7', '', '', '0.00', 1, 1, '2021-10-07 07:02:24', '2021-10-07 07:02:24', '2019-20', NULL, 1, NULL),
-(7, 7, 'sege', '', 1, 0, '', '', '7', '', '', '0.00', 1, 1, '2021-10-07 07:03:52', '2021-10-07 07:03:52', '2019-20', NULL, 1, NULL),
-(8, 7, 'egre', '', 1, 0, '', '', '7', '', '', '0.00', 1, 1, '2021-10-07 07:03:52', '2021-10-07 07:03:52', '2019-20', NULL, 1, NULL),
-(9, 8, 'Parent', '1', 2, 15, 'test45', 'Assay123', '1000', '7852', '100', '0.00', 3, 3, '2021-10-07 09:22:39', '2021-10-07 09:22:39', '2019-20', NULL, 1, NULL),
-(10, 8, 'Child', '1.1', 2, 28, 'test1234', 'test parameter', '201', '501', '100', '5000.00', 3, 3, '2021-10-07 09:22:39', '2021-10-07 09:22:39', '2019-20', NULL, 1, NULL),
-(11, 8, 'Child', '2', 1, 0, 'heeee', 'test name', 'lable claim', 'min limit', 'max limit', '70000.00', 3, 3, '2021-10-07 09:22:39', '2021-10-07 09:22:39', '2019-20', NULL, 1, NULL),
-(12, 9, 'Parent', '', 2, 15, '', 'Assay123', '1000', '7852', '', '0.00', 3, 3, '2021-10-07 09:24:12', '2021-10-07 09:24:12', '2019-20', NULL, 1, NULL),
-(13, 9, 'Child', '', 2, 14, '', 'test parameter', '', '', '', '5000.00', 3, 3, '2021-10-07 09:24:12', '2021-10-07 09:24:12', '2019-20', NULL, 1, NULL),
-(14, 14, 'Parent', '', 1, 20, 'testing here', 'dgfdg', '202', '33', '101', '1111.00', 3, 3, '2021-10-07 09:45:12', '2021-10-07 09:45:12', '2019-20', NULL, 1, NULL),
-(15, 15, 'Parent', '', 1, 20, 'testing here', 'dgfdg', '202', '33', '101', '1111.00', 3, 3, '2021-10-07 09:46:07', '2021-10-07 09:46:07', '2019-20', NULL, 1, NULL);
+INSERT INTO `booking_tests` (`id`, `booking_id`, `parent_child`, `p_sr_no`, `by_pass`, `parent`, `product_details`, `test_name`, `label_claim`, `percentage_of_label_claim`, `min_limit`, `max_limit`, `result`, `label_claim_result`, `label_claim_unit`, `result2`, `mean`, `na_content`, `final_na_content`, `unit`, `expanded_uncertanity`, `amount`, `division`, `method`, `test_time`, `test_date_time`, `approval_date_time`, `approved`, `chemsit_name`, `created_by`, `updated_by`, `created_at`, `updated_at`, `selected_year`, `copied_from_year`, `is_active`, `deleted_at`) VALUES
+(1, 4, 'Child', '', 1, 20, 'testing here', 'dgfdg', '202', NULL, '33', '101', '', '', '', '', '', '', '', '', '', '1111.00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, 3, '2021-10-07 06:05:20', '2021-10-07 06:05:20', '2019-20', NULL, 1, NULL),
+(2, 4, 'Parent', '1', 2, 28, 'test', '', '', NULL, '1', '200', '', '', '', '', '', '', '', '', '', '500.00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, 3, '2021-10-07 06:05:20', '2021-10-07 06:05:20', '2019-20', NULL, 1, NULL),
+(3, 5, 'sege', '', 1, 0, '', '', '7', NULL, '', '', '', '', '', '', '', '', '', '', '', '0.00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, '2021-10-07 06:56:46', '2021-10-07 06:56:46', '2019-20', NULL, 1, NULL),
+(4, 5, 'egre', '', 1, 0, '', '', '7', NULL, '', '', '', '', '', '', '', '', '', '', '', '0.00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, '2021-10-07 06:56:46', '2021-10-07 06:56:46', '2019-20', NULL, 1, NULL),
+(5, 6, 'sege', '', 1, 0, '', '', '7', NULL, '', '', '', '', '', '', '', '', '', '', '', '0.00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, '2021-10-07 07:02:24', '2021-10-07 07:02:24', '2019-20', NULL, 1, NULL),
+(6, 6, 'egre', '', 1, 0, '', '', '7', NULL, '', '', '', '', '', '', '', '', '', '', '', '0.00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, '2021-10-07 07:02:24', '2021-10-07 07:02:24', '2019-20', NULL, 1, NULL),
+(7, 7, 'sege', '', 1, 0, '', '', '7', NULL, '', '', '', '', '', '', '', '', '', '', '', '0.00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, '2021-10-07 07:03:52', '2021-10-07 07:03:52', '2019-20', NULL, 1, NULL),
+(8, 7, 'egre', '', 1, 0, '', '', '7', NULL, '', '', '', '', '', '', '', '', '', '', '', '0.00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, '2021-10-07 07:03:52', '2021-10-07 07:03:52', '2019-20', NULL, 1, NULL),
+(9, 8, 'Parent', '1', 2, 15, 'test45', 'Assay123', '1000', NULL, '7852', '100', '', '', '', '', '', '', '', '', '', '0.00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, 3, '2021-10-07 09:22:39', '2021-10-07 09:22:39', '2019-20', NULL, 1, NULL),
+(10, 8, 'Child', '1.1', 2, 28, 'test1234', 'test parameter', '201', NULL, '501', '100', '', '', '', '', '', '', '', '', '', '5000.00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, 3, '2021-10-07 09:22:39', '2021-10-07 09:22:39', '2019-20', NULL, 1, NULL),
+(11, 8, 'Child', '2', 1, 0, 'heeee', 'test name', 'lable claim', NULL, 'min limit', 'max limit', '', '', '', '', '', '', '', '', '', '70000.00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, 3, '2021-10-07 09:22:39', '2021-10-07 09:22:39', '2019-20', NULL, 1, NULL),
+(12, 9, 'Parent', '', 2, 15, '', 'Assay123', '1000', NULL, '7852', '', '', '', '', '', '', '', '', '', '', '0.00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, 3, '2021-10-07 09:24:12', '2021-10-07 09:24:12', '2019-20', NULL, 1, NULL),
+(13, 9, 'Child', '', 2, 14, '', 'test parameter', '', NULL, '', '', '', '', '', '', '', '', '', '', '', '5000.00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, 3, '2021-10-07 09:24:12', '2021-10-07 09:24:12', '2019-20', NULL, 1, NULL),
+(14, 14, 'Parent', '', 1, 20, 'testing here', 'dgfdg', '202', NULL, '33', '101', '', '', '', '', '', '', '', '', '', '1111.00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, 3, '2021-10-07 09:45:12', '2021-10-07 09:45:12', '2019-20', NULL, 1, NULL),
+(15, 15, 'Parent', '', 1, 20, 'testing here', 'dgfdg', '202', NULL, '33', '101', '', '', '', '', '', '', '', '', '', '1111.00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, 3, '2021-10-07 09:46:07', '2021-10-07 09:46:07', '2019-20', NULL, 1, NULL),
+(16, 47, 'sege', '', 1, 0, '', '', '7', NULL, '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0.00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, '2021-10-12 12:09:24', '2021-10-12 12:09:24', '2019-20', NULL, 1, NULL),
+(17, 47, 'egre', '', 1, 0, '', '', '7', NULL, '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0.00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, '2021-10-12 12:09:24', '2021-10-12 12:09:24', '2019-20', NULL, 1, NULL),
+(18, 48, 'sege', '', 1, 0, '', '', '7', NULL, '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0.00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, '2021-10-12 12:11:17', '2021-10-12 12:11:17', '2019-20', NULL, 1, NULL),
+(19, 48, 'egre', '', 1, 0, '', '', '7', NULL, '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0.00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, '2021-10-12 12:11:17', '2021-10-12 12:11:17', '2019-20', NULL, 1, NULL),
+(20, 49, 'sege', '', 1, 0, '', '', '7', NULL, '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0.00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, '2021-10-12 12:11:20', '2021-10-12 12:11:20', '2019-20', NULL, 1, NULL),
+(21, 49, 'egre', '', 1, 0, '', '', '7', NULL, '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0.00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, '2021-10-12 12:11:20', '2021-10-12 12:11:20', '2019-20', NULL, 1, NULL),
+(22, 50, 'sege', '', 1, 0, '', '', '7', NULL, '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0.00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, '2021-10-12 12:11:25', '2021-10-12 12:11:25', '2019-20', NULL, 1, NULL),
+(23, 50, 'egre', '', 1, 0, '', '', '7', NULL, '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0.00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, '2021-10-12 12:11:25', '2021-10-12 12:11:25', '2019-20', NULL, 1, NULL),
+(24, 51, 'sege', '', 1, 0, '', '', '7', NULL, '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0.00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, '2021-10-12 12:12:39', '2021-10-12 12:12:39', '2019-20', NULL, 1, NULL),
+(25, 51, 'egre', '', 1, 0, '', '', '7', NULL, '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0.00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, '2021-10-12 12:12:39', '2021-10-12 12:12:39', '2019-20', NULL, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -1429,8 +1520,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `mst_companies_id`, `title`, `first_name`, `middle_name`, `last_name`, `email`, `email_verified_at`, `username`, `password`, `remember_token`, `blood_group`, `gender`, `birth_date`, `marital_status`, `photo`, `machine_code`, `phone`, `mobile`, `notes`, `attendance`, `signature`, `booking_action`, `booking_sms`, `booking_email`, `is_resigned`, `booking_copy`, `nationality`, `religion`, `caste`, `is_reporting_authority`, `deposit`, `booking_rate`, `created_by`, `updated_by`, `selected_year`, `copied_from_year`, `is_active`, `is_admin`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, NULL, NULL, 'Manoj', 'Kumar', 'Patel', 'manojp.divine@gmail.com', NULL, 'manojp.divine@gmail.com', '$2y$10$4PhhTLKUvtTNSeYODq1w6e/jbFPErnGKXXLtLngZKnQUnPGBn1TCu', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 0, NULL, 0, NULL, NULL, NULL, NULL, 1, 0, NULL, '2021-05-07 14:40:35', '2021-05-07 10:10:35'),
-(2, NULL, NULL, 'Sanjay', 'Kumar', 'Patel', 'sanjayp.divine@gmail.com', NULL, 'sanjayp.divine@gmail.com', '$2y$10$4PhhTLKUvtTNSeYODq1w6e/jbFPErnGKXXLtLngZKnQUnPGBn1TCu', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 0, NULL, 0, NULL, NULL, NULL, NULL, 1, 0, NULL, '2021-05-07 14:40:35', '2021-05-07 10:10:35'),
+(1, 1, NULL, 'Manoj', 'Kumar', 'Patel', 'manojp.divine@gmail.com', NULL, 'manojp.divine@gmail.com', '$2y$10$4PhhTLKUvtTNSeYODq1w6e/jbFPErnGKXXLtLngZKnQUnPGBn1TCu', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 0, NULL, 0, NULL, NULL, NULL, NULL, 1, 0, NULL, '2021-05-07 14:40:35', '2021-10-11 08:24:55'),
+(2, 1, NULL, 'Sanjay', 'Kumar', 'Patel', 'sanjayp.divine@gmail.com', NULL, 'sanjayp.divine@gmail.com', '$2y$10$4PhhTLKUvtTNSeYODq1w6e/jbFPErnGKXXLtLngZKnQUnPGBn1TCu', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 0, NULL, 0, NULL, NULL, NULL, NULL, 1, 0, NULL, '2021-05-07 14:40:35', '2021-10-11 08:25:10'),
 (3, 1, 'Ms.', 'Prexa', 'S', 'Shah', 'preksha.divine@gmail.com', NULL, 'preksha.divine@gmail.com', '$2y$10$C.DBkJxKGx9d3gd8MG6CNOyHwqQ6siFRJLN4Rad.B/YKor5t5gKgC', NULL, 'B+', 'M', '1988-07-11', 'Married', NULL, 'M01', '4545454545554', '4545454545554', 'lorem Ipsum dor simit de nur', 1, 'MSP', 1, 1, 1, 1, 1, 'Indian', 'Hindu', 'Hindu', 1, 100, 1, NULL, 1, '2019-20', NULL, 1, 0, NULL, '2021-05-07 14:40:35', '2021-07-20 12:29:45'),
 (4, 1, NULL, 'Manoj', 'D', 'Patel', 'manojp.divine@gmail.com', NULL, 'manojp.divine@gmail.com', '$2y$10$e6tbMQLOpGtM2pG4fdKAge6GMFCXpCugsNeUq9C8n.5W9h7fyN60W', NULL, 'B+ve', 'M', '1988-07-11', 'Married', NULL, 'M01', '4545454545554', '4545454545554', 'lorem Ipsum dor simit de nur1111', 1, 'MSP', 1, 1, 1, 0, 1, 'Indian', 'Hindu', NULL, 1, 100, 0, NULL, 1, '2019-20', NULL, 1, 0, '2021-05-20 10:45:29', '2021-05-20 10:44:45', '2021-05-20 10:45:29'),
 (5, 1, 'Mr.', 'Manoj', 'S', 'Patel', 'manojp.divine@yopmail.com', NULL, 'manojp.divine@yopmail.com', '$2y$10$kwX1OommbpMTePmSbCobSurGal2Lhn4z9I5zVQ/jm5QxRa6K7ElPq', NULL, 'B+ve', 'M', '1988-07-11', 'Married', NULL, 'M01', '4545454545554', '4545454545554', 'lorem Ipsum dor simit de nur', 1, 'MSP', 1, 1, 1, 0, 1, 'Indian', 'Hindu', 'Hindu', 1, 100, 1, NULL, 3, '2019-20', NULL, 1, 0, NULL, '2021-06-16 10:45:46', '2021-06-18 06:39:30'),
@@ -1907,25 +1998,25 @@ ALTER TABLE `user_emp_details`
 -- AUTO_INCREMENT for table `bookings`
 --
 ALTER TABLE `bookings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
 -- AUTO_INCREMENT for table `booking_audit_details`
 --
 ALTER TABLE `booking_audit_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `booking_sample_details`
 --
 ALTER TABLE `booking_sample_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `booking_tests`
 --
 ALTER TABLE `booking_tests`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
