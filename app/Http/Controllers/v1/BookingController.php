@@ -573,7 +573,7 @@ class BookingController extends Controller
             ->find($id);
         $data = $data->toArray();
         $data['invoice_date'] = \Carbon\Carbon::parse($data['invoice_date'])->format('d/m/Y');
-        $data['receipte_date'] = \Carbon\Carbon::parse($data['receipte_date'])->format('d-m-Y');
+        $data['receipte_date'] = \Carbon\Carbon::parse($data['receipte_date'])->format('Y-m-d');
         $data['mfg_date'] = \Carbon\Carbon::parse($data['mfg_date'])->format('d/m/Y');
         $data['exp_date'] = \Carbon\Carbon::parse($data['exp_date'])->format('d/m/Y');
         $data['analysis_date'] = \Carbon\Carbon::parse($data['analysis_date'])->format('d/m/Y');
