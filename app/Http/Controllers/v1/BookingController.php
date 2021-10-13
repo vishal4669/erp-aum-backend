@@ -36,7 +36,6 @@ class BookingController extends Controller
             $is_dropdown = (isset($request->is_dropdown) && $request->is_dropdown == 1) ? 1 : 0;
 
             if (!$is_dropdown) {
-
                 $data = Booking::leftjoin('booking_sample_details as samples', 'samples.booking_id', '=', 'bookings.id')
                     ->leftjoin('mst_products', 'mst_products.id', '=', 'samples.product_id')
                     ->select(
@@ -49,11 +48,11 @@ class BookingController extends Controller
                     )
                     ->where('bookings.is_active', 1)
                     ->where('bookings.selected_year', $loggedInUserData['selected_year'])
+                    ->where('bookings.mst_companies_id', $loggedInUserData['company_id'])
                     ->orderBy('id', 'desc')
                     ->get();
                 // ->paginate(10);
             } elseif ($is_dropdown) {
-
                 $data = Booking::leftjoin('booking_sample_details as samples', 'samples.booking_id', '=', 'bookings.id')
                     ->leftjoin('mst_products', 'mst_products.id', '=', 'samples.product_id')
                     ->select(
@@ -66,6 +65,7 @@ class BookingController extends Controller
                     )
                     ->where('bookings.is_active', 1)
                     ->where('bookings.selected_year', $loggedInUserData['selected_year'])
+                    ->where('bookings.mst_companies_id', $loggedInUserData['company_id'])
                     ->orderBy('id', 'desc')
                     ->get();
             }
@@ -92,15 +92,17 @@ class BookingController extends Controller
         $booking_table = Booking::all();
 
         if ($booking_table->isEmpty()) {
-            $last_booking_id = 1;
             $aum_serial_no = 1;
-            $booking_no = ("ARL/COA/" . $report_type . '/' . Carbon::now()->format('ymd') . '/' . $last_booking_id);
+            $last_booking_id = 1;
+            $str_pad_booking_id = str_pad($last_booking_id, 3, '0', STR_PAD_LEFT);
+            $booking_no = ("ARL/COA/" . $report_type . '/' . Carbon::now()->format('ymd') . '/' . $str_pad_booking_id);
         } {
             $mytime = Carbon::now()->format('ymd');
             // dd($mytime);
             if (!isset(Booking::where('report_type', $report_type)->latest()->first()->booking_no)) {
                 $last_booking_id = 1;
-                $booking_no = ("ARL/COA/" . $report_type . '/' . Carbon::now()->format('ymd') . '/' . $last_booking_id);
+                $str_pad_booking_id = str_pad($last_booking_id, 3, '0', STR_PAD_LEFT);
+                $booking_no = ("ARL/COA/" . $report_type . '/' . Carbon::now()->format('ymd') . '/' . $str_pad_booking_id);
             } else {
                 $latest_booking_no = Booking::where('report_type', $report_type)->latest()->first()->booking_no;
                 $latest_data = $latest_booking_no;
@@ -249,7 +251,9 @@ class BookingController extends Controller
 
         if (!isset(Booking::where('booking_no', $request->booking_no)->latest()->first()->booking_no)) {
             $last_booking_id = 1;
-            $booking_no = ("ARL/COA/" . $request->report_type . '/' . Carbon::now()->format('ymd') . '/' . $last_booking_id);
+            $str_pad_booking_id = str_pad($last_booking_id, 3, '0', STR_PAD_LEFT);
+            $booking_no = ("ARL/COA/" . $request->report_type . '/' . Carbon::now()->format('ymd') . '/' . $str_pad_booking_id);
+            // dd($booking_no);
         } else {
             $mytime = Carbon::now()->format('ymd');
             $latest_booking_no = Booking::where('report_type', $request->report_type)->latest()->first()->booking_no;
@@ -265,6 +269,7 @@ class BookingController extends Controller
                 $str_pad_booking_id = str_pad($last_booking_id, 3, '0', STR_PAD_LEFT);
                 $booking_no = ("ARL/COA/" . $request->report_type . '/' . Carbon::now()->format('ymd') . '/' . $str_pad_booking_id);
             }
+            // dd($booking_no);
         }
 
         if (isset(Booking::where('aum_serial_no', $request->aum_serial_no)->latest()->first()->aum_serial_no)) {
@@ -289,6 +294,7 @@ class BookingController extends Controller
                 'dispatch_details' => 'required_if:is_report_dispacthed,1',
                 'mfg_date'  => 'required|date',
                 'exp_date'    => 'required|date_format:Y-m-d|after:mfg_date',
+                'booking_sample_details.*.product_id'  => 'required|Integer',
                 'booking_sample_details.*.sampling_date_from'  => 'nullable|date',
                 'booking_sample_details.*.sampling_date_to'    => 'nullable|date_format:Y-m-d|after:booking_sample_details.*.sampling_date_from',
                 'booking_tests.*.amount'    => 'nullable|numeric|between:0,999999999999999999999999999.99',
@@ -306,6 +312,7 @@ class BookingController extends Controller
                 "booking_no.unique" => "The Booking No Field Must Be Unique.",
                 "mfg_date.required" => "The Mfg Date Field Is Required.",
                 "exp_date.required" => "The Exp Date Field Is Required.",
+                'booking_sample_details.*.product_id.required'  => 'The Product Name Field Is Required.',
                 'booking_sample_details.*.sampling_date_to.after'    => 'Sampling Date To Must Be A Date After Sampling Date From.',
             ];
 
@@ -353,6 +360,10 @@ class BookingController extends Controller
                 "discipline"    => (isset($request->discipline) ? $request->discipline : ''),
                 "booking_group" => (isset($request->booking_group) ? $request->booking_group : ''),
                 "statement_ofconformity"    => (isset($request->statement_ofconformity) ? $request->statement_ofconformity : ''),
+                // "coa_release_date"    => (isset($request->coa_release_date) ? date('Y-m-d', strtotime($request->coa_release_date)) : NULL),
+                // "block"    => (isset($request->block) ? $request->block : NULL),
+                "invoice_date" => (isset($request->invoice_date) ? date('Y-m-d', strtotime($request->invoice_date)) : NULL),
+                "invoice_no" => (isset($request->invoice_no) ? $request->invoice_no : NULL),
                 "is_active" => 1,
                 "selected_year" => $loggedInUserData['selected_year'],
                 "created_by"    => $loggedInUserData['logged_in_user_id'],
@@ -562,7 +573,7 @@ class BookingController extends Controller
             ->find($id);
         $data = $data->toArray();
         $data['invoice_date'] = \Carbon\Carbon::parse($data['invoice_date'])->format('d/m/Y');
-        $data['receipte_date'] = \Carbon\Carbon::parse($data['receipte_date'])->format('d/m/Y');
+        $data['receipte_date'] = \Carbon\Carbon::parse($data['receipte_date'])->format('d-m-Y');
         $data['mfg_date'] = \Carbon\Carbon::parse($data['mfg_date'])->format('d/m/Y');
         $data['exp_date'] = \Carbon\Carbon::parse($data['exp_date'])->format('d/m/Y');
         $data['analysis_date'] = \Carbon\Carbon::parse($data['analysis_date'])->format('d/m/Y');
@@ -727,6 +738,8 @@ class BookingController extends Controller
                 "discipline"    => (isset($request->discipline) ? $request->discipline : ''),
                 "booking_group" => (isset($request->booking_group) ? $request->booking_group : ''),
                 "statement_ofconformity"    => (isset($request->statement_ofconformity) ? $request->statement_ofconformity : ''),
+                "coa_release_date"    => (isset($request->coa_release_date) ? date('Y-m-d', strtotime($request->coa_release_date)) : NULL),
+                "block"    => (isset($request->block) ? $request->block : NULL),
                 "is_active" => 1,
                 "selected_year" => $loggedInUserData['selected_year'],
                 "updated_by"    => $loggedInUserData['logged_in_user_id'],

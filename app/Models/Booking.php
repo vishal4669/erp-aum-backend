@@ -50,6 +50,8 @@ class Booking extends Model
         "discipline",
         "booking_group",
         "statement_ofconformity",
+        "coa_release_date",
+        "block",
         "is_active",
         "selected_year",
         "created_by",
