@@ -388,7 +388,7 @@ class MstProductController extends Controller
      */
     public function show($id)
     {
-        $data = MstProduct::with('generic:id,product_name as generic_product_name', 'samples', 'samples.parameter', 'samples.parent')->find($id);
+        $data = MstProduct::with('pharmacopeia:id,pharmacopeia_name','generic:id,product_name as generic_product_name', 'samples', 'samples.parameter', 'samples.parent')->find($id);
         $data_Arr = $data->toArray();
         $len = count($data_Arr['samples']);
         $i = 0;

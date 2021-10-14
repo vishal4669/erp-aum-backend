@@ -41,6 +41,9 @@ class BookingSampleDetail extends Model
         "selected_year",
         "copied_from_year",
         "is_active",
+        "created_by",
+        "updated_by",
+        "updated_at"
 
     ];
 

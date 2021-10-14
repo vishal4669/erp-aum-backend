@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Log;
 use App\Helpers\Helper;
 use App\Models\BookingAuditDetail;
 use App\Models\MstProduct;
+use App\Models\Pharmacopeia;
 use Auth;
 use DB;
 use Carbon\Carbon;
@@ -41,9 +42,9 @@ class BookingController extends Controller
                     ->select(
                         [
                             'bookings.id', 'bookings.aum_serial_no', 'bookings.booking_no',
-                            'bookings.booking_type', 'samples.product_type',
-                            DB::raw('DATE_FORMAT(bookings.receipte_date, "%d-%b-%Y") as receipte_date'),
-                            'bookings.is_active', 'mst_products.product_name'
+                            'bookings.booking_type',
+                            DB::raw('DATE_FORMAT(bookings.receipte_date, "%Y-%m-%d") as receipte_date'),
+                            'bookings.is_active', 'mst_products.product_name', 'mst_products.product_generic'
                         ]
                     )
                     ->where('bookings.is_active', 1)
@@ -59,7 +60,7 @@ class BookingController extends Controller
                         [
                             'bookings.id', 'bookings.aum_serial_no', 'bookings.booking_no',
                             'bookings.booking_type', 'samples.product_type',
-                            DB::raw('DATE_FORMAT(bookings.receipte_date, "%d-%b-%Y") as receipte_date'),
+                            DB::raw('DATE_FORMAT(bookings.receipte_date, "%Y-%m-%d") as receipte_date'),
                             'bookings.is_active', 'mst_products.product_name'
                         ]
                     )
@@ -253,7 +254,6 @@ class BookingController extends Controller
             $last_booking_id = 1;
             $str_pad_booking_id = str_pad($last_booking_id, 3, '0', STR_PAD_LEFT);
             $booking_no = ("ARL/COA/" . $request->report_type . '/' . Carbon::now()->format('ymd') . '/' . $str_pad_booking_id);
-            // dd($booking_no);
         } else {
             $mytime = Carbon::now()->format('ymd');
             $latest_booking_no = Booking::where('report_type', $request->report_type)->latest()->first()->booking_no;
@@ -269,7 +269,6 @@ class BookingController extends Controller
                 $str_pad_booking_id = str_pad($last_booking_id, 3, '0', STR_PAD_LEFT);
                 $booking_no = ("ARL/COA/" . $request->report_type . '/' . Carbon::now()->format('ymd') . '/' . $str_pad_booking_id);
             }
-            // dd($booking_no);
         }
 
         if (isset(Booking::where('aum_serial_no', $request->aum_serial_no)->latest()->first()->aum_serial_no)) {
@@ -281,23 +280,51 @@ class BookingController extends Controller
         DB::beginTransaction();
         try {
             $rules = [
-                "report_type" => "required",
-                "booking_type" => "required",
+                "report_type" => "required|max:55",
+                "booking_type" => "required|max:55",
                 "receipte_date" => "required",
                 "customer_id" => "required",
                 'invoice_date' => 'required_if:booking_type,Invoice',
-                'invoice_no' => 'required_if:booking_type,Invoice',
-                // 'booking_no'  => 'unique:bookings',
+                'invoice_no' => 'required_if:booking_type,Invoice|max:55',
+                'booking_no'  => 'max:255',
+                'reference_no'  => 'max:55',
+                'aum_serial_no'  => 'max:55',
+                'd_format'  => 'max:255',
+                'project_name'  => 'max:255',
+                'mfg_lic_no'  => 'max:155',
                 // 'aum_serial_no'  => 'unique:bookings',
-                'dispatch_date_time' => 'required_if:is_report_dispacthed,1',
-                'dispatch_mode' => 'required_if:is_report_dispacthed,1',
-                'dispatch_details' => 'required_if:is_report_dispacthed,1',
+                'dispatch_date_time' => 'required_if:is_report_dispacthed,1|max:100',
+                'dispatch_mode' => 'required_if:is_report_dispacthed,1|max:155',
+                'dispatch_details' => 'required_if:is_report_dispacthed,1|max:255',
                 'mfg_date'  => 'required|date',
                 'exp_date'    => 'required|date_format:Y-m-d|after:mfg_date',
                 'booking_sample_details.*.product_id'  => 'required|Integer',
                 'booking_sample_details.*.sampling_date_from'  => 'nullable|date',
                 'booking_sample_details.*.sampling_date_to'    => 'nullable|date_format:Y-m-d|after:booking_sample_details.*.sampling_date_from',
                 'booking_tests.*.amount'    => 'nullable|numeric|between:0,999999999999999999999999999.99',
+                'booking_sample_details.*.batch_no'  => 'Integer|max:25',
+                'booking_sample_details.*.packsize'  => 'max:55',
+                'booking_sample_details.*.sample_code'  => 'max:100',
+                'booking_sample_details.*.sample_location'  => 'max:150',
+                'booking_sample_details.*.sample_packaging'  => 'max:255',
+                'booking_sample_details.*.sample_type'  => 'max:60',
+                'booking_sample_details.*.sample_drawn_by'  => 'max:255',
+                'booking_tests.*.p_sr_no'  => 'max:10',
+                'booking_tests.*.test_name'  => 'max:10',
+                'booking_tests.*.label_claim'  => 'max:10',
+                'booking_tests.*.percentage_of_label_claim'  => 'max:10',
+                'booking_tests.*.min_limit'  => 'max:10',
+                'booking_tests.*.max_limit'  => 'max:10',
+                'booking_tests.*.label_claim_result'  => 'max:10',
+                'booking_tests.*.label_claim_unit'  => 'max:10',
+                'booking_tests.*.result2'  => 'max:10',
+                'booking_tests.*.mean'  => 'max:10',
+                'booking_tests.*.unit'  => 'max:10',
+                'booking_tests.*.amount'  => 'max:10',
+                'booking_tests.*.division'  => 'max:10',
+                'booking_tests.*.method'  => 'max:10',
+                'booking_tests.*.p_sr_no'  => 'max:10',
+                'booking_tests.*.approved'  => 'max:10',
             ];
             $massage = [
                 "report_type.required" => "The Report Type Field Is Required.",
@@ -395,8 +422,6 @@ class BookingController extends Controller
             $booking_sample_data = array(
                 "booking_id" => (isset($booking_id) ? $booking_id : 0),
                 "product_id"    => (isset($booking_samples[0]['product_id']) ? $booking_samples[0]['product_id'] : 0),
-                "product_type"  => (isset($booking_samples[0]['product_type']) ? $booking_samples[0]['product_type'] : ''),
-                "pharmacopiea_id"   => (isset($booking_samples[0]['pharmacopiea_id']) ? $booking_samples[0]['pharmacopiea_id'] : 0),
                 "batch_no"  => (isset($booking_samples[0]['batch_no']) ? $booking_samples[0]['batch_no'] : 0),
                 "packsize"  => (isset($booking_samples[0]['packsize']) ? $booking_samples[0]['packsize'] : ''),
                 "request_quantity"  => (isset($booking_samples[0]['request_quantity']) ? $booking_samples[0]['request_quantity'] : 0),
@@ -419,14 +444,15 @@ class BookingController extends Controller
                 "sample_drawn_by"   => (isset($booking_samples[0]['sample_drawn_by']) ? $booking_samples[0]['sample_drawn_by'] : ''),
                 "is_active" => 1,
                 "selected_year" => $loggedInUserData['selected_year'],
-                "created_by"    => $loggedInUserData['logged_in_user_id'],
-                "updated_by"    => $loggedInUserData['logged_in_user_id'],
             );
             $sample_detail_exist = BookingSampleDetail::where('booking_id', $booking_id)->get();
             if (count($sample_detail_exist) > 0) {
+                $booking_sample_data['updated_by'] = $loggedInUserData['logged_in_user_id'];
                 $update_table = BookingSampleDetail::where('booking_id', $booking_id);
                 $update_table->update($booking_sample_data);
             } else {
+                $booking_sample_data['created_by'] = $loggedInUserData['logged_in_user_id'];
+                $booking_sample_data['updated_at'] = NULL;
                 BookingSampleDetail::create($booking_sample_data);
             }
         }
@@ -562,8 +588,8 @@ class BookingController extends Controller
             'manufacturer_id:id,company_name',
             'supplier_id:id,company_name',
             'samples',
-            'samples.product_id:id,generic_product_id',
-            'samples.pharmacopiea_id:id,pharmacopeia_name',
+            'samples.product_id:id,generic_product_id,product_generic,pharmacopeia_id',
+            // 'samples.pharmacopiea_id:id,pharmacopeia_name',
             'tests',
             'tests.parent',
             'audit',
@@ -572,13 +598,19 @@ class BookingController extends Controller
         )
             ->find($id);
         $data = $data->toArray();
-        $data['invoice_date'] = \Carbon\Carbon::parse($data['invoice_date'])->format('d/m/Y');
+        $pharmacopiea_id = $data['samples'][0]['product_id']['pharmacopeia_id'];
+        $pharmacopiea_id = Pharmacopeia::where('id', $pharmacopiea_id)->get(['id', 'pharmacopeia_name'])->toArray();
+        $data['samples'][0]['product_id']['pharmacopiea_id'] = array(
+            'id' => $pharmacopiea_id[0]['id'],
+            'pharmacopeia_name' => $pharmacopiea_id[0]['pharmacopeia_name'],
+        );
+        $data['invoice_date'] = \Carbon\Carbon::parse($data['invoice_date'])->format('Y-m-d');
         $data['receipte_date'] = \Carbon\Carbon::parse($data['receipte_date'])->format('Y-m-d');
-        $data['mfg_date'] = \Carbon\Carbon::parse($data['mfg_date'])->format('d/m/Y');
-        $data['exp_date'] = \Carbon\Carbon::parse($data['exp_date'])->format('d/m/Y');
-        $data['analysis_date'] = \Carbon\Carbon::parse($data['analysis_date'])->format('d/m/Y');
-        $data['samples'][0]['sampling_date_from'] = \Carbon\Carbon::parse($data['samples'][0]['sampling_date_from'])->format('d/m/Y');
-        $data['samples'][0]['sampling_date_to'] = \Carbon\Carbon::parse($data['samples'][0]['sampling_date_to'])->format('d/m/Y');
+        $data['mfg_date'] = \Carbon\Carbon::parse($data['mfg_date'])->format('Y-m-d');
+        $data['exp_date'] = \Carbon\Carbon::parse($data['exp_date'])->format('Y-m-d');
+        $data['analysis_date'] = \Carbon\Carbon::parse($data['analysis_date'])->format('Y-m-d');
+        $data['samples'][0]['sampling_date_from'] = \Carbon\Carbon::parse($data['samples'][0]['sampling_date_from'])->format('Y-m-d');
+        $data['samples'][0]['sampling_date_to'] = \Carbon\Carbon::parse($data['samples'][0]['sampling_date_to'])->format('Y-m-d');
 
 
         if ($data['samples'][0]['product_id'] == null) {
@@ -627,8 +659,8 @@ class BookingController extends Controller
                 "last_name" => ""
             );
         }
-        if ($data['samples'][0]['pharmacopiea_id'] == null) {
-            $data['samples'][0]['pharmacopiea_id'] = array(
+        if ($data['samples'][0]['product_id']['pharmacopiea_id'] == null) {
+            $data['samples'][0]['product_id']['pharmacopiea_id'] = array(
                 "id" => "",
                 "pharmacopeia_name" => ""
             );
