@@ -36,6 +36,7 @@ class CustomerController extends Controller
                     ->where('c_info.contact_info_type', '1')
                     ->select('mst_customers.id', 'company_name', 'contact_person_name', 'contact_type', 'tally_alias_name', 'c_info.contact_no', 'is_active')
                     ->where('mst_customers.selected_year', $loggedInUserData['selected_year'])
+                    ->where('mst_customers.mst_companies_id', $loggedInUserData['company_id'])
                     ->orderBy('mst_customers.id', 'desc')
                     ->paginate(10);
             } elseif ($is_dropdown) {

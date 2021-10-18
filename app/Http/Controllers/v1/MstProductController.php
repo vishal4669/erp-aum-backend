@@ -48,6 +48,7 @@ class MstProductController extends Controller
                     ->with('pharmacopeia:id,pharmacopeia_name', 'generic:id,product_name')
                     ->where('is_active', 1)
                     ->where('selected_year', $loggedInUserData['selected_year'])
+                    ->where('mst_companies_id', $loggedInUserData['company_id'])
                     ->orderBy('id', 'desc')
                     ->paginate(10);
             } elseif ($is_dropdown) {
@@ -63,7 +64,6 @@ class MstProductController extends Controller
                     'generic_product_id'
                 )->with('pharmacopeia:id,pharmacopeia_name', 'generic:id,product_name')
                     ->where('is_active', 1)
-                    ->where('selected_year', $loggedInUserData['selected_year'])
                     ->orderBy('id', 'desc')
                     ->get();
             }
@@ -81,7 +81,6 @@ class MstProductController extends Controller
                 )->with('pharmacopeia:id,pharmacopeia_name', 'generic:id,product_name')
                     ->where('is_generic', 1)
                     ->where('is_active', 1)
-                    ->where('selected_year', $loggedInUserData['selected_year'])
                     ->orderBy('id', 'desc')
                     ->get();
             }
@@ -388,7 +387,7 @@ class MstProductController extends Controller
      */
     public function show($id)
     {
-        $data = MstProduct::with('pharmacopeia:id,pharmacopeia_name','generic:id,product_name as generic_product_name', 'samples', 'samples.parameter', 'samples.parent')->find($id);
+        $data = MstProduct::with('pharmacopeia:id,pharmacopeia_name', 'generic:id,product_name as generic_product_name', 'samples', 'samples.parameter', 'samples.parent')->find($id);
         $data_Arr = $data->toArray();
         $len = count($data_Arr['samples']);
         $i = 0;

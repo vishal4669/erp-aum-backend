@@ -1,4 +1,4 @@
-<?php    
+<?php
 
 namespace App\Http\Controllers\v1;
 
@@ -10,7 +10,7 @@ use App\Helpers\Helper;
 use Auth;
 use Log;
 use Illuminate\Support\Facades\Validator;
-    
+
 
 class DepartmentController extends Controller
 {
@@ -23,34 +23,34 @@ class DepartmentController extends Controller
 
     public function index(Request $request)
     {
-        try{
+        try {
             $loggedInUserData = Helper::getUserData();
 
             $is_dropdown = (isset($request->is_dropdown)) ? $request->is_dropdown : false;
 
-            if(!$is_dropdown){
+            if (!$is_dropdown) {
                 $data = Department::select('mst_departments.*', 'c.company_name', 'b.branch_name')
-                        ->leftjoin('mst_companies as c', 'c.id', '=', 'mst_departments.mst_companies_id')
-                        ->leftjoin('mst_branches as b', 'b.id', '=', 'mst_departments.mst_branches_id')
-                        ->where('mst_departments.is_active',1)
-                        ->where('mst_departments.selected_year', $loggedInUserData['selected_year'])
-                        ->orderBy('mst_departments.id', 'desc')
-                        ->get();
+                    ->leftjoin('mst_companies as c', 'c.id', '=', 'mst_departments.mst_companies_id')
+                    ->leftjoin('mst_branches as b', 'b.id', '=', 'mst_departments.mst_branches_id')
+                    ->where('mst_departments.is_active', 1)
+                    ->where('mst_departments.selected_year', $loggedInUserData['selected_year'])
+                    ->where('mst_departments.mst_companies_id', $loggedInUserData['company_id'])
+                    ->orderBy('mst_departments.id', 'desc')
+                    ->get();
             } else {
                 $data = Department::select('mst_departments.*', 'c.company_name', 'b.branch_name')
-                        ->leftjoin('mst_companies as c', 'c.id', '=', 'mst_departments.mst_companies_id')
-                        ->leftjoin('mst_branches as b', 'b.id', '=', 'mst_departments.mst_branches_id')
-                        ->where('mst_departments.is_active',1)
-                        ->orderBy('mst_departments.id', 'desc')
-                        ->get();
+                    ->leftjoin('mst_companies as c', 'c.id', '=', 'mst_departments.mst_companies_id')
+                    ->leftjoin('mst_branches as b', 'b.id', '=', 'mst_departments.mst_branches_id')
+                    ->where('mst_departments.is_active', 1)
+                    ->orderBy('mst_departments.id', 'desc')
+                    ->get();
             }
-            
+
             return Helper::response("Department List Shown Successfully", Response::HTTP_OK, true, $data);
         } catch (Exception $e) {
             $data = array();
-            return Helper::response(trans("message.something_went_wrong"),$e->getStatusCode(),false,$data);
-        }  
-        
+            return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);
+        }
     }
 
     /**
@@ -61,8 +61,8 @@ class DepartmentController extends Controller
      */
 
     public function store(Request $request)
-    {   
-        try{
+    {
+        try {
 
             $rules = [
                 'mst_branches_id' => 'required',
@@ -75,9 +75,9 @@ class DepartmentController extends Controller
                 'department_name.max' => 'The Department Name must be less than or equal to 255 characters'
             ];
 
-            $validator = Validator::make( $request->all(), $rules, $messages );
+            $validator = Validator::make($request->all(), $rules, $messages);
 
-            if($validator->fails()){
+            if ($validator->fails()) {
                 $data = array();
                 return Helper::response($validator->errors()->all(), Response::HTTP_OK, false, $data);
             }
@@ -85,21 +85,21 @@ class DepartmentController extends Controller
             $loggedInUserData = Helper::getUserData();
 
             $input = $request->all();
-            $input_data['department_name'] = $input['department_name'];  
-            $input_data['selected_year'] = $loggedInUserData['selected_year'];  
+            $input_data['department_name'] = $input['department_name'];
+            $input_data['selected_year'] = $loggedInUserData['selected_year'];
             $input_data['mst_companies_id'] = $loggedInUserData['company_id'];
             $input_data['mst_branches_id'] = $input['mst_branches_id'];
-            $input_data['is_active'] = 1;  
+            $input_data['is_active'] = 1;
             $input_data['created_by'] = $loggedInUserData['logged_in_user_id'];
 
-            Log::info("Department Created with details : ".json_encode($input_data));
+            Log::info("Department Created with details : " . json_encode($input_data));
 
             $data = Department::create($input_data);
-            return Helper::response("Department Added Successfully", Response::HTTP_OK, true, $data);  
+            return Helper::response("Department Added Successfully", Response::HTTP_OK, true, $data);
         } catch (Exception $e) {
             $data = array();
-            return Helper::response(trans("message.something_went_wrong"),$e->getStatusCode(),false,$data);
-        }  
+            return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);
+        }
     }
 
     /**
@@ -111,17 +111,16 @@ class DepartmentController extends Controller
 
     public function show($id)
     {
-        Log::info("Fetch department details : ".json_encode(array('id' => $id)));
-        try{
+        Log::info("Fetch department details : " . json_encode(array('id' => $id)));
+        try {
             $departmentData = Department::find($id);
             return Helper::response("Department Data Shown Successfully", Response::HTTP_OK, true, $departmentData);
         } catch (Exception $e) {
             $data = array();
-            return Helper::response(trans("message.something_went_wrong"),$e->getStatusCode(),false,$data);
-        }  
-        
-    } 
-    
+            return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);
+        }
+    }
+
     /**
      * Update the specified resource in storage.
      *
@@ -132,7 +131,7 @@ class DepartmentController extends Controller
 
     public function update(Request $request, $id)
     {
-        try{
+        try {
 
             $rules = [
                 'mst_branches_id' => 'required',
@@ -145,10 +144,10 @@ class DepartmentController extends Controller
                 'department_name.max' => 'The Department Name must be less than or equal to 255 characters'
             ];
 
-            $validator = Validator::make( $request->all(), $rules, $messages );
+            $validator = Validator::make($request->all(), $rules, $messages);
 
 
-            if($validator->fails()){
+            if ($validator->fails()) {
                 $data = array();
                 return Helper::response($validator->errors()->all(), Response::HTTP_OK, false, $data);
             }
@@ -156,22 +155,22 @@ class DepartmentController extends Controller
             $loggedInUserData = Helper::getUserData();
 
             $input = $request->all();
-            $input_data['department_name'] = $input['department_name'];  
-            $input_data['mst_branches_id'] = $input['mst_branches_id']; 
-            $input_data['updated_by'] = $loggedInUserData['logged_in_user_id']; 
+            $input_data['department_name'] = $input['department_name'];
+            $input_data['mst_branches_id'] = $input['mst_branches_id'];
+            $input_data['updated_by'] = $loggedInUserData['logged_in_user_id'];
 
-            Log::info("Department updated with details : ".json_encode(array('data' => $input_data, 'id' => $id)));
+            Log::info("Department updated with details : " . json_encode(array('data' => $input_data, 'id' => $id)));
 
             $department = Department::find($id);
             $department->update($input_data);
 
-            return Helper::response("Department updated successfully", Response::HTTP_OK, true, $department); 
+            return Helper::response("Department updated successfully", Response::HTTP_OK, true, $department);
         } catch (Exception $e) {
             $data = array();
-            return Helper::response(trans("message.something_went_wrong"),$e->getStatusCode(),false,$data);
-        }  
+            return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);
+        }
     }
-    
+
 
     /**
      * Remove the specified resource from storage.
@@ -182,23 +181,21 @@ class DepartmentController extends Controller
 
     public function destroy($id)
     {
-        try{
+        try {
             $data = array();
             $department = Department::find($id);
 
-            Log::info("Department deleted with : ".json_encode(array('id' => $id)));
+            Log::info("Department deleted with : " . json_encode(array('id' => $id)));
 
-            if(!empty($department)){
+            if (!empty($department)) {
                 $department->delete();
-                return Helper::response("Department deleted successfully", Response::HTTP_OK, true, $data); 
-            }  
+                return Helper::response("Department deleted successfully", Response::HTTP_OK, true, $data);
+            }
 
-            return Helper::response("Department not exists", Response::HTTP_NOT_FOUND,true,$data);  
+            return Helper::response("Department not exists", Response::HTTP_NOT_FOUND, true, $data);
         } catch (Exception $e) {
             $data = array();
-            return Helper::response(trans("message.something_went_wrong"),$e->getStatusCode(),false,$data);
-        }  
+            return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);
+        }
     }
-
 }
-

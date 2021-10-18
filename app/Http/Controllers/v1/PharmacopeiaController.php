@@ -29,7 +29,7 @@ class PharmacopeiaController extends Controller
             $is_dropdown = (isset($request->is_dropdown)) ? $request->is_dropdown : false;
 
             if(!$is_dropdown){
-                $data = Pharmacopeia::where('is_active',1)->where('selected_year', $loggedInUserData['selected_year'])->orderBy('id', 'desc')->get();
+                $data = Pharmacopeia::where('is_active',1)->where('selected_year', $loggedInUserData['selected_year'])->where('mst_companies_id', $loggedInUserData['company_id'])->orderBy('id', 'desc')->get();
             } else {
                 $data = Pharmacopeia::where('is_active',1)->orderBy('id', 'desc')->get();
             }

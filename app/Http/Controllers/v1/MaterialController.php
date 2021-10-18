@@ -34,6 +34,7 @@ class MaterialController extends Controller
                     ->leftjoin('mst_categories as subsubcat', 'subsubcat.id', '=', 'mst_materials.sub_sub_category_id')
                     ->where('mst_materials.is_active', 1)
                     ->where('mst_materials.selected_year', $loggedInUserData['selected_year'])
+                    ->where('mst_materials.mst_companies_id', $loggedInUserData['company_id'])
                     ->orderBy('mst_materials.id', 'desc')
                     ->paginate(10);
             } else {

@@ -35,7 +35,6 @@ class BookingController extends Controller
 
             $loggedInUserData = Helper::getUserData();
             $is_dropdown = (isset($request->is_dropdown) && $request->is_dropdown == 1) ? 1 : 0;
-
             if (!$is_dropdown) {
                 $data = Booking::leftjoin('booking_sample_details as samples', 'samples.booking_id', '=', 'bookings.id')
                     ->leftjoin('mst_products', 'mst_products.id', '=', 'samples.product_id')
@@ -65,8 +64,6 @@ class BookingController extends Controller
                         ]
                     )
                     ->where('bookings.is_active', 1)
-                    ->where('bookings.selected_year', $loggedInUserData['selected_year'])
-                    ->where('bookings.mst_companies_id', $loggedInUserData['company_id'])
                     ->orderBy('id', 'desc')
                     ->get();
             }
@@ -599,11 +596,21 @@ class BookingController extends Controller
             ->find($id);
         $data = $data->toArray();
         $pharmacopiea_id = $data['samples'][0]['product_id']['pharmacopeia_id'];
-        $pharmacopiea_id = Pharmacopeia::where('id', $pharmacopiea_id)->get(['id', 'pharmacopeia_name'])->toArray();
-        $data['samples'][0]['product_id']['pharmacopiea_id'] = array(
-            'id' => $pharmacopiea_id[0]['id'],
-            'pharmacopeia_name' => $pharmacopiea_id[0]['pharmacopeia_name'],
-        );
+        if ($pharmacopiea_id != null) {
+            $pharmacopiea_id = Pharmacopeia::where('id', $pharmacopiea_id)->get(['id', 'pharmacopeia_name'])->toArray();
+            if ($data['samples'][0]['product_id']['pharmacopeia_id'] == null) {
+                $data['samples'][0]['product_id']['pharmacopeia_id'] = array(
+                    "id" => "",
+                    "pharmacopeia_name" => ""
+                );
+            } else {
+                $data['samples'][0]['product_id']['pharmacopeia_id'] = array(
+                    'id' => $pharmacopiea_id[0]['id'],
+                    'pharmacopeia_name' => $pharmacopiea_id[0]['pharmacopeia_name'],
+                );
+            }
+        }
+
         $data['invoice_date'] = \Carbon\Carbon::parse($data['invoice_date'])->format('Y-m-d');
         $data['receipte_date'] = \Carbon\Carbon::parse($data['receipte_date'])->format('Y-m-d');
         $data['mfg_date'] = \Carbon\Carbon::parse($data['mfg_date'])->format('Y-m-d');
@@ -616,8 +623,13 @@ class BookingController extends Controller
         if ($data['samples'][0]['product_id'] == null) {
             $data['samples'][0]['product_id'] = array(
                 'id' => '',
+                "product_generic" => "",
                 'generic_product_id' => '',
-                'generic_product_name' => ''
+                'generic_product_name' => '',
+                'pharmacopeia_id' => array(
+                    "id" => "",
+                    "pharmacopeia_name" => ""
+                )
             );
         } else {
             $generic_id = $data['samples'][0]['product_id']['generic_product_id'];
@@ -659,12 +671,7 @@ class BookingController extends Controller
                 "last_name" => ""
             );
         }
-        if ($data['samples'][0]['product_id']['pharmacopiea_id'] == null) {
-            $data['samples'][0]['product_id']['pharmacopiea_id'] = array(
-                "id" => "",
-                "pharmacopeia_name" => ""
-            );
-        }
+
         $len = count($data['tests']);
         $i = 0;
         for ($i = 0; $i < $len; $i++) {

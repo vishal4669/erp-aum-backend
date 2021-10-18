@@ -30,6 +30,7 @@ class UnitController extends Controller
                         ->leftjoin('mst_companies as c', 'c.id', '=', 'mst_units.mst_companies_id')
                         ->where('mst_units.is_active',1)
                         ->where('mst_units.selected_year', $loggedInUserData['selected_year'])
+                        ->where('mst_units.mst_companies_id', $loggedInUserData['company_id'])
                         ->orderBy('mst_units.id', 'desc')
                         ->get();
             } else {

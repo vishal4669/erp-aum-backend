@@ -33,6 +33,7 @@ class GroupController extends Controller
                         ->leftjoin('mst_groups as g', 'g.id', '=', 'mst_groups.parent_group')
                         ->where('mst_groups.is_active',1)
                         ->where('mst_groups.selected_year', $loggedInUserData['selected_year'])
+                        ->where('mst_groups.mst_companies_id', $loggedInUserData['company_id'])
                         ->orderBy('mst_groups.id', 'desc')
                         ->get();
             } else {

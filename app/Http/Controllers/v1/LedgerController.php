@@ -34,6 +34,7 @@ class LedgerController extends Controller
                         ->leftjoin('mst_groups as g', 'g.id', '=', 'mst_ledgers.mst_groups_id')
                         ->where('mst_ledgers.is_active',1)
                         ->where('mst_ledgers.selected_year', $loggedInUserData['selected_year'])
+                        ->where('mst_ledgers.mst_companies_id', $loggedInUserData['company_id'])
                         ->orderBy('mst_ledgers.id', 'desc')
                         ->get();
             } else {

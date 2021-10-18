@@ -30,6 +30,7 @@ class MachineController extends Controller
                         ->leftjoin('mst_companies as c', 'c.id', '=', 'mst_machines.mst_companies_id')
                         ->where('mst_machines.is_active',1)
                         ->where('mst_machines.selected_year', $loggedInUserData['selected_year'])
+                        ->where('mst_machines.mst_companies_id', $loggedInUserData['company_id'])
                         ->orderBy('mst_machines.id', 'desc')
                         ->get();
             } else {
