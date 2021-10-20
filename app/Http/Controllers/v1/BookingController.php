@@ -84,7 +84,7 @@ class BookingController extends Controller
         }
     }
 
-    public function last_booking_no($report_type)
+    public function last_booking_no($report_type = '', $receipte_date = '')
     {
 
         $booking_table = Booking::all();
@@ -93,14 +93,15 @@ class BookingController extends Controller
             $aum_serial_no = 1;
             $last_booking_id = 1;
             $str_pad_booking_id = str_pad($last_booking_id, 3, '0', STR_PAD_LEFT);
-            $booking_no = ("ARL/COA/" . $report_type . '/' . Carbon::now()->format('ymd') . '/' . $str_pad_booking_id);
+            $formate_receipte_date = date('ymd', strtotime($receipte_date));
+            $booking_no = ("ARL/COA/" . $report_type . '/' . $formate_receipte_date . '/' . $str_pad_booking_id);
         } {
             $mytime = Carbon::now()->format('ymd');
-            // dd($mytime);
             if (!isset(Booking::where('report_type', $report_type)->latest()->first()->booking_no)) {
                 $last_booking_id = 1;
                 $str_pad_booking_id = str_pad($last_booking_id, 3, '0', STR_PAD_LEFT);
-                $booking_no = ("ARL/COA/" . $report_type . '/' . Carbon::now()->format('ymd') . '/' . $str_pad_booking_id);
+                $formate_receipte_date = date('ymd', strtotime($receipte_date));
+                $booking_no = ("ARL/COA/" . $report_type . '/' . $formate_receipte_date . '/' . $str_pad_booking_id);
             } else {
                 $latest_booking_no = Booking::where('report_type', $report_type)->latest()->first()->booking_no;
                 $latest_data = $latest_booking_no;
@@ -109,13 +110,14 @@ class BookingController extends Controller
                 if ($mytime == $last_booking_date) {
                     $last_booking_id = end($findlaststr) + 1;
                     $str_pad_booking_id = str_pad($last_booking_id, 3, '0', STR_PAD_LEFT);
-                    $booking_no = ("ARL/COA/" . $report_type . '/' . Carbon::now()->format('ymd') . '/' . $str_pad_booking_id);
+                    $formate_receipte_date = date('ymd', strtotime($receipte_date));
+                    $booking_no = ("ARL/COA/" . $report_type . '/' . $formate_receipte_date . '/' . $str_pad_booking_id);
                 } else {
                     $last_booking_id = 1;
                     $str_pad_booking_id = str_pad($last_booking_id, 3, '0', STR_PAD_LEFT);
-                    $booking_no = ("ARL/COA/" . $report_type . '/' . Carbon::now()->format('ymd') . '/' . $str_pad_booking_id);
+                    $formate_receipte_date = date('ymd', strtotime($receipte_date));
+                    $booking_no = ("ARL/COA/" . $report_type . '/' . $formate_receipte_date . '/' . $str_pad_booking_id);
                 }
-                // dd($booking_no);
             }
             if (isset(Booking::latest()->first()->aum_serial_no)) {
                 $serial_no = Booking::latest()->first()->aum_serial_no;
@@ -250,7 +252,8 @@ class BookingController extends Controller
         if (!isset(Booking::where('booking_no', $request->booking_no)->latest()->first()->booking_no)) {
             $last_booking_id = 1;
             $str_pad_booking_id = str_pad($last_booking_id, 3, '0', STR_PAD_LEFT);
-            $booking_no = ("ARL/COA/" . $request->report_type . '/' . Carbon::now()->format('ymd') . '/' . $str_pad_booking_id);
+            $receipte_date = date('ymd', strtotime($request->receipte_date));
+            $booking_no = ("ARL/COA/" . $request->report_type . '/' . $receipte_date . '/' . $str_pad_booking_id);
         } else {
             $mytime = Carbon::now()->format('ymd');
             $latest_booking_no = Booking::where('report_type', $request->report_type)->latest()->first()->booking_no;
@@ -260,11 +263,14 @@ class BookingController extends Controller
             if ($mytime == $last_booking_date) {
                 $last_booking_id = end($findlaststr) + 1;
                 $str_pad_booking_id = str_pad($last_booking_id, 3, '0', STR_PAD_LEFT);
-                $booking_no = ("ARL/COA/" . $request->report_type . '/' . Carbon::now()->format('ymd') . '/' . $str_pad_booking_id);
+                $receipte_date = date('ymd', strtotime($request->receipte_date));
+                $booking_no = ("ARL/COA/" . $request->report_type . '/' . $receipte_date . '/' . $str_pad_booking_id);
             } else {
                 $last_booking_id = 1;
                 $str_pad_booking_id = str_pad($last_booking_id, 3, '0', STR_PAD_LEFT);
-                $booking_no = ("ARL/COA/" . $request->report_type . '/' . Carbon::now()->format('ymd') . '/' . $str_pad_booking_id);
+                $receipte_date = date('ymd', strtotime($request->receipte_date));
+
+                $booking_no = ("ARL/COA/" . $request->report_type . '/' . $receipte_date . '/' . $str_pad_booking_id);
             }
         }
 
@@ -299,7 +305,7 @@ class BookingController extends Controller
                 'booking_sample_details.*.sampling_date_from'  => 'nullable|date',
                 'booking_sample_details.*.sampling_date_to'    => 'nullable|date_format:Y-m-d|after:booking_sample_details.*.sampling_date_from',
                 'booking_tests.*.amount'    => 'nullable|numeric|between:0,999999999999999999999999999.99',
-                'booking_sample_details.*.batch_no'  => 'Integer|max:25',
+                'booking_sample_details.*.batch_no'  => 'nullable|digits_between:0,25',
                 'booking_sample_details.*.packsize'  => 'max:55',
                 'booking_sample_details.*.sample_code'  => 'max:100',
                 'booking_sample_details.*.sample_location'  => 'max:150',
@@ -307,7 +313,6 @@ class BookingController extends Controller
                 'booking_sample_details.*.sample_type'  => 'max:60',
                 'booking_sample_details.*.sample_drawn_by'  => 'max:255',
                 'booking_tests.*.p_sr_no'  => 'max:10',
-                'booking_tests.*.test_name'  => 'max:10',
                 'booking_tests.*.label_claim'  => 'max:10',
                 'booking_tests.*.percentage_of_label_claim'  => 'max:10',
                 'booking_tests.*.min_limit'  => 'max:10',
@@ -336,6 +341,7 @@ class BookingController extends Controller
                 "booking_no.unique" => "The Booking No Field Must Be Unique.",
                 "mfg_date.required" => "The Mfg Date Field Is Required.",
                 "exp_date.required" => "The Exp Date Field Is Required.",
+                'booking_sample_details.*.batch_no.digits_between'  => 'booking sample details of batch_no must be between 0 and 25 digits.',
                 'booking_sample_details.*.product_id.required'  => 'The Product Name Field Is Required.',
                 'booking_sample_details.*.sampling_date_to.after'    => 'Sampling Date To Must Be A Date After Sampling Date From.',
             ];
@@ -633,9 +639,13 @@ class BookingController extends Controller
             );
         } else {
             $generic_id = $data['samples'][0]['product_id']['generic_product_id'];
-            $product_id = $data['samples'][0]['product_id']['id'];
-            $generic_product_name = MstProduct::where('id', '=', $generic_id)->get(['product_name']);
-            $data['samples'][0]['product_id']['generic_product_name'] = $generic_product_name[0]['product_name'];
+            if ($generic_id != 0) {
+                $product_id = $data['samples'][0]['product_id']['id'];
+                $generic_product_name = MstProduct::where('id', '=', $generic_id)->get(['product_name']);
+                $data['samples'][0]['product_id']['generic_product_name'] = $generic_product_name[0]['product_name'];
+            } else {
+                $data['samples'][0]['product_id']['generic_product_name'] = "";
+            }
         }
         if ($data['customer_id'] == null) {
             $data['customer_id'] = array(

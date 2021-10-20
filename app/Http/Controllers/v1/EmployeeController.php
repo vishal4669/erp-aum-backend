@@ -7,6 +7,7 @@ use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\Models\Employee;
 use App\Helpers\Helper;
+use App\Models\Position;
 use Auth;
 use Log;
 use JWTAuth;
@@ -36,6 +37,7 @@ class EmployeeController extends Controller
             $loggedInUserData = Helper::getUserData();
             $is_dropdown = (isset($request->is_dropdown) && $request->is_dropdown == 1) ? 1 : 0;
             $is_reporting_authority = (isset($request->is_reporting_authority) && $request->is_reporting_authority == 1) ? 1 : 0;
+            $is_chemist = (isset($request->is_chemist) && $request->is_chemist == 1) ? 1 : 0;
 
             if ($is_dropdown) {
                 $data = Employee::with(['address', 'right', 'company', 'education', 'employment', 'document'])
@@ -46,6 +48,14 @@ class EmployeeController extends Controller
                 }
                 $data  = $data->orderBy('users.id', 'desc')
                     ->get();
+            } elseif ($is_chemist) {
+
+                $chemist_id = Position::where('position_title', 'Chemist')->get('id');
+                $chemist_id = $chemist_id->toarray();
+                $data =  Employee::join('user_company_info as company', 'company.users_id', 'users.id')
+                    ->where('company.mst_positions_id', $chemist_id[0]['id'])
+                    ->where('users.is_active', 1)
+                    ->get(['users.id', 'users.first_name', 'users.middle_name', 'users.last_name']);
             } else {
                 $data = Employee::with(['address', 'right', 'company', 'education', 'employment', 'document'])
                     ->where('users.is_active', 1)

@@ -1,4 +1,4 @@
-	<?php
+<?php
 
 namespace App\Http\Controllers\v1;
 
@@ -24,7 +24,6 @@ class BankController extends Controller
             $loggedInUserData = Helper::getUserData();
 
             $is_dropdown = (isset($request->is_dropdown)) ? $request->is_dropdown : false;
-
             if(!$is_dropdown){
                 $data = Bank::select('mst_banks.*', 'c.company_name')
                         ->leftjoin('mst_companies as c', 'c.id', '=', 'mst_banks.mst_companies_id')
