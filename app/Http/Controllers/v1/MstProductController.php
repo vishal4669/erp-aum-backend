@@ -391,8 +391,17 @@ class MstProductController extends Controller
         $data_Arr = $data->toArray();
         $len = count($data_Arr['samples']);
         $i = 0;
+        if ($data_Arr['pharmacopeia'] == null or $data_Arr['pharmacopeia'] == 0) {
 
-        if ($data_Arr['generic_product_id'] == null or $data_Arr['generic_product_id'] == 0) {
+            $data_Arr['pharmacopeia'] = array(
+                'id' => '',
+                'pharmacopeia_name' => ''
+            );
+        } else {
+
+            $data_Arr['pharmacopeia'] = $data_Arr['pharmacopeia'];
+        }
+        if ($data_Arr['generic'] == null or $data_Arr['generic'] == 0) {
 
             $data_Arr['generic'] = array(
                 'id' => '',

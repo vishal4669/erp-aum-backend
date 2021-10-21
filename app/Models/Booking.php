@@ -79,7 +79,7 @@ class Booking extends Model
 
     public function customer_id()
     {
-        return $this->hasOne(Customer::class, 'id', 'customer_id');
+        return $this->hasOne(Customer::class, 'id', 'customer_id')->withTrashed();
     }
     public function manufacturer_id()
     {

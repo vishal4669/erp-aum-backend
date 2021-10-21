@@ -96,7 +96,6 @@ class BookingController extends Controller
             $formate_receipte_date = date('ymd', strtotime($receipte_date));
             $booking_no = ("ARL/COA/" . $report_type . '/' . $formate_receipte_date . '/' . $str_pad_booking_id);
         } {
-            $mytime = Carbon::now()->format('ymd');
             if (!isset(Booking::where('report_type', $report_type)->latest()->first()->booking_no)) {
                 $last_booking_id = 1;
                 $str_pad_booking_id = str_pad($last_booking_id, 3, '0', STR_PAD_LEFT);
@@ -106,18 +105,10 @@ class BookingController extends Controller
                 $latest_booking_no = Booking::where('report_type', $report_type)->latest()->first()->booking_no;
                 $latest_data = $latest_booking_no;
                 $findlaststr = explode("/", $latest_data);
-                $last_booking_date = $findlaststr[3];
-                if ($mytime == $last_booking_date) {
-                    $last_booking_id = end($findlaststr) + 1;
-                    $str_pad_booking_id = str_pad($last_booking_id, 3, '0', STR_PAD_LEFT);
-                    $formate_receipte_date = date('ymd', strtotime($receipte_date));
-                    $booking_no = ("ARL/COA/" . $report_type . '/' . $formate_receipte_date . '/' . $str_pad_booking_id);
-                } else {
-                    $last_booking_id = 1;
-                    $str_pad_booking_id = str_pad($last_booking_id, 3, '0', STR_PAD_LEFT);
-                    $formate_receipte_date = date('ymd', strtotime($receipte_date));
-                    $booking_no = ("ARL/COA/" . $report_type . '/' . $formate_receipte_date . '/' . $str_pad_booking_id);
-                }
+                $last_booking_id = end($findlaststr) + 1;
+                $str_pad_booking_id = str_pad($last_booking_id, 3, '0', STR_PAD_LEFT);
+                $formate_receipte_date = date('ymd', strtotime($receipte_date));
+                $booking_no = ("ARL/COA/" . $report_type . '/' . $formate_receipte_date . '/' . $str_pad_booking_id);
             }
             if (isset(Booking::latest()->first()->aum_serial_no)) {
                 $serial_no = Booking::latest()->first()->aum_serial_no;
@@ -134,9 +125,10 @@ class BookingController extends Controller
         return Helper::response("last booking no is generated Successfully", Response::HTTP_CREATED, true, $number);
     }
 
-    public function contact_type($type = '')
+    public function contact_type($type = '', $data = '')
     {
         //
+        // dd($data);
         $loggedInUserData = Helper::getUserData();
         $contact_type_data = Customer::select('id', 'company_name')
             ->where('contact_type', $type)
@@ -144,6 +136,30 @@ class BookingController extends Controller
             ->where('selected_year', $loggedInUserData['selected_year'])
             ->orderBy('id', 'desc')
             ->get();
+        if ($data != '') {
+
+            if ($data['customer_id']['deleted_at'] == '') {
+                $contact_type_data = Customer::select('id', 'company_name')
+                    ->where('contact_type', 'Customer')
+                    ->where('is_active', 1)
+                    ->where('selected_year', $loggedInUserData['selected_year'])
+                    ->orderBy('id', 'desc')
+                    ->get();
+                $contact_type_data = $contact_type_data->toArray();
+                // dd($contact_type_data);
+            } else {
+
+                $contact_type_data = Customer::select('id', 'company_name')
+                    ->where('contact_type', 'Customer')
+                    ->where('is_active', 1)
+                    ->where('selected_year', $loggedInUserData['selected_year'])
+                    ->orderBy('id', 'desc')
+                    ->get();
+                $contact_type_data = $contact_type_data->toArray();
+                array_push($contact_type_data, $data['customer_id']);
+                // dd($contact_type_data);
+            }
+        }
         return Helper::response("company name list Successfully", Response::HTTP_CREATED, true, $contact_type_data);
     }
 
@@ -255,23 +271,13 @@ class BookingController extends Controller
             $receipte_date = date('ymd', strtotime($request->receipte_date));
             $booking_no = ("ARL/COA/" . $request->report_type . '/' . $receipte_date . '/' . $str_pad_booking_id);
         } else {
-            $mytime = Carbon::now()->format('ymd');
             $latest_booking_no = Booking::where('report_type', $request->report_type)->latest()->first()->booking_no;
             $latest_data = $latest_booking_no;
             $findlaststr = explode("/", $latest_data);
-            $last_booking_date = $findlaststr[3];
-            if ($mytime == $last_booking_date) {
-                $last_booking_id = end($findlaststr) + 1;
-                $str_pad_booking_id = str_pad($last_booking_id, 3, '0', STR_PAD_LEFT);
-                $receipte_date = date('ymd', strtotime($request->receipte_date));
-                $booking_no = ("ARL/COA/" . $request->report_type . '/' . $receipte_date . '/' . $str_pad_booking_id);
-            } else {
-                $last_booking_id = 1;
-                $str_pad_booking_id = str_pad($last_booking_id, 3, '0', STR_PAD_LEFT);
-                $receipte_date = date('ymd', strtotime($request->receipte_date));
-
-                $booking_no = ("ARL/COA/" . $request->report_type . '/' . $receipte_date . '/' . $str_pad_booking_id);
-            }
+            $last_booking_id = end($findlaststr) + 1;
+            $str_pad_booking_id = str_pad($last_booking_id, 3, '0', STR_PAD_LEFT);
+            $receipte_date = date('ymd', strtotime($request->receipte_date));
+            $booking_no = ("ARL/COA/" . $request->report_type . '/' . $receipte_date . '/' . $str_pad_booking_id);
         }
 
         if (isset(Booking::where('aum_serial_no', $request->aum_serial_no)->latest()->first()->aum_serial_no)) {
@@ -305,7 +311,7 @@ class BookingController extends Controller
                 'booking_sample_details.*.sampling_date_from'  => 'nullable|date',
                 'booking_sample_details.*.sampling_date_to'    => 'nullable|date_format:Y-m-d|after:booking_sample_details.*.sampling_date_from',
                 'booking_tests.*.amount'    => 'nullable|numeric|between:0,999999999999999999999999999.99',
-                'booking_sample_details.*.batch_no'  => 'nullable|digits_between:0,25',
+                'booking_sample_details.*.batch_no'  => 'nullable|numeric|digits_between:0,25',
                 'booking_sample_details.*.packsize'  => 'max:55',
                 'booking_sample_details.*.sample_code'  => 'max:100',
                 'booking_sample_details.*.sample_location'  => 'max:150',
@@ -313,20 +319,18 @@ class BookingController extends Controller
                 'booking_sample_details.*.sample_type'  => 'max:60',
                 'booking_sample_details.*.sample_drawn_by'  => 'max:255',
                 'booking_tests.*.p_sr_no'  => 'max:10',
-                'booking_tests.*.label_claim'  => 'max:10',
-                'booking_tests.*.percentage_of_label_claim'  => 'max:10',
-                'booking_tests.*.min_limit'  => 'max:10',
-                'booking_tests.*.max_limit'  => 'max:10',
-                'booking_tests.*.label_claim_result'  => 'max:10',
-                'booking_tests.*.label_claim_unit'  => 'max:10',
-                'booking_tests.*.result2'  => 'max:10',
-                'booking_tests.*.mean'  => 'max:10',
-                'booking_tests.*.unit'  => 'max:10',
-                'booking_tests.*.amount'  => 'max:10',
-                'booking_tests.*.division'  => 'max:10',
-                'booking_tests.*.method'  => 'max:10',
-                'booking_tests.*.p_sr_no'  => 'max:10',
-                'booking_tests.*.approved'  => 'max:10',
+                'booking_tests.*.label_claim'  => 'max:155',
+                'booking_tests.*.percentage_of_label_claim'  => 'nullable|numeric|between:0,999999999999999999999999999.99',
+                'booking_tests.*.min_limit'  => 'max:55',
+                'booking_tests.*.max_limit'  => 'max:55',
+                'booking_tests.*.label_claim_result'  => 'max:255',
+                'booking_tests.*.label_claim_unit'  => 'max:60',
+                'booking_tests.*.mean'  => 'max:150',
+                'booking_tests.*.unit'  => 'max:60',
+                'booking_tests.*.amount'  => 'nullable|numeric|between:0,999999999999999999999999999.99',
+                'booking_tests.*.division'  => 'max:255',
+                'booking_tests.*.method'  => 'max:255',
+                'booking_tests.*.approved'  => 'max:20',
             ];
             $massage = [
                 "report_type.required" => "The Report Type Field Is Required.",
@@ -357,7 +361,7 @@ class BookingController extends Controller
                 "mst_companies_id"  => $loggedInUserData['company_id'],
                 "booking_type"  => (isset($request->booking_type) ? $request->booking_type : ''),
                 "report_type"   => (isset($request->report_type) ? $request->report_type : ''),
-                "dispatch_date_time" => (isset($request->dispatch_date_time) ? date('Y-m-d h:i:s A', strtotime($request->dispatch_date_time)) : NULL),
+                "dispatch_date_time" => (isset($request->dispatch_date_time) ? $request->dispatch_date_time : NULL),
                 "dispatch_mode"    => (isset($request->dispatch_mode) ? $request->dispatch_mode : NULL),
                 "dispatch_details"    => (isset($request->dispatch_details) ? $request->dispatch_details : NULL),
                 "receipte_date" => (isset($request->receipte_date) ? date('Y-m-d', strtotime($request->receipte_date)) : NULL),
@@ -587,7 +591,7 @@ class BookingController extends Controller
         //
         $loggedInUserData = Helper::getUserData();
         $data = Booking::with(
-            'customer_id:id,company_name',
+            'customer_id:id,company_name,deleted_at',
             'manufacturer_id:id,company_name',
             'supplier_id:id,company_name',
             'samples',
@@ -617,6 +621,7 @@ class BookingController extends Controller
             }
         }
 
+        $data['dispatch_date_time'] = \Carbon\Carbon::parse($data['dispatch_date_time'])->format('Y-m-d H:M:S');
         $data['invoice_date'] = \Carbon\Carbon::parse($data['invoice_date'])->format('Y-m-d');
         $data['receipte_date'] = \Carbon\Carbon::parse($data['receipte_date'])->format('Y-m-d');
         $data['mfg_date'] = \Carbon\Carbon::parse($data['mfg_date'])->format('Y-m-d');
@@ -692,7 +697,7 @@ class BookingController extends Controller
                 );
             }
         }
-
+        $this->contact_type($type = '', $data);
         return Helper::response("This Booking Shown Successfully", Response::HTTP_OK, true, $data);
     }
 
@@ -731,14 +736,48 @@ class BookingController extends Controller
                 "customer_id" => "required",
                 'mfg_date'  => 'required|date',
                 'exp_date'    => 'required|date_format:Y-m-d|after:mfg_date',
+                'booking_sample_details.*.product_id'  => 'required|Integer',
+                'booking_sample_details.*.sampling_date_from'  => 'nullable|date',
+                'booking_sample_details.*.sampling_date_to'    => 'nullable|date_format:Y-m-d|after:booking_sample_details.*.sampling_date_from',
+                'booking_tests.*.amount'    => 'nullable|numeric|between:0,999999999999999999999999999.99',
+                'booking_sample_details.*.batch_no'  => 'nullable|digits_between:0,25',
+                'booking_sample_details.*.packsize'  => 'max:55',
+                'booking_sample_details.*.sample_code'  => 'max:100',
+                'booking_sample_details.*.sample_location'  => 'max:150',
+                'booking_sample_details.*.sample_packaging'  => 'max:255',
+                'booking_sample_details.*.sample_type'  => 'max:60',
+                'booking_sample_details.*.sample_drawn_by'  => 'max:255',
+                'booking_tests.*.p_sr_no'  => 'max:10',
+                'booking_tests.*.label_claim'  => 'max:155',
+                'booking_tests.*.percentage_of_label_claim'  => 'nullable|numeric|between:0,999999999999999999999999999.99',
+                'booking_tests.*.min_limit'  => 'max:55',
+                'booking_tests.*.max_limit'  => 'max:55',
+                'booking_tests.*.label_claim_result'  => 'max:255',
+                'booking_tests.*.label_claim_unit'  => 'max:60',
+                'booking_tests.*.mean'  => 'max:150',
+                'booking_tests.*.unit'  => 'max:60',
+                'booking_tests.*.amount'  => 'nullable|numeric|between:0,999999999999999999999999999.99',
+                'booking_tests.*.division'  => 'max:255',
+                'booking_tests.*.method'  => 'max:255',
+                'booking_tests.*.approved'  => 'max:20',
             ];
             $massage = [
                 "report_type.required" => "The Report Type Field Is Required.",
                 "booking_type.required" => "The Booking Type Field Is Required.",
                 "receipte_date.required" => "The Receipte Date Field Is Required.",
                 "customer_id.required" => "The Customer Id Field Is Required.",
+                'invoice_date.required_if' => 'The Invoice Date Field Is Required.',
+                'invoice_no.required_if' => 'The Invoice No Field Is Required.',
+                'dispatch_date_time.required_if' => 'The Dispatch Date Time Field Is Required.',
+                'dispatch_mode.required_if' => 'The Dispatch Mode Field Is Required.',
+                'dispatch_details.required_if' => 'The Dispatch Details Field Is Required.',
+                "booking_no.unique" => "The Booking No Field Must Be Unique.",
                 "mfg_date.required" => "The Mfg Date Field Is Required.",
                 "exp_date.required" => "The Exp Date Field Is Required.",
+                'booking_sample_details.*.batch_no.digits_between'  => 'booking sample details of batch_no must be between 0 and 25 digits.',
+                'booking_sample_details.*.product_id.required'  => 'The Product Name Field Is Required.',
+                'booking_sample_details.*.sampling_date_to.after'    => 'Sampling Date To Must Be A Date After Sampling Date From.',
+
             ];
 
             $validator = Validator::make($request->all(), $rules, $massage);
