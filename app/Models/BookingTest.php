@@ -39,6 +39,7 @@ class BookingTest extends Model
         "test_date_time",
         "approval_date_time",
         "approved",
+        "percentage_of_label_claim",
         "chemist_name",
         "created_by",
         "updated_by",

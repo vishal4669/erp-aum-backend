@@ -125,10 +125,9 @@ class BookingController extends Controller
         return Helper::response("last booking no is generated Successfully", Response::HTTP_CREATED, true, $number);
     }
 
-    public function contact_type($type = '', $data = '')
+    public function contact_type($type = '', $data = '', $is_return = '')
     {
-        //
-        // dd($data);
+        // $is_return = false;
         $loggedInUserData = Helper::getUserData();
         $contact_type_data = Customer::select('id', 'company_name')
             ->where('contact_type', $type)
@@ -136,8 +135,8 @@ class BookingController extends Controller
             ->where('selected_year', $loggedInUserData['selected_year'])
             ->orderBy('id', 'desc')
             ->get();
-        if ($data != '') {
 
+        if ($data != '' and $data['customer_id']['id'] != '') {
             if ($data['customer_id']['deleted_at'] == '') {
                 $contact_type_data = Customer::select('id', 'company_name')
                     ->where('contact_type', 'Customer')
@@ -146,7 +145,7 @@ class BookingController extends Controller
                     ->orderBy('id', 'desc')
                     ->get();
                 $contact_type_data = $contact_type_data->toArray();
-                // dd($contact_type_data);
+                $data['contact_type_Customer'] = $contact_type_data;
             } else {
 
                 $contact_type_data = Customer::select('id', 'company_name')
@@ -157,10 +156,61 @@ class BookingController extends Controller
                     ->get();
                 $contact_type_data = $contact_type_data->toArray();
                 array_push($contact_type_data, $data['customer_id']);
-                // dd($contact_type_data);
+                $data['contact_type_Customer'] = $contact_type_data;
             }
         }
-        return Helper::response("company name list Successfully", Response::HTTP_CREATED, true, $contact_type_data);
+        if ($data != '' and $data['manufacturer_id']['id'] != '') {
+            if ($data['manufacturer_id']['deleted_at'] == '') {
+                $contact_type_data = Customer::select('id', 'company_name')
+                    ->where('contact_type', 'Manufacturer')
+                    ->where('is_active', 1)
+                    ->where('selected_year', $loggedInUserData['selected_year'])
+                    ->orderBy('id', 'desc')
+                    ->get();
+                $contact_type_data = $contact_type_data->toArray();
+                $data['contact_type_Manufacturer'] = $contact_type_data;
+            } else {
+
+                $contact_type_data = Customer::select('id', 'company_name')
+                    ->where('contact_type', 'Manufacturer')
+                    ->where('is_active', 1)
+                    ->where('selected_year', $loggedInUserData['selected_year'])
+                    ->orderBy('id', 'desc')
+                    ->get();
+                $contact_type_data = $contact_type_data->toArray();
+                array_push($contact_type_data, $data['manufacturer_id']);
+                $data['contact_type_Manufacturer'] = $contact_type_data;
+            }
+        }
+        if ($data != '' and $data['supplier_id']['id'] != '') {
+            if ($data['supplier_id']['deleted_at'] == '') {
+                $contact_type_data = Customer::select('id', 'company_name')
+                    ->where('contact_type', 'Supplier')
+                    ->where('is_active', 1)
+                    ->where('selected_year', $loggedInUserData['selected_year'])
+                    ->orderBy('id', 'desc')
+                    ->get();
+                $contact_type_data = $contact_type_data->toArray();
+                $data['contact_type_Supplier'] = $contact_type_data;
+            } else {
+
+                $contact_type_data = Customer::select('id', 'company_name')
+                    ->where('contact_type', 'Supplier')
+                    ->where('is_active', 1)
+                    ->where('selected_year', $loggedInUserData['selected_year'])
+                    ->orderBy('id', 'desc')
+                    ->get();
+                $contact_type_data = $contact_type_data->toArray();
+                array_push($contact_type_data, $data['supplier_id']);
+                $data['contact_type_Supplier'] = $contact_type_data;
+            }
+        }
+        if ($is_return == true) {
+            return $data;
+        } else {
+
+            return Helper::response("company name list Successfully", Response::HTTP_CREATED, true, $contact_type_data);
+        }
     }
 
     public function exportlist()
@@ -182,7 +232,7 @@ class BookingController extends Controller
             )
                 ->with(
                     'customer_id:id,company_name',
-                    'samples:id,booking_id,product_id,batch_no,product_type',
+                    'samples:id,booking_id,product_id,batch_no',
                     'samples.product_id:id,generic_product_id',
                     'tests:booking_id,test_name,amount',
                     'audit:booking_id,comments',
@@ -201,10 +251,20 @@ class BookingController extends Controller
 
                 if ($exportData_Arr[$i]['samples'][0]['product_id'] != null) {
                     $generic_id = $exportData_Arr[$i]['samples'][0]['product_id']['generic_product_id'];
-                    $product_id = $exportData_Arr[$i]['samples'][0]['product_id']['id'];
-                    $generic_product_name = MstProduct::where('id', '=', $generic_id)->get(['product_name']);
-                    $dageneric_product_nameta1 = $generic_product_name->toArray();
-                    $exportData_Arr[$i]['samples'][0]['product_id']['generic_product_name'] = $generic_product_name[0]['product_name'];
+                    if ($generic_id != 0) {
+                        $product_id = $exportData_Arr[$i]['samples'][0]['product_id']['id'];
+                        $generic_product_name = MstProduct::where('id', '=', $generic_id)->get(['product_name']);
+                        $generic_product_name = $generic_product_name->toArray();
+                        $exportData_Arr[$i]['samples'][0]['product_id']['generic_product_name'] = $generic_product_name[0]['product_name'];
+                    }
+                    // else
+                    // {
+
+
+                        
+                    // }
+
+                    // dd($exportData_Arr);
                 } else {
                     $exportData_Arr[$i]['samples'][0]['product_id'] = array(
                         'id' => '',
@@ -467,6 +527,7 @@ class BookingController extends Controller
 
     public function addupdateBookingTests($booking_tests, $booking_id)
     {
+
         if (!empty($booking_tests)) {
 
             $loggedInUserData = Helper::getUserData();
@@ -474,12 +535,14 @@ class BookingController extends Controller
 
             if ($tests_count) {
 
-                // Delete all old   
+                // Delete all old
                 $testdata = BookingTest::where('booking_id', $booking_id);
                 $testdata->forceDelete();
 
                 foreach ($booking_tests as $tests) {
+                    // print_r("=====4");
                     if (!empty($tests['by_pass']) and !empty($tests['parent_child'])) {
+                        // print_r("=====5");
                         if (
                             !empty($tests['p_sr_no']) or
                             !empty($tests['parent']) or
@@ -505,8 +568,10 @@ class BookingController extends Controller
                             !empty($tests['test_date_time']) or
                             !empty($tests['approval_date_time']) or
                             !empty($tests['approved']) or
+                            !empty($tests['percentage_of_label_claim']) or
                             !empty($tests['chemsit_name'])
                         ) {
+                            // print_r("=====6");
                             $tests_data = array(
                                 "booking_id" => (isset($booking_id) ? $booking_id : 0),
                                 "parent_child" => (isset($tests['parent_child']) ? $tests['parent_child'] : ''),
@@ -535,19 +600,21 @@ class BookingController extends Controller
                                 "test_date_time" => (isset($tests['test_date_time']) ? $tests['test_date_time'] : NULL),
                                 "approval_date_time" => (isset($tests['approval_date_time']) ? $tests['approval_date_time'] : NULL),
                                 "approved" => (isset($tests['approved']) ? $tests['approved'] : ''),
-                                "chemsit_name" => (isset($tests['chemsit_name']) ? $tests['chemsit_name'] : NULL),
+                                "percentage_of_label_claim" => (isset($tests['percentage_of_label_claim']) ? $tests['percentage_of_label_claim'] : NULL),
+                                "chemist_name" => (isset($tests['chemist_name']) ? $tests['chemist_name'] : NULL),
                                 "selected_year" => $loggedInUserData['selected_year'],
                                 "is_active" => (isset($tests['is_active']) ? $tests['is_active'] : 1),
                                 'created_by' => $loggedInUserData['logged_in_user_id'], //edited
                                 'updated_by' => $loggedInUserData['logged_in_user_id']
                             );
-
+                            // print_r("=====7");
                             BookingTest::create($tests_data);
                         }
                     }
                 }
             }
         } else {
+
             $sampledata = BookingTest::where('booking_id', $booking_id);
             $sampledata->forceDelete();
         }
@@ -592,8 +659,8 @@ class BookingController extends Controller
         $loggedInUserData = Helper::getUserData();
         $data = Booking::with(
             'customer_id:id,company_name,deleted_at',
-            'manufacturer_id:id,company_name',
-            'supplier_id:id,company_name',
+            'manufacturer_id:id,company_name,deleted_at',
+            'supplier_id:id,company_name,deleted_at',
             'samples',
             'samples.product_id:id,generic_product_id,product_generic,pharmacopeia_id',
             // 'samples.pharmacopiea_id:id,pharmacopeia_name',
@@ -621,7 +688,6 @@ class BookingController extends Controller
             }
         }
 
-        $data['dispatch_date_time'] = \Carbon\Carbon::parse($data['dispatch_date_time'])->format('Y-m-d H:M:S');
         $data['invoice_date'] = \Carbon\Carbon::parse($data['invoice_date'])->format('Y-m-d');
         $data['receipte_date'] = \Carbon\Carbon::parse($data['receipte_date'])->format('Y-m-d');
         $data['mfg_date'] = \Carbon\Carbon::parse($data['mfg_date'])->format('Y-m-d');
@@ -697,7 +763,7 @@ class BookingController extends Controller
                 );
             }
         }
-        $this->contact_type($type = '', $data);
+        $data = $this->contact_type($type = '', $data, true);
         return Helper::response("This Booking Shown Successfully", Response::HTTP_OK, true, $data);
     }
 
@@ -722,69 +788,70 @@ class BookingController extends Controller
     public function update(Request $request, $id)
     {
         //
+        // return Helper::response("Debug Mode ON", Response::HTTP_CREATED, true, $request->all());
         try {
 
-            $rules = [
-                "report_type" => "required",
-                "booking_type" => "required",
-                'invoice_date' => 'required_if:booking_type,Invoice',
-                'invoice_no' => 'required_if:booking_type,Invoice',
-                'dispatch_date_time' => 'required_if:is_report_dispacthed,1',
-                'dispatch_mode' => 'required_if:is_report_dispacthed,1',
-                'dispatch_details' => 'required_if:is_report_dispacthed,1',
-                "receipte_date" => "required",
-                "customer_id" => "required",
-                'mfg_date'  => 'required|date',
-                'exp_date'    => 'required|date_format:Y-m-d|after:mfg_date',
-                'booking_sample_details.*.product_id'  => 'required|Integer',
-                'booking_sample_details.*.sampling_date_from'  => 'nullable|date',
-                'booking_sample_details.*.sampling_date_to'    => 'nullable|date_format:Y-m-d|after:booking_sample_details.*.sampling_date_from',
-                'booking_tests.*.amount'    => 'nullable|numeric|between:0,999999999999999999999999999.99',
-                'booking_sample_details.*.batch_no'  => 'nullable|digits_between:0,25',
-                'booking_sample_details.*.packsize'  => 'max:55',
-                'booking_sample_details.*.sample_code'  => 'max:100',
-                'booking_sample_details.*.sample_location'  => 'max:150',
-                'booking_sample_details.*.sample_packaging'  => 'max:255',
-                'booking_sample_details.*.sample_type'  => 'max:60',
-                'booking_sample_details.*.sample_drawn_by'  => 'max:255',
-                'booking_tests.*.p_sr_no'  => 'max:10',
-                'booking_tests.*.label_claim'  => 'max:155',
-                'booking_tests.*.percentage_of_label_claim'  => 'nullable|numeric|between:0,999999999999999999999999999.99',
-                'booking_tests.*.min_limit'  => 'max:55',
-                'booking_tests.*.max_limit'  => 'max:55',
-                'booking_tests.*.label_claim_result'  => 'max:255',
-                'booking_tests.*.label_claim_unit'  => 'max:60',
-                'booking_tests.*.mean'  => 'max:150',
-                'booking_tests.*.unit'  => 'max:60',
-                'booking_tests.*.amount'  => 'nullable|numeric|between:0,999999999999999999999999999.99',
-                'booking_tests.*.division'  => 'max:255',
-                'booking_tests.*.method'  => 'max:255',
-                'booking_tests.*.approved'  => 'max:20',
-            ];
-            $massage = [
-                "report_type.required" => "The Report Type Field Is Required.",
-                "booking_type.required" => "The Booking Type Field Is Required.",
-                "receipte_date.required" => "The Receipte Date Field Is Required.",
-                "customer_id.required" => "The Customer Id Field Is Required.",
-                'invoice_date.required_if' => 'The Invoice Date Field Is Required.',
-                'invoice_no.required_if' => 'The Invoice No Field Is Required.',
-                'dispatch_date_time.required_if' => 'The Dispatch Date Time Field Is Required.',
-                'dispatch_mode.required_if' => 'The Dispatch Mode Field Is Required.',
-                'dispatch_details.required_if' => 'The Dispatch Details Field Is Required.',
-                "booking_no.unique" => "The Booking No Field Must Be Unique.",
-                "mfg_date.required" => "The Mfg Date Field Is Required.",
-                "exp_date.required" => "The Exp Date Field Is Required.",
-                'booking_sample_details.*.batch_no.digits_between'  => 'booking sample details of batch_no must be between 0 and 25 digits.',
-                'booking_sample_details.*.product_id.required'  => 'The Product Name Field Is Required.',
-                'booking_sample_details.*.sampling_date_to.after'    => 'Sampling Date To Must Be A Date After Sampling Date From.',
+            // $rules = [
+            //     "report_type" => "required",
+            //     "booking_type" => "required",
+            //     'invoice_date' => 'required_if:booking_type,Invoice',
+            //     'invoice_no' => 'required_if:booking_type,Invoice',
+            //     'dispatch_date_time' => 'required_if:is_report_dispacthed,1',
+            //     'dispatch_mode' => 'required_if:is_report_dispacthed,1',
+            //     'dispatch_details' => 'required_if:is_report_dispacthed,1',
+            //     "receipte_date" => "required",
+            //     "customer_id" => "required",
+            //     'mfg_date'  => 'required|date',
+            //     'exp_date'    => 'required|date_format:Y-m-d|after:mfg_date',
+            //     'booking_sample_details.*.product_id'  => 'required|Integer',
+            //     'booking_sample_details.*.sampling_date_from'  => 'nullable|date',
+            //     'booking_sample_details.*.sampling_date_to'    => 'nullable|date_format:Y-m-d|after:booking_sample_details.*.sampling_date_from',
+            //     'booking_tests.*.amount'    => 'nullable|numeric|between:0,999999999999999999999999999.99',
+            //     'booking_sample_details.*.batch_no'  => 'nullable|digits_between:0,25',
+            //     'booking_sample_details.*.packsize'  => 'max:55',
+            //     'booking_sample_details.*.sample_code'  => 'max:100',
+            //     'booking_sample_details.*.sample_location'  => 'max:150',
+            //     'booking_sample_details.*.sample_packaging'  => 'max:255',
+            //     'booking_sample_details.*.sample_type'  => 'max:60',
+            //     'booking_sample_details.*.sample_drawn_by'  => 'max:255',
+            //     'booking_tests.*.p_sr_no'  => 'max:10',
+            //     'booking_tests.*.label_claim'  => 'max:155',
+            //     'booking_tests.*.percentage_of_label_claim'  => 'nullable|numeric|between:0,999999999999999999999999999.99',
+            //     'booking_tests.*.min_limit'  => 'max:55',
+            //     'booking_tests.*.max_limit'  => 'max:55',
+            //     'booking_tests.*.label_claim_result'  => 'max:255',
+            //     'booking_tests.*.label_claim_unit'  => 'max:60',
+            //     'booking_tests.*.mean'  => 'max:150',
+            //     'booking_tests.*.unit'  => 'max:60',
+            //     'booking_tests.*.amount'  => 'nullable|numeric|between:0,999999999999999999999999999.99',
+            //     'booking_tests.*.division'  => 'max:255',
+            //     'booking_tests.*.method'  => 'max:255',
+            //     'booking_tests.*.approved'  => 'max:20',
+            // ];
+            // $massage = [
+            //     "report_type.required" => "The Report Type Field Is Required.",
+            //     "booking_type.required" => "The Booking Type Field Is Required.",
+            //     "receipte_date.required" => "The Receipte Date Field Is Required.",
+            //     "customer_id.required" => "The Customer Id Field Is Required.",
+            //     'invoice_date.required_if' => 'The Invoice Date Field Is Required.',
+            //     'invoice_no.required_if' => 'The Invoice No Field Is Required.',
+            //     'dispatch_date_time.required_if' => 'The Dispatch Date Time Field Is Required.',
+            //     'dispatch_mode.required_if' => 'The Dispatch Mode Field Is Required.',
+            //     'dispatch_details.required_if' => 'The Dispatch Details Field Is Required.',
+            //     "booking_no.unique" => "The Booking No Field Must Be Unique.",
+            //     "mfg_date.required" => "The Mfg Date Field Is Required.",
+            //     "exp_date.required" => "The Exp Date Field Is Required.",
+            //     'booking_sample_details.*.batch_no.digits_between'  => 'booking sample details of batch_no must be between 0 and 25 digits.',
+            //     'booking_sample_details.*.product_id.required'  => 'The Product Name Field Is Required.',
+            //     'booking_sample_details.*.sampling_date_to.after'    => 'Sampling Date To Must Be A Date After Sampling Date From.',
 
-            ];
+            // ];
 
-            $validator = Validator::make($request->all(), $rules, $massage);
-            if ($validator->fails()) {
-                $data = array();
-                return Helper::response($validator->errors()->all(), Response::HTTP_OK, false, $data);
-            }
+            // $validator = Validator::make($request->all(), $rules, $massage);
+            // if ($validator->fails()) {
+            //     $data = array();
+            //     return Helper::response($validator->errors()->all(), Response::HTTP_OK, false, $data);
+            // }
 
             $loggedInUserData = Helper::getUserData();
             $booking_data = [
@@ -814,7 +881,7 @@ class BookingController extends Controller
                 "project_options"   => (isset($request->project_options) ? $request->project_options : ''),
                 "mfg_lic_no"    => (isset($request->mfg_lic_no) ? $request->mfg_lic_no : ''),
                 "is_report_dispacthed"  => (isset($request->is_report_dispacthed) ? $request->is_report_dispacthed : 0),
-                "dispatch_date_time" => (isset($request->dispatch_date_time) ? date('Y-m-d H:i:s', strtotime($request->dispatch_date_time)) : NULL),
+                "dispatch_date_time" => (isset($request->dispatch_date_time) ? $request->dispatch_date_time : NULL),
                 "dispatch_mode"    => (isset($request->dispatch_mode) ? $request->dispatch_mode : NULL),
                 "dispatch_details"    => (isset($request->dispatch_details) ? $request->dispatch_details : NULL),
                 "signature" => (isset($request->signature) ? $request->signature : 0),

@@ -50,7 +50,8 @@ class MstProductController extends Controller
                     ->where('selected_year', $loggedInUserData['selected_year'])
                     ->where('mst_companies_id', $loggedInUserData['company_id'])
                     ->orderBy('id', 'desc')
-                    ->paginate(10);
+                    ->get();
+                    // ->paginate(10);
             } elseif ($is_dropdown) {
 
                 $data = MstProduct::select(
