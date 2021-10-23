@@ -7,6 +7,7 @@ use App\Models\Booking;
 use App\Models\BookingSampleDetail;
 use App\Models\BookingTest;
 use App\Models\Customer;
+use App\Models\Position;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Response;
@@ -15,11 +16,14 @@ use App\Helpers\Helper;
 use App\Models\BookingAuditDetail;
 use App\Models\MstProduct;
 use App\Models\Pharmacopeia;
+use App\Models\User;
 use Auth;
 use DB;
 use Carbon\Carbon;
 use Illuminate\Validation\Rule;
 use Mockery\Undefined;
+
+use function PHPUnit\Framework\isEmpty;
 
 class BookingController extends Controller
 {
@@ -127,7 +131,6 @@ class BookingController extends Controller
 
     public function contact_type($type = '', $data = '', $is_return = '')
     {
-        // $is_return = false;
         $loggedInUserData = Helper::getUserData();
         $contact_type_data = Customer::select('id', 'company_name')
             ->where('contact_type', $type)
@@ -208,7 +211,6 @@ class BookingController extends Controller
         if ($is_return == true) {
             return $data;
         } else {
-
             return Helper::response("company name list Successfully", Response::HTTP_CREATED, true, $contact_type_data);
         }
     }
@@ -251,20 +253,14 @@ class BookingController extends Controller
 
                 if ($exportData_Arr[$i]['samples'][0]['product_id'] != null) {
                     $generic_id = $exportData_Arr[$i]['samples'][0]['product_id']['generic_product_id'];
-                    if ($generic_id != 0) {
+                    if ($generic_id != 0 and $generic_id != '') {
                         $product_id = $exportData_Arr[$i]['samples'][0]['product_id']['id'];
                         $generic_product_name = MstProduct::where('id', '=', $generic_id)->get(['product_name']);
                         $generic_product_name = $generic_product_name->toArray();
                         $exportData_Arr[$i]['samples'][0]['product_id']['generic_product_name'] = $generic_product_name[0]['product_name'];
+                    } else {
+                        $exportData_Arr[$i]['samples'][0]['product_id']['generic_product_name'] = '';
                     }
-                    // else
-                    // {
-
-
-                        
-                    // }
-
-                    // dd($exportData_Arr);
                 } else {
                     $exportData_Arr[$i]['samples'][0]['product_id'] = array(
                         'id' => '',
@@ -373,11 +369,14 @@ class BookingController extends Controller
                 'booking_tests.*.amount'    => 'nullable|numeric|between:0,999999999999999999999999999.99',
                 'booking_sample_details.*.batch_no'  => 'nullable|numeric|digits_between:0,25',
                 'booking_sample_details.*.packsize'  => 'max:55',
+                'booking_sample_details.*.request_quantity'  => 'nullable|numeric',
                 'booking_sample_details.*.sample_code'  => 'max:100',
                 'booking_sample_details.*.sample_location'  => 'max:150',
                 'booking_sample_details.*.sample_packaging'  => 'max:255',
                 'booking_sample_details.*.sample_type'  => 'max:60',
                 'booking_sample_details.*.sample_drawn_by'  => 'max:255',
+                'booking_sample_details.*.sample_quantity'  => 'nullable|numeric',
+                'booking_sample_details.*.batch_size_qty_rec'  => 'nullable|numeric',
                 'booking_tests.*.p_sr_no'  => 'max:10',
                 'booking_tests.*.label_claim'  => 'max:155',
                 'booking_tests.*.percentage_of_label_claim'  => 'nullable|numeric|between:0,999999999999999999999999999.99',
@@ -405,9 +404,14 @@ class BookingController extends Controller
                 "booking_no.unique" => "The Booking No Field Must Be Unique.",
                 "mfg_date.required" => "The Mfg Date Field Is Required.",
                 "exp_date.required" => "The Exp Date Field Is Required.",
+                'booking_sample_details.*.sample_quantity.numeric'  => 'booking sample details of sample quantity must be numeric value.',
+                'booking_sample_details.*.batch_size_qty_rec.numeric'  => 'booking sample details of batch size qty rec must be numeric value.',
+                'booking_sample_details.*.request_quantity.numeric'  => 'booking sample details of request quantity must be numeric value.',
+                'booking_sample_details.*.batch_no.numeric'  => 'booking sample details of batch_no must be numeric value.',
                 'booking_sample_details.*.batch_no.digits_between'  => 'booking sample details of batch_no must be between 0 and 25 digits.',
                 'booking_sample_details.*.product_id.required'  => 'The Product Name Field Is Required.',
                 'booking_sample_details.*.sampling_date_to.after'    => 'Sampling Date To Must Be A Date After Sampling Date From.',
+                'booking_tests.*.amount.numeric'  => 'booking tests details of amount must be numeric value.',
             ];
 
             $validator = Validator::make($request->all(), $rules, $massage);
@@ -545,7 +549,7 @@ class BookingController extends Controller
                         // print_r("=====5");
                         if (
                             !empty($tests['p_sr_no']) or
-                            !empty($tests['parent']) or
+                            !empty($tests['parent_id']) or
                             !empty($tests['product_details']) or
                             !empty($tests['test_name']) or
                             !empty($tests['label_claim']) or
@@ -577,7 +581,7 @@ class BookingController extends Controller
                                 "parent_child" => (isset($tests['parent_child']) ? $tests['parent_child'] : ''),
                                 "p_sr_no" => (isset($tests['p_sr_no']) ? $tests['p_sr_no'] : ''),
                                 "by_pass" => (isset($tests['by_pass']) ? $tests['by_pass'] : 0),
-                                "parent" => (isset($tests['parent']) ? $tests['parent'] : 0),
+                                "parent" => (isset($tests['parent_id']) ? $tests['parent_id'] : 0),
                                 "product_details" => (isset($tests['product_details']) ? $tests['product_details'] : ''),
                                 "test_name" => (isset($tests['test_name']) ? $tests['test_name'] : ''),
                                 "label_claim" => (isset($tests['label_claim']) ? $tests['label_claim'] : ''),
@@ -662,7 +666,7 @@ class BookingController extends Controller
             'manufacturer_id:id,company_name,deleted_at',
             'supplier_id:id,company_name,deleted_at',
             'samples',
-            'samples.product_id:id,generic_product_id,product_generic,pharmacopeia_id',
+            'samples.product_id:id,product_name,generic_product_id,product_generic,pharmacopeia_id',
             // 'samples.pharmacopiea_id:id,pharmacopeia_name',
             'tests',
             'tests.parent',
@@ -700,6 +704,7 @@ class BookingController extends Controller
         if ($data['samples'][0]['product_id'] == null) {
             $data['samples'][0]['product_id'] = array(
                 'id' => '',
+                "product_name" => "",
                 "product_generic" => "",
                 'generic_product_id' => '',
                 'generic_product_name' => '',
@@ -762,6 +767,41 @@ class BookingController extends Controller
                     "parent_name" => ""
                 );
             }
+            if (isset($data['tests'][$i]['parent']['id'])) {
+                $data['tests'][$i]['parent_id'] = $data['tests'][$i]['parent']['id'];
+            } else {
+                $data['tests'][$i]['parent_id'] = '';
+            }
+
+            if (isset($data['tests'][$i]['chemist_name'])) {
+                $c_id = $data['tests'][$i]['chemist_name'];
+                $chemist_name = User::where('id', $c_id)->get(['id', 'first_name', 'middle_name', 'last_name'])->toarray();
+                if (!empty($chemist_name)) {
+                    $chemist_Arr = array(
+                        "id" => $chemist_name[0]['id'],
+                        "first_name" => $chemist_name[0]['first_name'],
+                        "middle_name" => $chemist_name[0]['middle_name'],
+                        "last_name" => $chemist_name[0]['last_name']
+                    );
+                    $data['tests'][$i]['chemist'] = $chemist_Arr;
+                }
+                else
+                {
+                    $data['tests'][$i]['chemist'] = array(
+                        "id" => "",
+                        "first_name" => "",
+                        "middle_name" => "",
+                        "last_name" => ""
+                    );
+                }
+            } else {
+                $data['tests'][$i]['chemist'] = array(
+                    "id" => "",
+                    "first_name" => "",
+                    "middle_name" => "",
+                    "last_name" => ""
+                );
+            }
         }
         $data = $this->contact_type($type = '', $data, true);
         return Helper::response("This Booking Shown Successfully", Response::HTTP_OK, true, $data);
@@ -787,71 +827,76 @@ class BookingController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
-        // return Helper::response("Debug Mode ON", Response::HTTP_CREATED, true, $request->all());
         try {
 
-            // $rules = [
-            //     "report_type" => "required",
-            //     "booking_type" => "required",
-            //     'invoice_date' => 'required_if:booking_type,Invoice',
-            //     'invoice_no' => 'required_if:booking_type,Invoice',
-            //     'dispatch_date_time' => 'required_if:is_report_dispacthed,1',
-            //     'dispatch_mode' => 'required_if:is_report_dispacthed,1',
-            //     'dispatch_details' => 'required_if:is_report_dispacthed,1',
-            //     "receipte_date" => "required",
-            //     "customer_id" => "required",
-            //     'mfg_date'  => 'required|date',
-            //     'exp_date'    => 'required|date_format:Y-m-d|after:mfg_date',
-            //     'booking_sample_details.*.product_id'  => 'required|Integer',
-            //     'booking_sample_details.*.sampling_date_from'  => 'nullable|date',
-            //     'booking_sample_details.*.sampling_date_to'    => 'nullable|date_format:Y-m-d|after:booking_sample_details.*.sampling_date_from',
-            //     'booking_tests.*.amount'    => 'nullable|numeric|between:0,999999999999999999999999999.99',
-            //     'booking_sample_details.*.batch_no'  => 'nullable|digits_between:0,25',
-            //     'booking_sample_details.*.packsize'  => 'max:55',
-            //     'booking_sample_details.*.sample_code'  => 'max:100',
-            //     'booking_sample_details.*.sample_location'  => 'max:150',
-            //     'booking_sample_details.*.sample_packaging'  => 'max:255',
-            //     'booking_sample_details.*.sample_type'  => 'max:60',
-            //     'booking_sample_details.*.sample_drawn_by'  => 'max:255',
-            //     'booking_tests.*.p_sr_no'  => 'max:10',
-            //     'booking_tests.*.label_claim'  => 'max:155',
-            //     'booking_tests.*.percentage_of_label_claim'  => 'nullable|numeric|between:0,999999999999999999999999999.99',
-            //     'booking_tests.*.min_limit'  => 'max:55',
-            //     'booking_tests.*.max_limit'  => 'max:55',
-            //     'booking_tests.*.label_claim_result'  => 'max:255',
-            //     'booking_tests.*.label_claim_unit'  => 'max:60',
-            //     'booking_tests.*.mean'  => 'max:150',
-            //     'booking_tests.*.unit'  => 'max:60',
-            //     'booking_tests.*.amount'  => 'nullable|numeric|between:0,999999999999999999999999999.99',
-            //     'booking_tests.*.division'  => 'max:255',
-            //     'booking_tests.*.method'  => 'max:255',
-            //     'booking_tests.*.approved'  => 'max:20',
-            // ];
-            // $massage = [
-            //     "report_type.required" => "The Report Type Field Is Required.",
-            //     "booking_type.required" => "The Booking Type Field Is Required.",
-            //     "receipte_date.required" => "The Receipte Date Field Is Required.",
-            //     "customer_id.required" => "The Customer Id Field Is Required.",
-            //     'invoice_date.required_if' => 'The Invoice Date Field Is Required.',
-            //     'invoice_no.required_if' => 'The Invoice No Field Is Required.',
-            //     'dispatch_date_time.required_if' => 'The Dispatch Date Time Field Is Required.',
-            //     'dispatch_mode.required_if' => 'The Dispatch Mode Field Is Required.',
-            //     'dispatch_details.required_if' => 'The Dispatch Details Field Is Required.',
-            //     "booking_no.unique" => "The Booking No Field Must Be Unique.",
-            //     "mfg_date.required" => "The Mfg Date Field Is Required.",
-            //     "exp_date.required" => "The Exp Date Field Is Required.",
-            //     'booking_sample_details.*.batch_no.digits_between'  => 'booking sample details of batch_no must be between 0 and 25 digits.',
-            //     'booking_sample_details.*.product_id.required'  => 'The Product Name Field Is Required.',
-            //     'booking_sample_details.*.sampling_date_to.after'    => 'Sampling Date To Must Be A Date After Sampling Date From.',
+            $rules = [
+                "report_type" => "required",
+                "booking_type" => "required",
+                'invoice_date' => 'required_if:booking_type,Invoice',
+                'invoice_no' => 'required_if:booking_type,Invoice',
+                'dispatch_date_time' => 'required_if:is_report_dispacthed,1',
+                'dispatch_mode' => 'required_if:is_report_dispacthed,1',
+                'dispatch_details' => 'required_if:is_report_dispacthed,1',
+                "receipte_date" => "required",
+                "customer_id" => "required",
+                'mfg_date'  => 'required|date',
+                'exp_date'    => 'required|date_format:Y-m-d|after:mfg_date',
+                'booking_sample_details.*.product_id'  => 'required|Integer',
+                'booking_sample_details.*.sampling_date_from'  => 'nullable|date',
+                'booking_sample_details.*.sampling_date_to'    => 'nullable|date_format:Y-m-d|after:booking_sample_details.*.sampling_date_from',
+                'booking_tests.*.amount'    => 'nullable|numeric|between:0,999999999999999999999999999.99',
+                'booking_sample_details.*.batch_no'  => 'nullable|numeric|digits_between:0,25',
+                'booking_sample_details.*.packsize'  => 'max:55',
+                'booking_sample_details.*.request_quantity'  => 'nullable|numeric',
+                'booking_sample_details.*.sample_code'  => 'max:100',
+                'booking_sample_details.*.sample_location'  => 'max:150',
+                'booking_sample_details.*.sample_packaging'  => 'max:255',
+                'booking_sample_details.*.sample_type'  => 'max:60',
+                'booking_sample_details.*.sample_drawn_by'  => 'max:255',
+                'booking_sample_details.*.sample_quantity'  => 'nullable|numeric',
+                'booking_sample_details.*.batch_size_qty_rec'  => 'nullable|numeric',
+                'booking_tests.*.p_sr_no'  => 'max:10',
+                'booking_tests.*.label_claim'  => 'max:155',
+                'booking_tests.*.percentage_of_label_claim'  => 'nullable|numeric|between:0,999999999999999999999999999.99',
+                'booking_tests.*.min_limit'  => 'max:55',
+                'booking_tests.*.max_limit'  => 'max:55',
+                'booking_tests.*.label_claim_result'  => 'max:255',
+                'booking_tests.*.label_claim_unit'  => 'max:60',
+                'booking_tests.*.mean'  => 'max:150',
+                'booking_tests.*.unit'  => 'max:60',
+                'booking_tests.*.amount'  => 'nullable|numeric|between:0,999999999999999999999999999.99',
+                'booking_tests.*.division'  => 'max:255',
+                'booking_tests.*.method'  => 'max:255',
+                'booking_tests.*.approved'  => 'max:20',
+            ];
+            $massage = [
+                "report_type.required" => "The Report Type Field Is Required.",
+                "booking_type.required" => "The Booking Type Field Is Required.",
+                "receipte_date.required" => "The Receipte Date Field Is Required.",
+                "customer_id.required" => "The Customer Id Field Is Required.",
+                'invoice_date.required_if' => 'The Invoice Date Field Is Required.',
+                'invoice_no.required_if' => 'The Invoice No Field Is Required.',
+                'dispatch_date_time.required_if' => 'The Dispatch Date Time Field Is Required.',
+                'dispatch_mode.required_if' => 'The Dispatch Mode Field Is Required.',
+                'dispatch_details.required_if' => 'The Dispatch Details Field Is Required.',
+                "booking_no.unique" => "The Booking No Field Must Be Unique.",
+                "mfg_date.required" => "The Mfg Date Field Is Required.",
+                "exp_date.required" => "The Exp Date Field Is Required.",
+                'booking_sample_details.*.sample_quantity.numeric'  => 'booking sample details of sample quantity must be numeric value.',
+                'booking_sample_details.*.batch_size_qty_rec.numeric'  => 'booking sample details of batch size qty rec must be numeric value.',
+                'booking_sample_details.*.request_quantity.numeric'  => 'booking sample details of request quantity must be numeric value.',
+                'booking_sample_details.*.batch_no.numeric'  => 'booking sample details of batch_no must be numeric value.',
+                'booking_sample_details.*.batch_no.digits_between'  => 'booking sample details of batch_no must be between 0 and 25 digits.',
+                'booking_sample_details.*.product_id.required'  => 'The Product Name Field Is Required.',
+                'booking_sample_details.*.sampling_date_to.after'    => 'Sampling Date To Must Be A Date After Sampling Date From.',
+                'booking_tests.*.amount'  => 'booking tests details of amount must be numeric value.',
+            ];
 
-            // ];
-
-            // $validator = Validator::make($request->all(), $rules, $massage);
-            // if ($validator->fails()) {
-            //     $data = array();
-            //     return Helper::response($validator->errors()->all(), Response::HTTP_OK, false, $data);
-            // }
+            $validator = Validator::make($request->all(), $rules, $massage);
+            if ($validator->fails()) {
+                $data = array();
+                return Helper::response($validator->errors()->all(), Response::HTTP_OK, false, $data);
+            }
 
             $loggedInUserData = Helper::getUserData();
             $booking_data = [
