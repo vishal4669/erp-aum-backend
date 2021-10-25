@@ -60,4 +60,9 @@ class BookingSampleDetail extends Model
     {
         return $this->hasOne(Pharmacopeia::class, 'id', 'pharmacopiea_id');
     }
+    //get product and bind deleted and selected product for frontend
+    public function get_product()
+    {
+        return $this->hasOne(MstProduct::class, 'id', 'product_id')->withTrashed();
+    }
 }

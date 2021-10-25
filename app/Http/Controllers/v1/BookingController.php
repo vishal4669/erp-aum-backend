@@ -139,73 +139,94 @@ class BookingController extends Controller
             ->orderBy('id', 'desc')
             ->get();
 
-        if ($data != '' and $data['customer_id']['id'] != '') {
-            if ($data['customer_id']['deleted_at'] == '') {
-                $contact_type_data = Customer::select('id', 'company_name')
-                    ->where('contact_type', 'Customer')
-                    ->where('is_active', 1)
-                    ->where('selected_year', $loggedInUserData['selected_year'])
-                    ->orderBy('id', 'desc')
-                    ->get();
-                $contact_type_data = $contact_type_data->toArray();
-                $data['contact_type_Customer'] = $contact_type_data;
-            } else {
+        if ($data != '') {
+            if ($data['customer_id']['id'] != '') {
+                if ($data['customer_id']['deleted_at'] == '') {
+                    $contact_type_data = Customer::select('id', 'company_name')
+                        ->where('contact_type', 'Customer')
+                        ->where('is_active', 1)
+                        ->where('selected_year', $loggedInUserData['selected_year'])
+                        ->orderBy('id', 'desc')
+                        ->get();
+                    $contact_type_data = $contact_type_data->toArray();
+                    $data['contact_type_Customer'] = $contact_type_data;
+                } else {
 
-                $contact_type_data = Customer::select('id', 'company_name')
-                    ->where('contact_type', 'Customer')
-                    ->where('is_active', 1)
-                    ->where('selected_year', $loggedInUserData['selected_year'])
-                    ->orderBy('id', 'desc')
-                    ->get();
-                $contact_type_data = $contact_type_data->toArray();
-                array_push($contact_type_data, $data['customer_id']);
-                $data['contact_type_Customer'] = $contact_type_data;
+                    $contact_type_data = Customer::select('id', 'company_name')
+                        ->where('contact_type', 'Customer')
+                        ->where('is_active', 1)
+                        ->where('selected_year', $loggedInUserData['selected_year'])
+                        ->orderBy('id', 'desc')
+                        ->get();
+                    $contact_type_data = $contact_type_data->toArray();
+                    array_push($contact_type_data, $data['customer_id']);
+                    $data['contact_type_Customer'] = $contact_type_data;
+                }
+            } else {
+                $data['contact_type_Customer'] = array([
+                    "id" =>  "",
+                    "company_name" => ""
+                ]);
             }
         }
-        if ($data != '' and $data['manufacturer_id']['id'] != '') {
-            if ($data['manufacturer_id']['deleted_at'] == '') {
-                $contact_type_data = Customer::select('id', 'company_name')
-                    ->where('contact_type', 'Manufacturer')
-                    ->where('is_active', 1)
-                    ->where('selected_year', $loggedInUserData['selected_year'])
-                    ->orderBy('id', 'desc')
-                    ->get();
-                $contact_type_data = $contact_type_data->toArray();
-                $data['contact_type_Manufacturer'] = $contact_type_data;
-            } else {
+        if ($data != '') {
+            if ($data['manufacturer_id']['id'] != '') {
+                if ($data['manufacturer_id']['deleted_at'] == '') {
+                    $contact_type_data = Customer::select('id', 'company_name')
+                        ->where('contact_type', 'Manufacturer')
+                        ->where('is_active', 1)
+                        ->where('selected_year', $loggedInUserData['selected_year'])
+                        ->orderBy('id', 'desc')
+                        ->get();
+                    $contact_type_data = $contact_type_data->toArray();
+                    $data['contact_type_Manufacturer'] = $contact_type_data;
+                } else {
 
-                $contact_type_data = Customer::select('id', 'company_name')
-                    ->where('contact_type', 'Manufacturer')
-                    ->where('is_active', 1)
-                    ->where('selected_year', $loggedInUserData['selected_year'])
-                    ->orderBy('id', 'desc')
-                    ->get();
-                $contact_type_data = $contact_type_data->toArray();
-                array_push($contact_type_data, $data['manufacturer_id']);
-                $data['contact_type_Manufacturer'] = $contact_type_data;
+                    $contact_type_data = Customer::select('id', 'company_name')
+                        ->where('contact_type', 'Manufacturer')
+                        ->where('is_active', 1)
+                        ->where('selected_year', $loggedInUserData['selected_year'])
+                        ->orderBy('id', 'desc')
+                        ->get();
+                    $contact_type_data = $contact_type_data->toArray();
+                    array_push($contact_type_data, $data['manufacturer_id']);
+                    $data['contact_type_Manufacturer'] = $contact_type_data;
+                }
+            } else {
+                $data['contact_type_Manufacturer'] = array([
+                    "id" =>  "",
+                    "company_name" => ""
+                ]);
             }
         }
-        if ($data != '' and $data['supplier_id']['id'] != '') {
-            if ($data['supplier_id']['deleted_at'] == '') {
-                $contact_type_data = Customer::select('id', 'company_name')
-                    ->where('contact_type', 'Supplier')
-                    ->where('is_active', 1)
-                    ->where('selected_year', $loggedInUserData['selected_year'])
-                    ->orderBy('id', 'desc')
-                    ->get();
-                $contact_type_data = $contact_type_data->toArray();
-                $data['contact_type_Supplier'] = $contact_type_data;
-            } else {
+        if ($data != '') {
+            if ($data['supplier_id']['id'] != '') {
+                if ($data['supplier_id']['deleted_at'] == '') {
+                    $contact_type_data = Customer::select('id', 'company_name')
+                        ->where('contact_type', 'Supplier')
+                        ->where('is_active', 1)
+                        ->where('selected_year', $loggedInUserData['selected_year'])
+                        ->orderBy('id', 'desc')
+                        ->get();
+                    $contact_type_data = $contact_type_data->toArray();
+                    $data['contact_type_Supplier'] = $contact_type_data;
+                } else {
 
-                $contact_type_data = Customer::select('id', 'company_name')
-                    ->where('contact_type', 'Supplier')
-                    ->where('is_active', 1)
-                    ->where('selected_year', $loggedInUserData['selected_year'])
-                    ->orderBy('id', 'desc')
-                    ->get();
-                $contact_type_data = $contact_type_data->toArray();
-                array_push($contact_type_data, $data['supplier_id']);
-                $data['contact_type_Supplier'] = $contact_type_data;
+                    $contact_type_data = Customer::select('id', 'company_name')
+                        ->where('contact_type', 'Supplier')
+                        ->where('is_active', 1)
+                        ->where('selected_year', $loggedInUserData['selected_year'])
+                        ->orderBy('id', 'desc')
+                        ->get();
+                    $contact_type_data = $contact_type_data->toArray();
+                    array_push($contact_type_data, $data['supplier_id']);
+                    $data['contact_type_Supplier'] = $contact_type_data;
+                }
+            } else {
+                $data['contact_type_Supplier'] = array([
+                    "id" =>  "",
+                    "company_name" => ""
+                ]);
             }
         }
         if ($is_return == true) {
@@ -651,6 +672,47 @@ class BookingController extends Controller
             }
         }
     }
+
+    public function get_products($data)
+    {
+        $loggedInUserData = Helper::getUserData();
+        $product_data = MstProduct::select(
+            'id',
+            'product_name',
+            'product_generic',
+            'marker_specification',
+            'is_generic',
+            'is_active',
+            'pharmacopeia_id',
+            'generic_product_id'
+        )->with('pharmacopeia:id,pharmacopeia_name', 'generic:id,product_name')
+            ->where('is_active', 1)
+            ->orderBy('id', 'desc')
+            ->get()->toarray();
+
+        if ($data['samples'][0]['get_product']['deleted_at'] == null) {
+            $data['products'] = $product_data;
+        } else {
+            $product_arr = array(
+                'id' => $data['samples'][0]['get_product']['id'],
+                'product_name' => $data['samples'][0]['get_product']['product_name'],
+                'product_generic' => $data['samples'][0]['get_product']['product_generic'],
+                "pharmacopeia_id"=> $data['samples'][0]['get_product']['pharmacopeia_id']['id'],
+                "generic_product_id"=> $data['samples'][0]['get_product']['generic_product_id'],
+                "pharmacopeia"=> array(
+                    "id"=> $data['samples'][0]['get_product']['pharmacopeia_id']['id'],
+                "pharmacopeia_name"=> $data['samples'][0]['get_product']['pharmacopeia_id']['pharmacopeia_name']
+                ),
+                "generic"=> array(
+                    "id"=> $data['samples'][0]['get_product']['generic_product_id'],
+                    "product_name"=> $data['samples'][0]['get_product']['generic_product_name']
+                ),
+            );
+            array_push($product_data, $product_arr);
+            $data['products'] = $product_data;
+        }
+        return $data;
+    }
     /**
      * Display the specified resource.
      *
@@ -666,7 +728,7 @@ class BookingController extends Controller
             'manufacturer_id:id,company_name,deleted_at',
             'supplier_id:id,company_name,deleted_at',
             'samples',
-            'samples.product_id:id,product_name,generic_product_id,product_generic,pharmacopeia_id',
+            'samples.get_product:id,product_name,generic_product_id,product_generic,pharmacopeia_id,deleted_at',
             // 'samples.pharmacopiea_id:id,pharmacopeia_name',
             'tests',
             'tests.parent',
@@ -676,21 +738,47 @@ class BookingController extends Controller
         )
             ->find($id);
         $data = $data->toArray();
-        $pharmacopiea_id = $data['samples'][0]['product_id']['pharmacopeia_id'];
-        if ($pharmacopiea_id != null) {
-            $pharmacopiea_id = Pharmacopeia::where('id', $pharmacopiea_id)->get(['id', 'pharmacopeia_name'])->toArray();
-            if ($data['samples'][0]['product_id']['pharmacopeia_id'] == null) {
-                $data['samples'][0]['product_id']['pharmacopeia_id'] = array(
+        // dd($data);
+        if ($data['samples'][0]['get_product'] == null or $data['samples'][0]['get_product'] == 0) {
+            $data['samples'][0]['get_product'] = array(
+                'id' => '',
+                "product_name" => "",
+                "product_generic" => "",
+                'generic_product_id' => '',
+                'generic_product_name' => '',
+                'pharmacopeia_id' => array(
                     "id" => "",
                     "pharmacopeia_name" => ""
-                );
+                ),
+                'deleted_at' => ""
+            );
+        } else {
+            $generic_id = $data['samples'][0]['get_product']['generic_product_id'];
+            if ($generic_id != 0) {
+                $product_id = $data['samples'][0]['get_product']['id'];
+                $generic_product_name = MstProduct::where('id', '=', $generic_id)->get(['product_name']);
+                $data['samples'][0]['get_product']['generic_product_name'] = $generic_product_name[0]['product_name'];
             } else {
-                $data['samples'][0]['product_id']['pharmacopeia_id'] = array(
-                    'id' => $pharmacopiea_id[0]['id'],
-                    'pharmacopeia_name' => $pharmacopiea_id[0]['pharmacopeia_name'],
-                );
+                $data['samples'][0]['get_product']['generic_product_name'] = "";
+            }
+
+            $pharmacopiea_id = $data['samples'][0]['get_product']['pharmacopeia_id'];
+            if ($pharmacopiea_id != null) {
+                $pharmacopiea_id = Pharmacopeia::where('id', $pharmacopiea_id)->get(['id', 'pharmacopeia_name'])->toArray();
+                if ($data['samples'][0]['get_product']['pharmacopeia_id'] == null) {
+                    $data['samples'][0]['get_product']['pharmacopeia_id'] = array(
+                        "id" => "",
+                        "pharmacopeia_name" => ""
+                    );
+                } else {
+                    $data['samples'][0]['get_product']['pharmacopeia_id'] = array(
+                        'id' => $pharmacopiea_id[0]['id'],
+                        'pharmacopeia_name' => $pharmacopiea_id[0]['pharmacopeia_name'],
+                    );
+                }
             }
         }
+
 
         $data['invoice_date'] = \Carbon\Carbon::parse($data['invoice_date'])->format('Y-m-d');
         $data['receipte_date'] = \Carbon\Carbon::parse($data['receipte_date'])->format('Y-m-d');
@@ -701,29 +789,8 @@ class BookingController extends Controller
         $data['samples'][0]['sampling_date_to'] = \Carbon\Carbon::parse($data['samples'][0]['sampling_date_to'])->format('Y-m-d');
 
 
-        if ($data['samples'][0]['product_id'] == null) {
-            $data['samples'][0]['product_id'] = array(
-                'id' => '',
-                "product_name" => "",
-                "product_generic" => "",
-                'generic_product_id' => '',
-                'generic_product_name' => '',
-                'pharmacopeia_id' => array(
-                    "id" => "",
-                    "pharmacopeia_name" => ""
-                )
-            );
-        } else {
-            $generic_id = $data['samples'][0]['product_id']['generic_product_id'];
-            if ($generic_id != 0) {
-                $product_id = $data['samples'][0]['product_id']['id'];
-                $generic_product_name = MstProduct::where('id', '=', $generic_id)->get(['product_name']);
-                $data['samples'][0]['product_id']['generic_product_name'] = $generic_product_name[0]['product_name'];
-            } else {
-                $data['samples'][0]['product_id']['generic_product_name'] = "";
-            }
-        }
-        if ($data['customer_id'] == null) {
+
+        if ($data['customer_id'] == null or $data['customer_id'] == 0) {
             $data['customer_id'] = array(
                 "id" => "",
                 "company_name" => ""
@@ -784,9 +851,7 @@ class BookingController extends Controller
                         "last_name" => $chemist_name[0]['last_name']
                     );
                     $data['tests'][$i]['chemist'] = $chemist_Arr;
-                }
-                else
-                {
+                } else {
                     $data['tests'][$i]['chemist'] = array(
                         "id" => "",
                         "first_name" => "",
@@ -804,6 +869,7 @@ class BookingController extends Controller
             }
         }
         $data = $this->contact_type($type = '', $data, true);
+        $data = $this->get_products($data);
         return Helper::response("This Booking Shown Successfully", Response::HTTP_OK, true, $data);
     }
 

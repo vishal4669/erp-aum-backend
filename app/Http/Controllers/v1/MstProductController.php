@@ -51,7 +51,7 @@ class MstProductController extends Controller
                     ->where('mst_companies_id', $loggedInUserData['company_id'])
                     ->orderBy('id', 'desc')
                     ->get();
-                    // ->paginate(10);
+                // ->paginate(10);
             } elseif ($is_dropdown) {
 
                 $data = MstProduct::select(
