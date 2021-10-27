@@ -397,7 +397,7 @@ class BookingController extends Controller
                 'booking_sample_details.*.sample_type'  => 'max:60',
                 'booking_sample_details.*.sample_drawn_by'  => 'max:255',
                 'booking_sample_details.*.sample_quantity'  => 'nullable|numeric',
-                'booking_sample_details.*.batch_size_qty_rec'  => 'nullable|numeric',
+                'booking_sample_details.*.batch_size_qty_rec'  => 'nullable|numeric|digits_between:0,25',
                 'booking_tests.*.p_sr_no'  => 'max:10',
                 'booking_tests.*.label_claim'  => 'max:155',
                 'booking_tests.*.percentage_of_label_claim'  => 'nullable|numeric|between:0,999999999999999999999999999.99',
@@ -425,6 +425,7 @@ class BookingController extends Controller
                 "booking_no.unique" => "The Booking No Field Must Be Unique.",
                 "mfg_date.required" => "The Mfg Date Field Is Required.",
                 "exp_date.required" => "The Exp Date Field Is Required.",
+                'booking_sample_details.*.batch_size_qty_rec.digits_between'  => 'booking sample details of batch_size_qty_rec must be between 0 and 25 digits',
                 'booking_sample_details.*.sample_quantity.numeric'  => 'booking sample details of sample quantity must be numeric value.',
                 'booking_sample_details.*.batch_size_qty_rec.numeric'  => 'booking sample details of batch size qty rec must be numeric value.',
                 'booking_sample_details.*.request_quantity.numeric'  => 'booking sample details of request quantity must be numeric value.',
@@ -697,15 +698,15 @@ class BookingController extends Controller
                 'id' => $data['samples'][0]['get_product']['id'],
                 'product_name' => $data['samples'][0]['get_product']['product_name'],
                 'product_generic' => $data['samples'][0]['get_product']['product_generic'],
-                "pharmacopeia_id"=> $data['samples'][0]['get_product']['pharmacopeia_id']['id'],
-                "generic_product_id"=> $data['samples'][0]['get_product']['generic_product_id'],
-                "pharmacopeia"=> array(
-                    "id"=> $data['samples'][0]['get_product']['pharmacopeia_id']['id'],
-                "pharmacopeia_name"=> $data['samples'][0]['get_product']['pharmacopeia_id']['pharmacopeia_name']
+                "pharmacopeia_id" => $data['samples'][0]['get_product']['pharmacopeia_id']['id'],
+                "generic_product_id" => $data['samples'][0]['get_product']['generic_product_id'],
+                "pharmacopeia" => array(
+                    "id" => $data['samples'][0]['get_product']['pharmacopeia_id']['id'],
+                    "pharmacopeia_name" => $data['samples'][0]['get_product']['pharmacopeia_id']['pharmacopeia_name']
                 ),
-                "generic"=> array(
-                    "id"=> $data['samples'][0]['get_product']['generic_product_id'],
-                    "product_name"=> $data['samples'][0]['get_product']['generic_product_name']
+                "generic" => array(
+                    "id" => $data['samples'][0]['get_product']['generic_product_id'],
+                    "product_name" => $data['samples'][0]['get_product']['generic_product_name']
                 ),
             );
             array_push($product_data, $product_arr);
@@ -738,7 +739,6 @@ class BookingController extends Controller
         )
             ->find($id);
         $data = $data->toArray();
-        // dd($data);
         if ($data['samples'][0]['get_product'] == null or $data['samples'][0]['get_product'] == 0) {
             $data['samples'][0]['get_product'] = array(
                 'id' => '',
@@ -920,7 +920,7 @@ class BookingController extends Controller
                 'booking_sample_details.*.sample_type'  => 'max:60',
                 'booking_sample_details.*.sample_drawn_by'  => 'max:255',
                 'booking_sample_details.*.sample_quantity'  => 'nullable|numeric',
-                'booking_sample_details.*.batch_size_qty_rec'  => 'nullable|numeric',
+                'booking_sample_details.*.batch_size_qty_rec'  => 'nullable|numeric|digits_between:0,25',
                 'booking_tests.*.p_sr_no'  => 'max:10',
                 'booking_tests.*.label_claim'  => 'max:155',
                 'booking_tests.*.percentage_of_label_claim'  => 'nullable|numeric|between:0,999999999999999999999999999.99',
@@ -950,12 +950,15 @@ class BookingController extends Controller
                 "exp_date.required" => "The Exp Date Field Is Required.",
                 'booking_sample_details.*.sample_quantity.numeric'  => 'booking sample details of sample quantity must be numeric value.',
                 'booking_sample_details.*.batch_size_qty_rec.numeric'  => 'booking sample details of batch size qty rec must be numeric value.',
+                'booking_sample_details.*.batch_size_qty_rec.digits_between'  => 'booking sample details of batch_size_qty_rec must be between 0 and 25 digits',
                 'booking_sample_details.*.request_quantity.numeric'  => 'booking sample details of request quantity must be numeric value.',
                 'booking_sample_details.*.batch_no.numeric'  => 'booking sample details of batch_no must be numeric value.',
                 'booking_sample_details.*.batch_no.digits_between'  => 'booking sample details of batch_no must be between 0 and 25 digits.',
                 'booking_sample_details.*.product_id.required'  => 'The Product Name Field Is Required.',
                 'booking_sample_details.*.sampling_date_to.after'    => 'Sampling Date To Must Be A Date After Sampling Date From.',
-                'booking_tests.*.amount'  => 'booking tests details of amount must be numeric value.',
+                'booking_tests.*.amount.numeric'  => 'booking tests details of amount must be numeric value.',
+
+                          
             ];
 
             $validator = Validator::make($request->all(), $rules, $massage);
