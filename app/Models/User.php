@@ -7,11 +7,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable implements JWTSubject
 {
     use HasFactory, Notifiable;
-
+    use SoftDeletes;
     /**
      * The attributes that are mass assignable.
      *
@@ -22,7 +23,7 @@ class User extends Authenticatable implements JWTSubject
         'first_name',
         'middle_name',
         'last_name',
-        'email',        
+        'email',
         'username',
         'password',
         'blood_group',
@@ -80,10 +81,9 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->getKey();
     }
-        
+
     public function getJWTCustomClaims()
     {
         return [];
     }
-
 }

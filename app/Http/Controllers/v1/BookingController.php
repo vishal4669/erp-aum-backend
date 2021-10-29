@@ -8,6 +8,7 @@ use App\Models\BookingSampleDetail;
 use App\Models\BookingTest;
 use App\Models\Customer;
 use App\Models\Position;
+use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Response;
@@ -401,8 +402,6 @@ class BookingController extends Controller
                 'booking_tests.*.p_sr_no'  => 'max:10',
                 'booking_tests.*.label_claim'  => 'max:155',
                 'booking_tests.*.percentage_of_label_claim'  => 'nullable|numeric|between:0,999999999999999999999999999.99',
-                'booking_tests.*.min_limit'  => 'max:55',
-                'booking_tests.*.max_limit'  => 'max:55',
                 'booking_tests.*.label_claim_result'  => 'max:255',
                 'booking_tests.*.label_claim_unit'  => 'max:60',
                 'booking_tests.*.mean'  => 'max:150',
@@ -842,13 +841,15 @@ class BookingController extends Controller
 
             if (isset($data['tests'][$i]['chemist_name'])) {
                 $c_id = $data['tests'][$i]['chemist_name'];
-                $chemist_name = User::where('id', $c_id)->get(['id', 'first_name', 'middle_name', 'last_name'])->toarray();
+                $chemist_name = User::where('id', $c_id)->withTrashed()->get(['id', 'first_name', 'middle_name', 'last_name', 'deleted_at'])->toarray();
                 if (!empty($chemist_name)) {
+
                     $chemist_Arr = array(
                         "id" => $chemist_name[0]['id'],
                         "first_name" => $chemist_name[0]['first_name'],
                         "middle_name" => $chemist_name[0]['middle_name'],
-                        "last_name" => $chemist_name[0]['last_name']
+                        "last_name" => $chemist_name[0]['last_name'],
+                        "deleted_at" => $chemist_name[0]['deleted_at']
                     );
                     $data['tests'][$i]['chemist'] = $chemist_Arr;
                 } else {
@@ -856,7 +857,8 @@ class BookingController extends Controller
                         "id" => "",
                         "first_name" => "",
                         "middle_name" => "",
-                        "last_name" => ""
+                        "last_name" => "",
+                        "deleted_at" => ""
                     );
                 }
             } else {
@@ -864,9 +866,47 @@ class BookingController extends Controller
                     "id" => "",
                     "first_name" => "",
                     "middle_name" => "",
-                    "last_name" => ""
+                    "last_name" => "",
+                    "deleted_at" => ""
                 );
             }
+        }
+        $chemist_id = Position::where('position_title', 'Chemist')->get('id');
+        $chemist_id = $chemist_id->toarray();
+        $chemist_data =  Employee::join('user_company_info as company', 'company.users_id', 'users.id')
+            ->where('company.mst_positions_id', $chemist_id[0]['id'])
+            ->where('users.is_active', 1)
+            ->get(['users.id', 'users.first_name', 'users.middle_name', 'users.last_name', 'users.deleted_at'])->toarray();
+
+        if ($chemist_data) {
+
+            $tests_len = count($data['tests']);
+            for ($i = 0; $i < $tests_len; $i++) {
+                if ($data['tests'][$i]['chemist']['id'] != '') {
+                    if ($data['tests'][$i]['chemist']['deleted_at'] == '') {
+                        $data['chemist_dropdown'] = $chemist_data;
+                    } else {
+                        array_push($chemist_data, $data['tests'][$i]['chemist']);
+                        $data['chemist_dropdown'] = $chemist_data;
+                    }
+                } else {
+                    $data['chemist_dropdown'] = array(
+                        "id" => "",
+                        "first_name" => "",
+                        "middle_name" => "",
+                        "last_name" => "",
+                        "deleted_at" => ""
+                    );
+                }
+            }
+        } else {
+            $data['chemist_dropdown'] = array(
+                "id" => "",
+                "first_name" => "",
+                "middle_name" => "",
+                "last_name" => "",
+                "deleted_at" => ""
+            );
         }
         $data = $this->contact_type($type = '', $data, true);
         $data = $this->get_products($data);
@@ -924,8 +964,6 @@ class BookingController extends Controller
                 'booking_tests.*.p_sr_no'  => 'max:10',
                 'booking_tests.*.label_claim'  => 'max:155',
                 'booking_tests.*.percentage_of_label_claim'  => 'nullable|numeric|between:0,999999999999999999999999999.99',
-                'booking_tests.*.min_limit'  => 'max:55',
-                'booking_tests.*.max_limit'  => 'max:55',
                 'booking_tests.*.label_claim_result'  => 'max:255',
                 'booking_tests.*.label_claim_unit'  => 'max:60',
                 'booking_tests.*.mean'  => 'max:150',
@@ -958,7 +996,7 @@ class BookingController extends Controller
                 'booking_sample_details.*.sampling_date_to.after'    => 'Sampling Date To Must Be A Date After Sampling Date From.',
                 'booking_tests.*.amount.numeric'  => 'booking tests details of amount must be numeric value.',
 
-                          
+
             ];
 
             $validator = Validator::make($request->all(), $rules, $massage);
