@@ -877,27 +877,17 @@ class BookingController extends Controller
             ->where('company.mst_positions_id', $chemist_id[0]['id'])
             ->where('users.is_active', 1)
             ->get(['users.id', 'users.first_name', 'users.middle_name', 'users.last_name', 'users.deleted_at'])->toarray();
-
+        // dd($chemist_data);
         if ($chemist_data) {
 
             $tests_len = count($data['tests']);
             for ($i = 0; $i < $tests_len; $i++) {
-                if ($data['tests'][$i]['chemist']['id'] != '') {
                     if ($data['tests'][$i]['chemist']['deleted_at'] == '') {
                         $data['chemist_dropdown'] = $chemist_data;
                     } else {
                         array_push($chemist_data, $data['tests'][$i]['chemist']);
                         $data['chemist_dropdown'] = $chemist_data;
                     }
-                } else {
-                    $data['chemist_dropdown'] = array(
-                        "id" => "",
-                        "first_name" => "",
-                        "middle_name" => "",
-                        "last_name" => "",
-                        "deleted_at" => ""
-                    );
-                }
             }
         } else {
             $data['chemist_dropdown'] = array(
