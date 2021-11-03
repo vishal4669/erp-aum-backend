@@ -44,6 +44,11 @@ class MstProduct extends Model
     {
         return $this->hasOne(MstProduct::class, 'id', 'generic_product_id');
     }
+    //generic product for edit generic dropdown
+    public function generic_product_id()
+    {
+        return $this->hasOne(MstProduct::class, 'id', 'generic_product_id')->withTrashed();
+    }
     
     public function created_by()
     {

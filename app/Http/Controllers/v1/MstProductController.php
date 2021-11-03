@@ -388,7 +388,7 @@ class MstProductController extends Controller
      */
     public function show($id)
     {
-        $data = MstProduct::with('pharmacopeia:id,pharmacopeia_name', 'generic:id,product_name as generic_product_name', 'samples', 'samples.parameter', 'samples.parent')->find($id);
+        $data = MstProduct::with('pharmacopeia:id,pharmacopeia_name', 'generic_product_id:id,product_name as generic_product_name,deleted_at', 'samples', 'samples.parameter', 'samples.parent')->find($id);
         $data_Arr = $data->toArray();
         $len = count($data_Arr['samples']);
         $i = 0;
@@ -402,15 +402,16 @@ class MstProductController extends Controller
 
             $data_Arr['pharmacopeia'] = $data_Arr['pharmacopeia'];
         }
-        if ($data_Arr['generic'] == null or $data_Arr['generic'] == 0) {
+        if ($data_Arr['generic_product_id'] == null or $data_Arr['generic_product_id'] == 0) {
 
-            $data_Arr['generic'] = array(
+            $data_Arr['generic_product_id'] = array(
                 'id' => '',
-                'generic_product_name' => ''
+                'generic_product_name' => '',
+                'deleted_at' => ''
             );
         } else {
 
-            $data_Arr['generic'] = $data_Arr['generic'];
+            $data_Arr['generic_product_id'] = $data_Arr['generic_product_id'];
         }
         for ($i = 0; $i < $len; $i++) {
 
@@ -437,6 +438,49 @@ class MstProductController extends Controller
             }
         }
 
+        // if()
+        $generic_data = MstProduct::select(
+            'generic_product_id',
+        )->with('generic:id,product_name,deleted_at')
+            ->where('is_generic', 1)
+            ->where('is_active', 1)
+            ->whereNotNull('generic_product_id')
+            ->orderBy('id', 'desc')
+            ->distinct()
+            ->get()
+            ->toarray();
+            // dd($generic_data);
+            // dd($generic_data);
+        $new_generic_arr = [];
+        foreach($generic_data as $key =>$item)
+        {
+           if(isset($item['generic']))
+           {
+               array_push($new_generic_arr,$item);
+           }
+        }
+
+        if($new_generic_arr[0]['generic_product_id'] !== null || $new_generic_arr[0]['generic_product_id'] !== '')
+        {
+            if($data_Arr['generic_product_id']['deleted_at'] != null || $data_Arr['generic_product_id']['deleted_at'] != '')
+            {
+                
+                $gen_arr = array(
+                    "generic_product_id" => $data_Arr['generic_product_id']['id'],
+                    "generic" => array(
+                        "id" => $data_Arr['generic_product_id']['id'],
+                        "product_name" => $data_Arr['generic_product_id']['generic_product_name'],
+                        "deleted_at" => $data_Arr['generic_product_id']['deleted_at']
+                    )
+                );
+                array_push($new_generic_arr,$gen_arr);
+                $data_Arr['generic_dropdown'] = $new_generic_arr;
+            }
+            else
+            {
+                $data_Arr['generic_dropdown'] = $new_generic_arr;
+            }
+        }
         return Helper::response("This Product Shown Successfully", Response::HTTP_OK, true, $data_Arr);
     }
 
