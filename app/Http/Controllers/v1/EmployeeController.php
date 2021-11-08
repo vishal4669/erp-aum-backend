@@ -19,6 +19,7 @@ use App\Models\UserAssignRight;
 use App\Models\UserDocDetail;
 use App\Models\UserEduDetail;
 use App\Models\UserEmpDetail;
+use File;
 
 class EmployeeController extends Controller
 {
@@ -87,13 +88,77 @@ class EmployeeController extends Controller
 
         try {
 
-            $validator = Validator::make($request->all(), [
+            $rules = [
+
+                // Employee Form Fields
                 'first_name' => 'required|string|max:255',
+                'middle_name' => 'required|string|max:255',
                 'last_name' => 'required|string|max:255',
-                // 'email' => 'required|string|email|unique:users',
-                'password' => 'required|string|min:6',
-                'mobile' => 'required'
-            ]);
+                'email' => 'required|email|max:255',
+                'password' => 'required|min:6|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,15}$/',
+                'birth_date' => 'required|date',
+                'mobile' => 'required|min:10|max:10',
+                'phone' => 'nullable|min:10|max:10',
+
+                // Address form fields
+                'address.0.mst_countries_id' => 'required',
+                'address.0.mst_states_id' => 'required',
+                'address.0.street1' => 'required|max:255',
+                'address.0.street2' => 'required|max:255',
+                'address.0.email' => 'nullable|email',
+                'address.0.emergency_contact_name' => 'required|max:255',
+                'address.0.emergency_contact_number' => 'required|min:10|max:10',
+
+                // Company Info form fields
+                'company.mst_companies_id' => 'required',
+                'company.mst_departments_id' => 'required',
+                'company.mst_positions_id' => 'required',
+                'company.join_date' => 'nullable|date'
+            ];
+
+            $messages = [
+                'first_name.required' => 'Employee First Name field is required.',
+                'first_name.max' => 'Employee First Name should not me greater than 255 characters.',
+                'middle_name.required' => 'Employee Middle Name field is required.',
+                'middle_name.max' => 'Employee Middle Name should not me greater than 255 characters.',
+                'last_name.required' => 'Employee Last Name field is required.',
+                'last_name.max' => 'Employee Last Name should not me greater than 255 characters.',
+                'email.required' => 'Email field is required.',
+                'email.email' => 'Please enter valid email for Employee Email',
+                'email.max' => 'Email should not me greater than 255 characters.',
+                'password.required' => 'password field is required.',
+                'password.regex' => 'password invalid : minimum 8 max 15 characters, only one uppercase letter,at least one lowercase letter, one number and one special character:',
+                'birth_date.required' => 'Birth Date field is required.',
+                'birth_date.date' => 'Please enter valid date for Employee Date Of Birth.',
+                'mobile.required' => 'Email field is required.',
+                'mobile.min' => 'Mobile Number should not be less than 10 characters.',
+                'mobile.max' => 'Mobile Number should not me greater than 10 characters.',
+                'phone.min' => 'Phone Number should not be less than 10 characters.',
+                'phone.max' => 'Phone Number should not me greater than 10 characters.',
+
+                // address form messages
+                'address.0.mst_countries_id.required' => 'Permanent Address Country field is required.',
+                'address.0.mst_states_id.required' => 'Permanent Address State field is required.',
+                'address.0.street1.required' => 'Permanent Address Street 1 is required',
+                'address.0.street1.max' => 'please enter maximum 255 words for Permanent Address Street 1',
+                'address.0.street2.required' => 'Permanent Address Street 2 is required',
+                'address.0.street2.max' => 'please enter maximum 255 words for Permanent Address Street 2',
+                'address.0.email' => 'Please enter valid email for address Email',
+                'address.0.emergency_contact_name.required' => 'Emergency Contact Name field is required.',
+                'address.0.emergency_contact_name.max' => 'Emergency Contact Name should not me greater than 255 characters.',
+                'address.0.emergency_contact_number.required' => 'Emergency Contact Number field is required.',
+                'address.0.emergency_contact_number.min' => 'Emergency Contact Number should not be less than 10 characters.',
+                'address.0.emergency_contact_number.max' => 'Emergency Contact Number should not me greater than 10 characters.',
+
+                // for company form messages
+                'company.*.mst_companies_id.required' => 'Employee Company field is required.',
+                'company.*.mst_departments_id.required' => 'Company Department field is required.',
+                'company.*.mst_positions_id.required' => 'Company Position field is required.',
+                'company.*.join_date.date' => 'Please enter valid date for Employee Company Join Date.',
+
+            ];
+
+            $validator = Validator::make($request->all(), $rules, $messages);
 
             if ($validator->fails()) {
                 $data = array();
@@ -141,17 +206,18 @@ class EmployeeController extends Controller
 
             //Added user id
             $users_id = $data->id;
-
+            
             // Update User related details
             $this->addUpdateUserAddressDetails($request->address, $users_id);
             $this->addUserEducationDetails($request->education, $users_id);
             $this->addUserEmploymentDetails($request->employment, $users_id);
             $this->addUpdateUserCompanyDetails($request->company, $users_id);
+            $this->addUpdateUserDocumentDetails($request->document, $users_id);
 
 
             Log::info("Employee Created with details : " . json_encode($request->all()));
 
-            return Helper::response("Employee added Successfully", Response::HTTP_CREATED, true, $data);
+            return Helper::response("Employee added Successfully", Response::HTTP_CREATED, true, []);
         } catch (Exception $e) {
             $data = array();
             return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);
@@ -385,7 +451,7 @@ class EmployeeController extends Controller
                             'university' => (isset($education_data['university'])) ? $education_data['university'] : '',
                             'from_year' => (isset($education_data['from_year'])) ? $education_data['from_year'] : '',
                             'to_year' => (isset($education_data['to_year'])) ? $education_data['to_year'] : '',
-                            'percentage' => (isset($education_data['percentage_grade'])) ? $education_data['percentage_grade'] : '',
+                            'percentage_grade' => (isset($education_data['percentage_grade'])) ? $education_data['percentage_grade'] : '',
                             'specialization' => (isset($education_data['specialization'])) ? $education_data['specialization'] : '',
                             'is_active' => 1,
                             'created_by' => $loggedInUserData['logged_in_user_id']
@@ -480,5 +546,117 @@ class EmployeeController extends Controller
                 UserCompanyInfo::create($companyArray);
             }
         }
+    }
+
+    /**
+     * Update users company details
+     *
+     * @param  int  $users_id
+     * @param  array  $request 
+     * @return \Illuminate\Http\Response
+     */
+    function addUpdateUserDocumentDetails($document_data, $users_id = '')
+    {
+        
+            // already exists data
+            $userDoc = UserDocDetail::where('users_id', $users_id);
+            $countDocumentData = $userDoc->count();
+
+            // to get the old data 
+            $userDocData = UserDocDetail::where('users_id', $users_id)->first();
+
+            $loggedInUserData = Helper::getUserData();
+            $random_string = Helper::generateRandomString();
+
+            $documentArray = array(
+                'users_id' => $users_id,
+                'aadhar_number' => (isset($document_data['aadhar_number'])) ? $document_data['aadhar_number'] : '',
+                'election_card_number' => (isset($document_data['election_card_number'])) ? $document_data['election_card_number'] : '',
+                'pan_card_number' => (isset($document_data['pan_card_number'])) ? $document_data['pan_card_number'] : '',
+                'passport_number' => (isset($document_data['passport_number'])) ? $document_data['passport_number'] : '',
+                'driving_license_number' => (isset($document_data['driving_license_number'])) ? $document_data['driving_license_number'] : '',
+                'is_active' => 1,
+            );
+
+
+            $aadhar_card_photo = (isset($document_data['aadhar_card_photo']) && !empty($document_data['aadhar_card_photo'])) ? $document_data['aadhar_card_photo'] : '';
+
+            if(!empty($aadhar_card_photo)){
+                $aadhar_card_photo_file_name = 'aadhar_card_'.$users_id."_".$random_string."." . $aadhar_card_photo->getClientOriginalExtension();
+                $aadhar_card_photo->move(public_path('images/employee/documents'), $aadhar_card_photo_file_name);
+                $documentArray["aadhar_card_photo"] = $aadhar_card_photo_file_name;
+
+                if($countDocumentData > 0){
+                    if (isset($userDocData->aadhar_card_photo) && $userDocData->aadhar_card_photo!='' && File::exists(public_path('images/employee/documents/'.$userDocData->aadhar_card_photo))) {
+                         File::delete(public_path('images/employee/documents/'.$userDocData->aadhar_card_photo));
+                     }
+                }
+            }
+
+            $election_card_photo = (isset($document_data['election_card_photo']) && !empty($document_data['election_card_photo'])) ? $document_data['election_card_photo'] : '';
+
+            if(!empty($election_card_photo)){
+                $election_card_photo_file_name = 'election_card_'.$users_id."_".$random_string."." . $election_card_photo->getClientOriginalExtension();
+                $election_card_photo->move(public_path('images/employee/documents'), $election_card_photo_file_name);
+                $documentArray["election_card_photo"] = $election_card_photo_file_name;
+
+                if($countDocumentData > 0){
+                    if (isset($userDocData->election_card_photo) && $userDocData->election_card_photo!='' && File::exists(public_path('images/employee/documents/'.$userDocData->election_card_photo))) {
+                         File::delete(public_path('images/employee/documents/'.$userDocData->election_card_photo));
+                     }
+                }
+            }
+
+            $pan_card_photo = (isset($document_data['pan_card_photo']) && !empty($document_data['pan_card_photo'])) ? $document_data['pan_card_photo'] : '';
+
+            if(!empty($pan_card_photo)){
+                $pan_card_photo_file_name = 'pan_card_'.$users_id."_".$random_string."." . $pan_card_photo->getClientOriginalExtension();
+                $pan_card_photo->move(public_path('images/employee/documents'), $pan_card_photo_file_name);
+                $documentArray["pan_card_photo"] = $pan_card_photo_file_name;
+
+                if($countDocumentData > 0){
+                    if (isset($userDocData->pan_card_photo) && $userDocData->pan_card_photo!='' && File::exists(public_path('images/employee/documents/'.$userDocData->pan_card_photo))) {
+                         File::delete(public_path('images/employee/documents/'.$userDocData->pan_card_photo));
+                     }
+                }
+            }
+
+            $passport_photo = (isset($document_data['passport_photo']) && !empty($document_data['passport_photo'])) ? $document_data['passport_photo'] : '';
+
+            if(!empty($passport_photo)){
+                $passport_photo_file_name = 'passport_'.$users_id."_".$random_string."." . $passport_photo->getClientOriginalExtension();
+                $passport_photo->move(public_path('images/employee/documents'), $passport_photo_file_name);
+                $documentArray["passport_photo"] = $passport_photo_file_name;
+
+                if($countDocumentData > 0){
+                    if (isset($userDocData->passport_photo) && $userDocData->passport_photo!='' && File::exists(public_path('images/employee/documents/'.$userDocData->passport_photo))) {
+                         File::delete(public_path('images/employee/documents/'.$userDocData->passport_photo));
+                     }
+                }
+            }
+
+            $driving_license_photo = (isset($document_data['driving_license_photo']) && !empty($document_data['driving_license_photo'])) ? $document_data['driving_license_photo'] : '';
+
+            if(!empty($driving_license_photo)){
+                $driving_license_photo_file_name = 'driving_license_'.$users_id."_".$random_string."." . $driving_license_photo->getClientOriginalExtension();
+                $driving_license_photo->move(public_path('images/employee/documents'), $driving_license_photo_file_name);
+                $documentArray["driving_license_photo"] = $driving_license_photo_file_name;
+
+                if($countDocumentData > 0){
+                    if (isset($userDocData->driving_license_photo) && $userDocData->driving_license_photo!='' && File::exists(public_path('images/employee/documents/'.$userDocData->driving_license_photo))) {
+                         File::delete(public_path('images/employee/documents/'.$userDocData->driving_license_photo));
+                     }
+                }
+            }
+
+            
+            if ($countDocumentData > 0) {
+                $documentArray['updated_by'] = $loggedInUserData['logged_in_user_id'];
+                $userDoc->update($documentArray);
+            } else {
+                $documentArray['created_by'] = $loggedInUserData['logged_in_user_id'];
+                UserDocDetail::create($documentArray);
+            }
+       
     }
 }

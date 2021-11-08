@@ -5,6 +5,7 @@ namespace App\Helpers;
 use App\Models\TrainerCafeBooking;
 use Illuminate\Http\Response;
 use JWTAuth;
+use Illuminate\Support\Str;
 
 class Helper
 {
@@ -38,7 +39,16 @@ class Helper
         return $years_array;
     }
 
-   
+    /**
+     * It will generate the random string as per the given count parameter default it will be 5
+     * 
+    */
+    public static function generateRandomString($count = 5){
+        $random_string = Str::random($count);   
+
+        return $random_string;
+    }
+
     public static function getUserData(){
         $userdata = array();
 
