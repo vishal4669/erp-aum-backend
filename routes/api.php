@@ -171,6 +171,13 @@ Route::group(['middleware' => ['jwt.verify'], 'prefix' => 'v1'], function () {
     Route::get('contact_type/{type?}/{data?}', 'App\Http\Controllers\v1\BookingController@contact_type');
     Route::get('exportlist', 'App\Http\Controllers\v1\BookingController@exportlist');
     Route::post('deleteBooking/{id}', 'App\Http\Controllers\v1\BookingController@destroy');
+
+    // Instruments master
+    Route::post('addInstrument', 'App\Http\Controllers\v1\InstrumentController@store');
+    Route::get('listInstrument', 'App\Http\Controllers\v1\InstrumentController@index');
+    Route::get('getInstrument/{id}', 'App\Http\Controllers\v1\InstrumentController@show');
+    Route::post('editInstrument/{id}', 'App\Http\Controllers\v1\InstrumentController@update');
+    Route::post('deleteInstrument/{id}', 'App\Http\Controllers\v1\InstrumentController@destroy');
 });
 
 Route::group(['prefix' => 'v1'], function () {
