@@ -161,6 +161,12 @@ Route::group(['middleware' => ['jwt.verify'], 'prefix' => 'v1'], function () {
     Route::post('deleteProduct/{id}', 'App\Http\Controllers\v1\MstProductController@destroy');
     Route::get('exportproductlist', 'App\Http\Controllers\v1\MstProductController@exportlist');
     
+    // Instruments master
+    Route::post('addInstrument', 'App\Http\Controllers\v1\InstrumentController@store');
+    Route::get('listInstrument', 'App\Http\Controllers\v1\InstrumentController@index');
+    Route::get('getInstrument/{id}', 'App\Http\Controllers\v1\InstrumentController@show');
+    Route::post('editInstrument/{id}', 'App\Http\Controllers\v1\InstrumentController@update');
+    Route::post('deleteInstrument/{id}', 'App\Http\Controllers\v1\InstrumentController@destroy');
     
     // Booking
     Route::post('addBooking', 'App\Http\Controllers\v1\BookingController@store');
@@ -168,16 +174,19 @@ Route::group(['middleware' => ['jwt.verify'], 'prefix' => 'v1'], function () {
     Route::get('listBooking', 'App\Http\Controllers\v1\BookingController@index');
     Route::get('getBooking/{id}', 'App\Http\Controllers\v1\BookingController@show');
     Route::get('booking_no/{report_type?}/{receipte_date?}', 'App\Http\Controllers\v1\BookingController@last_booking_no');
-    Route::get('contact_type/{type?}/{data?}', 'App\Http\Controllers\v1\BookingController@contact_type');
+    Route::get('contact_type/{type?}', 'App\Http\Controllers\v1\BookingController@contact_type');
     Route::get('exportlist', 'App\Http\Controllers\v1\BookingController@exportlist');
     Route::post('deleteBooking/{id}', 'App\Http\Controllers\v1\BookingController@destroy');
 
-    // Instruments master
-    Route::post('addInstrument', 'App\Http\Controllers\v1\InstrumentController@store');
-    Route::get('listInstrument', 'App\Http\Controllers\v1\InstrumentController@index');
-    Route::get('getInstrument/{id}', 'App\Http\Controllers\v1\InstrumentController@show');
-    Route::post('editInstrument/{id}', 'App\Http\Controllers\v1\InstrumentController@update');
-    Route::post('deleteInstrument/{id}', 'App\Http\Controllers\v1\InstrumentController@destroy');
+    // Test Masters
+    Route::get('listTest', 'App\Http\Controllers\v1\TestController@index');
+    Route::get('listParentTest', 'App\Http\Controllers\v1\TestController@listParentTests');
+    Route::get('listSubTest/{id}', 'App\Http\Controllers\v1\TestController@listSubTests');
+    Route::get('listSubSubTest/{id}', 'App\Http\Controllers\v1\TestController@listSubSubTests');
+    Route::post('addTest', 'App\Http\Controllers\v1\TestController@store');
+    Route::get('getTest/{id}', 'App\Http\Controllers\v1\TestController@show');
+    Route::post('editTest/{id}', 'App\Http\Controllers\v1\TestController@update');
+    Route::post('deleteTest/{id}', 'App\Http\Controllers\v1\TestController@destroy');
 });
 
 Route::group(['prefix' => 'v1'], function () {
