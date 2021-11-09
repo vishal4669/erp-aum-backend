@@ -13,6 +13,7 @@ use App\Models\MstProduct;
 use App\Models\MstProductSample;
 use App\Models\MstSampleParameter;
 use App\Models\MstProductParent;
+use App\Models\Pharmacopeia;
 use Illuminate\Support\Arr;
 use Exception;
 
@@ -86,14 +87,28 @@ class MstProductController extends Controller
                     ->get();
             }
 
-            $data_arr = $data->isEmpty();
+            $data_empty = $data->isEmpty();
+            $data_arr = $data->toarray();
+            foreach ($data_arr as $key => $item) {
+                if ($item['pharmacopeia'] == null || $item['pharmacopeia'] == '' || !isset($item['pharmacopeia'])) {
+                    $data_arr[$key]['pharmacopeia'] = array(
+                        "id" => "",
+                        "pharmacopeia_name" => ""
+                    );
+                }
+                if ($item['generic'] == null || $item['generic'] == '' || !isset($item['generic'])) {
+                    $data_arr[$key]['generic'] = array(
+                        "id" => "",
+                        "product_name" => ""
+                    );
+                }
+            }
+            if ($data_empty) {
 
-            if ($data_arr) {
-
-                return Helper::response("Product List is Empty", Response::HTTP_OK, true, $data);
+                return Helper::response("Product List is Empty", Response::HTTP_OK, true, $data_arr);
             } else {
 
-                return Helper::response("Product List Shown Successfully", Response::HTTP_OK, true, $data);
+                return Helper::response("Product List Shown Successfully", Response::HTTP_OK, true, $data_arr);
             }
         } catch (Exception $e) {
             $data = array();
@@ -379,7 +394,6 @@ class MstProductController extends Controller
         }
     }
 
-
     /**
      * Display the specified resource.
      *
@@ -388,8 +402,9 @@ class MstProductController extends Controller
      */
     public function show($id)
     {
-        $data = MstProduct::with('pharmacopeia:id,pharmacopeia_name', 'generic_product_id:id,product_name as generic_product_name,deleted_at', 'samples', 'samples.parameter', 'samples.parent')->find($id);
+        $data = MstProduct::with('pharmacopeia:id,pharmacopeia_name', 'generic_product_id:id,product_name as generic_product_name,deleted_at', 'samples', 'samples.parameter', 'samples.parent')->withTrashed()->find($id);
         $data_Arr = $data->toArray();
+
         $len = count($data_Arr['samples']);
         $i = 0;
         if ($data_Arr['pharmacopeia'] == null or $data_Arr['pharmacopeia'] == 0) {
@@ -399,7 +414,6 @@ class MstProductController extends Controller
                 'pharmacopeia_name' => ''
             );
         } else {
-
             $data_Arr['pharmacopeia'] = $data_Arr['pharmacopeia'];
         }
         if ($data_Arr['generic_product_id'] == null or $data_Arr['generic_product_id'] == 0) {
@@ -438,7 +452,6 @@ class MstProductController extends Controller
             }
         }
 
-        // if()
         $generic_data = MstProduct::select(
             'generic_product_id',
         )->with('generic:id,product_name,deleted_at')
@@ -449,22 +462,16 @@ class MstProductController extends Controller
             ->distinct()
             ->get()
             ->toarray();
-            // dd($generic_data);
-            // dd($generic_data);
+
         $new_generic_arr = [];
-        foreach($generic_data as $key =>$item)
-        {
-           if(isset($item['generic']))
-           {
-               array_push($new_generic_arr,$item);
-           }
+        foreach ($generic_data as $key => $item) {
+            if (isset($item['generic'])) {
+                array_push($new_generic_arr, $item);
+            }
         }
 
-        if($new_generic_arr[0]['generic_product_id'] !== null || $new_generic_arr[0]['generic_product_id'] !== '')
-        {
-            if($data_Arr['generic_product_id']['deleted_at'] != null || $data_Arr['generic_product_id']['deleted_at'] != '')
-            {
-                
+        if ($new_generic_arr[0]['generic_product_id'] !== null || $new_generic_arr[0]['generic_product_id'] !== '') {
+            if ($data_Arr['generic_product_id']['deleted_at'] != null || $data_Arr['generic_product_id']['deleted_at'] != '') {
                 $gen_arr = array(
                     "generic_product_id" => $data_Arr['generic_product_id']['id'],
                     "generic" => array(
@@ -473,14 +480,13 @@ class MstProductController extends Controller
                         "deleted_at" => $data_Arr['generic_product_id']['deleted_at']
                     )
                 );
-                array_push($new_generic_arr,$gen_arr);
+                array_push($new_generic_arr, $gen_arr);
                 $data_Arr['generic_dropdown'] = $new_generic_arr;
-            }
-            else
-            {
+            } else {
                 $data_Arr['generic_dropdown'] = $new_generic_arr;
             }
         }
+
         return Helper::response("This Product Shown Successfully", Response::HTTP_OK, true, $data_Arr);
     }
 

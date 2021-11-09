@@ -98,4 +98,6 @@ class Booking extends Model
     {
         return $this->hasOne(User::class, 'id', 'updated_by');
     }
+
+    
 }

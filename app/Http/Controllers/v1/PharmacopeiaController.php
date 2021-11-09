@@ -33,7 +33,6 @@ class PharmacopeiaController extends Controller
             } else {
                 $data = Pharmacopeia::where('is_active',1)->orderBy('id', 'desc')->get();
             }
-
             
             return Helper::response("Pharmacopeia List Shown Successfully", Response::HTTP_OK, true, $data);
         } catch (Exception $e) {

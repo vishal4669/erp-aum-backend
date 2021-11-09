@@ -49,7 +49,7 @@ class MstProduct extends Model
     {
         return $this->hasOne(MstProduct::class, 'id', 'generic_product_id')->withTrashed();
     }
-    
+
     public function created_by()
     {
         return $this->hasOne(User::class, 'id', 'created_by');
@@ -58,4 +58,16 @@ class MstProduct extends Model
     {
         return $this->hasOne(User::class, 'id', 'updated_by');
     }
+
+    // get product detail for edit booking api
+    public function all_pharmacopeia()
+    {
+        return $this->hasOne(Pharmacopeia::class, 'id', 'pharmacopeia_id')->withTrashed();
+    }
+
+    public function all_generic()
+    {
+        return $this->hasOne(MstProduct::class, 'id', 'generic_product_id')->withTrashed();
+    }
+
 }

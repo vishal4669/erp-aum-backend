@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Nov 08, 2021 at 06:32 PM
+-- Generation Time: Nov 09, 2021 at 07:30 PM
 -- Server version: 5.7.36-0ubuntu0.18.04.1
 -- PHP Version: 7.4.25
 
@@ -1461,6 +1461,31 @@ INSERT INTO `mst_states` (`id`, `mst_countries_id`, `state_name`, `is_active`) V
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `mst_tests`
+--
+
+CREATE TABLE `mst_tests` (
+  `id` int(11) NOT NULL,
+  `mst_companies_id` int(11) NOT NULL,
+  `procedure_name` varchar(255) DEFAULT NULL,
+  `price` varchar(50) DEFAULT NULL,
+  `test_code` varchar(50) DEFAULT NULL,
+  `test_category` varchar(255) DEFAULT NULL,
+  `test_procedure` text,
+  `parent_id` int(11) NOT NULL,
+  `created_by` int(11) NOT NULL,
+  `updated_by` int(11) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `selected_year` varchar(25) DEFAULT NULL,
+  `copied_from_year` int(4) DEFAULT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT '1',
+  `deleted_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `mst_units`
 --
 
@@ -2032,6 +2057,12 @@ ALTER TABLE `mst_states`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `mst_tests`
+--
+ALTER TABLE `mst_tests`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `mst_units`
 --
 ALTER TABLE `mst_units`
@@ -2229,6 +2260,11 @@ ALTER TABLE `mst_sample_parameters`
 --
 ALTER TABLE `mst_states`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+--
+-- AUTO_INCREMENT for table `mst_tests`
+--
+ALTER TABLE `mst_tests`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `mst_units`
 --

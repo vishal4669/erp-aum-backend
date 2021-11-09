@@ -256,7 +256,9 @@ class BookingController extends Controller
             )
                 ->with(
                     'customer_id:id,company_name',
-                    'samples:id,booking_id,product_id,batch_no',
+                    'samples:id,booking_id,
+                    
+                    ,batch_no',
                     'samples.product_id:id,generic_product_id',
                     'tests:booking_id,test_name,amount',
                     'audit:booking_id,comments',
@@ -685,7 +687,7 @@ class BookingController extends Controller
             'is_active',
             'pharmacopeia_id',
             'generic_product_id'
-        )->with('pharmacopeia:id,pharmacopeia_name', 'generic:id,product_name')
+        )->with('all_pharmacopeia:id,pharmacopeia_name', 'all_generic:id,product_name as generic_product_name')
             ->where('is_active', 1)
             ->orderBy('id', 'desc')
             ->get()->toarray();
@@ -699,17 +701,33 @@ class BookingController extends Controller
                 'product_generic' => $data['samples'][0]['get_product']['product_generic'],
                 "pharmacopeia_id" => $data['samples'][0]['get_product']['pharmacopeia_id']['id'],
                 "generic_product_id" => $data['samples'][0]['get_product']['generic_product_id'],
-                "pharmacopeia" => array(
+                "all_pharmacopeia" => array(
                     "id" => $data['samples'][0]['get_product']['pharmacopeia_id']['id'],
                     "pharmacopeia_name" => $data['samples'][0]['get_product']['pharmacopeia_id']['pharmacopeia_name']
                 ),
-                "generic" => array(
+                "all_generic" => array(
                     "id" => $data['samples'][0]['get_product']['generic_product_id'],
-                    "product_name" => $data['samples'][0]['get_product']['generic_product_name']
+                    "generic_product_name" => $data['samples'][0]['get_product']['generic_product_name']
                 ),
             );
             array_push($product_data, $product_arr);
             $data['products'] = $product_data;
+        }
+        foreach ($data['products'] as $key => $item) {
+
+            if ($item['all_generic'] == '' && $item['all_generic'] == null) {
+
+                $data['products'][$key]['all_generic'] = array(
+                    "id" => '',
+                    "generic_product_name" => ''
+                );
+            }
+            if ($item['all_pharmacopeia'] == '' && $item['all_pharmacopeia'] == null) {
+                $data['products'][$key]['all_pharmacopeia'] = array(
+                    "id" => '',
+                    "pharmacopeia_name" => ''
+                );
+            }
         }
         return $data;
     }
@@ -753,26 +771,42 @@ class BookingController extends Controller
             );
         } else {
             $generic_id = $data['samples'][0]['get_product']['generic_product_id'];
-            if ($generic_id != 0) {
+            if ($generic_id != 0 || $generic_id != null) {
                 $product_id = $data['samples'][0]['get_product']['id'];
-                $generic_product_name = MstProduct::where('id', '=', $generic_id)->get(['product_name']);
-                $data['samples'][0]['get_product']['generic_product_name'] = $generic_product_name[0]['product_name'];
+                $generic_product_name = MstProduct::where('id', '=', $generic_id)->withTrashed()->get(['product_name']);
+
+                if($generic_product_name->isEmpty() == false)
+                {
+                    $data['samples'][0]['get_product']['generic_product_name'] = $generic_product_name[0]['product_name'];
+                }
+                else
+                {
+                    $data['samples'][0]['get_product']['generic_product_name'] = "";
+                }
             } else {
                 $data['samples'][0]['get_product']['generic_product_name'] = "";
             }
 
             $pharmacopiea_id = $data['samples'][0]['get_product']['pharmacopeia_id'];
             if ($pharmacopiea_id != null) {
-                $pharmacopiea_id = Pharmacopeia::where('id', $pharmacopiea_id)->get(['id', 'pharmacopeia_name'])->toArray();
-                if ($data['samples'][0]['get_product']['pharmacopeia_id'] == null) {
+                $pharmacopiea_id = Pharmacopeia::where('id', $pharmacopiea_id)->withTrashed()->get(['id', 'pharmacopeia_name'])->toArray();
+                if (!empty($pharmacopiea_id)) {
+                    if ($data['samples'][0]['get_product']['pharmacopeia_id'] == null || $data['samples'][0]['get_product']['pharmacopeia_id'] == '') {
+                        $data['samples'][0]['get_product']['pharmacopeia_id'] = array(
+                            "id" => "",
+                            "pharmacopeia_name" => ""
+                        );
+                    } else {
+
+                        $data['samples'][0]['get_product']['pharmacopeia_id'] = array(
+                            'id' => $pharmacopiea_id[0]['id'],
+                            'pharmacopeia_name' => $pharmacopiea_id[0]['pharmacopeia_name'],
+                        );
+                    }
+                } else {
                     $data['samples'][0]['get_product']['pharmacopeia_id'] = array(
                         "id" => "",
                         "pharmacopeia_name" => ""
-                    );
-                } else {
-                    $data['samples'][0]['get_product']['pharmacopeia_id'] = array(
-                        'id' => $pharmacopiea_id[0]['id'],
-                        'pharmacopeia_name' => $pharmacopiea_id[0]['pharmacopeia_name'],
                     );
                 }
             }
@@ -877,17 +911,17 @@ class BookingController extends Controller
             ->where('company.mst_positions_id', $chemist_id[0]['id'])
             ->where('users.is_active', 1)
             ->get(['users.id', 'users.first_name', 'users.middle_name', 'users.last_name', 'users.deleted_at'])->toarray();
-        // dd($chemist_data);
+
         if ($chemist_data) {
 
             $tests_len = count($data['tests']);
             for ($i = 0; $i < $tests_len; $i++) {
-                    if ($data['tests'][$i]['chemist']['deleted_at'] == '') {
-                        $data['chemist_dropdown'] = $chemist_data;
-                    } else {
-                        array_push($chemist_data, $data['tests'][$i]['chemist']);
-                        $data['chemist_dropdown'] = $chemist_data;
-                    }
+                if ($data['tests'][$i]['chemist']['deleted_at'] == '') {
+                    $data['chemist_dropdown'] = $chemist_data;
+                } else {
+                    array_push($chemist_data, $data['tests'][$i]['chemist']);
+                    $data['chemist_dropdown'] = $chemist_data;
+                }
             }
         } else {
             $data['chemist_dropdown'] = array(
@@ -900,6 +934,7 @@ class BookingController extends Controller
         }
         $data = $this->contact_type($type = '', $data, true);
         $data = $this->get_products($data);
+
         return Helper::response("This Booking Shown Successfully", Response::HTTP_OK, true, $data);
     }
 
