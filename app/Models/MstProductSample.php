@@ -31,9 +31,15 @@ class MstProductSample extends Model
         'updated_at',
     ];
 
+    // public function parameter()
+    // {
+    //     return $this->hasOne(MstSampleParameter::class, 'id', 'mst_sample_parameter_id');
+    // }
+
+    //here parameters are tests data
     public function parameter()
     {
-        return $this->hasOne(MstSampleParameter::class, 'id', 'mst_sample_parameter_id');
+        return $this->hasOne(Test::class, 'id', 'mst_sample_parameter_id')->withTrashed();
     }
     public function parent()
     {

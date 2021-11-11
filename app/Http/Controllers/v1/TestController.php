@@ -37,9 +37,10 @@ class TestController extends Controller
                         ->orderBy('mst_tests.id', 'desc')
                         ->get();
             } else {
-                $data = Test::select('mst_tests.*', 'c.category_name as parent_name')
-                        ->leftjoin('mst_tests as c', 'c.id', '=', 'mst_tests.parent_id')
+                $data = Test::select('mst_tests.*', 't.procedure_name as parent_name')
+                        ->leftjoin('mst_tests as t', 't.id', '=', 'mst_tests.parent_id')
                         ->where('mst_tests.is_active',1)
+                        ->where('mst_tests.mst_companies_id', $loggedInUserData['company_id'])
                         ->orderBy('mst_tests.id', 'desc')
                         ->get();
             }

@@ -10,12 +10,15 @@ use App\Helpers\Helper;
 use Auth;
 use DB;
 use App\Models\MstProduct;
-use App\Models\MstProductSample;
 use App\Models\MstSampleParameter;
+use App\Models\MstProductSample;
 use App\Models\MstProductParent;
 use App\Models\Pharmacopeia;
+use App\Models\Test;
 use Illuminate\Support\Arr;
-use Exception;
+use JWTAuth;
+
+
 
 
 
@@ -66,6 +69,7 @@ class MstProductController extends Controller
                     'generic_product_id'
                 )->with('pharmacopeia:id,pharmacopeia_name', 'generic:id,product_name')
                     ->where('is_active', 1)
+                    ->where('mst_companies_id', $loggedInUserData['company_id'])
                     ->orderBy('id', 'desc')
                     ->get();
             }
@@ -113,23 +117,6 @@ class MstProductController extends Controller
         } catch (Exception $e) {
             $data = array();
             return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);
-        }
-    }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function param_list()
-    {
-        try {
-
-            $paramData = MstSampleParameter::all();
-
-            return Helper::response("Parameter Data Shown Successfully", Response::HTTP_OK, true, $paramData);
-        } catch (Exception $e) {
-            $paramData = array();
-            return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $paramData);
         }
     }
     /**
@@ -318,7 +305,7 @@ class MstProductController extends Controller
 
             if ($sample_count) {
 
-                // Delete all old   
+                // Delete all old
                 $sampledata = MstProductSample::where('mst_product_id', $product_id);
                 $sampledata->forceDelete();
 
@@ -329,7 +316,7 @@ class MstProductController extends Controller
                     ) {
                         if (
                             !empty($sample['parent']) or
-                            !empty($sample['mst_sample_parameter_id']) or
+                            //  !empty($sample['mst_sample_parameter_id']) or
                             !empty($sample['parameter_name']) or
                             !empty($sample['label_claim']) or
                             !empty($sample['min_limit']) or
@@ -342,34 +329,11 @@ class MstProductController extends Controller
                             !empty($sample['formula'])
                         ) {
 
-                            $is_exists = MstSampleParameter::where('parameter_name', '=', $sample['parameter_name'])->first();
-                            $parameter_id = 0;
-
-                            if ($sample['parameter_name'] != '') {
-
-                                if ($is_exists == null) {
-
-                                    $parameterArray = array(
-                                        'mst_companies_id' => $loggedInUserData['company_id'],
-                                        'parameter_name' => ($sample['parameter_name']) ? $sample['parameter_name'] : '',
-                                        'is_active' => 1,
-                                        'selected_year' => $loggedInUserData['selected_year'],
-                                        'created_by' => $loggedInUserData['logged_in_user_id'], //edited
-                                        'updated_by' => $loggedInUserData['logged_in_user_id']
-                                    );
-
-                                    $parameters = MstSampleParameter::create($parameterArray);
-                                    $parameter_id = $parameters->id;
-                                } else {
-                                    $parameter_id = $is_exists->id;
-                                }
-                            }
-
                             $sample_data = array(
                                 'mst_product_id' => $product_id,
                                 'by_pass' => (isset($sample['by_pass'])) ? $sample['by_pass'] : 2,
                                 'parent' => (isset($sample['parent'])) ? $sample['parent'] : 0,
-                                'mst_sample_parameter_id' => $parameter_id,
+                                'mst_sample_parameter_id' => (isset($sample['parameter_name'])) ? $sample['parameter_name'] : 0,
                                 'label_claim' => (isset($sample['label_claim'])) ? $sample['label_claim'] : '',
                                 'min_limit' => (isset($sample['min_limit'])) ? $sample['min_limit'] : '',
                                 'max_limit' => (isset($sample['max_limit'])) ? $sample['max_limit'] : '',
@@ -402,7 +366,7 @@ class MstProductController extends Controller
      */
     public function show($id)
     {
-        $data = MstProduct::with('pharmacopeia:id,pharmacopeia_name', 'generic_product_id:id,product_name as generic_product_name,deleted_at', 'samples', 'samples.parameter', 'samples.parent')->withTrashed()->find($id);
+        $data = MstProduct::with('pharmacopeia:id,pharmacopeia_name', 'generic_product_id:id,product_name as generic_product_name,deleted_at', 'samples', 'samples.parameter', 'samples.parent')->find($id);
         $data_Arr = $data->toArray();
 
         $len = count($data_Arr['samples']);
@@ -443,15 +407,29 @@ class MstProductController extends Controller
             if ($data_Arr['samples'][$i]['mst_sample_parameter_id'] == null || $data_Arr['samples'][$i]['mst_sample_parameter_id'] == 0) {
 
                 $data_Arr['samples'][$i]['parameter'] = array(
-                    'id' => '',
-                    'parameter_name' => ''
+                    "id" => "",
+                    "mst_companies_id" => "",
+                    "procedure_name" => "",
+                    "price" => "",
+                    "test_code" => "",
+                    "test_category" => "",
+                    "test_procedure" => "",
+                    "parent_id" => "",
+                    "created_by" => "",
+                    "updated_by" => "",
+                    "created_at" => "",
+                    "updated_at" => "",
+                    "selected_year" => "",
+                    "copied_from_year" => "",
+                    "is_active" => "",
+                    "deleted_at" => ""
                 );
             } else {
 
                 $data_Arr['samples'][$i]['parameter'] = $data_Arr['samples'][$i]['parameter'];
             }
         }
-
+        $data_Arr = $this->parameter_dropdown($data_Arr, $id);
         $generic_data = MstProduct::select(
             'generic_product_id',
         )->with('generic:id,product_name,deleted_at')
@@ -490,6 +468,38 @@ class MstProductController extends Controller
         return Helper::response("This Product Shown Successfully", Response::HTTP_OK, true, $data_Arr);
     }
 
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Models\MstProduct  $mstProduct
+     * @return \Illuminate\Http\Response
+     */
+    public function parameter_dropdown($data, $id = '')
+    {
+        $loggedInUserData = Helper::getUserData();
+        $data_Arr = Test::select('mst_tests.*', 't.procedure_name as parent_name')
+            ->leftjoin('mst_tests as t', 't.id', '=', 'mst_tests.parent_id')
+            ->where('mst_tests.is_active', 1)
+            ->where('mst_tests.mst_companies_id', $loggedInUserData['company_id'])
+            ->orderBy('mst_tests.id', 'desc')
+            ->get();
+        $data_Arr = $data_Arr->toarray();
+        foreach ($data['samples'] as $key => $item) {
+            // print_r($item['parameter']['deleted_at']);
+            if ($item['parameter']['deleted_at'] != null || $item['parameter']['deleted_at']  != '') {
+                //if test selected & also deleted then merge with data_arr(tests list)
+                if(!in_array($item['parameter'], $data_Arr)){
+                    array_push($data_Arr, $item['parameter']);
+                }
+                $data['parameter_dropdown'] = $data_Arr;
+            } else {
+                //if selected test not deleted or test mst_sample_parameter_id "0 or null" then list simple tests
+                $data['parameter_dropdown'] = $data_Arr;
+            }
+        }
+
+        return $data;
+    }
     /**
      * Show the form for editing the specified resource.
      *

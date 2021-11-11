@@ -150,7 +150,7 @@ class BookingController extends Controller
 
         if ($data != '') {
             if ($data['customer_id']['id'] != '') {
-                if ($data['customer_id']['deleted_at'] == '') {
+                if ($data['customer_id']['deleted_at'] == '' || $data['customer_id']['deleted_at'] == null) {
                     $contact_type_data = Customer::select('id', 'company_name')
                         ->where('contact_type', 'Customer')
                         ->where('is_active', 1)
@@ -786,6 +786,7 @@ class BookingController extends Controller
             'generic_product_id'
         )->with('all_pharmacopeia:id,pharmacopeia_name', 'all_generic:id,product_name as generic_product_name')
             ->where('is_active', 1)
+            ->where('mst_companies_id', $loggedInUserData['company_id'])
             ->orderBy('id', 'desc')
             ->get()->toarray();
 
@@ -926,7 +927,8 @@ class BookingController extends Controller
         if ($data['customer_id'] == null or $data['customer_id'] == 0) {
             $data['customer_id'] = array(
                 "id" => "",
-                "company_name" => ""
+                "company_name" => "",
+                "deleted_at" => ""
             );
         }
         if ($data['supplier_id'] == null) {
@@ -1012,6 +1014,7 @@ class BookingController extends Controller
         $chemist_data =  Employee::join('user_company_info as company', 'company.users_id', 'users.id')
             ->where('company.mst_positions_id', $chemist_id[0]['id'])
             ->where('users.is_active', 1)
+            ->where('users.mst_companies_id', $loggedInUserData['company_id'])
             ->get(['users.id', 'users.first_name', 'users.middle_name', 'users.last_name', 'users.deleted_at'])->toarray();
 
         if ($chemist_data) {
@@ -1022,8 +1025,10 @@ class BookingController extends Controller
                     if ($data['tests'][$i]['chemist']['deleted_at'] == null || $data['tests'][$i]['chemist']['deleted_at'] == '') {
                         $data['chemist_dropdown'] = $chemist_data;
                     } else {
+                        if(!in_array($data['tests'][$i]['chemist'], $chemist_data)){
                         array_push($chemist_data, $data['tests'][$i]['chemist']);
                         $data['chemist_dropdown'] = $chemist_data;
+                        }
                     }
                 }
             } else {

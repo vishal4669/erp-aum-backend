@@ -31,7 +31,7 @@ class PharmacopeiaController extends Controller
             if(!$is_dropdown){
                 $data = Pharmacopeia::where('is_active',1)->where('selected_year', $loggedInUserData['selected_year'])->where('mst_companies_id', $loggedInUserData['company_id'])->orderBy('id', 'desc')->get();
             } else {
-                $data = Pharmacopeia::where('is_active',1)->orderBy('id', 'desc')->get();
+                $data = Pharmacopeia::where('is_active',1)->where('mst_companies_id', $loggedInUserData['company_id'])->orderBy('id', 'desc')->get();
             }
             
             return Helper::response("Pharmacopeia List Shown Successfully", Response::HTTP_OK, true, $data);
@@ -214,7 +214,8 @@ class PharmacopeiaController extends Controller
     public function exportPharmacopieaData(Request $request)
     {
         try{
-            $data = Pharmacopeia::where('is_active',1)->orderBy('id', 'desc')->get(['pharmacopeia_name', 'vol_no', 'pharmacopeia_year', 'pharmacopeia_edition']);
+            $loggedInUserData = Helper::getUserData();
+            $data = Pharmacopeia::where('is_active',1)->where('mst_companies_id', $loggedInUserData['company_id'])->orderBy('id', 'desc')->get(['pharmacopeia_name', 'vol_no', 'pharmacopeia_year', 'pharmacopeia_edition']);
             return Helper::response("Export Parmacopeia List Shown Successfully", Response::HTTP_OK, true, $data);
         } catch (Exception $e) {
             $data = array();
