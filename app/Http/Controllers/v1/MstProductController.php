@@ -180,7 +180,7 @@ class MstProductController extends Controller
                     'updated_by:id,first_name,middle_name,last_name'
                 )
                 ->where('is_active', 1)
-                ->where('selected_year', $loggedInUserData['selected_year'])
+                ->where('mst_companies_id', $loggedInUserData['company_id'])
                 ->orderBy('id', 'desc')
                 ->get();
 
