@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: sdb-e.hosting.stackcp.net
--- Generation Time: Nov 11, 2021 at 05:46 AM
+-- Generation Time: Nov 12, 2021 at 02:00 PM
 -- Server version: 10.4.18-MariaDB-log
 -- PHP Version: 7.1.33
 
@@ -20,8 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `aum_research_lab-313833c271`
 --
-CREATE DATABASE IF NOT EXISTS `aum_research_lab-313833c271` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
-USE `aum_research_lab-313833c271`;
 
 -- --------------------------------------------------------
 
@@ -195,7 +193,7 @@ CREATE TABLE `booking_sample_details` (
 --
 
 INSERT INTO `booking_sample_details` (`id`, `booking_id`, `product_id`, `batch_no`, `packsize`, `request_quantity`, `sample_code`, `sample_description`, `sample_quantity`, `sample_location`, `sample_packaging`, `sample_type`, `sampling_date_from`, `sampling_date_from_options`, `sampling_date_to`, `sampling_date_to_options`, `sample_received_through`, `chemist`, `sample_condition`, `is_sample_condition`, `batch_size_qty_rec`, `notes`, `sample_drawn_by`, `created_by`, `updated_by`, `created_at`, `updated_at`, `selected_year`, `copied_from_year`, `is_active`, `deleted_at`) VALUES
-(1, 1, 8, 54322, '55', 0, 'EASPORTS6913', 'EASPORTS6913', 0, 'Keas 69 Str. 15234, Chalandri Athens, Greece', 'Packaging', 'sample type', '2021-10-22', '', '2021-10-30', '', '', 1, '', 0, 0, 'test', '', 3, 3, '2021-10-18 09:52:35', '2021-11-09 10:42:31', '2019-20', NULL, 1, NULL),
+(1, 1, 5, 54322, '55', 0, 'EASPORTS6913', 'EASPORTS6913', 0, 'Keas 69 Str. 15234, Chalandri Athens, Greece', 'Packaging', 'sample type', '2021-10-22', '', '2021-10-30', '', '', 1, '', 0, 0, 'test', '', 3, 3, '2021-10-18 09:52:35', '2021-11-09 10:42:31', '2019-20', NULL, 1, NULL),
 (2, 2, 4, 10, '57', 77, 'EASPORTS6914', 'EASPORTS6914', 14, 'Keas 69 Str. 15234, Chalandri Athens, Greece', 'Keas 69 Str. 15234, Chalandri Athens, Greece', 'Sample Type', '2021-10-19', 'N/A', '2021-10-21', 'N/A', 'By Hand', 1, 'Secured seal with label', 1, 14, 'Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).', 'Sample Drawn By', 3, 3, '2021-10-18 10:12:22', '2021-10-26 06:37:16', '2019-20', NULL, 1, NULL),
 (3, 3, 2, 1, '1', 2, '121', 'desc', 1, '', '', '', '2021-10-29', 'N/S', '2021-11-05', 'N/S', 'By Courier', 1, '', 0, 0, '', '', 3, 3, '2021-10-19 09:07:13', '2021-10-29 07:30:26', '2019-20', NULL, 1, NULL),
 (4, 4, 2, 12, '', 0, '', '', 0, '', '', '', NULL, 'N/S', NULL, 'N/S', 'By Courier', 1, '', 0, 0, '', '', 3, NULL, '2021-10-19 13:40:39', NULL, '2019-20', NULL, 1, NULL),
@@ -1253,8 +1251,8 @@ INSERT INTO `mst_pharmacopeia` (`id`, `mst_companies_id`, `pharmacopeia_name`, `
 (8, 1, 'test123', 52, 478902, 'test', '2019-20', NULL, 1, 3, 3, '2021-06-11 05:58:29', '2021-06-08 13:23:32', '2021-06-11 05:58:29'),
 (9, 1, 'test', 1, 10, '5th', '2019-20', NULL, 1, 3, 3, '2021-06-10 09:52:22', '2021-06-10 09:51:45', '2021-06-10 09:52:22'),
 (10, 1, 'EP', 21, 2021, '1', '2019-20', NULL, 1, 2, 2, '2021-06-10 09:52:22', '2021-06-18 10:05:17', '2021-11-09 10:15:55'),
-(11, 1, 'IHS', 1, 2021, '1', '2019-20', NULL, 1, 2, NULL, NULL, '2021-06-18 10:06:44', '2021-11-09 13:58:45'),
-(12, 4, 'Ip', 123, 2016, 'First', '2019-20', NULL, 1, 2, 2, NULL, '2021-10-29 06:43:41', '2021-11-01 10:53:16');
+(11, 1, 'IHS', 1, 2021, '1', '2019-20', NULL, 1, 2, NULL, '2021-06-10 09:52:22', '2021-06-18 10:06:44', '2021-11-12 12:57:45'),
+(12, 4, 'GP', 123, 2016, 'First', '2019-20', NULL, 1, 2, 2, '2021-06-10 09:52:22', '2021-10-29 06:43:41', '2021-11-12 13:04:30');
 
 -- --------------------------------------------------------
 
@@ -1326,12 +1324,16 @@ CREATE TABLE `mst_products` (
 INSERT INTO `mst_products` (`id`, `mst_companies_id`, `product_name`, `product_generic`, `marker_specification`, `pharmacopeia_id`, `generic_product_id`, `packing_detail`, `sample_description`, `hsn_Code`, `is_generic`, `selected_year`, `copied_from_year`, `is_active`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (1, 1, 'Dolo', 'Raw Material', 'for cold', 12, 1, 'Don\'t put in sunlight', 'Dolo', '', 1, '2019-20', NULL, 1, 3, 3, '2021-09-28 07:18:44', '2021-11-10 12:15:26', NULL),
 (2, 1, 'AJINO MOTTO1', 'Raw Material', 'for fever1', 10, 1, '', '', '', 1, '2020-20', NULL, 1, 3, 3, '2021-09-28 07:26:10', '2021-10-01 10:49:42', '2021-10-01 10:49:42'),
-(3, 1, 'test product3', 'Finished Product', 'test', 11, 1, '', '', '', 1, '2019-20', NULL, 1, 3, 3, '2021-09-28 08:46:54', '2021-11-10 12:14:34', NULL),
+(3, 1, 'test product3', 'Finished Product', 'test', 11, 1, '', '', '', 1, '2019-20', NULL, 1, 3, 3, '2021-09-28 08:46:54', '2021-11-11 13:01:55', NULL),
 (4, 1, 'peracitamol', 'Other', 'for cold', 4, 1, 'Don\'t put in sunlight', '', '', 1, '2019-20', NULL, 1, 3, 3, '2021-10-01 11:22:38', '2021-11-10 12:15:18', NULL),
 (5, 1, 'test', 'Other', 'For Fever123', 4, 2, '', '', '', 1, '2019-20', NULL, 1, 3, 3, '2021-10-06 08:03:02', '2021-11-03 06:12:04', '2021-11-03 06:12:04'),
-(6, 1, 'Himalaya Wellness', 'Raw Material', 'motion sicknesss', 11, 1, 'Shipped', 'motion sickness', '', 1, '2019-20', NULL, 1, 3, 3, '2021-10-14 11:17:48', '2021-11-10 12:15:05', NULL),
+(6, 1, 'Himalaya Wellness', 'Raw Material', 'motion sicknesss', 11, 1, 'Shipped', 'motion sickness', '', 1, '2019-20', NULL, 1, 3, 3, '2021-10-14 11:17:48', '2021-11-10 12:15:05', '2021-11-03 06:12:04'),
 (7, 4, 'Kitcat Tablets', 'Finished Product', 'NA', 12, 1, 'NA', 'White to off white colored round shape tablet with one side break line and other side plain.', '998346', 1, '2019-20', NULL, 1, 2, NULL, '2021-10-29 06:53:49', NULL, NULL),
-(8, 4, 'Health life Black Seed Oil Capsules', 'Finished Product', '', 7, 7, '', 'Black coloured soft gelatin capsules.', '998346', 1, '2019-20', NULL, 1, 2, NULL, '2021-10-29 06:57:07', NULL, '2021-11-03 10:47:05');
+(8, 4, 'Health life Black Seed Oil Capsules', 'Finished Product', '', 7, 7, '', 'Black coloured soft gelatin capsules.', '998346', 1, '2019-20', NULL, 1, 2, NULL, '2021-10-29 06:57:07', NULL, NULL),
+(9, 1, 'Corona Medicine', 'Raw Material', 'Corona Cure', 4, 4, 'testing parameter', 'Sample Description', 'HSN Code', 1, '2019-20', NULL, 1, 3, NULL, '2021-11-11 10:11:59', NULL, NULL),
+(11, 1, 'AR Medicine', 'Finished Product', 'test', 2, 9, '', '', '', 0, '2019-20', NULL, 1, 3, 3, '2021-11-11 10:23:06', '2021-11-11 13:22:19', NULL),
+(12, 1, 'abcdefg', 'Other', 'hello1', 11, 4, '', '', '', 0, '2019-20', NULL, 1, 3, 3, '2021-11-11 10:48:03', '2021-11-11 11:11:31', NULL),
+(13, 1, 'AR Medicine2', 'Finished Product', 'Corona Cure', 11, 9, 'testing parameter', 'Sample Descriptio', '', 1, '2019-20', NULL, 1, 3, 3, '2021-11-11 11:12:10', '2021-11-12 11:45:59', NULL);
 
 -- --------------------------------------------------------
 
@@ -1406,61 +1408,29 @@ CREATE TABLE `mst_product_samples` (
 INSERT INTO `mst_product_samples` (`id`, `mst_product_id`, `by_pass`, `parent`, `mst_sample_parameter_id`, `label_claim`, `min_limit`, `max_limit`, `amount`, `method`, `description`, `division`, `nabl`, `formula`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (11, 2, 1, 20, 3, '202', '33', '101', '1111.00', '', 'testing here', '', '', '', 3, 3, '2021-10-01 10:49:42', '2021-10-01 10:49:42', NULL),
 (27, 23, 1, 22, 4, 'label claim', '10', '100', '500.00', 'method', 'description', 'A', 'nabl', 'formula', 3, 3, '2021-10-14 11:18:37', '2021-10-14 11:18:37', NULL),
-(28, 23, 1, 13, 8, 'label claim1', '20', '200', '700.00', 'method1', 'description1', 'A1', 'nabl1', 'formula1', 3, 3, '2021-10-14 11:18:37', '2021-10-14 11:18:37', NULL),
-(41, 7, 2, 0, 9, '', '', '', '0.00', '', 'White to off white colored round shape tablet with one side break line and other side plain.', '', '', '', 2, 2, '2021-10-29 06:53:49', '2021-10-29 06:53:49', NULL),
-(42, 7, 2, 32, 9, '', '', '', '0.00', '', '', '', '', '', 2, 2, '2021-10-29 06:53:49', '2021-10-29 06:53:49', NULL),
-(43, 7, 2, 0, 10, '', '', 'The principal spot in the chromatogram obtained with the test solution corresponds to that obtained with reference solution.', '200.00', '', '', '', '', '', 2, 2, '2021-10-29 06:53:49', '2021-10-29 06:53:49', NULL),
-(44, 8, 2, 0, 11, '', '', '', '0.00', '', 'Black coloured soft gelatin capsules.', '', '', '', 2, 2, '2021-10-29 06:57:07', '2021-10-29 06:57:07', NULL),
-(45, 8, 2, 0, 12, '', '', 'NMT 10 ppm', '0.00', '', '', '', '', '', 2, 2, '2021-10-29 06:57:07', '2021-10-29 06:57:07', NULL),
-(46, 8, 2, 0, 13, '', '', 'NMT 0.30 ppm', '0.00', '', '', '', '', '', 2, 2, '2021-10-29 06:57:07', '2021-10-29 06:57:07', NULL),
-(47, 8, 2, 0, 14, '', '', 'NMT 3.0 ppm', '0.00', '', '', '', '', '', 2, 2, '2021-10-29 06:57:07', '2021-10-29 06:57:07', NULL),
+(28, 23, 1, 13, 4, 'label claim1', '20', '200', '700.00', 'method1', 'description1', 'A1', 'nabl1', 'formula1', 3, 3, '2021-10-14 11:18:37', '2021-10-14 11:18:37', NULL),
+(41, 7, 2, 0, 1, '', '', '', '0.00', '', 'White to off white colored round shape tablet with one side break line and other side plain.', '', '', '', 2, 2, '2021-10-29 06:53:49', '2021-10-29 06:53:49', NULL),
+(42, 7, 2, 32, 2, '', '', '', '0.00', '', '', '', '', '', 2, 2, '2021-10-29 06:53:49', '2021-10-29 06:53:49', NULL),
+(43, 7, 2, 0, 0, '', '', 'The principal spot in the chromatogram obtained with the test solution corresponds to that obtained with reference solution.', '200.00', '', '', '', '', '', 2, 2, '2021-10-29 06:53:49', '2021-10-29 06:53:49', NULL),
+(44, 8, 2, 0, 2, '', '', '', '0.00', '', 'Black coloured soft gelatin capsules.', '', '', '', 2, 2, '2021-10-29 06:57:07', '2021-10-29 06:57:07', NULL),
+(45, 8, 2, 0, 2, '', '', 'NMT 10 ppm', '0.00', '', '', '', '', '', 2, 2, '2021-10-29 06:57:07', '2021-10-29 06:57:07', NULL),
+(46, 8, 2, 0, 3, '', '', 'NMT 0.30 ppm', '0.00', '', '', '', '', '', 2, 2, '2021-10-29 06:57:07', '2021-10-29 06:57:07', NULL),
+(47, 8, 2, 0, 4, '', '', 'NMT 3.0 ppm', '0.00', '', '', '', '', '', 2, 2, '2021-10-29 06:57:07', '2021-10-29 06:57:07', NULL),
 (48, 5, 1, 20, 3, '202', '33', '101', '1111.00', '', 'testing here', '', '', '', 3, 3, '2021-11-03 06:12:04', '2021-11-03 06:12:04', NULL),
-(66, 3, 2, 15, 6, '1000', '7852', '', '0.00', '', '', '', '', '', 3, 3, '2021-11-10 12:14:34', '2021-11-10 12:14:34', NULL),
-(67, 3, 2, 0, 7, '', '', '', '5000.00', '', '', '', '', '', 3, 3, '2021-11-10 12:14:34', '2021-11-10 12:14:34', NULL),
-(69, 6, 1, 18, 9, '', '', '', '0.00', '', 'White to off white colored round shape tablet with one side break line and other side plain.', '', '', '', 3, 3, '2021-11-10 12:15:05', '2021-11-10 12:15:05', NULL),
-(70, 6, 1, 17, 9, '', '', '', '0.00', '', '', '', '', '', 3, 3, '2021-11-10 12:15:05', '2021-11-10 12:15:05', NULL),
-(71, 6, 1, 18, 10, '', '', 'The principal spot in the chromatogram obtained with the test solution corresponds to that obtained with reference solution.', '200.00', '', '', '', '', '', 3, 3, '2021-11-10 12:15:05', '2021-11-10 12:15:05', NULL),
-(72, 4, 1, 20, 3, '202', '33', '101', '1111.00', '', 'testing here', '', '', '', 3, 3, '2021-11-10 12:15:18', '2021-11-10 12:15:18', NULL);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `mst_sample_parameters`
---
-
-CREATE TABLE `mst_sample_parameters` (
-  `id` int(11) NOT NULL,
-  `parameter_name` varchar(255) NOT NULL,
-  `mst_companies_id` int(11) NOT NULL,
-  `is_active` tinyint(1) NOT NULL,
-  `selected_year` varchar(25) NOT NULL,
-  `copied_from_year` int(4) DEFAULT NULL,
-  `created_by` int(11) NOT NULL,
-  `updated_by` int(11) NOT NULL,
-  `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL,
-  `deleted_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `mst_sample_parameters`
---
-
-INSERT INTO `mst_sample_parameters` (`id`, `parameter_name`, `mst_companies_id`, `is_active`, `selected_year`, `copied_from_year`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'MyParam', 1, 1, '2019-20', NULL, 3, 3, '2021-09-28 07:18:44', '2021-09-28 07:18:44', NULL),
-(2, 'My Para1m', 1, 1, '2019-20', NULL, 3, 3, '2021-10-01 10:48:39', '2021-10-01 10:48:39', NULL),
-(3, 'dgfdg', 1, 1, '2019-20', NULL, 3, 3, '2021-10-01 10:49:42', '2021-10-01 10:49:42', NULL),
-(4, 'newparams022', 1, 1, '2019-20', NULL, 3, 3, '2021-10-01 11:08:11', '2021-10-01 11:08:11', NULL),
-(5, 'Assay', 1, 1, '2019-20', NULL, 3, 3, '2021-10-01 11:10:35', '2021-10-01 11:10:35', NULL),
-(6, 'Assay123', 1, 1, '2019-20', NULL, 3, 3, '2021-10-05 06:39:45', '2021-10-05 06:39:45', NULL),
-(7, 'test parameter', 1, 1, '2019-20', NULL, 3, 3, '2021-10-05 06:39:45', '2021-10-05 06:39:45', NULL),
-(8, 'newparams122', 1, 1, '2019-20', NULL, 3, 3, '2021-10-14 11:17:48', '2021-10-14 11:17:48', NULL),
-(9, 'Average weight', 4, 1, '2019-20', NULL, 2, 2, '2021-10-29 06:53:49', '2021-10-29 06:53:49', NULL),
-(10, 'Identification', 4, 1, '2019-20', NULL, 2, 2, '2021-10-29 06:53:49', '2021-10-29 06:53:49', NULL),
-(11, 'Description', 4, 1, '2019-20', NULL, 2, 2, '2021-10-29 06:57:07', '2021-10-29 06:57:07', NULL),
-(12, 'Lead', 4, 1, '2019-20', NULL, 2, 2, '2021-10-29 06:57:07', '2021-10-29 06:57:07', NULL),
-(13, 'Cadmium', 4, 1, '2019-20', NULL, 2, 2, '2021-10-29 06:57:07', '2021-10-29 06:57:07', NULL),
-(14, 'Arsenic', 4, 1, '2019-20', NULL, 2, 2, '2021-10-29 06:57:07', '2021-10-29 06:57:07', NULL);
+(69, 6, 1, 18, 1, '', '', '', '0.00', '', 'White to off white colored round shape tablet with one side break line and other side plain.', '', '', '', 3, 3, '2021-11-10 12:15:05', '2021-11-10 12:15:05', NULL),
+(70, 6, 1, 17, 1, '', '', '', '0.00', '', '', '', '', '', 3, 3, '2021-11-10 12:15:05', '2021-11-10 12:15:05', NULL),
+(71, 6, 1, 18, 0, '', '', 'The principal spot in the chromatogram obtained with the test solution corresponds to that obtained with reference solution.', '200.00', '', '', '', '', '', 3, 3, '2021-11-10 12:15:05', '2021-11-10 12:15:05', NULL),
+(72, 4, 1, 20, 3, '202', '33', '101', '1111.00', '', 'testing here', '', '', '', 3, 3, '2021-11-10 12:15:18', '2021-11-10 12:15:18', NULL),
+(73, 9, 1, 20, 2, '202', '33', '101', '1111.00', 'test', 'testing here', 'div1', 'nabl1', 'for1', 3, 3, '2021-11-11 10:11:59', '2021-11-11 10:11:59', NULL),
+(74, 9, 1, 15, 3, '', '0', '1', '0.00', '', '', '', '', '', 3, 3, '2021-11-11 10:11:59', '2021-11-11 10:11:59', NULL),
+(80, 12, 1, 20, 0, '202', '33', '101', '1111.00', '', 'testing here', '', '', '', 3, 3, '2021-11-11 11:11:31', '2021-11-11 11:11:31', NULL),
+(93, 3, 2, 15, 4, '1000', '7852', '', '0.00', '', '', '', '', '', 3, 3, '2021-11-11 13:01:55', '2021-11-11 13:01:55', NULL),
+(94, 3, 2, 0, 4, '', '', '', '5000.00', '', '', '', '', '', 3, 3, '2021-11-11 13:01:55', '2021-11-11 13:01:55', NULL),
+(95, 3, 2, 17, 4, '', '', '', '0.00', '', '', '', '', '', 3, 3, '2021-11-11 13:01:55', '2021-11-11 13:01:55', NULL),
+(100, 11, 1, 20, 2, '202', '33', '101', '1111.00', 'test', 'testing here', 'div1', 'nabl1', 'for1', 3, 3, '2021-11-11 13:22:19', '2021-11-11 13:22:19', NULL),
+(101, 11, 1, 15, 2, '', '0', '1', '2505.00', '', '', '', '', '', 3, 3, '2021-11-11 13:22:19', '2021-11-11 13:22:19', NULL),
+(104, 13, 1, 20, 2, '202', '33', '101', '1111.00', 'test', 'testing here', 'div1', 'nabl1', 'for1', 3, 3, '2021-11-12 11:45:59', '2021-11-12 11:45:59', NULL),
+(105, 13, 1, 15, 2, '', '0', '1', '0.00', '', '', '', '', '', 3, 3, '2021-11-12 11:45:59', '2021-11-12 11:45:59', NULL);
 
 -- --------------------------------------------------------
 
@@ -1548,8 +1518,9 @@ CREATE TABLE `mst_tests` (
 
 INSERT INTO `mst_tests` (`id`, `mst_companies_id`, `procedure_name`, `price`, `test_code`, `test_category`, `test_procedure`, `parent_id`, `created_by`, `updated_by`, `created_at`, `updated_at`, `selected_year`, `copied_from_year`, `is_active`, `deleted_at`) VALUES
 (1, 1, 'Test 01', '10.20', 'TEST01', 'Cate 01', 'Test 01', 0, 1, 1, '2021-11-09 12:26:27', '2021-11-09 12:27:16', '2019-20', NULL, 1, '2021-11-09 12:27:16'),
-(2, 1, 'Test 1', '10', 'TEST01', 'Cate 1', 'Test', 0, 1, NULL, '2021-11-09 12:27:22', '2021-11-09 12:27:22', '2019-20', NULL, 1, NULL),
-(3, 1, 'Test 2', '10.50', 'TEST02', 'Cate 1', 'Test', 0, 1, NULL, '2021-11-09 12:27:31', '2021-11-09 12:27:31', '2019-20', NULL, 1, NULL);
+(2, 1, 'Test 02', '10', 'TEST01', 'Cate 1', 'Test', 0, 1, NULL, '2021-11-09 12:27:22', '2021-11-09 12:27:22', '2019-20', NULL, 1, '2021-11-09 12:27:16'),
+(3, 1, 'Test 03', '10.50', 'TEST02', 'Cate 1', 'Test', 0, 1, NULL, '2021-11-09 12:27:31', '2021-11-09 12:27:31', '2019-20', NULL, 1, NULL),
+(4, 1, 'Test 04', '10.50', 'TEST020', 'Cate 1', 'Test', 0, 1, NULL, '2021-11-09 12:27:31', '2021-11-09 12:27:31', '2019-20', NULL, 1, '2021-11-09 12:27:16');
 
 -- --------------------------------------------------------
 
@@ -2065,12 +2036,6 @@ ALTER TABLE `mst_product_samples`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `mst_sample_parameters`
---
-ALTER TABLE `mst_sample_parameters`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `mst_states`
 --
 ALTER TABLE `mst_states`
@@ -2282,7 +2247,7 @@ ALTER TABLE `mst_positions`
 -- AUTO_INCREMENT for table `mst_products`
 --
 ALTER TABLE `mst_products`
-  MODIFY `id` int(23) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(23) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `mst_product_parents`
@@ -2294,13 +2259,7 @@ ALTER TABLE `mst_product_parents`
 -- AUTO_INCREMENT for table `mst_product_samples`
 --
 ALTER TABLE `mst_product_samples`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
-
---
--- AUTO_INCREMENT for table `mst_sample_parameters`
---
-ALTER TABLE `mst_sample_parameters`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=106;
 
 --
 -- AUTO_INCREMENT for table `mst_states`
@@ -2312,7 +2271,7 @@ ALTER TABLE `mst_states`
 -- AUTO_INCREMENT for table `mst_tests`
 --
 ALTER TABLE `mst_tests`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `mst_units`

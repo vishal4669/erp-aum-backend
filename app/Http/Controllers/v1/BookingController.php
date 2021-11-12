@@ -789,8 +789,8 @@ class BookingController extends Controller
             ->where('mst_companies_id', $loggedInUserData['company_id'])
             ->orderBy('id', 'desc')
             ->get()->toarray();
-
-        if ($data['samples'][0]['get_product']['deleted_at'] == null) {
+            // dd($product_data);
+        if ($data['samples'][0]['get_product']['deleted_at'] == null || $data['samples'][0]['get_product']['deleted_at'] == '') {
             $data['products'] = $product_data;
         } else {
             $product_arr = array(

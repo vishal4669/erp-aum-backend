@@ -25,7 +25,6 @@ class PharmacopeiaController extends Controller
     {
         try{
             $loggedInUserData = Helper::getUserData();
-
             $is_dropdown = (isset($request->is_dropdown)) ? $request->is_dropdown : false;
 
             if(!$is_dropdown){

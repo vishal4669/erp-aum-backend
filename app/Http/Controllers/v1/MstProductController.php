@@ -87,6 +87,7 @@ class MstProductController extends Controller
                 )->with('pharmacopeia:id,pharmacopeia_name', 'generic:id,product_name')
                     ->where('is_generic', 1)
                     ->where('is_active', 1)
+                    ->where('mst_companies_id', $loggedInUserData['company_id'])
                     ->orderBy('id', 'desc')
                     ->get();
             }
@@ -366,9 +367,9 @@ class MstProductController extends Controller
      */
     public function show($id)
     {
+        $loggedInUserData = Helper::getUserData();
         $data = MstProduct::with('pharmacopeia:id,pharmacopeia_name', 'generic_product_id:id,product_name as generic_product_name,deleted_at', 'samples', 'samples.parameter', 'samples.parent')->find($id);
         $data_Arr = $data->toArray();
-
         $len = count($data_Arr['samples']);
         $i = 0;
         if ($data_Arr['pharmacopeia'] == null or $data_Arr['pharmacopeia'] == 0) {
@@ -387,9 +388,9 @@ class MstProductController extends Controller
                 'generic_product_name' => '',
                 'deleted_at' => ''
             );
-        } else {
+         } else {
 
-            $data_Arr['generic_product_id'] = $data_Arr['generic_product_id'];
+             $data_Arr['generic_product_id'] = $data_Arr['generic_product_id'];
         }
         for ($i = 0; $i < $len; $i++) {
 
@@ -430,41 +431,31 @@ class MstProductController extends Controller
             }
         }
         $data_Arr = $this->parameter_dropdown($data_Arr, $id);
+
         $generic_data = MstProduct::select(
-            'generic_product_id',
-        )->with('generic:id,product_name,deleted_at')
-            ->where('is_generic', 1)
+            'id',
+            'product_name',
+            'deleted_at'
+        )->where('is_generic', 1)
             ->where('is_active', 1)
-            ->whereNotNull('generic_product_id')
+            ->where('mst_companies_id', $loggedInUserData['company_id'])
             ->orderBy('id', 'desc')
-            ->distinct()
-            ->get()
-            ->toarray();
+            ->get()->toarray();
 
-        $new_generic_arr = [];
-        foreach ($generic_data as $key => $item) {
-            if (isset($item['generic'])) {
-                array_push($new_generic_arr, $item);
-            }
+        if($data_Arr['generic_product_id']['deleted_at'] == null || $data_Arr['generic_product_id']['deleted_at'] == '')
+        {
+            $data_Arr['generic_dropdown'] = $generic_data;
         }
-
-        if ($new_generic_arr[0]['generic_product_id'] !== null || $new_generic_arr[0]['generic_product_id'] !== '') {
-            if ($data_Arr['generic_product_id']['deleted_at'] != null || $data_Arr['generic_product_id']['deleted_at'] != '') {
-                $gen_arr = array(
-                    "generic_product_id" => $data_Arr['generic_product_id']['id'],
-                    "generic" => array(
-                        "id" => $data_Arr['generic_product_id']['id'],
-                        "product_name" => $data_Arr['generic_product_id']['generic_product_name'],
-                        "deleted_at" => $data_Arr['generic_product_id']['deleted_at']
-                    )
-                );
-                array_push($new_generic_arr, $gen_arr);
-                $data_Arr['generic_dropdown'] = $new_generic_arr;
-            } else {
-                $data_Arr['generic_dropdown'] = $new_generic_arr;
-            }
+        else
+        {
+            $deleted_generic_product_merge = array(
+                'id' => $data_Arr['generic_product_id']['id'],
+                'product_name' => $data_Arr['generic_product_id']['generic_product_name'],
+                'deleted_at' => $data_Arr['generic_product_id']['deleted_at']
+            );
+            array_push($generic_data,$deleted_generic_product_merge);
+            $data_Arr['generic_dropdown'] = $generic_data;
         }
-
         return Helper::response("This Product Shown Successfully", Response::HTTP_OK, true, $data_Arr);
     }
 
@@ -488,7 +479,7 @@ class MstProductController extends Controller
             // print_r($item['parameter']['deleted_at']);
             if ($item['parameter']['deleted_at'] != null || $item['parameter']['deleted_at']  != '') {
                 //if test selected & also deleted then merge with data_arr(tests list)
-                if(!in_array($item['parameter'], $data_Arr)){
+                if (!in_array($item['parameter'], $data_Arr)) {
                     array_push($data_Arr, $item['parameter']);
                 }
                 $data['parameter_dropdown'] = $data_Arr;
