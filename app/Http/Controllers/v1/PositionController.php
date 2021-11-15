@@ -41,6 +41,7 @@ class PositionController extends Controller
                         ->leftjoin('mst_companies as c', 'c.id', '=', 'mst_positions.mst_companies_id')
                         ->leftjoin('mst_departments as d', 'd.id', '=', 'mst_positions.mst_departments_id')
                         ->where('mst_positions.is_active',1)
+                        ->where('mst_positions.mst_companies_id', $loggedInUserData['company_id'])
                         ->orderBy('mst_positions.id', 'desc')
                         ->get();
             }

@@ -71,4 +71,14 @@ class MstProduct extends Model
         return $this->hasOne(MstProduct::class, 'id', 'generic_product_id')->withTrashed();
     }
 
+     /**
+     * Get the pharmacopiea detail associated with the BookingSampleDetail for AssignTests table
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+     public function pharmacopiea_detail()
+     {
+         return $this->hasOne(Pharmacopeia::class, 'id', 'pharmacopeia_id')->withTrashed();
+     }
+
 }

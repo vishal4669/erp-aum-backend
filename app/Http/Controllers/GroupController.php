@@ -124,7 +124,7 @@ class GroupController extends Controller
             $input_data['is_active'] = 1;  
             $input_data['updated_by'] = Auth::user()->id; 
 
-            Log::info("Group updated with details : ".json_encode(array('data' => $input_data, 'id' => $id));
+            Log::info("Group updated with details : ".json_encode(array('data' => $input_data, 'id' => $id)));
 
             $group = Group::find($id);
             $group->update($input_data);
@@ -151,7 +151,7 @@ class GroupController extends Controller
             $data = array();
             $group = Group::find($id);
 
-            Log::info("Group deleted with : ".json_encode(array('id' => $id));
+            Log::info("Group deleted with : ".json_encode(array('id' => $id)));
 
             if(!empty($group)){
                 $group->delete();

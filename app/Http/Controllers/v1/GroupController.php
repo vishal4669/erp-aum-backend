@@ -40,6 +40,7 @@ class GroupController extends Controller
                 $data = Group::select('mst_groups.*', 'g.group_name as parent_name')
                         ->leftjoin('mst_groups as g', 'g.id', '=', 'mst_groups.parent_group')
                         ->where('mst_groups.is_active',1)
+                        ->where('mst_groups.mst_companies_id', $loggedInUserData['company_id'])
                         ->orderBy('mst_groups.id', 'desc')
                         ->get();
             }
@@ -64,7 +65,9 @@ class GroupController extends Controller
         try{
             $loggedInUserData = Helper::getUserData();
 
-            $data = Group::where('is_active',1)->get();
+            $data = Group::where('is_active',1)
+                    ->where('mst_companies_id', $loggedInUserData['company_id'])
+                    ->get();
             return Helper::response("Parent Group List Shown Successfully", Response::HTTP_OK, true, $data);
         } catch (Exception $e) {
             $data = array();

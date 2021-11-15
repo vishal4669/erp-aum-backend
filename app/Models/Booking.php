@@ -99,5 +99,13 @@ class Booking extends Model
         return $this->hasOne(User::class, 'id', 'updated_by');
     }
 
-    
+    /**
+     * Get the tests where chemist name is null or blank ''
+     *where condition = return only tests data where chemist_name == NULL for AssignTests table
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function tests_detail()
+    {
+        return $this->hasMany(BookingTest::class)->where('chemist_name',NULL)->orwhere('chemist_name',0)->withTrashed();
+    }
 }
