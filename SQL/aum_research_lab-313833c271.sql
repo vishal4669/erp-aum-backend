@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: sdb-e.hosting.stackcp.net
--- Generation Time: Nov 12, 2021 at 02:00 PM
+-- Generation Time: Nov 16, 2021 at 01:41 PM
 -- Server version: 10.4.18-MariaDB-log
 -- PHP Version: 7.1.33
 
@@ -101,7 +101,7 @@ INSERT INTO `bookings` (`id`, `mst_companies_id`, `booking_type`, `invoice_no`, 
 (30, 1, 'Dispatched', NULL, 'FP', NULL, '2021-10-22', 'ARL/COA/FP/211022/005', 2, '9408072555', '', 0, 0, '2021-10-21', 'None', '2021-10-22', 'None', NULL, 12, '', 'N/S', '', 'N/S', '', 'N/S', '', 1, '2021-10-22T17:54', 'By Courier', 'Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).', 0, 'QA', 1, 'Yes', 'Cancel Remarks', 'High', 'Chemical', 'Drugs and Pharmaceuticals', 'PASS', NULL, NULL, 3, NULL, '2021-10-21 12:27:37', NULL, '2019-20', NULL, NULL, 1, NULL),
 (31, 1, 'Invoice', '34543554654', 'ADL', '2021-10-22', '2021-10-23', 'ARL/COA/ADL/211023/001', 12, '', '', 0, 0, '2021-10-01', 'N/S', '2021-10-30', 'N/S', NULL, 13, '', 'N/S', '', 'N/S', '', 'N/S', '', 1, '2021-10-16T18:17', 'By Hand Delivery', 'Courier by Preksha', 0, 'None', 0, 'None', '', 'High', 'Chemical', 'Drugs and Pharmaceuticals', 'PASS', NULL, NULL, 3, NULL, '2021-10-21 12:45:06', NULL, '2019-20', NULL, NULL, 1, NULL),
 (32, 1, 'Invoice', '6529', 'AYUSH', '2021-10-15', '2021-10-22', 'ARL/COA/AYUSH/211022/002', 14, '9408072555', 'test', 0, 0, '2021-10-15', 'None', '2021-10-28', 'None', '2021-10-16', 14, 'Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).', 'None', 'A+', 'N/A', 'Newproject', 'None', '00765100', 1, '2021-10-03T10:15', 'By Hand Delivery', 'Courier by Preksha', 1, 'QA', 1, 'Yes', 'report', 'High', 'Chemical', 'Drugs and Pharmaceuticals', 'PASS', NULL, NULL, 3, 3, '2021-10-21 13:47:01', '2021-11-10 07:01:11', '2019-20', NULL, NULL, 1, NULL),
-(33, 1, 'Report', NULL, 'OT', '2021-10-23', '2021-10-22', 'ARL/COA/OT/211022/003', 13, '', '', 8, 1, '2021-10-21', 'N/S', '2021-10-24', 'N/S', '2021-10-24', 15, '', 'N/S', '', 'N/S', '', 'N/S', '', 1, '2021-10-24T23:10', 'By Hand Delivery', 'Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).', 0, 'None', 0, 'None', '', 'High', 'Chemical', 'Drugs and Pharmaceuticals', 'PASS', NULL, NULL, 3, 3, '2021-10-21 13:47:42', '2021-10-23 06:09:07', '2019-20', NULL, NULL, 1, NULL),
+(33, 1, 'Report', NULL, 'OT', '2021-10-23', '2021-10-22', 'ARL/COA/OT/211022/003', 13, '', '', 8, 25, '2021-10-21', 'N/S', '2021-10-24', 'N/S', '2021-10-24', 15, '', 'N/S', '', 'N/S', '', 'N/S', '', 1, '2021-10-24T23:10', 'By Hand Delivery', 'Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).', 0, 'None', 0, 'None', '', 'High', 'Chemical', 'Drugs and Pharmaceuticals', 'PASS', NULL, NULL, 3, 3, '2021-10-21 13:47:42', '2021-11-16 13:11:36', '2019-20', NULL, NULL, 1, NULL),
 (38, 1, 'Invoice', '1234567890', 'AYUSH', '2021-10-23', '2021-10-30', 'ARL/COA/AYUSH/211030/003', 6, '2389239', 'Remarks', 11, 4, '2021-10-07', 'None', '2021-10-30', 'N/A', '2021-10-22', 16, 'D Format', 'None', 'C+', 'N/S', 'Aum research', 'N/S', '25LA775', 1, '2021-10-23T12:10', 'Collect by Party', 'Dispatch Details', 0, 'None', 0, 'None', 'Cancel Remarks', 'High', 'Chemical', 'Drugs and Pharmaceuticals', 'PASS', NULL, NULL, 3, 3, '2021-10-23 07:29:27', '2021-11-09 13:39:46', '2019-20', NULL, NULL, 1, NULL),
 (39, 1, 'Invoice', '00006913', 'OT', '2021-10-28', '2021-10-28', 'ARL/COA/OT/211028/004', 13, '9408072555', 'Remarks', 14, 4, '2021-10-28', 'N/A', '2021-10-31', 'N/S', '2021-10-28', 17, 'D Format1', 'N/S', 'A+', 'N/S', 'Aum research', 'N/S', '25LA775', 1, '2021-10-28T18:10', 'By Courier', 'Courier by Preksha', 1, 'QA', 1, 'Yes', 'Cancel Remarks', 'High', 'Chemical', 'Drugs and Pharmaceuticals', 'PASS', NULL, NULL, 3, 3, '2021-10-27 13:06:39', '2021-11-02 13:37:40', '2019-20', NULL, NULL, 1, NULL),
 (42, 4, 'Entry', NULL, 'RM', NULL, '2021-10-22', 'ARL/COA/RM/211022/002', 12, '8762', 'this is remark', 11, 4, '2021-10-29', 'N/S', '2021-10-30', 'N/S', '2021-10-29', 18, '12', 'N/S', 'Male', 'N/S', 'P', 'N/S', 'Not Specified', 1, '2021-10-29T12:50', 'By Hand Delivery', 'Despatch detail', 0, 'QA', 1, 'Yes', 'cancel', 'High', 'Chemical', 'Drugs and Pharmaceuticals', 'PASS', NULL, NULL, 2, NULL, '2021-10-29 07:23:38', NULL, '2019-20', NULL, NULL, 1, NULL),
@@ -143,7 +143,7 @@ CREATE TABLE `booking_audit_details` (
 INSERT INTO `booking_audit_details` (`id`, `booking_id`, `audit_remarks`, `reason`, `comments`, `created_by`, `updated_by`, `created_at`, `updated_at`, `selected_year`, `copied_from_year`, `is_active`, `deleted_at`) VALUES
 (1, 4, 'Audit Remarks', 'Audit Remarks\nReason', 'Comments', 3, NULL, '2021-10-19 13:40:39', NULL, '2019-20', NULL, 1, NULL),
 (2, 6, 'test', 'test123', 'test123456', 3, 3, '2021-10-20 06:38:02', '2021-11-02 12:53:33', '2019-20', NULL, 1, NULL),
-(3, 33, 'Audit Remarks', 'Reason', 'Comments', 3, 3, '2021-10-21 13:47:42', '2021-10-23 07:05:42', '2019-20', NULL, 1, NULL),
+(3, 33, 'Audit Remarks', 'Reason', 'Comments', 3, 3, '2021-10-21 13:47:42', '2021-11-16 13:27:34', '2019-20', NULL, 1, NULL),
 (4, 1, '', '', '', 3, 3, '2021-10-22 08:56:17', '2021-11-09 10:42:31', '2019-20', NULL, 1, NULL),
 (5, 5, 'audit remarks1', 'reasons behind it1', 'comments1', 3, 3, '2021-10-22 10:45:46', '2021-10-22 11:10:01', '2019-20', NULL, 1, NULL),
 (6, 38, '', '', '', 3, 3, '2021-10-23 09:00:28', '2021-10-23 09:02:28', '2019-20', NULL, 1, NULL);
@@ -209,7 +209,7 @@ INSERT INTO `booking_sample_details` (`id`, `booking_id`, `product_id`, `batch_n
 (14, 30, 2, 26, '55', 77, 'EASPORTS6913', 'EASPORTS6913', 0, '', '', '', '2021-10-22', 'N/S', '2021-10-24', 'N/S', 'By Courier', 1, '', 0, 0, '', '', 3, NULL, '2021-10-21 12:27:37', NULL, '2019-20', NULL, 1, NULL),
 (15, 31, 3, 0, '', 0, '', '', 0, '', '', '', NULL, 'N/S', NULL, 'N/S', 'By Courier', 1, '', 0, 0, '', '', 3, NULL, '2021-10-21 12:45:06', NULL, '2019-20', NULL, 1, NULL),
 (16, 32, 1, 1, '55', 77, 'EASPORTS6913', 'EASPORTS6913', 13, 'Keas 69 Str. 15234, Chalandri Athens, Greece', 'Keas 69 Str. 15234, Chalandri Athens, Greece', 'Sample Type', '2021-10-01', 'N/S', '2021-10-30', 'N/S', 'By Courier', 1, 'Secured seal with label', 0, 13, 'Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).', 'Darshan Vacchani', 3, 3, '2021-10-21 13:47:01', '2021-11-10 07:01:11', '2019-20', NULL, 1, NULL),
-(17, 33, 2, 54322, '55', 77, 'EASPORTS6913', 'EASPORTS6913', 13, 'Keas 69 Str. 15234, Chalandri Athens, Greece', 'Packaging', 'sample type', '2021-10-22', 'N/S', '2021-10-24', 'N/S', 'By Courier', 1, '', 0, 13, 'Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).', '', 3, 3, '2021-10-21 13:47:42', '2021-10-23 07:05:42', '2019-20', NULL, 1, NULL),
+(17, 33, 2, 54322, '55', 77, 'EASPORTS6913', 'EASPORTS6913', 13, 'Keas 69 Str. 15234, Chalandri Athens, Greece', 'Packaging', 'sample type', '2021-10-22', 'N/S', '2021-10-24', 'N/S', 'By Courier', 1, '', 0, 13, 'Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).', '', 3, 3, '2021-10-21 13:47:42', '2021-11-16 13:27:34', '2019-20', NULL, 1, NULL),
 (18, 38, 3, 123456789, '123', 23, '234467', 'Sample Desc', 12, 'Sample Location', 'Sample Packaging', 'Sample Type', '2021-10-01', 'N/S', '2021-10-30', 'N/S', 'By Courier', 1, 'Sample Condition', 0, 50, 'Notes', 'Sample Drawn By', 3, 3, '2021-10-23 07:29:27', '2021-11-09 13:39:46', '2019-20', NULL, 1, NULL),
 (19, 39, 2, 1, '32', 777, 'EASPORTS6913', 'EASPORTS6913', 13, 'Keas 69 Str. 15234, Chalandri Athens, Greece', 'Keas 69 Str. 15234, Chalandri Athens, Greece', 'Sample Type', '2021-10-28', 'N/S', '2021-10-31', 'N/S', 'By Courier', 1, 'Secured seal with label', 1, 13, 'Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).', 'Sample Drawn By', 3, 3, '2021-10-27 13:06:39', '2021-11-02 13:37:40', '2019-20', NULL, 1, NULL),
 (20, 42, 7, 72727, '87', 1, '2', '2', 0, '', '', '', NULL, 'N/S', NULL, 'N/S', 'By Courier', 1, '', 0, 0, '', '', 2, NULL, '2021-10-29 07:23:38', NULL, '2019-20', NULL, 1, NULL),
@@ -282,7 +282,6 @@ INSERT INTO `booking_tests` (`id`, `booking_id`, `parent_child`, `p_sr_no`, `by_
 (15, 30, 'Parent', '', 1, 20, 'testing here', 'dgfdg', '202', NULL, '33', '101', '', '', '', '', '', '', '', '', '', '1111.00', '', '', NULL, NULL, NULL, '', NULL, 3, 3, '2021-10-21 12:27:37', '2021-10-21 12:27:37', '2019-20', NULL, 1, NULL),
 (16, 31, 'Parent', '', 2, 15, '', 'Assay123', '1000', NULL, '7852', '', '', '', '', '', '', '', '', '', '', '0.00', '', '', NULL, NULL, NULL, '', NULL, 3, 3, '2021-10-21 12:45:06', '2021-10-21 12:45:06', '2019-20', NULL, 1, NULL),
 (17, 31, 'Parent', '', 2, 0, '', 'test parameter', '', NULL, '', '', '', '', '', '', '', '', '', '', '', '5000.00', '', '', NULL, NULL, NULL, '', NULL, 3, 3, '2021-10-21 12:45:06', '2021-10-21 12:45:06', '2019-20', NULL, 1, NULL),
-(106, 33, 'Parent', '865', 1, 14, 'Product Details', 'testname1', '201', '99.00', '', '', '', '', '', '', '', '', '', '', '', '0.00', '', '', NULL, NULL, NULL, 'Pending', NULL, 3, 3, '2021-10-23 07:05:42', '2021-10-23 07:05:42', '2019-20', NULL, 1, NULL),
 (134, 5, 'Parent', '', 1, 20, 'testing here', 'dgfdg', '202', NULL, '33', '101', '', '', '', '', '', '', '', '', '', '1111.00', '', '', NULL, NULL, NULL, '', NULL, 3, 3, '2021-10-23 10:54:00', '2021-10-23 10:54:00', '2019-20', NULL, 1, NULL),
 (146, 42, 'Parent', '1', 2, 0, 'White to off white colored round shape tablet with one side break line and other side plain.', 'Average weight', '', NULL, '', '', '', '', '', '', '', '', '', '', '', '0.00', '', '', NULL, NULL, NULL, '', NULL, 2, 2, '2021-10-29 07:23:38', '2021-10-29 07:23:38', '2019-20', NULL, 1, NULL),
 (147, 42, 'Parent', '2', 2, 32, '', 'Average weight', '', NULL, '', '', '', '', '', '', '', '', '', '', '', '0.00', '', '', NULL, NULL, NULL, '', NULL, 2, 2, '2021-10-29 07:23:38', '2021-10-29 07:23:38', '2019-20', NULL, 1, NULL),
@@ -308,12 +307,12 @@ INSERT INTO `booking_tests` (`id`, `booking_id`, `parent_child`, `p_sr_no`, `by_
 (177, 39, 'Parent', '2', 1, 31, 'testing here', 'Parent node', '204', NULL, '50', '100', '', '', '', '', '', '', '', '', '', '70092.00', '', '', NULL, NULL, NULL, '', NULL, 3, 3, '2021-11-02 13:37:40', '2021-11-02 13:37:40', '2019-20', NULL, 1, NULL),
 (178, 39, 'Child', '2.1', 1, 14, 'testing here', 'Child node', '205', NULL, '50', '100', '', '', '', '', '', '', '', '', '', '1111.00', '', '', NULL, NULL, NULL, '', 81, 3, 3, '2021-11-02 13:37:40', '2021-11-02 13:37:40', '2019-20', NULL, 1, NULL),
 (179, 39, 'Child', '2.2', 1, 14, 'testing here', 'Child node', '206', NULL, '50', '100', '', '', '', '', '', '', '', '', '', '500.00', '', '', NULL, NULL, NULL, '', 3, 3, 3, '2021-11-02 13:37:40', '2021-11-02 13:37:40', '2019-20', NULL, 1, NULL),
-(192, 1, 'Parent', '1', 2, 0, 'Black coloured soft gelatin capsules.', 'Description', '', NULL, '', '', '', '', '', '', '', '', '', '', '', '0.00', '', '', NULL, NULL, NULL, '', NULL, 3, 3, '2021-11-09 10:42:31', '2021-11-09 10:42:31', '2019-20', NULL, 1, NULL),
-(193, 1, 'Parent', '2', 2, 0, '', 'Lead', '', NULL, '', 'NMT 10 ppm', '', '', '', '', '', '', '', '', '', '0.00', '', '', NULL, NULL, NULL, '', NULL, 3, 3, '2021-11-09 10:42:31', '2021-11-09 10:42:31', '2019-20', NULL, 1, NULL),
-(194, 1, 'Parent', '3', 2, 0, '', 'Cadmium', '', NULL, '', 'NMT 0.30 ppm', '', '', '', '', '', '', '', '', '', '0.00', '', '', NULL, NULL, NULL, '', NULL, 3, 3, '2021-11-09 10:42:31', '2021-11-09 10:42:31', '2019-20', NULL, 1, NULL),
-(195, 1, 'Parent', '4', 2, 0, '', 'Arsenic', '', NULL, '', 'NMT 3.0 ppm', '', '', '', '', '', '', '', '', '', '0.00', '', '', NULL, NULL, NULL, '', NULL, 3, 3, '2021-11-09 10:42:31', '2021-11-09 10:42:31', '2019-20', NULL, 1, NULL),
-(196, 38, 'Parent', '1', 2, 15, 'Product Details1', 'Assay1232', '10001', NULL, '7853', '7856', '', '', '', '', '', '', '', '', '', '2500.00', '', '', NULL, NULL, NULL, '', NULL, 3, 3, '2021-11-09 13:39:46', '2021-11-09 13:39:46', '2019-20', NULL, 1, NULL),
-(197, 38, 'Child', '1.1', 2, 2, 'Product Details2', 'test parameter1', '10002', NULL, '7854', '7880', '', '', '', '', '', '', '', '', '', '5000.00', '', '', NULL, NULL, NULL, '', NULL, 3, 3, '2021-11-09 13:39:46', '2021-11-09 13:39:46', '2019-20', NULL, 1, NULL),
+(192, 1, 'Parent', '1', 2, 0, 'Black coloured soft gelatin capsules.', 'Description', '', NULL, '', '', '', '', '', '', '', '', '', '', '', '0.00', '', '', NULL, NULL, NULL, '', NULL, 5, 3, '2021-11-09 10:42:31', '2021-11-09 10:42:31', '2019-20', NULL, 1, NULL),
+(193, 1, 'Parent', '2', 2, 0, '', 'Lead', '', NULL, '', 'NMT 10 ppm', '', '', '', '', '', '', '', '', '', '0.00', '', '', NULL, NULL, NULL, '', NULL, 7, 3, '2021-11-09 10:42:31', '2021-11-09 10:42:31', '2019-20', NULL, 1, NULL),
+(194, 1, 'Parent', '3', 2, 0, '', 'Cadmium', '', NULL, '', 'NMT 0.30 ppm', '', '', '', '', '', '', '', '', '', '0.00', '', '', NULL, NULL, NULL, '', NULL, 5, 3, '2021-11-09 10:42:31', '2021-11-09 10:42:31', '2019-20', NULL, 1, NULL),
+(195, 1, 'Parent', '4', 2, 0, '', 'Arsenic', '', NULL, '', 'NMT 3.0 ppm', '', '', '', '', '', '', '', '', '', '0.00', '', '', NULL, NULL, NULL, '', NULL, 5, 3, '2021-11-09 10:42:31', '2021-11-09 10:42:31', '2019-20', NULL, 1, NULL),
+(196, 38, 'Parent', '1', 2, 15, 'Product Details1', 'Assay1232', '10001', NULL, '7853', '7856', '', '', '', '', '', '', '', '', '', '2500.00', '', '', NULL, NULL, NULL, '', NULL, 5, 3, '2021-11-09 13:39:46', '2021-11-09 13:39:46', '2019-20', NULL, 1, NULL),
+(197, 38, 'Child', '1.1', 2, 2, 'Product Details2', 'test parameter1', '10002', NULL, '7854', '7880', '', '', '', '', '', '', '', '', '', '5000.00', '', '', NULL, NULL, NULL, '', NULL, 0, 3, '2021-11-09 13:39:46', '2021-11-09 13:39:46', '2019-20', NULL, 1, NULL),
 (201, 32, 'Child', '1', 2, 16, 'test', 'test', '1', NULL, '2', '3', '', '', '', '', '', '', '', '', '', '44.00', '', '', NULL, NULL, NULL, '', NULL, 3, 3, '2021-11-10 07:01:11', '2021-11-10 07:01:11', '2019-20', NULL, 1, NULL),
 (214, 46, 'Parent', '1', 1, 18, 'White to off white colored round shape tablet with one side break line and other side plain.', 'Average weight', '', NULL, '', '', '', '', '', '', '', '', '', '', '', '0.00', '', '', NULL, NULL, NULL, '', NULL, 3, 3, '2021-11-10 11:06:15', '2021-11-10 11:06:15', '2019-20', NULL, 1, NULL),
 (215, 46, 'Parent', '2', 1, 17, '', 'Average weight', '', NULL, '', '', '', '', '', '', '', '', '', '', '', '0.00', '', '', NULL, NULL, NULL, '', NULL, 3, 3, '2021-11-10 11:06:15', '2021-11-10 11:06:15', '2019-20', NULL, 1, NULL),
@@ -325,7 +324,8 @@ INSERT INTO `booking_tests` (`id`, `booking_id`, `parent_child`, `p_sr_no`, `by_
 (234, 50, 'Parent', '2', 1, 17, '', 'Average weight', '', NULL, '', '', '', '', '', '', '', '', '', '', '', '0.00', '', '', NULL, NULL, NULL, '', NULL, 3, 3, '2021-11-10 13:44:49', '2021-11-10 13:44:49', '2019-20', NULL, 1, NULL),
 (235, 50, 'Parent', '3', 1, 18, '', 'Identification', '', NULL, '', 'The principal spot in the chromatogram obtained with the test solution corresponds to that obtained with reference solution.', '', '', '', '', '', '', '', '', '', '200.00', '', '', NULL, NULL, NULL, '', NULL, 3, 3, '2021-11-10 13:44:49', '2021-11-10 13:44:49', '2019-20', NULL, 1, NULL),
 (238, 49, 'Parent', '1', 2, 15, '', 'Assay123', '1000', NULL, '7852', '', '', '', '', '', '', '', '', '', '', '0.00', '', '', NULL, NULL, NULL, '', NULL, 3, 3, '2021-11-10 13:47:40', '2021-11-10 13:47:40', '2019-20', NULL, 1, NULL),
-(239, 49, 'Parent', '2', 2, 0, '', 'test parameter', '', NULL, '', '', '', '', '', '', '', '', '', '', '', '5000.00', '', '', NULL, NULL, NULL, '', NULL, 3, 3, '2021-11-10 13:47:40', '2021-11-10 13:47:40', '2019-20', NULL, 1, NULL);
+(239, 49, 'Parent', '2', 2, 0, '', 'test parameter', '', NULL, '', '', '', '', '', '', '', '', '', '', '', '5000.00', '', '', NULL, NULL, NULL, '', NULL, 3, 3, '2021-11-10 13:47:40', '2021-11-10 13:47:40', '2019-20', NULL, 1, NULL),
+(242, 33, 'Parent', '1', 1, 14, 'Product Details', 'testname1', '201', '99.00', '', '', '', '', '', '', '', '', '', '', '', '0.00', '', '', NULL, NULL, NULL, 'Assigned', 3, 3, 3, '2021-11-16 13:27:34', '2021-11-16 13:27:34', '2019-20', NULL, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -447,7 +447,8 @@ INSERT INTO `mst_branches` (`id`, `mst_companies_id`, `branch_name`, `branch_typ
 (15, 14, 'Branch 7ewsfdfdf', 'Home', 'BR07', '1234567890', 'Branch 07', 'Main Street', 'Main Road', 'New York Square', 'New York', 'New York', 'US', 12345, '1234567890', '1234567890', '1234567890', 'branch07@yopmail.com', '2021', 1, 3, '2019-20', NULL, 1, '2021-06-08 13:20:47', '2021-05-25 11:46:07', '2021-06-08 12:20:47'),
 (16, 25, 'test', 'Test', 'Test', 'Test', 'Test', 'test', NULL, NULL, 'test', 'test', 'India', 380005, 'test', NULL, '7788996655', 'test@gmail.com', NULL, 3, NULL, '2016-17', NULL, 1, NULL, '2021-05-26 08:49:02', '2021-05-26 07:49:02'),
 (17, 2, 'test123', 'test', 'test', 'test', 'test', 'test', 'test', 'ttest', 'test', 'test', 'test', 123456, '9988776655', NULL, '6549872315', '111111@gmail.com', '1232', 3, NULL, '2019-20', NULL, 1, '2021-06-08 08:55:58', '2021-06-08 08:55:39', '2021-06-08 07:55:58'),
-(18, 4, 'Mayank Shah123', 'test', 'test', 'test', 'test', 'Paldi', 'test', NULL, 'Ahmedabad', 'Gujarat', NULL, 380012, '1234567890', NULL, '7895642315', 'mayank@gmail.com', NULL, 3, 3, '2019-20', NULL, 1, '2021-06-08 08:57:46', '2021-06-08 08:56:57', '2021-06-08 07:57:46');
+(18, 4, 'Mayank Shah123', 'test', 'test', 'test', 'test', 'Paldi', 'test', NULL, 'Ahmedabad', 'Gujarat', NULL, 380012, '1234567890', NULL, '7895642315', 'mayank@gmail.com', NULL, 3, 3, '2019-20', NULL, 1, '2021-06-08 08:57:46', '2021-06-08 08:56:57', '2021-06-08 07:57:46'),
+(19, 1, 'Akhil Trivedi', 'test', '123', '23', 'test', 'Ahmedabad', NULL, NULL, 'Ahmedabad', 'Gujarat', 'test', 380012, '7788996655', '12', '1234567890', 'test1111111111@gm.com', '789', 3, 3, '2019-20', NULL, 1, NULL, '2021-11-16 12:36:20', '2021-11-16 12:37:16');
 
 -- --------------------------------------------------------
 
@@ -486,7 +487,9 @@ INSERT INTO `mst_categories` (`id`, `mst_companies_id`, `parent_category_id`, `c
 (9, 1, 8, 'Child Category', 3, NULL, '2019-20', NULL, 1, '2021-08-09 09:34:56', '2021-08-09 09:25:03', '2021-08-09 08:34:56'),
 (10, 1, NULL, 'None', 3, NULL, '2019-20', NULL, 1, '2021-08-09 09:25:53', '2021-08-09 09:25:43', '2021-08-09 08:25:53'),
 (12, 1, 0, 'Parent Category', 3, NULL, '2019-20', NULL, 1, NULL, '2021-08-09 09:35:15', '2021-08-09 08:35:15'),
-(13, 1, 12, 'Child Category', 3, NULL, '2019-20', NULL, 1, NULL, '2021-08-09 09:35:37', '2021-08-09 08:35:37');
+(13, 1, 12, 'Child Category', 3, NULL, '2019-20', NULL, 1, NULL, '2021-08-09 09:35:37', '2021-08-09 08:35:37'),
+(14, 1, 0, 'dd', 3, NULL, '2019-20', NULL, 1, NULL, '2021-11-16 12:41:33', '2021-11-16 12:41:33'),
+(15, 1, 0, 'Chemical', 3, NULL, '2019-20', NULL, 1, NULL, '2021-11-16 12:53:16', '2021-11-16 12:53:16');
 
 -- --------------------------------------------------------
 
@@ -848,7 +851,8 @@ INSERT INTO `mst_customers` (`id`, `mst_companies_id`, `company_name`, `gst_numb
 (21, 1, 'Divine infosys', NULL, NULL, NULL, NULL, NULL, NULL, 'Supplier', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, NULL, '2021-11-10 13:15:52', NULL, '2019-20', NULL, 1, NULL),
 (22, 1, 'Jay Bhavani1', NULL, NULL, NULL, NULL, NULL, NULL, 'Manufacturer', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, NULL, '2021-11-10 13:47:14', NULL, '2019-20', NULL, 1, NULL),
 (23, 1, 'Divine infosys11', NULL, NULL, NULL, NULL, NULL, NULL, 'Supplier', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, NULL, '2021-11-10 13:47:14', NULL, '2019-20', NULL, 1, NULL),
-(24, 1, 'MacDonald', NULL, NULL, NULL, NULL, NULL, NULL, 'Supplier', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, NULL, '2021-11-11 05:27:48', NULL, '2019-20', NULL, 1, NULL);
+(24, 1, 'MacDonald', NULL, NULL, NULL, NULL, NULL, NULL, 'Supplier', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, NULL, '2021-11-11 05:27:48', NULL, '2019-20', NULL, 1, NULL),
+(25, 1, 'TCSS', NULL, NULL, NULL, NULL, NULL, NULL, 'Supplier', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, NULL, '2021-11-16 13:11:36', NULL, '2019-20', NULL, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -985,12 +989,13 @@ INSERT INTO `mst_departments` (`id`, `mst_companies_id`, `mst_branches_id`, `dep
 (2, 1, 14, 'Department 2', 1, NULL, '2019-20', NULL, 1, '2021-05-26 09:07:02', '2021-05-24 13:19:24', '2021-05-26 08:07:02'),
 (3, 1, 14, 'Department 3', 1, NULL, '2019-20', NULL, 1, '2021-05-26 09:24:56', '2021-05-24 13:19:30', '2021-05-26 08:24:56'),
 (4, 1, 12, 'Department 4', 1, NULL, '2019-20', NULL, 1, '2021-06-18 13:01:33', '2021-05-24 13:19:36', '2021-06-18 12:01:33'),
-(5, 1, 12, 'HR', 1, 3, '2019-20', NULL, 1, NULL, '2021-05-24 13:19:42', '2021-07-19 09:49:50'),
+(5, 1, 12, 'HR', 1, 3, '2019-20', NULL, 1, NULL, '2021-05-24 13:19:42', '2021-11-15 09:12:13'),
 (6, 1, 10, 'Department 6', 1, NULL, '2020-21', NULL, 1, NULL, '2021-05-24 13:20:37', '2021-05-26 11:49:41'),
 (7, 4, 13, 'Accounts111', 3, 3, '2019-20', NULL, 1, '2021-06-08 13:21:24', '2021-05-26 09:00:59', '2021-06-08 12:21:24'),
 (8, 1, 15, 'test', 3, NULL, '2019-20', NULL, 1, '2021-06-08 11:01:03', '2021-06-08 11:00:07', '2021-06-08 10:01:03'),
 (9, 1, 10, 'Analysis', 3, 3, '2019-20', NULL, 1, '2021-06-08 11:00:59', '2021-06-08 11:00:29', '2021-06-08 10:00:59'),
-(10, 1, 13, 'test1234', 3, 3, '2019-20', NULL, 1, '2021-06-10 10:15:41', '2021-06-10 10:15:17', '2021-06-10 09:15:41');
+(10, 1, 13, 'test1234', 3, 3, '2019-20', NULL, 1, '2021-06-10 10:15:41', '2021-06-10 10:15:17', '2021-06-10 09:15:41'),
+(11, 1, 10, 'QA', 3, NULL, '2019-20', NULL, 1, NULL, '2021-11-16 12:51:04', '2021-11-16 12:51:04');
 
 -- --------------------------------------------------------
 
@@ -1019,7 +1024,7 @@ CREATE TABLE `mst_groups` (
 --
 
 INSERT INTO `mst_groups` (`id`, `mst_companies_id`, `group_name`, `group_code`, `parent_group`, `created_by`, `updated_by`, `selected_year`, `copied_from_year`, `is_active`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 1, 'Current Liabilites', '1234569', 2, 3, 3, '2019-20', NULL, 1, NULL, '2021-05-20 14:08:09', '2021-05-25 09:30:04'),
+(1, 4, 'Current Liabilites', '1234569', 2, 3, 3, '2019-20', NULL, 1, NULL, '2021-05-20 14:08:09', '2021-11-15 09:16:28'),
 (2, 1, 'Creditors', '1234569', NULL, 3, NULL, '2019-20', NULL, 1, NULL, '2021-05-20 14:08:27', '2021-05-26 09:08:18'),
 (3, 1, 'Sales1234', '85235AO1', NULL, 3, 3, '2019-20', NULL, 1, NULL, '2021-05-20 14:08:46', '2021-08-05 05:51:17'),
 (8, 1, 'None', '255', 2, 3, 3, '2019-20', NULL, 1, '2021-06-08 05:50:21', '2021-05-21 04:50:41', '2021-06-08 04:50:21'),
@@ -1028,7 +1033,8 @@ INSERT INTO `mst_groups` (`id`, `mst_companies_id`, `group_name`, `group_code`, 
 (12, 1, 'test1', '1234500', 2, 3, 3, '2019-20', NULL, 1, '2021-06-08 06:31:00', '2021-06-08 06:26:34', '2021-06-08 05:31:00'),
 (13, 1, 'test', '2445400', 3, 3, 3, '2019-20', NULL, 1, '2021-06-08 13:18:03', '2021-06-08 13:17:35', '2021-06-08 12:18:03'),
 (14, 1, 'test test', 'test', 2, 3, 3, '2019-20', NULL, 1, '2021-06-10 09:58:11', '2021-06-10 09:57:45', '2021-06-10 08:58:11'),
-(15, 4, 'Group', '12OI', 2, 2, 2, '2019-20', NULL, 1, NULL, '2021-10-28 11:49:52', '2021-10-28 10:50:04');
+(15, 4, 'Group', '12OI', 2, 2, 2, '2019-20', NULL, 1, NULL, '2021-10-28 11:49:52', '2021-10-28 10:50:04'),
+(17, 1, 'z', 'z', NULL, 3, NULL, '2019-20', NULL, 1, NULL, '2021-11-16 12:48:52', '2021-11-16 12:48:52');
 
 -- --------------------------------------------------------
 
@@ -1101,13 +1107,14 @@ CREATE TABLE `mst_ledgers` (
 INSERT INTO `mst_ledgers` (`id`, `mst_companies_id`, `mst_groups_id`, `ledger_name`, `ledger_opening_balance`, `ledger_contact_type`, `balance_type`, `created_by`, `updated_by`, `selected_year`, `copied_from_year`, `is_active`, `deleted_at`, `created_at`, `updated_at`) VALUES
 (1, 1, 8, 'Ledger T', '100', 'Service Provider', 'Dr', 1, 3, '2018-19', NULL, 1, NULL, '2021-05-26 06:18:15', '2021-08-05 05:29:40'),
 (2, 1, NULL, 'Ledger 2', '2', 'NA', 'dr', 1, NULL, '2019-20', NULL, 1, '2021-05-28 04:30:05', '2021-05-27 13:08:51', '2021-05-28 03:30:05'),
-(3, 1, 1, 'Test Ledger 2', '2500.50', 'Supplier', 'Cr', 3, 3, '2019-20', NULL, 1, NULL, '2021-05-28 04:53:55', '2021-05-31 10:40:04'),
+(3, 1, 2, 'Test Ledger 2', '2500.50', 'Supplier', 'Cr', 3, 3, '2019-20', NULL, 1, NULL, '2021-05-28 04:53:55', '2021-11-15 09:32:04'),
 (4, 1, 2, 'Test Ledger 1', '0', 'Customer', 'Dr', 3, 3, '2019-20', NULL, 1, NULL, '2021-05-28 04:54:24', '2021-05-31 10:39:10'),
 (5, 1, 8, 'test', '500', 'Customer', 'Cr', 3, NULL, '2019-20', NULL, 1, '2021-06-08 07:21:16', '2021-05-31 11:42:22', '2021-06-08 06:21:16'),
 (6, 1, 2, 'test', '120.50', 'Manufacturer', 'Cr', 3, 3, '2019-20', NULL, 1, NULL, '2021-06-07 13:11:27', '2021-06-11 09:50:43'),
 (7, 1, 8, 'test ledger', '152800', 'Ledger', 'Dr', 3, 3, '2019-20', NULL, 1, '2021-06-08 13:18:44', '2021-06-07 13:36:10', '2021-06-08 12:18:44'),
 (8, 1, 3, 'test', '1234', 'Ledger', 'Dr', 3, NULL, '2019-20', NULL, 1, NULL, '2021-06-21 09:17:56', '2021-06-21 08:17:56'),
-(9, 4, 2, 'Ledger', '1000', 'Customer', 'Cr', 2, 2, '2019-20', NULL, 1, NULL, '2021-10-28 11:54:34', '2021-10-28 10:54:48');
+(9, 4, 2, 'Ledger', '1000', 'Customer', 'Cr', 2, 2, '2019-20', NULL, 1, NULL, '2021-10-28 11:54:34', '2021-10-28 10:54:48'),
+(10, 1, 3, 'aa', '1234', 'Ledger', 'Dr', 3, NULL, '2019-20', NULL, 1, NULL, '2021-11-16 12:50:25', '2021-11-16 12:50:25');
 
 -- --------------------------------------------------------
 
@@ -1284,10 +1291,11 @@ INSERT INTO `mst_positions` (`id`, `mst_departments_id`, `mst_companies_id`, `po
 (2, 2, 1, 'Accounts', 1, NULL, '2019-20', NULL, 1, NULL, '2021-05-26 05:06:35', '2021-07-28 07:09:20'),
 (3, 3, 1, 'Finance', 1, NULL, '2019-20', NULL, 1, NULL, '2021-05-26 05:06:38', '2021-07-28 07:09:28'),
 (4, 7, 4, 'Accounts Manager', 3, NULL, '2019-20', NULL, 1, NULL, '2021-05-26 11:53:07', '2021-05-26 10:53:07'),
-(5, 4, 4, 'QA123', 3, 3, '2019-20', NULL, 1, NULL, '2021-05-26 11:53:59', '2021-07-28 07:08:53'),
+(5, 4, 4, 'QA123', 3, 3, '2019-20', NULL, 1, NULL, '2021-05-26 11:53:59', '2021-11-15 06:34:47'),
 (6, 5, 1, 'test position', 3, 2, '2019-20', NULL, 1, NULL, '2021-06-08 11:12:39', '2021-10-29 05:24:31'),
 (7, 5, 1, 'QA', 3, NULL, '2019-20', NULL, 1, NULL, '2021-06-08 13:22:23', '2021-06-08 12:22:23'),
-(8, 5, 1, 'Chemist', 3, NULL, '2019-20', NULL, 1, NULL, '2021-06-11 05:55:58', '2021-10-19 12:19:27');
+(8, 5, 1, 'Chemist', 3, NULL, '2019-20', NULL, 1, NULL, '2021-06-11 05:55:58', '2021-10-19 12:19:27'),
+(9, 11, 1, 'Junior QA Analytics', 3, NULL, '2019-20', NULL, 1, NULL, '2021-11-16 12:51:44', '2021-11-16 12:51:44');
 
 -- --------------------------------------------------------
 
@@ -1619,8 +1627,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `mst_companies_id`, `title`, `first_name`, `middle_name`, `last_name`, `email`, `email_verified_at`, `username`, `password`, `remember_token`, `blood_group`, `gender`, `birth_date`, `marital_status`, `photo`, `machine_code`, `phone`, `mobile`, `notes`, `attendance`, `signature`, `booking_action`, `booking_sms`, `booking_email`, `is_resigned`, `booking_copy`, `nationality`, `religion`, `caste`, `is_reporting_authority`, `deposit`, `booking_rate`, `created_by`, `updated_by`, `selected_year`, `copied_from_year`, `is_active`, `is_admin`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 1, NULL, 'Manoj', 'Kumar', 'Patel', 'manojp.divine@gmail.com', NULL, 'manojp.divine@gmail.com', '$2y$10$4PhhTLKUvtTNSeYODq1w6e/jbFPErnGKXXLtLngZKnQUnPGBn1TCu', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 0, NULL, 0, NULL, NULL, NULL, NULL, 1, 0, NULL, '2021-05-07 14:40:35', '2021-10-11 08:24:55'),
-(2, 1, NULL, 'Sanjay', 'Kumar', 'Patel', 'sanjayp.divine@gmail.com', NULL, 'sanjayp.divine@gmail.com', '$2y$10$4PhhTLKUvtTNSeYODq1w6e/jbFPErnGKXXLtLngZKnQUnPGBn1TCu', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 0, NULL, 0, NULL, NULL, NULL, NULL, 1, 0, NULL, '2021-05-07 14:40:35', '2021-10-11 08:25:10'),
+(1, 1, NULL, 'Manoj', 'Kumar', 'Patel', 'manojp.divine@gmail.com', NULL, 'manojp.divine@gmail.com', '$2y$10$4PhhTLKUvtTNSeYODq1w6e/jbFPErnGKXXLtLngZKnQUnPGBn1TCu', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, NULL, 0, NULL, NULL, NULL, NULL, 1, 0, NULL, '2021-05-07 14:40:35', '2021-11-15 06:22:23'),
+(2, 1, NULL, 'Sanjay', 'Kumar', 'Patel', 'sanjayp.divine@gmail.com', NULL, 'sanjayp.divine@gmail.com', '$2y$10$4PhhTLKUvtTNSeYODq1w6e/jbFPErnGKXXLtLngZKnQUnPGBn1TCu', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, NULL, 0, NULL, NULL, '2019-20', NULL, 1, 0, NULL, '2021-05-07 14:40:35', '2021-11-15 06:50:08'),
 (3, 1, 'Ms.', 'Prexa', 'S', 'Shah', 'preksha.divine@gmail.com', NULL, 'preksha.divine@gmail.com', '$2y$10$C.DBkJxKGx9d3gd8MG6CNOyHwqQ6siFRJLN4Rad.B/YKor5t5gKgC', NULL, 'B+', 'M', '1988-07-11', 'Married', NULL, 'M01', '4545454545554', '4545454545554', 'lorem Ipsum dor simit de nur', 1, 'MSP', 1, 1, 1, 1, 1, 'Indian', 'Hindu', 'Hindu', 1, 100, 1, NULL, 1, '2019-20', NULL, 1, 0, NULL, '2021-05-07 14:40:35', '2021-07-20 12:29:45'),
 (4, 1, NULL, 'Manoj', 'D', 'Patel', 'manojp.divine@gmail.com', NULL, 'manojp.divine@gmail.com', '$2y$10$e6tbMQLOpGtM2pG4fdKAge6GMFCXpCugsNeUq9C8n.5W9h7fyN60W', NULL, 'B+ve', 'M', '1988-07-11', 'Married', NULL, 'M01', '4545454545554', '4545454545554', 'lorem Ipsum dor simit de nur1111', 1, 'MSP', 1, 1, 1, 0, 1, 'Indian', 'Hindu', NULL, 1, 100, 0, NULL, 1, '2019-20', NULL, 1, 0, '2021-05-20 10:45:29', '2021-05-20 10:44:45', '2021-05-20 10:45:29'),
 (5, 1, 'Mr.', 'Manoj', 'S', 'Patel', 'manojp.divine@yopmail.com', NULL, 'manojp.divine@yopmail.com', '$2y$10$kwX1OommbpMTePmSbCobSurGal2Lhn4z9I5zVQ/jm5QxRa6K7ElPq', NULL, 'B+ve', 'M', '1988-07-11', 'Married', NULL, 'M01', '4545454545554', '4545454545554', 'lorem Ipsum dor simit de nur', 1, 'MSP', 1, 1, 1, 0, 1, 'Indian', 'Hindu', 'Hindu', 1, 100, 1, NULL, 3, '2019-20', NULL, 1, 0, NULL, '2021-06-16 10:45:46', '2021-06-18 06:39:30'),
@@ -1634,7 +1642,24 @@ INSERT INTO `users` (`id`, `mst_companies_id`, `title`, `first_name`, `middle_na
 (87, 4, 'Mr.', 'Ohbubble', 'Ajit', 'nz', 'test@gmail.com', NULL, 'test@gmail.com', '$2y$10$tTbmCAOTTyHM6827H.FzO.Z4zoPYhSd16himHwjgQKSjUAUb.1Y9m', NULL, 'B+', 'M', '2021-09-03', 'Single', NULL, NULL, '1234567890', '1234567890', NULL, 1, NULL, 0, 0, 0, 0, 0, NULL, NULL, NULL, 0, 0, 0, NULL, 3, '2019-20', NULL, 1, 0, NULL, '2021-09-01 06:56:13', '2021-10-18 12:58:19'),
 (88, 1, 'Mr.', 'dfhfghfghfgf', 'hfghfgh', 'hgfhfghf', 'preksha111.divine@gmail.com', NULL, 'preksha111.divine@gmail.com', '$2y$10$JXU/CCNuAyGpIx/evC1xjO2Pdm1GcdKG059NkDhhedaHMKFekHyPe', NULL, 'None', 'M', '2021-09-02', 'Single', NULL, NULL, '11122333', '55555533556', NULL, 1, NULL, 0, 0, 0, 0, 0, NULL, NULL, NULL, 0, 0, 0, NULL, 3, '2020-20', NULL, 1, 0, NULL, '2021-09-01 06:58:58', '2021-10-18 12:58:03'),
 (89, 4, 'Mr.', 'Sanjay', 'c', 'Patel', 'sanjayp.d@gmail.com', NULL, 'sanjayp.d@gmail.com', '$2y$10$uG9Y5GydiHpAtuQV7Q7buOFK8C/Skzzb.Ol2Cy/CAsdS4PvC7aqT.', NULL, 'A+', 'M', '1991-02-01', 'Married', NULL, '1222', '9377876363', '9377876363', 'notes', 1, 'C:\\fakepath\\16339507951195078173531-1.pdf', 1, 1, 1, 1, 0, NULL, NULL, NULL, 1, 1, 1, 2, NULL, '2019-20', NULL, 1, 0, NULL, '2021-10-28 09:21:31', NULL),
-(90, 4, 'Mr.', 'Sanjay', 'c', 'Patel', 'sanjayp.d@gmail.com', NULL, 'sanjayp.d@gmail.com', '$2y$10$aOSEvfve.3.qh.eNGwATvOkkrwfaZV1DZMHGWc/uD2it6Ns56r5o6', NULL, 'A+', 'M', '1991-02-01', 'Married', NULL, '1222', '9377876363', '9377876363', 'notes', 1, 'C:\\fakepath\\16339507951195078173531-1.pdf', 1, 1, 1, 1, 0, NULL, NULL, NULL, 1, 1, 1, 2, NULL, '2019-20', NULL, 1, 0, NULL, '2021-10-28 09:23:46', NULL);
+(90, 4, 'Mr.', 'Sanjay', 'c', 'Patel', 'sanjayp.d@gmail.com', NULL, 'sanjayp.d@gmail.com', '$2y$10$aOSEvfve.3.qh.eNGwATvOkkrwfaZV1DZMHGWc/uD2it6Ns56r5o6', NULL, 'A+', 'M', '1991-02-01', 'Married', NULL, '1222', '9377876363', '9377876363', 'notes', 1, 'C:\\fakepath\\16339507951195078173531-1.pdf', 1, 1, 1, 1, 0, NULL, NULL, NULL, 1, 1, 1, 2, NULL, '2019-20', NULL, 1, 0, NULL, '2021-10-28 09:23:46', NULL),
+(91, 1, 'Mr.', 'dev', 'M', 'Vyas', 'dev.divine@gmail.com', NULL, 'dev.divine@gmail.com', '$2y$10$RR1dWbWoirmi1ka/AyySZe8MGvifKpBlzsxRmVV9lG.xkyct9TmDS', NULL, 'A+', NULL, '2021-12-31', 'Single', NULL, 'M07', '9537671314', '9537671314', 'Notes', 1, NULL, 1, 1, 1, 1, 1, 'Indian', 'Hindu', 'Hindu', 1, 1, 1, 3, NULL, '2019-20', NULL, 1, 0, NULL, '2021-11-15 07:20:20', NULL),
+(92, 1, 'Mr.', 'Manoj', 'S', 'Patel', 'mp.inviable_123@yopmail.com', NULL, 'mp.inviable_123@yopmail.com', '$2y$10$6klKF02m0g72BAbGNu9/aOb134jk/mKjNYGoo6TfCiSGXNwaufH/u', NULL, 'B+ve', 'F', '1988-07-11', 'Married', NULL, 'M01', '2582582588', '2582582588', 'lorem Ipsum dor simit de nur', 2, NULL, 1, 1, 1, 1, 1, 'Indian', 'Hindu', 'Hindu', 1, 100, 1, 3, NULL, '2019-20', NULL, 1, 0, NULL, '2021-11-15 07:37:02', NULL),
+(93, 1, 'Mr.', 'Manoj', 'S', 'Patel', 'mp.inviable_123@yopmail.com', NULL, 'mp.inviable_123@yopmail.com', '$2y$10$xzojsl8X7IFqtYSxAXmJoe93No4ytrRQ//tSxyp1xasfbCOEFtuUS', NULL, 'B+ve', 'F', '1988-07-11', 'Married', NULL, 'M01', '2582582588', '2582582588', 'lorem Ipsum dor simit de nur', 2, NULL, 1, 1, 1, 1, 1, 'Indian', 'Hindu', 'Hindu', 1, 100, 1, 3, NULL, '2019-20', NULL, 1, 0, NULL, '2021-11-15 07:39:40', NULL),
+(94, 1, 'Mr.', 'Manoj', 'S', 'Patel', 'mp.inviable_123@yopmail.com', NULL, 'mp.inviable_123@yopmail.com', '$2y$10$lW3CNjMQ4zv1yE0vuBeibOC1wvXTHkljTcSjNHGibE22T2FErJrrG', NULL, 'B+ve', 'F', '1988-07-11', 'Married', NULL, 'M01', '2582582588', '2582582588', 'lorem Ipsum dor simit de nur', 2, NULL, 1, 1, 1, 1, 1, 'Indian', 'Hindu', 'Hindu', 1, 100, 1, 3, NULL, '2019-20', NULL, 1, 0, NULL, '2021-11-15 07:39:58', NULL),
+(95, 1, 'Mr.', 'vishal', 'GOPIKA', 'kotak', 'pragnesh@gmail.com', NULL, 'pragnesh@gmail.com', '$2y$10$CTTxB3TBlccs5z20eaucZOuO1kA8rKlRtuxXRx0hZPwTWg/JtHB8u', NULL, 'A+', NULL, '2021-11-21', 'Single', NULL, 'M07', '9537671314', '9537671314', 'Notes', 1, NULL, 0, 0, 0, 0, 1, 'Indian', 'Hindu', 'Hindu', 1, 1, 1, 3, NULL, '2019-20', NULL, 1, 0, NULL, '2021-11-15 07:42:12', NULL),
+(96, 1, 'Mr.', 'Manoj', 'S', 'Patel', 'mp.inviable_123@yopmail.com', NULL, 'mp.inviable_123@yopmail.com', '$2y$10$bxqZKyuxrZI1BogR5xbtquPhOE5HdMoAh3KwjygdF4tGsbMKF.AOe', NULL, 'B+ve', 'F', '1988-07-11', 'Married', NULL, 'M01', '2582582588', '2582582588', 'lorem Ipsum dor simit de nur', 2, NULL, 1, 1, 1, 1, 1, 'Indian', 'Hindu', 'Hindu', 1, 100, 1, 3, NULL, '2019-20', NULL, 1, 0, NULL, '2021-11-15 07:43:05', NULL),
+(97, 1, 'Mr.', 'vishal', 'GOPIKA', 'kotak', 'pragnesh@gmail.com', NULL, 'pragnesh@gmail.com', '$2y$10$lgFRw6OpMxH9qmNcOkJlp.fMEqz0tyQtZA41vpnLxYRkGfsan0aMa', NULL, 'A+', NULL, '2021-11-21', 'Single', NULL, 'M07', '9537671314', '9537671314', 'Notes', 1, NULL, 0, 0, 0, 0, 1, 'Indian', 'Hindu', 'Hindu', 1, 1, 1, 3, NULL, '2019-20', NULL, 1, 0, NULL, '2021-11-15 07:43:12', NULL),
+(98, 1, 'Mr.', 'vishal', 'GOPIKA', 'kotak', 'pragnesh@gmail.com', NULL, 'pragnesh@gmail.com', '$2y$10$OAzU5JXwLKXTHG3sr8.rEuU7UWq3GuzOSN2KmfIf90YLfXo6ToY5q', NULL, 'A+', NULL, '2021-11-21', 'Single', NULL, 'M07', '9537671314', '9537671314', 'Notes', 1, NULL, 0, 0, 0, 0, 1, 'Indian', 'Hindu', 'Hindu', 1, 1, 1, 3, NULL, '2019-20', NULL, 1, 0, NULL, '2021-11-15 07:44:05', NULL),
+(99, 1, 'Mr.', 'vishal', 'GOPIKA', 'kotak', 'pragnesh@gmail.com', NULL, 'pragnesh@gmail.com', '$2y$10$TiSD0iGA3XsfSD2pShAet.2xCmp57an5GTora3F/RmGC/slpEbnBe', NULL, 'A+', NULL, '2021-11-21', 'Single', NULL, 'M07', '9537671314', '9537671314', 'Notes', 1, NULL, 0, 0, 0, 0, 1, 'Indian', 'Hindu', 'Hindu', 1, 1, 1, 3, NULL, '2019-20', NULL, 1, 0, NULL, '2021-11-15 07:44:39', NULL),
+(100, 1, 'Mr.', 'Pragnesh', 'A', 'Chauhan', 'pragnesh@gmail.com', NULL, 'pragnesh@gmail.com', '$2y$10$FMCEqwm/7mvyTRBkzxEI9ucHR8FYT3VBPTrgo36sZthoYyGjqtdfG', NULL, 'A+', NULL, '2021-12-31', 'Single', NULL, 'M07', '9537671314', '9408072555', NULL, 1, NULL, 1, 1, 1, 1, 1, 'Indian', 'Hindu', 'Hindu', 1, 1, 1, 3, NULL, '2019-20', NULL, 1, 0, NULL, '2021-11-15 08:45:31', NULL),
+(101, 1, 'Mr.', 'Pragnesh', 'A', 'Chauhan', 'pragnesh@gmail.com', NULL, 'pragnesh@gmail.com', '$2y$10$5isESoIxtwrOu8nCQ1QiiuZIRRsjQ9KHYooPgpECJeFnhdSx74fnS', NULL, 'A+', NULL, '2021-12-31', 'Single', NULL, 'M07', '9537671314', '9408072555', NULL, 1, NULL, 1, 1, 1, 1, 1, 'Indian', 'Hindu', 'Hindu', 1, 1, 1, 3, NULL, '2019-20', NULL, 1, 0, NULL, '2021-11-15 08:46:29', NULL),
+(102, 1, 'Mr.', 'Pragnesh', 'A', 'Chauhan', 'pragnesh@gmail.com', NULL, 'pragnesh@gmail.com', '$2y$10$2Yt6r5Okf.JVvKyZWJpueui2SApZBs0OdoEQe1TDc3Vq.FDs34OMm', NULL, 'A+', NULL, '2021-12-31', 'Single', NULL, 'M07', '9537671314', '9408072555', NULL, 1, NULL, 1, 1, 1, 1, 1, 'Indian', 'Hindu', 'Hindu', 1, 1, 1, 3, NULL, '2019-20', NULL, 1, 0, NULL, '2021-11-15 08:47:30', NULL),
+(103, 1, 'Mr.', 'test', 'ddd', 'Shah', 'preksha1.divine@gmail.com', NULL, 'preksha1.divine@gmail.com', '$2y$10$l13VvNF76GJiuq6sA/kEkey8RuiaPm5pA9Ly3csSowsu/DZHjzLhO', NULL, 'None', NULL, '2021-11-20', 'Single', NULL, NULL, '1112223334', '1234567895', NULL, 1, NULL, 0, 0, 0, 0, 0, NULL, NULL, NULL, 0, 0, 0, 3, NULL, '2019-20', NULL, 1, 0, NULL, '2021-11-16 09:53:42', NULL),
+(104, 1, 'Mr.', 'test', 'ddd', 'Shah', 'preksha1.divine@gmail.com', NULL, 'preksha1.divine@gmail.com', '$2y$10$LUp8YYOab0bM9fmGOMForu7xqNSv1h.V0oroVfluKzlz2h64D.xNO', NULL, 'None', NULL, '2021-11-20', 'Single', NULL, NULL, '1112223334', '1234567895', NULL, 1, NULL, 0, 0, 0, 0, 0, NULL, NULL, NULL, 0, 0, 0, 3, NULL, '2019-20', NULL, 1, 0, NULL, '2021-11-16 09:54:03', NULL),
+(105, 1, 'Mr.', 'test', 'ddd', 'Shah', 'preksha1.divine@gmail.com', NULL, 'preksha1.divine@gmail.com', '$2y$10$cVPKrH8DHivbwSfC51Y3oOQJU1ZeCjw6KAAiKOQ2/vKK70ckTIEqq', NULL, 'None', NULL, '2021-11-20', 'Single', NULL, NULL, '1112223334', '1234567895', NULL, 1, NULL, 0, 0, 0, 0, 0, NULL, NULL, NULL, 0, 0, 0, 3, NULL, '2019-20', NULL, 1, 0, NULL, '2021-11-16 09:56:13', NULL),
+(106, 1, 'Mr.', 'test', 'ddd', 'Shah', 'preksha1.divine@gmail.com', NULL, 'preksha1.divine@gmail.com', '$2y$10$wcu8DVGI.q/S52DHC9P.gO.h03ladWSndIwrNyHIBlG4EGR.ZKRaC', NULL, 'None', NULL, '2021-11-20', 'Single', NULL, NULL, '1112223334', '1234567895', NULL, 1, NULL, 0, 0, 0, 0, 0, NULL, NULL, NULL, 0, 0, 0, 3, NULL, '2019-20', NULL, 1, 0, NULL, '2021-11-16 09:57:11', NULL),
+(107, 1, 'Mr.', 'test', 'ddd', 'Shah', 'preksha1.divine@gmail.com', NULL, 'preksha1.divine@gmail.com', '$2y$10$aEb6WV8D7pK5ozz1epwS7ezfURevLWQdeef9JG.UfZuMvjy.kkkFK', NULL, 'None', NULL, '2021-11-20', 'Single', NULL, NULL, '1112223334', '1234567895', NULL, 1, NULL, 0, 0, 0, 0, 0, NULL, NULL, NULL, 0, 0, 0, 3, NULL, '2019-20', NULL, 1, 0, NULL, '2021-11-16 09:57:24', NULL);
 
 -- --------------------------------------------------------
 
@@ -1698,7 +1723,16 @@ INSERT INTO `user_address_details` (`id`, `users_id`, `mst_countries_id`, `mst_s
 (124, 89, 102, 12, '1711  Centennial Farm Road, aassss', '1711  Centennial Farm Road', '', 'Harlan', '07036', 'sanjayp@net4nuts.com', 'sanjay patel', '', '', 1, 2, NULL, NULL, '2021-10-28 09:21:31', '2021-10-28 09:21:31'),
 (125, 89, 0, 0, '1711  Centennial Farm Road', '', '', '', '07036', '', '', '8652425262', '', 2, 2, NULL, NULL, '2021-10-28 09:21:31', '2021-10-28 09:21:31'),
 (126, 90, 102, 12, '1711  Centennial Farm Road, aassss', '1711  Centennial Farm Road', '', 'Harlan', '07036', 'sanjayp@net4nuts.com', 'sanjay patel', '', '', 1, 2, NULL, NULL, '2021-10-28 09:23:46', '2021-10-28 09:23:46'),
-(127, 90, 0, 0, '1711  Centennial Farm Road', '', '', '', '07036', '', '', '8652425262', '', 2, 2, NULL, NULL, '2021-10-28 09:23:46', '2021-10-28 09:23:46');
+(127, 90, 0, 0, '1711  Centennial Farm Road', '', '', '', '07036', '', '', '8652425262', '', 2, 2, NULL, NULL, '2021-10-28 09:23:46', '2021-10-28 09:23:46'),
+(128, 94, 102, 50, 'Sabermati', 'Street 2 Test', 'Sudama Nagar', 'Indore', '452001', '', 'Manish', '1234567890', '', 1, 3, NULL, NULL, '2021-11-15 07:39:58', '2021-11-15 07:39:58'),
+(129, 94, 102, 50, 'Sabermati', 'Street 2 Test', 'Sudama Nagar', 'Indore', '452001', '', 'Manish', '1234567890', '', 2, 3, NULL, NULL, '2021-11-15 07:39:58', '2021-11-15 07:39:58'),
+(130, 96, 102, 50, 'Sabermati', 'Street 2 Test', 'Sudama Nagar', 'Indore', '452001', '', 'Manish', '1234567890', '', 1, 3, NULL, NULL, '2021-11-15 07:43:05', '2021-11-15 07:43:05'),
+(131, 96, 102, 50, 'Sabermati', 'Street 2 Test', 'Sudama Nagar', 'Indore', '452001', '', 'Manish', '1234567890', '', 2, 3, NULL, NULL, '2021-11-15 07:43:05', '2021-11-15 07:43:05'),
+(132, 103, 102, 12, 'Ahmedabad', 'Ahmedabad', '', 'Ahmedabad', '380012', 'bhaveshgajjar@gmail.com', 'Mayank Shah', '1112223334', '', 2, 3, NULL, NULL, '2021-11-16 09:53:42', '2021-11-16 09:53:42'),
+(133, 104, 102, 12, 'Ahmedabad', 'Ahmedabad', '', 'Ahmedabad', '380012', 'bhaveshgajjar@gmail.com', 'Mayank Shah', '1112223334', '', 2, 3, NULL, NULL, '2021-11-16 09:54:03', '2021-11-16 09:54:03'),
+(134, 105, 102, 12, 'Ahmedabad', 'Ahmedabad', '', 'Ahmedabad', '380012', 'bhaveshgajjar@gmail.com', 'Mayank Shah', '1112223334', '', 2, 3, NULL, NULL, '2021-11-16 09:56:13', '2021-11-16 09:56:13'),
+(135, 106, 102, 12, 'Ahmedabad', 'Ahmedabad', '', 'Ahmedabad', '380012', 'bhaveshgajjar@gmail.com', 'Mayank Shah', '1112223334', '', 2, 3, NULL, NULL, '2021-11-16 09:57:11', '2021-11-16 09:57:11'),
+(136, 107, 102, 12, 'Ahmedabad', 'Ahmedabad', '', 'Ahmedabad', '380012', 'bhaveshgajjar@gmail.com', 'Mayank Shah', '1112223334', '', 2, 3, NULL, NULL, '2021-11-16 09:57:24', '2021-11-16 09:57:24');
 
 -- --------------------------------------------------------
 
@@ -1765,7 +1799,9 @@ INSERT INTO `user_company_info` (`id`, `mst_companies_id`, `users_id`, `reportin
 (8, NULL, 47, 2, 2, 8, '2020-05-20', '2021-06-20', 'Bank Name Ltd', 'Vijay Nagar', '5000', '454545554545', 1, 3, NULL, NULL, '2021-07-02 10:13:01', '2021-10-29 12:07:20'),
 (9, 4, 81, 5, 5, 8, '2018-07-19', '2021-07-19', 'ICICI Bank', 'Thaltej', '25000', '12345678958', 1, 3, NULL, NULL, '2021-07-19 10:43:21', '2021-10-29 12:07:17'),
 (10, 2, 85, 3, 3, 1, '2018-07-07', '2021-07-19', 'Kalupur Bank', 'Paldi', '27000', '12345678000', 1, 3, NULL, NULL, '2021-07-19 11:19:29', '2021-10-29 12:06:22'),
-(11, 1, 86, 2, 2, 1, '2020-05-20', '2021-06-20', 'Bank Name Ltd', 'Vijay Nagar', '5000', '454545554545', 1, 1, NULL, NULL, '2021-07-20 12:28:54', '2021-07-20 12:28:54');
+(11, 1, 86, 2, 2, 1, '2020-05-20', '2021-06-20', 'Bank Name Ltd', 'Vijay Nagar', '5000', '454545554545', 1, 1, NULL, NULL, '2021-07-20 12:28:54', '2021-07-20 12:28:54'),
+(12, 1, 94, 2, 2, 1, '2020-05-20', '2021-06-20', 'Bank Name Ltd', 'Vijay Nagar', '5000', '454545554545', 1, 3, NULL, NULL, '2021-11-15 07:39:58', '2021-11-15 07:39:58'),
+(13, 1, 96, 2, 2, 1, '2020-05-20', '2021-06-20', 'Bank Name Ltd', 'Vijay Nagar', '5000', '454545554545', 1, 3, NULL, NULL, '2021-11-15 07:43:05', '2021-11-15 07:43:05');
 
 -- --------------------------------------------------------
 
@@ -1793,6 +1829,14 @@ CREATE TABLE `user_doc_details` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='This table is used to store user education details';
+
+--
+-- Dumping data for table `user_doc_details`
+--
+
+INSERT INTO `user_doc_details` (`id`, `users_id`, `aadhar_card_photo`, `aadhar_number`, `election_card_photo`, `election_card_number`, `pan_card_photo`, `pan_card_number`, `passport_photo`, `passport_number`, `driving_license_photo`, `driving_license_number`, `is_active`, `created_by`, `updated_by`, `deleted_at`, `created_at`, `updated_at`) VALUES
+(1, 94, NULL, '1234123412341234', NULL, '1234567890', NULL, 'ABCDE1234E', NULL, 'M4584585', NULL, 'MP0585555555', 1, 3, NULL, NULL, '2021-11-15 07:39:58', '2021-11-15 07:39:58'),
+(2, 96, NULL, '1234123412341234', NULL, '1234567890', NULL, 'ABCDE1234E', NULL, 'M4584585', NULL, 'MP0585555555', 1, 3, NULL, NULL, '2021-11-15 07:43:05', '2021-11-15 07:43:05');
 
 -- --------------------------------------------------------
 
@@ -1835,7 +1879,11 @@ INSERT INTO `user_edu_details` (`id`, `users_id`, `degree`, `university`, `from_
 (51, 86, 'B Tech', 'Ganpat University', 2008, 2012, '', 'Information Technology', 1, 1, NULL, '2021-07-20 12:28:54', '2021-07-20 12:28:54'),
 (52, 86, '10th', 'Gujrat Board', 1992, 1993, '', 'Science', 1, 1, NULL, '2021-07-20 12:28:54', '2021-07-20 12:28:54'),
 (55, 3, 'B Tech', 'Ganpat University', 2008, 2012, '81.20', 'Information Technology', 1, 1, NULL, '2021-07-20 12:29:45', '2021-07-20 12:29:45'),
-(56, 3, '10th', 'Gujrat Board', 1992, 1993, '78.50', 'Science', 1, 1, NULL, '2021-07-20 12:29:45', '2021-07-20 12:29:45');
+(56, 3, '10th', 'Gujrat Board', 1992, 1993, '78.50', 'Science', 1, 1, NULL, '2021-07-20 12:29:45', '2021-07-20 12:29:45'),
+(57, 94, 'B Tech', 'Ganpat University', 2008, 2012, NULL, 'Information Technology', 1, 3, NULL, '2021-11-15 07:39:58', '2021-11-15 07:39:58'),
+(58, 94, '10th', 'Gujrat Board', 1992, 1993, NULL, 'Science', 1, 3, NULL, '2021-11-15 07:39:58', '2021-11-15 07:39:58'),
+(59, 96, 'B Tech', 'Ganpat University', 2008, 2012, NULL, 'Information Technology', 1, 3, NULL, '2021-11-15 07:43:05', '2021-11-15 07:43:05'),
+(60, 96, '10th', 'Gujrat Board', 1992, 1993, NULL, 'Science', 1, 3, NULL, '2021-11-15 07:43:05', '2021-11-15 07:43:05');
 
 -- --------------------------------------------------------
 
@@ -2127,7 +2175,7 @@ ALTER TABLE `booking_sample_details`
 -- AUTO_INCREMENT for table `booking_tests`
 --
 ALTER TABLE `booking_tests`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=240;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=243;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -2151,13 +2199,13 @@ ALTER TABLE `mst_banks`
 -- AUTO_INCREMENT for table `mst_branches`
 --
 ALTER TABLE `mst_branches`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `mst_categories`
 --
 ALTER TABLE `mst_categories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `mst_companies`
@@ -2175,7 +2223,7 @@ ALTER TABLE `mst_countries`
 -- AUTO_INCREMENT for table `mst_customers`
 --
 ALTER TABLE `mst_customers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `mst_customers_contact_info`
@@ -2193,13 +2241,13 @@ ALTER TABLE `mst_customers_contact_person`
 -- AUTO_INCREMENT for table `mst_departments`
 --
 ALTER TABLE `mst_departments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `mst_groups`
 --
 ALTER TABLE `mst_groups`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `mst_instruments`
@@ -2211,7 +2259,7 @@ ALTER TABLE `mst_instruments`
 -- AUTO_INCREMENT for table `mst_ledgers`
 --
 ALTER TABLE `mst_ledgers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `mst_locations`
@@ -2241,7 +2289,7 @@ ALTER TABLE `mst_pharmacopeia`
 -- AUTO_INCREMENT for table `mst_positions`
 --
 ALTER TABLE `mst_positions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `mst_products`
@@ -2283,13 +2331,13 @@ ALTER TABLE `mst_units`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=91;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=108;
 
 --
 -- AUTO_INCREMENT for table `user_address_details`
 --
 ALTER TABLE `user_address_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=128;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=137;
 
 --
 -- AUTO_INCREMENT for table `user_assign_rights`
@@ -2301,19 +2349,19 @@ ALTER TABLE `user_assign_rights`
 -- AUTO_INCREMENT for table `user_company_info`
 --
 ALTER TABLE `user_company_info`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `user_doc_details`
 --
 ALTER TABLE `user_doc_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `user_edu_details`
 --
 ALTER TABLE `user_edu_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
 
 --
 -- AUTO_INCREMENT for table `user_emp_details`

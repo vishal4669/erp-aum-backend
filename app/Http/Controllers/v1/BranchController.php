@@ -77,7 +77,7 @@ class BranchController extends Controller
                 'branch_state' => 'required',
                 'branch_country' => 'required',
                 'branch_establish_year' => 'integer',
-                'branch_fax' => 'integer'
+                'branch_fax' => 'nullable|integer'
             ];
 
             $messages = [
@@ -192,7 +192,7 @@ class BranchController extends Controller
                 'branch_state' => 'required',
                 'branch_country' => 'required',
                 'branch_establish_year' => 'integer',
-                'branch_fax' => 'integer'
+                'branch_fax' => 'nullable|integer'
             ];
 
             $messages = [

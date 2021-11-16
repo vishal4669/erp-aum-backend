@@ -695,7 +695,10 @@ class BookingController extends Controller
                             !empty($tests['percentage_of_label_claim']) or
                             !empty($tests['chemsit_name'])
                         ) {
-                            // print_r("=====6");
+
+                            if ($tests['approved'] == "Pending" || !isset($tests['approved']) && isset($tests['chemist_name']) == true) {
+                                $tests['approved'] = "Assigned";
+                            }
                             $tests_data = array(
                                 "booking_id" => (isset($booking_id) ? $booking_id : 0),
                                 "parent_child" => (isset($tests['parent_child']) ? $tests['parent_child'] : ''),
@@ -731,7 +734,6 @@ class BookingController extends Controller
                                 'created_by' => $loggedInUserData['logged_in_user_id'], //edited
                                 'updated_by' => $loggedInUserData['logged_in_user_id']
                             );
-                            // print_r("=====7");
                             BookingTest::create($tests_data);
                         }
                     }
@@ -789,7 +791,7 @@ class BookingController extends Controller
             ->where('mst_companies_id', $loggedInUserData['company_id'])
             ->orderBy('id', 'desc')
             ->get()->toarray();
-            // dd($product_data);
+
         if ($data['samples'][0]['get_product']['deleted_at'] == null || $data['samples'][0]['get_product']['deleted_at'] == '') {
             $data['products'] = $product_data;
         } else {
@@ -913,13 +915,11 @@ class BookingController extends Controller
         $data['mfg_date'] = \Carbon\Carbon::parse($data['mfg_date'])->format('Y-m-d');
         $data['exp_date'] = \Carbon\Carbon::parse($data['exp_date'])->format('Y-m-d');
         $data['analysis_date'] = \Carbon\Carbon::parse($data['analysis_date'])->format('Y-m-d');
-        
-        if($data['samples'][0]['sampling_date_from'] != null)
-        {
+
+        if ($data['samples'][0]['sampling_date_from'] != null) {
             $data['samples'][0]['sampling_date_from'] = \Carbon\Carbon::parse($data['samples'][0]['sampling_date_from'])->format('Y-m-d');
         }
-        if($data['samples'][0]['sampling_date_to'] != null)
-        {
+        if ($data['samples'][0]['sampling_date_to'] != null) {
             $data['samples'][0]['sampling_date_to'] = \Carbon\Carbon::parse($data['samples'][0]['sampling_date_to'])->format('Y-m-d');
         }
 
@@ -935,7 +935,7 @@ class BookingController extends Controller
             $data['supplier_id'] = array(
                 "id" => "",
                 "company_name" => "",
-                "supplier_name"=>""
+                "supplier_name" => ""
             );
         }
         if ($data['manufacturer_id'] == null) {
@@ -1025,9 +1025,9 @@ class BookingController extends Controller
                     if ($data['tests'][$i]['chemist']['deleted_at'] == null || $data['tests'][$i]['chemist']['deleted_at'] == '') {
                         $data['chemist_dropdown'] = $chemist_data;
                     } else {
-                        if(!in_array($data['tests'][$i]['chemist'], $chemist_data)){
-                        array_push($chemist_data, $data['tests'][$i]['chemist']);
-                        $data['chemist_dropdown'] = $chemist_data;
+                        if (!in_array($data['tests'][$i]['chemist'], $chemist_data)) {
+                            array_push($chemist_data, $data['tests'][$i]['chemist']);
+                            $data['chemist_dropdown'] = $chemist_data;
                         }
                     }
                 }

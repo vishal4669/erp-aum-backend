@@ -144,7 +144,7 @@ class EmployeeController extends Controller
                 'password.regex' => 'password invalid : minimum 8 max 15 characters, only one uppercase letter,at least one lowercase letter, one number and one special character:',
                 'birth_date.required' => 'Birth Date field is required.',
                 'birth_date.date' => 'Please enter valid date for Employee Date Of Birth.',
-                'mobile.required' => 'Email field is required.',
+                'mobile.required' => 'Mobile field is required.',
                 'mobile.min' => 'Mobile Number should not be less than 10 characters.',
                 'mobile.max' => 'Mobile Number should not me greater than 10 characters.',
                 'phone.min' => 'Phone Number should not be less than 10 characters.',

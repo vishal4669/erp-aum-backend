@@ -106,6 +106,7 @@ class Booking extends Model
      */
     public function tests_detail()
     {
-        return $this->hasMany(BookingTest::class)->where('chemist_name',NULL)->orwhere('chemist_name',0)->withTrashed();
+        // return $this->hasMany(BookingTest::class)->where('chemist_name',NULL)->orwhere('chemist_name',0)->withTrashed();
+        return $this->hasMany(BookingTest::class)->where('approved','Pending')->withTrashed();
     }
 }
