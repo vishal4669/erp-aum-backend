@@ -25,8 +25,17 @@ class UserController extends Controller
         Log::info("User Login -> " . json_encode(array('credentials' => $request->email)));
         try {
 
-            $customClaims = array('selected_year' => $selected_year, 'company_id' => $company_id);
+            // check for the resigned employees
+            $is_resigned = User::where('email', $request->email)->pluck('is_resigned')->first();
 
+            if($is_resigned){
+                $res = Helper::response("You are not authorized to login into system, please contact system administrator", Response::HTTP_UNAUTHORIZED, true, []);
+                Log::info("User Login -> Resigned User Try Login with Email : ".$request->email);
+
+                return $res;
+            }
+
+            $customClaims = array('selected_year' => $selected_year, 'company_id' => $company_id, 'is_resigned' => 0);
 
             if (!$token = JWTAuth::claims($customClaims)->attempt($credentials)) {
                 $data = array();
