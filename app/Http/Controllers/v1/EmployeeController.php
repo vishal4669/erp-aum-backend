@@ -59,6 +59,7 @@ class EmployeeController extends Controller
                     ->get(['users.id', 'users.first_name', 'users.middle_name', 'users.last_name']);
             } else {
                 $data = Employee::with(['address', 'right', 'company', 'education', 'employment', 'document'])
+                    ->where('users.is_resigned', 0)
                     ->where('users.is_active', 1)
                     ->where('users.selected_year', $loggedInUserData['selected_year'])
                     ->where('users.mst_companies_id', $loggedInUserData['company_id']);
@@ -113,7 +114,19 @@ class EmployeeController extends Controller
                 'company.mst_companies_id' => 'required',
                 'company.mst_departments_id' => 'required',
                 'company.mst_positions_id' => 'required',
-                'company.join_date' => 'nullable|date'
+                'company.join_date' => 'nullable|date',
+
+                //documents related messages
+                'document.aadhar_card_photo' => 'nullable|mimes:jpeg,jpg,png,pdf',
+                'document.election_card_photo' => 'nullable|mimes:jpeg,jpg,png,pdf',
+                'document.pan_card_photo' => 'nullable|mimes:jpeg,jpg,png,pdf',
+                'document.passport_photo' => 'nullable|mimes:jpeg,jpg,png,pdf',
+                'document.driving_license_photo' => 'nullable|mimes:jpeg,jpg,png,pdf',
+
+                // employee photo and signature
+                'signature' => 'nullable|mimes:jpeg,jpg,png,pdf',
+                'photo' => 'nullable|mimes:jpeg,jpg,png',
+                
             ];
 
             $messages = [
@@ -156,6 +169,18 @@ class EmployeeController extends Controller
                 'company.*.mst_positions_id.required' => 'Company Position field is required.',
                 'company.*.join_date.date' => 'Please enter valid date for Employee Company Join Date.',
 
+                //documents related messages
+                'document.aadhar_card_photo.mimes' => 'The Aadhar Card must be a file of type: jpeg, jpg, png, pdf.',
+                'document.election_card_photo.mimes' => 'The Election Card must be a file of type: jpeg, jpg, png, pdf.',
+                'document.pan_card_photo.mimes' => 'The Pan Card must be a file of type: jpeg, jpg, png, pdf.',
+                'document.passport_photo.mimes' => 'The Aadhar Passport must be a file of type: jpeg, jpg, png, pdf.',
+                'document.driving_license_photo.mimes' => 'The Driving License must be a file of type: jpeg, jpg, png, pdf.',
+
+                //documents related messages
+                'signature.mimes' => 'The Employee Signature must be a file of type: jpeg, jpg, png, pdf.',
+                'photo.mimes' => 'The Employee Photo must be a file of type: jpeg, jpg, png.',
+                
+
             ];
 
             $validator = Validator::make($request->all(), $rules, $messages);
@@ -185,7 +210,6 @@ class EmployeeController extends Controller
                 'mobile' => $request->get('mobile'),
                 'notes' => $request->get('notes'),
                 'attendance' => $request->get('attendance'),
-                'signature' => $request->get('signature'),
                 'booking_action' => $request->get('booking_action'),
                 'booking_sms' => $request->get('booking_sms'),
                 'booking_email' => $request->get('booking_email'),
@@ -206,18 +230,48 @@ class EmployeeController extends Controller
 
             //Added user id
             $users_id = $data->id;
-            
-            // Update User related details
-            $this->addUpdateUserAddressDetails($request->address, $users_id);
-            $this->addUserEducationDetails($request->education, $users_id);
-            $this->addUserEmploymentDetails($request->employment, $users_id);
-            $this->addUpdateUserCompanyDetails($request->company, $users_id);
-            $this->addUpdateUserDocumentDetails($request->document, $users_id);
 
+            // Upload Signature and Photo for the employee
+            $photo_file_name = $signature_file_name = '';
+            $random_string = Helper::generateRandomString();
+
+            $photo = (isset($request['photo']) && !empty($request['photo'])) ? $request['photo'] : '';
+            if(!empty($photo)){
+                $photo_file_name = 'photo_'.$users_id."_".$random_string."." . $photo->getClientOriginalExtension();
+                $photo->move(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH'), $photo_file_name);
+            }
+
+            $signature = (isset($request['signature']) && !empty($request['signature'])) ? $request['signature'] : '';
+            if(!empty($signature)){
+                $signature_file_name = 'signature_'.$users_id."_".$random_string."." . $signature->getClientOriginalExtension();
+                $signature->move(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH'), $signature_file_name);
+            }
+
+            $userData = Employee::find($users_id);
+            $userData->photo = ($photo_file_name && $photo_file_name!='') ? config('constants.EMPLOYEE_DOCUMENTS_URL').'/'.$photo_file_name : $userData->photo;
+            $userData->signature = ($signature_file_name && $signature_file_name!='') ? config('constants.EMPLOYEE_DOCUMENTS_URL').'/'.$signature_file_name : $userData->signature;
+            $userData->save();
+
+            //Update User related details
+            if(isset($request->address)){
+                $this->addUpdateUserAddressDetails($request->address, $users_id);
+            }
+            if(isset($request->education)){
+                $this->addUserEducationDetails($request->education, $users_id);
+            }
+            if(isset($request->employment)){
+                $this->addUserEmploymentDetails($request->employment, $users_id);
+            }
+            if(isset($request->company)){
+                $this->addUpdateUserCompanyDetails($request->company, $users_id);
+            }
+            if(isset($request->document)){
+                $this->addUpdateUserDocumentDetails($request->document, $users_id);
+            }
 
             Log::info("Employee Created with details : " . json_encode($request->all()));
 
-            return Helper::response("Employee added Successfully", Response::HTTP_CREATED, true, []);
+            return Helper::response("Employee added Successfully", Response::HTTP_CREATED, true, $userData);
         } catch (Exception $e) {
             $data = array();
             return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);
@@ -234,9 +288,8 @@ class EmployeeController extends Controller
 
     public function show($id)
     {
-        Log::info("Fetch company details : " . json_encode(array('id' => $id)));
+        Log::info("Fetch employee details : " . json_encode(array('id' => $id)));
         try {
-
             $employeeData = Employee::with(['address', 'right', 'company', 'education', 'employment', 'document'])->find($id);
             return Helper::response("Employee Data Shown Successfully", Response::HTTP_OK, true, $employeeData);
         } catch (Exception $e) {
@@ -257,13 +310,99 @@ class EmployeeController extends Controller
     {
         try {
 
-            $validator = Validator::make($request->all(), [
+            $rules = [
+
+                // Employee Form Fields
                 'first_name' => 'required|string|max:255',
                 'middle_name' => 'required|string|max:255',
                 'last_name' => 'required|string|max:255',
-                'email' => 'required|string|email|unique:users,email,' . $id,
-                'password' => 'required|string|min:6',
-            ]);
+                'email' => 'required|email|max:255',
+                'password' => 'required|min:6|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,15}$/',
+                'birth_date' => 'required|date',
+                'mobile' => 'required|min:10|max:10',
+                'phone' => 'nullable|min:10|max:10',
+
+                // Address form fields
+                'address.0.mst_countries_id' => 'required',
+                'address.0.mst_states_id' => 'required',
+                'address.0.street1' => 'required|max:255',
+                'address.0.street2' => 'required|max:255',
+                'address.0.email' => 'nullable|email',
+                'address.0.emergency_contact_name' => 'required|max:255',
+                'address.0.emergency_contact_number' => 'required|min:10|max:10',
+
+                // Company Info form fields
+                'company.mst_companies_id' => 'required',
+                'company.mst_departments_id' => 'required',
+                'company.mst_positions_id' => 'required',
+                'company.join_date' => 'nullable|date',
+
+                //documents related messages
+                'document.aadhar_card_photo' => 'nullable|mimes:jpeg,jpg,png,pdf',
+                'document.election_card_photo' => 'nullable|mimes:jpeg,jpg,png,pdf',
+                'document.pan_card_photo' => 'nullable|mimes:jpeg,jpg,png,pdf',
+                'document.passport_photo' => 'nullable|mimes:jpeg,jpg,png,pdf',
+                'document.driving_license_photo' => 'nullable|mimes:jpeg,jpg,png,pdf',
+
+                // employee photo and signature
+                'photo' => 'nullable|mimes:jpeg,jpg,png',
+                'signature' => 'nullable|mimes:jpeg,jpg,png,pdf',
+            ];
+
+            $messages = [
+                'first_name.required' => 'Employee First Name field is required.',
+                'first_name.max' => 'Employee First Name should not me greater than 255 characters.',
+                'middle_name.required' => 'Employee Middle Name field is required.',
+                'middle_name.max' => 'Employee Middle Name should not me greater than 255 characters.',
+                'last_name.required' => 'Employee Last Name field is required.',
+                'last_name.max' => 'Employee Last Name should not me greater than 255 characters.',
+                'email.required' => 'Email field is required.',
+                'email.email' => 'Please enter valid email for Employee Email',
+                'email.max' => 'Email should not me greater than 255 characters.',
+                'password.required' => 'password field is required.',
+                'password.regex' => 'password invalid : minimum 8 max 15 characters, only one uppercase letter,at least one lowercase letter, one number and one special character:',
+                'birth_date.required' => 'Birth Date field is required.',
+                'birth_date.date' => 'Please enter valid date for Employee Date Of Birth.',
+                'mobile.required' => 'Email field is required.',
+                'mobile.min' => 'Mobile Number should not be less than 10 characters.',
+                'mobile.max' => 'Mobile Number should not me greater than 10 characters.',
+                'phone.min' => 'Phone Number should not be less than 10 characters.',
+                'phone.max' => 'Phone Number should not me greater than 10 characters.',
+
+                // address form messages
+                'address.0.mst_countries_id.required' => 'Permanent Address Country field is required.',
+                'address.0.mst_states_id.required' => 'Permanent Address State field is required.',
+                'address.0.street1.required' => 'Permanent Address Street 1 is required',
+                'address.0.street1.max' => 'please enter maximum 255 words for Permanent Address Street 1',
+                'address.0.street2.required' => 'Permanent Address Street 2 is required',
+                'address.0.street2.max' => 'please enter maximum 255 words for Permanent Address Street 2',
+                'address.0.email' => 'Please enter valid email for address Email',
+                'address.0.emergency_contact_name.required' => 'Emergency Contact Name field is required.',
+                'address.0.emergency_contact_name.max' => 'Emergency Contact Name should not me greater than 255 characters.',
+                'address.0.emergency_contact_number.required' => 'Emergency Contact Number field is required.',
+                'address.0.emergency_contact_number.min' => 'Emergency Contact Number should not be less than 10 characters.',
+                'address.0.emergency_contact_number.max' => 'Emergency Contact Number should not me greater than 10 characters.',
+
+                // for company form messages
+                'company.*.mst_companies_id.required' => 'Employee Company field is required.',
+                'company.*.mst_departments_id.required' => 'Company Department field is required.',
+                'company.*.mst_positions_id.required' => 'Company Position field is required.',
+                'company.*.join_date.date' => 'Please enter valid date for Employee Company Join Date.',
+
+                //documents related messages
+                'document.aadhar_card_photo.mimes' => 'The Aadhar Card must be a file of type: jpeg, jpg, png, pdf.',
+                'document.election_card_photo.mimes' => 'The Election Card must be a file of type: jpeg, jpg, png, pdf.',
+                'document.pan_card_photo.mimes' => 'The Pan Card must be a file of type: jpeg, jpg, png, pdf.',
+                'document.passport_photo.mimes' => 'The Aadhar Passport must be a file of type: jpeg, jpg, png, pdf.',
+                'document.driving_license_photo.mimes' => 'The Driving License must be a file of type: jpeg, jpg, png, pdf.',
+
+                //documents related messages
+                'photo.mimes' => 'The Employee Photo must be a file of type: jpeg, jpg, png.',
+                'signature.mimes' => 'The Employee Signature must be a file of type: jpeg, jpg, png, pdf.',
+
+            ];
+
+            $validator = Validator::make($request->all(), $rules, $messages);
 
             if ($validator->fails()) {
                 $data = array();
@@ -289,7 +428,6 @@ class EmployeeController extends Controller
                 'mobile' => $request->get('mobile'),
                 'notes' => $request->get('notes'),
                 'attendance' => $request->get('attendance'),
-                'signature' => $request->get('signature'),
                 'booking_action' => $request->get('booking_action'),
                 'booking_sms' => $request->get('booking_sms'),
                 'booking_email' => $request->get('booking_email'),
@@ -305,16 +443,47 @@ class EmployeeController extends Controller
                 'updated_by' => $loggedInUserData['logged_in_user_id']
             ];
 
-            // Update User related details
-            $this->addUpdateUserAddressDetails($request->get('address'), $id);
-            $this->addUserEducationDetails($request->get('education'), $id);
-            $this->addUserEmploymentDetails($request->get('employment'), $id);
-            $this->addUpdateUserCompanyDetails($request->get('company'), $id);
-
             Log::info("Employee updated with details : " . json_encode(array('data' => $input_data, 'id' => $id)));
 
             $employee = Employee::find($id);
+
+            $photo_file_name = $signature_file_name = '';
+            $random_string = Helper::generateRandomString();
+
+            $photo = (isset($request['photo']) && !empty($request['photo'])) ? $request['photo'] : '';
+            if(!empty($photo)){
+                $photo_file_name = 'photo_'.$id."_".$random_string."." . $photo->getClientOriginalExtension();
+                $photo->move(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH'), $photo_file_name);
+            }
+
+            $signature = (isset($request['signature']) && !empty($request['signature'])) ? $request['signature'] : '';
+            if(!empty($signature)){
+                $signature_file_name = 'signature_'.$id."_".$random_string."." . $signature->getClientOriginalExtension();
+                $signature->move(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH'), $signature_file_name);
+            }
+
+            $employee->photo = ($photo_file_name && $photo_file_name!='') ? config('constants.EMPLOYEE_DOCUMENTS_URL').'/'.$photo_file_name : $employee->photo;
+            $employee->signature = ($signature_file_name && $signature_file_name!='') ? config('constants.EMPLOYEE_DOCUMENTS_URL').'/'.$signature_file_name : $employee->signature;
+
+
             $employee->update($input_data);
+
+            //Update User related details
+            if(isset($request->address)){
+                $this->addUpdateUserAddressDetails($request->address, $id);
+            }
+            if(isset($request->education)){
+                $this->addUserEducationDetails($request->education, $id);
+            }
+            if(isset($request->employment)){
+                $this->addUserEmploymentDetails($request->employment, $id);
+            }
+            if(isset($request->company)){
+                $this->addUpdateUserCompanyDetails($request->company, $id);
+            }
+            if(isset($request->document)){
+                $this->addUpdateUserDocumentDetails($request->document, $id);
+            }
 
             return Helper::response("Employee updated successfully", Response::HTTP_OK, true, $employee);
         } catch (Exception $e) {
@@ -334,12 +503,12 @@ class EmployeeController extends Controller
     {
         try {
             $data = array();
-            $company = Employee::find($id);
+            $employee = Employee::find($id);
 
             Log::info("Employee deleted with : " . json_encode(array('id' => $id)));
 
-            if (!empty($company)) {
-                $company->delete();
+            if (!empty($employee)) {
+                $employee->delete();
                 return Helper::response("Employee deleted successfully", Response::HTTP_OK, true, $data);
             }
 
@@ -351,7 +520,7 @@ class EmployeeController extends Controller
     }
 
     /**
-     * Update users address details
+     * Update employee address details
      *
      * @param  int  $users_id
      * @param  array  $request 
@@ -420,7 +589,7 @@ class EmployeeController extends Controller
     }
 
     /**
-     * Update users education details
+     * Update employee education details
      *
      * @param  int  $users_id
      * @param  array  $request 
@@ -465,7 +634,7 @@ class EmployeeController extends Controller
     }
 
     /**
-     * Update users employment details
+     * Update employee employment details
      *
      * @param  int  $users_id
      * @param  array  $request 
@@ -507,7 +676,7 @@ class EmployeeController extends Controller
     }
 
     /**
-     * Update users company details
+     * Update employee company details
      *
      * @param  int  $users_id
      * @param  array  $request 
@@ -549,7 +718,7 @@ class EmployeeController extends Controller
     }
 
     /**
-     * Update users company details
+     * Update employee documents details
      *
      * @param  int  $users_id
      * @param  array  $request 
@@ -583,7 +752,7 @@ class EmployeeController extends Controller
 
             if(!empty($aadhar_card_photo)){
                 $aadhar_card_photo_file_name = 'aadhar_card_'.$users_id."_".$random_string."." . $aadhar_card_photo->getClientOriginalExtension();
-                $aadhar_card_photo->move(public_path('images/employee/documents'), $aadhar_card_photo_file_name);
+                $aadhar_card_photo->move(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH'), $aadhar_card_photo_file_name);
                 $documentArray["aadhar_card_photo"] = $aadhar_card_photo_file_name;
 
                 if($countDocumentData > 0){
@@ -597,7 +766,7 @@ class EmployeeController extends Controller
 
             if(!empty($election_card_photo)){
                 $election_card_photo_file_name = 'election_card_'.$users_id."_".$random_string."." . $election_card_photo->getClientOriginalExtension();
-                $election_card_photo->move(public_path('images/employee/documents'), $election_card_photo_file_name);
+                $election_card_photo->move(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH'), $election_card_photo_file_name);
                 $documentArray["election_card_photo"] = $election_card_photo_file_name;
 
                 if($countDocumentData > 0){
@@ -611,7 +780,7 @@ class EmployeeController extends Controller
 
             if(!empty($pan_card_photo)){
                 $pan_card_photo_file_name = 'pan_card_'.$users_id."_".$random_string."." . $pan_card_photo->getClientOriginalExtension();
-                $pan_card_photo->move(public_path('images/employee/documents'), $pan_card_photo_file_name);
+                $pan_card_photo->move(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH'), $pan_card_photo_file_name);
                 $documentArray["pan_card_photo"] = $pan_card_photo_file_name;
 
                 if($countDocumentData > 0){
@@ -625,7 +794,7 @@ class EmployeeController extends Controller
 
             if(!empty($passport_photo)){
                 $passport_photo_file_name = 'passport_'.$users_id."_".$random_string."." . $passport_photo->getClientOriginalExtension();
-                $passport_photo->move(public_path('images/employee/documents'), $passport_photo_file_name);
+                $passport_photo->move(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH'), $passport_photo_file_name);
                 $documentArray["passport_photo"] = $passport_photo_file_name;
 
                 if($countDocumentData > 0){
@@ -639,7 +808,7 @@ class EmployeeController extends Controller
 
             if(!empty($driving_license_photo)){
                 $driving_license_photo_file_name = 'driving_license_'.$users_id."_".$random_string."." . $driving_license_photo->getClientOriginalExtension();
-                $driving_license_photo->move(public_path('images/employee/documents'), $driving_license_photo_file_name);
+                $driving_license_photo->move(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH'), $driving_license_photo_file_name);
                 $documentArray["driving_license_photo"] = $driving_license_photo_file_name;
 
                 if($countDocumentData > 0){
