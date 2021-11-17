@@ -192,6 +192,11 @@ Route::group(['middleware' => ['jwt.verify'], 'prefix' => 'v1'], function () {
     //Assign Tests
     Route::get('listAssignTests', 'App\Http\Controllers\v1\AssignTestsController@index');
     Route::post('assignTests', 'App\Http\Controllers\v1\AssignTestsController@assign_tests_chemist');
+    Route::get('statusWiseTests', 'App\Http\Controllers\v1\AssignTestsController@statusWiseTests');
+    
+    //Counter
+    Route::get('listCounts', 'App\Http\Controllers\v1\CounterController@index');
+
 
 });
 

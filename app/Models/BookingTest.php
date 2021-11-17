@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use DB;
 
 class BookingTest extends Model
 {
@@ -37,6 +38,7 @@ class BookingTest extends Model
         "division",
         "test_time",
         "test_date_time",
+        "assigned_date",
         "approval_date_time",
         "approved",
         "percentage_of_label_claim",
@@ -46,6 +48,7 @@ class BookingTest extends Model
         "selected_year",
         "copied_from_year",
         "is_active"
+        
     ];
 
     /**
@@ -57,4 +60,36 @@ class BookingTest extends Model
     {
         return $this->hasOne(MstProductParent::class, 'id', 'parent');
     }
+
+    /**
+     * Get the statusWiseTests associated with the BookingTest
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function booking_detail()
+    {
+        return $this->hasOne(Booking::class, 'id', 'booking_id');
+    }
+    /**
+     * Get the statusWiseTests associated with the BookingTest
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function booking_samples_detail()
+    {
+        return $this->hasOne(BookingSampleDetail::class, 'booking_id', 'booking_id');
+    }
+    /**
+     * Get the statusWiseTests associated with the BookingTest
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    static public function count_pending_assign_tests()
+    {
+        $datacount = DB::table('booking_tests')->where("approved","Pending")->count();
+        return $datacount;
+
+    }
+
+ 
 }
