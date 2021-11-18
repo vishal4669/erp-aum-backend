@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: sdb-e.hosting.stackcp.net
--- Generation Time: Nov 17, 2021 at 01:07 PM
+-- Generation Time: Nov 18, 2021 at 01:43 PM
 -- Server version: 10.4.18-MariaDB-log
 -- PHP Version: 7.1.33
 
@@ -112,7 +112,9 @@ INSERT INTO `bookings` (`id`, `mst_companies_id`, `booking_type`, `invoice_no`, 
 (47, 1, 'Invoice', '059jcnni', 'FP', '2021-10-08', '2021-07-10', 'ARL/COA/sdgsdgsdg/211013/4', 13, '2389239', 'remarks details', 17, 18, '2021-09-28', 'N/A', '2021-09-29', 'None', '2021-09-27', 23, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, '2021-10-08T15:10', 'dispatch_mode', 'dispatch_details', 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', NULL, NULL, 3, 3, '2021-11-10 11:11:00', '2021-11-10 11:18:34', '2019-20', NULL, NULL, 1, NULL),
 (48, 1, 'Received', NULL, 'TP', '2021-11-11', '2021-11-12', 'ARL/COA/TP/211112/002', 12, '', '', 11, 24, '2021-11-05', 'N/S', '2021-12-11', 'N/S', '2021-11-11', 24, '', 'N/S', '', 'N/S', '', 'N/S', '', 0, 'Invalid date', NULL, NULL, 0, 'None', 0, 'None', '', 'High', 'Chemical', 'Drugs and Pharmaceuticals', 'PASS', NULL, NULL, 3, 3, '2021-11-10 12:19:17', '2021-11-11 05:27:48', '2019-20', NULL, NULL, 1, NULL),
 (49, 1, 'Received', NULL, 'ADL', '2021-11-10', '2022-02-11', 'ARL/COA/ADL/220211/002', 5, '', '', 22, 16, '2021-11-11', 'N/S', '2021-12-11', 'N/S', '2021-11-10', 25, '', 'N/S', '', 'N/S', '', 'N/S', '', 0, 'Invalid date', NULL, NULL, 0, 'None', 0, 'None', '', 'High', 'Chemical', 'Drugs and Pharmaceuticals', 'PASS', NULL, NULL, 3, 3, '2021-11-10 12:23:54', '2021-11-10 13:47:40', '2019-20', NULL, NULL, 1, NULL),
-(50, 1, 'Received', NULL, 'OT', '2021-11-10', '2021-10-07', 'ARL/COA/OT/211007/001', 12, '9408072555', 'Remarks', 11, 20, '2021-11-10', 'N/S', '2021-11-14', 'N/S', '2021-11-20', 26, '', 'N/S', '', 'N/S', '', 'N/S', '', 0, 'Invalid date', NULL, NULL, 0, 'None', 0, 'None', '', 'High', 'Chemical', 'Drugs and Pharmaceuticals', 'PASS', NULL, NULL, 3, 3, '2021-11-10 13:25:38', '2021-11-10 13:44:49', '2019-20', NULL, NULL, 1, NULL);
+(50, 1, 'Received', NULL, 'OT', NULL, '2021-10-07', 'ARL/COA/OT/211007/001', 12, '9408072555', 'Remarks', 11, 24, '2021-11-10', 'N/S', '2021-11-14', 'N/S', '2021-11-20', 26, '', 'N/S', '', 'N/S', '', 'N/S', '', 1, '2021-11-19T14:21', 'By Hand Delivery', 'Dispatch Details', 0, 'None', 0, 'None', '', 'High', 'Chemical', 'Drugs and Pharmaceuticals', 'PASS', NULL, NULL, 3, 3, '2021-11-10 13:25:38', '2021-11-18 14:21:48', '2019-20', NULL, NULL, 1, NULL),
+(51, 1, 'Invoice', '059jcnni', 'FP', '2021-10-08', '2021-07-10', 'ARL/COA/sdgsdgsdg/211013/4', 13, '2389239', 'remarks details', 15, 16, '2021-09-28', 'N/A', '2021-09-29', 'None', '2021-09-27', 27, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, '2021-10-08 15:07:08', 'dispatch_mode', 'dispatch_details', 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', NULL, NULL, 3, NULL, '2021-11-18 18:11:12', NULL, '2019-20', NULL, NULL, 1, NULL),
+(53, 1, 'Invoice', '059jcnni', 'FP', '2021-10-08', '2021-07-10', 'ARL/COA/sdgsdgsdg/211013/4', 13, '2389239', 'remarks details', 15, 16, '2021-09-28', 'N/A', '2021-09-29', 'None', '2021-09-27', 28, 'D Format', 'none', 'A+', 'N/A', 'Aum research', 'None', '25LA775', 1, '2021-10-08 15:07:08', 'dispatch_mode', 'dispatch_details', 1, 'QA', 1, 'yes', 'cancel remarks detail', 'high', 'Chemical', 'Drugs and Pharmaceuticals', 'Pass', NULL, NULL, 3, NULL, '2021-11-18 18:13:34', NULL, '2019-20', NULL, NULL, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -146,7 +148,8 @@ INSERT INTO `booking_audit_details` (`id`, `booking_id`, `audit_remarks`, `reaso
 (3, 33, 'Audit Remarks', 'Reason', 'Comments', 3, 3, '2021-10-21 13:47:42', '2021-11-16 13:27:34', '2019-20', NULL, 1, NULL),
 (4, 1, '', '', '', 3, 3, '2021-10-22 08:56:17', '2021-11-09 10:42:31', '2019-20', NULL, 1, NULL),
 (5, 5, 'audit remarks1', 'reasons behind it1', 'comments1', 3, 3, '2021-10-22 10:45:46', '2021-10-22 11:10:01', '2019-20', NULL, 1, NULL),
-(6, 38, '', '', '', 3, 3, '2021-10-23 09:00:28', '2021-10-23 09:02:28', '2019-20', NULL, 1, NULL);
+(6, 38, '', '', '', 3, 3, '2021-10-23 09:00:28', '2021-10-23 09:02:28', '2019-20', NULL, 1, NULL),
+(7, 50, '', '', '', 3, NULL, '2021-11-18 14:21:48', NULL, '2019-20', NULL, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -220,7 +223,9 @@ INSERT INTO `booking_sample_details` (`id`, `booking_id`, `product_id`, `batch_n
 (25, 47, 7, 767, '55L', 13, 'EASPORTS6913', 'EASPORTS6913', 13, 'Main Branch of company', 'Packaging', 'sample type', '2021-09-30', 'N/S', '2021-10-31', 'N/A', 'By Courier', 1, 'Secured seal with label', 1, 13, 'sample notes', 'Sample Drawn By', 3, 3, '2021-11-10 11:11:00', '2021-11-10 11:18:34', '2019-20', NULL, 1, NULL),
 (26, 48, 1, 0, '', 0, '', '', 0, '', '', '', NULL, 'N/S', NULL, 'N/S', 'By Courier', 1, '', 0, 0, '', '', 3, 3, '2021-11-10 12:19:17', '2021-11-11 05:27:48', '2019-20', NULL, 1, NULL),
 (27, 49, 3, 0, '', 0, '', '', 0, '', '', '', '2021-10-31', 'N/S', '2021-11-10', 'N/S', 'By Courier', 1, '', 0, 0, '', '', 3, 3, '2021-11-10 12:23:54', '2021-11-10 13:47:40', '2019-20', NULL, 1, NULL),
-(28, 50, 6, 0, '', 0, '', '', 0, '', '', '', NULL, 'N/S', NULL, 'N/S', 'By Courier', 1, '', 0, 0, '', '', 3, 3, '2021-11-10 13:25:38', '2021-11-10 13:44:49', '2019-20', NULL, 1, NULL);
+(28, 50, 6, 0, '', 0, '', '', 0, '', '', '', NULL, 'N/S', NULL, 'N/S', 'By Courier', 1, '', 0, 0, '', '', 3, 3, '2021-11-10 13:25:38', '2021-11-18 14:21:48', '2019-20', NULL, 1, NULL),
+(29, 51, 2, 767, '55L', 13, 'EASPORTS6913', 'EASPORTS6913', 13, 'Main Branch of company', 'Packaging', 'sample type', NULL, 'N/S', NULL, 'N/A', 'By Courier', 1, 'Secured seal with label', 1, 13, 'sample notes', 'Sample Drawn By', 3, NULL, '2021-11-18 18:11:12', NULL, '2019-20', NULL, 1, NULL),
+(31, 53, 2, 767, '55L', 13, 'EASPORTS6913', 'EASPORTS6913', 13, 'Main Branch of company', 'Packaging', 'sample type', NULL, 'N/S', NULL, 'N/A', 'By Courier', 1, 'Secured seal with label', 1, 13, 'sample notes', 'Sample Drawn By', 3, NULL, '2021-11-18 18:13:34', NULL, '2019-20', NULL, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -274,11 +279,11 @@ CREATE TABLE `booking_tests` (
 --
 
 INSERT INTO `booking_tests` (`id`, `booking_id`, `parent_child`, `p_sr_no`, `by_pass`, `parent`, `product_details`, `test_name`, `label_claim`, `percentage_of_label_claim`, `min_limit`, `max_limit`, `result`, `label_claim_result`, `label_claim_unit`, `result2`, `mean`, `na_content`, `final_na_content`, `unit`, `expanded_uncertanity`, `amount`, `division`, `method`, `test_time`, `test_date_time`, `assigned_date`, `approval_date_time`, `approved`, `chemist_name`, `created_by`, `updated_by`, `created_at`, `updated_at`, `selected_year`, `copied_from_year`, `is_active`, `deleted_at`) VALUES
-(5, 4, 'Parent', '', 1, 20, 'testing here', 'dgfdg', '202', NULL, '33', '101', '', '', '', '', '', '', '', '', '', '1111.00', '', '', NULL, NULL, '2021-11-17 00:00:00', NULL, 'Pending', 7, 3, 3, '2021-10-19 13:40:39', '2021-11-17 09:30:39', '2019-20', NULL, 1, NULL),
-(10, 18, 'Parent', '', 1, 20, 'testing here', 'dgfdg', '202', NULL, '33', '101', '', '', '', '', '', '', '', '', '', '1111.00', '', '', NULL, NULL, '2021-11-17 00:00:00', NULL, 'Pending', 7, 3, 3, '2021-10-20 07:20:41', '2021-11-17 09:29:24', '2019-20', NULL, 1, NULL),
-(11, 25, 'Parent', '', 1, 22, 'description', 'newparams022', 'labe', NULL, '10', '100', '', '', '', '', '', '', '', '', '', '500.00', '', '', NULL, NULL, '2021-11-17 00:00:00', NULL, 'Pending', 1, 3, 3, '2021-10-20 11:20:57', '2021-11-17 09:30:39', '2019-20', NULL, 1, NULL),
-(12, 25, 'Parent', '', 1, 13, 'description1', 'newparams122', 'lab1', NULL, '20', '200', '', '', '', '', '', '', '', '', '', '700.00', '', '', NULL, NULL, NULL, NULL, 'Pending', 1, 3, 3, '2021-10-20 11:20:57', '2021-11-17 09:17:11', '2019-20', NULL, 1, NULL),
-(13, 26, 'Parent', '', 2, 15, '', 'Assay123', '1000', NULL, '7852', '', '', '', '', '', '', '', '', '', '', '0.00', '', '', NULL, NULL, NULL, NULL, 'Pending', 1, 3, 3, '2021-10-20 11:21:59', '2021-11-17 09:18:04', '2019-20', NULL, 1, NULL),
+(5, 4, 'Parent', '', 1, 20, 'testing here', 'dgfdg', '202', NULL, '33', '101', '', '', '', '', '', '', '', '', '', '1111.00', '', '', NULL, NULL, '2021-11-18 15:59:09', NULL, 'Assigned', 81, 3, 3, '2021-10-19 13:40:39', '2021-11-18 15:59:09', '2019-20', NULL, 1, NULL),
+(10, 18, 'Parent', '', 1, 20, 'testing here', 'dgfdg', '202', NULL, '33', '101', '', '', '', '', '', '', '', '', '', '1111.00', '', '', NULL, NULL, '2021-11-18 15:59:09', NULL, 'Assigned', 81, 3, 3, '2021-10-20 07:20:41', '2021-11-18 15:59:09', '2019-20', NULL, 1, NULL),
+(11, 25, 'Parent', '', 1, 22, 'description', 'newparams022', 'labe', NULL, '10', '100', '', '', '', '', '', '', '', '', '', '500.00', '', '', NULL, NULL, '2021-11-18 15:59:09', NULL, 'Assigned', 81, 3, 3, '2021-10-20 11:20:57', '2021-11-18 15:59:09', '2019-20', NULL, 1, NULL),
+(12, 25, 'Parent', '', 1, 13, 'description1', 'newparams122', 'lab1', NULL, '20', '200', '', '', '', '', '', '', '', '', '', '700.00', '', '', NULL, NULL, '2021-11-18 15:59:09', NULL, 'Assigned', 81, 3, 3, '2021-10-20 11:20:57', '2021-11-18 15:59:09', '2019-20', NULL, 1, NULL),
+(13, 26, 'Parent', '', 2, 15, '', 'Assay123', '1000', NULL, '7852', '', '', '', '', '', '', '', '', '', '', '0.00', '', '', NULL, NULL, '2021-11-18 15:59:09', NULL, 'Assigned', 81, 3, 3, '2021-10-20 11:21:59', '2021-11-18 15:59:09', '2019-20', NULL, 1, NULL),
 (14, 26, 'Parent', '', 2, 0, '', 'test parameter', '', NULL, '', '', '', '', '', '', '', '', '', '', '', '5000.00', '', '', NULL, NULL, NULL, NULL, 'Pending', 1, 3, 3, '2021-10-20 11:21:59', '2021-11-17 09:18:04', '2019-20', NULL, 1, NULL),
 (15, 30, 'Parent', '', 1, 20, 'testing here', 'dgfdg', '202', NULL, '33', '101', '', '', '', '', '', '', '', '', '', '1111.00', '', '', NULL, NULL, NULL, NULL, 'Pending', 1, 3, 3, '2021-10-21 12:27:37', '2021-11-17 09:18:04', '2019-20', NULL, 1, NULL),
 (16, 31, 'Parent', '', 2, 15, '', 'Assay123', '1000', NULL, '7852', '', '', '', '', '', '', '', '', '', '', '0.00', '', '', NULL, NULL, NULL, NULL, 'Pending', 1, 3, 3, '2021-10-21 12:45:06', '2021-11-17 09:18:04', '2019-20', NULL, 1, NULL),
@@ -315,18 +320,22 @@ INSERT INTO `booking_tests` (`id`, `booking_id`, `parent_child`, `p_sr_no`, `by_
 (196, 38, 'Parent', '1', 2, 15, 'Product Details1', 'Assay1232', '10001', NULL, '7853', '7856', '', '', '', '', '', '', '', '', '', '2500.00', '', '', NULL, NULL, NULL, NULL, 'Pending', NULL, 5, 3, '2021-11-09 13:39:46', '2021-11-09 13:39:46', '2019-20', NULL, 1, NULL),
 (197, 38, 'Child', '1.1', 2, 2, 'Product Details2', 'test parameter1', '10002', NULL, '7854', '7880', '', '', '', '', '', '', '', '', '', '5000.00', '', '', NULL, NULL, NULL, NULL, 'Pending', NULL, 0, 3, '2021-11-09 13:39:46', '2021-11-09 13:39:46', '2019-20', NULL, 1, NULL),
 (201, 32, 'Child', '1', 2, 16, 'test', 'test', '1', NULL, '2', '3', '', '', '', '', '', '', '', '', '', '44.00', '', '', NULL, NULL, NULL, NULL, 'Pending', NULL, 3, 3, '2021-11-10 07:01:11', '2021-11-10 07:01:11', '2019-20', NULL, 1, NULL),
-(214, 46, 'Parent', '1', 1, 18, 'White to off white colored round shape tablet with one side break line and other side plain.', 'Average weight', '', NULL, '', '', '', '', '', '', '', '', '', '', '', '0.00', '', '', NULL, NULL, NULL, NULL, 'Pending', NULL, 3, 3, '2021-11-10 11:06:15', '2021-11-10 11:06:15', '2019-20', NULL, 1, NULL),
+(214, 46, 'Parent', '1', 1, 18, 'White to off white colored round shape tablet with one side break line and other side plain.', 'Average weight', '', NULL, '', '', '', '', '', '', '', '', '', '', '', '0.00', '', '', NULL, NULL, '2021-11-18 16:02:19', NULL, 'Assigned', 81, 3, 3, '2021-11-10 11:06:15', '2021-11-18 16:02:19', '2019-20', NULL, 1, NULL),
 (215, 46, 'Parent', '2', 1, 17, '', 'Average weight', '', NULL, '', '', '', '', '', '', '', '', '', '', '', '0.00', '', '', NULL, NULL, NULL, NULL, 'Pending', NULL, 3, 3, '2021-11-10 11:06:15', '2021-11-10 11:06:15', '2019-20', NULL, 1, NULL),
 (216, 46, 'Child', '2.1', 1, 18, '', 'Identification', '', NULL, '', 'The principal spot in the chromatogram obtained with the test solution corresponds to that obtained with reference solution.', '', '', '', '', '', '', '', '', '', '200.00', '', '', NULL, NULL, NULL, NULL, 'Pending', NULL, 3, 3, '2021-11-10 11:06:15', '2021-11-10 11:06:15', '2019-20', NULL, 1, NULL),
 (219, 47, 'Parent', '1', 2, 0, 'White to off white colored round shape tablet with one side break line and other side plain.', 'Average weight', '', NULL, '', '', '', '', '', '', '', '', '', '', '', '0.00', '', '', NULL, NULL, '2021-11-17 00:00:00', NULL, 'Assigned', 81, 3, 3, '2021-11-10 11:18:34', '2021-11-17 12:14:39', '2019-20', NULL, 1, NULL),
-(220, 47, 'Parent', '2', 2, 32, '', 'Average weight', '', NULL, '', '', '', '', '', '', '', '', '', '', '', '0.00', '', '', NULL, NULL, NULL, NULL, 'Pending', NULL, 3, 3, '2021-11-10 11:18:34', '2021-11-10 11:18:34', '2019-20', NULL, 1, NULL),
+(220, 47, 'Parent', '2', 2, 32, '', 'Average weight', '', NULL, '', '', '', '', '', '', '', '', '', '', '', '0.00', '', '', NULL, NULL, '2021-11-18 07:24:50', NULL, 'Assigned', 3, 3, 3, '2021-11-10 11:18:34', '2021-11-18 07:24:50', '2019-20', NULL, 1, NULL),
 (221, 47, 'Parent', '3', 2, 0, '', 'Identification', '', NULL, '', 'The principal spot in the chromatogram obtained with the test solution corresponds to that obtained with reference solution.', '', '', '', '', '', '', '', '', '', '200.00', '', '', NULL, NULL, NULL, NULL, 'Pending', NULL, 3, 3, '2021-11-10 11:18:34', '2021-11-10 11:18:34', '2019-20', NULL, 1, NULL),
-(233, 50, 'Parent', '1', 1, 18, 'White to off white colored round shape tablet with one side break line and other side plain.', 'Average weight', '', NULL, '', '', '', '', '', '', '', '', '', '', '', '0.00', '', '', NULL, NULL, '2021-11-17 00:00:00', NULL, 'Assigned', 81, 3, 3, '2021-11-10 13:44:49', '2021-11-17 10:19:11', '2019-20', NULL, 1, NULL),
-(234, 50, 'Parent', '2', 1, 17, '', 'Average weight', '', NULL, '', '', '', '', '', '', '', '', '', '', '', '0.00', '', '', NULL, NULL, '2021-11-17 00:00:00', NULL, 'Pending', 81, 3, 3, '2021-11-10 13:44:49', '2021-11-17 10:05:45', '2019-20', NULL, 1, NULL),
-(235, 50, 'Parent', '3', 1, 18, '', 'Identification', '', NULL, '', 'The principal spot in the chromatogram obtained with the test solution corresponds to that obtained with reference solution.', '', '', '', '', '', '', '', '', '', '200.00', '', '', NULL, NULL, '2021-11-17 00:00:00', NULL, 'Pending', 3, 3, 3, '2021-11-10 13:44:49', '2021-11-17 10:14:03', '2019-20', NULL, 1, NULL),
 (238, 49, 'Parent', '1', 2, 15, '', 'Assay123', '1000', NULL, '7852', '', '', '', '', '', '', '', '', '', '', '0.00', '', '', NULL, NULL, '2021-11-17 00:00:00', NULL, 'Assigned', 81, 3, 3, '2021-11-10 13:47:40', '2021-11-17 10:19:11', '2019-20', NULL, 1, NULL),
 (239, 49, 'Parent', '2', 2, 0, '', 'test parameter', '', NULL, '', '', '', '', '', '', '', '', '', '', '', '5000.00', '', '', NULL, NULL, '2021-11-17 00:00:00', NULL, 'Pending', 81, 3, 3, '2021-11-10 13:47:40', '2021-11-17 10:05:45', '2019-20', NULL, 1, NULL),
-(242, 33, 'Parent', '1', 1, 14, 'Product Details', 'testname1', '201', '99.00', '', '', '', '', '', '', '', '', '', '', '', '0.00', '', '', NULL, NULL, NULL, NULL, 'Pending', 3, 3, 3, '2021-11-16 13:27:34', '2021-11-16 13:27:34', '2019-20', NULL, 1, NULL);
+(242, 33, 'Parent', '1', 1, 14, 'Product Details', 'testname1', '201', '99.00', '', '', '', '', '', '', '', '', '', '', '', '0.00', '', '', NULL, NULL, NULL, NULL, 'Pending', 3, 3, 3, '2021-11-16 13:27:34', '2021-11-16 13:27:34', '2019-20', NULL, 1, NULL),
+(243, 50, 'Parent', '1', 1, 18, 'White to off white colored round shape tablet with one side break line and other side plain.', 'Average weight', '', NULL, '', '', '', '', '', '', '', '', '', '', '', '0.00', '', '', NULL, NULL, NULL, NULL, 'Assigned', 81, 3, 3, '2021-11-18 14:21:48', '2021-11-18 14:21:48', '2019-20', NULL, 1, NULL),
+(244, 50, 'Parent', '2', 1, 17, '', 'Average weight', '', NULL, '', '', '', '', '', '', '', '', '', '', '', '0.00', '', '', NULL, NULL, NULL, NULL, 'Assigned', 81, 3, 3, '2021-11-18 14:21:48', '2021-11-18 14:21:48', '2019-20', NULL, 1, NULL),
+(245, 50, 'Parent', '3', 1, 18, '', 'Identification', '', NULL, '', 'The principal spot in the chromatogram obtained with the test solution corresponds to that obtained with reference solution.', '', '', '', '', '', '', '', '', '', '200.00', '', '', NULL, NULL, NULL, NULL, 'Assigned', 3, 3, 3, '2021-11-18 14:21:48', '2021-11-18 14:21:48', '2019-20', NULL, 1, NULL),
+(246, 51, 'sege', '', 1, 0, '', '', '7', NULL, '', '', '', '', '', '', '', '', '', '', '', '0.00', '', '', NULL, NULL, NULL, NULL, 'Assigned', 7, 3, 3, '2021-11-18 18:11:12', '2021-11-18 18:11:12', '2019-20', NULL, 1, NULL),
+(247, 51, 'egre', '', 1, 0, '', '', '7', NULL, '', '', '', '', '', '', '', '', '', '', '', '0.00', '', '', NULL, NULL, NULL, NULL, '', NULL, 3, 3, '2021-11-18 18:11:12', '2021-11-18 18:11:12', '2019-20', NULL, 1, NULL),
+(248, 53, 'sege', '', 1, 0, '', '', '7', NULL, '', '', 'result', '', '', '', '', '', '', '', '', '0.00', '', '', NULL, NULL, NULL, NULL, 'ForApproval', 7, 3, 3, '2021-11-18 18:13:34', '2021-11-18 18:13:34', '2019-20', NULL, 1, NULL),
+(249, 53, 'egre', '', 1, 0, '', '', '7', NULL, '', '', '', '', '', '', '', '', '', '', '', '0.00', '', '', NULL, NULL, NULL, NULL, '', NULL, 3, 3, '2021-11-18 18:13:34', '2021-11-18 18:13:34', '2019-20', NULL, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -477,8 +486,8 @@ CREATE TABLE `mst_categories` (
 --
 
 INSERT INTO `mst_categories` (`id`, `mst_companies_id`, `parent_category_id`, `category_name`, `created_by`, `updated_by`, `selected_year`, `copied_from_year`, `is_active`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 1, 0, 'category 1', 1, NULL, '2019-20', NULL, 1, NULL, '2021-06-09 11:55:36', '2021-06-09 10:55:36'),
-(2, 1, 1, 'Category 2', 3, 3, '2019-20', NULL, 1, NULL, '2021-06-09 11:55:50', '2021-06-11 04:57:45'),
+(1, 1, 0, 'category 1', 1, NULL, '2019-20', NULL, 1, NULL, '2021-06-09 11:55:36', '2021-11-18 11:19:28'),
+(2, 1, 6, 'Category 2', 3, 3, '2019-20', NULL, 1, NULL, '2021-06-09 11:55:50', '2021-11-18 10:49:44'),
 (3, 1, 2, 'category 3', 3, NULL, '2019-20', NULL, 1, NULL, '2021-06-09 11:57:09', '2021-08-06 07:05:26'),
 (4, 1, 1, 'test', 3, NULL, '2019-20', NULL, 1, NULL, '2021-06-09 12:02:48', '2021-08-06 11:49:29'),
 (5, 1, NULL, 'test', 3, NULL, '2019-20', NULL, 1, '2021-06-09 12:03:47', '2021-06-09 12:03:43', '2021-06-09 11:03:47'),
@@ -490,7 +499,7 @@ INSERT INTO `mst_categories` (`id`, `mst_companies_id`, `parent_category_id`, `c
 (12, 1, 0, 'Parent Category', 3, NULL, '2019-20', NULL, 1, NULL, '2021-08-09 09:35:15', '2021-08-09 08:35:15'),
 (13, 1, 12, 'Child Category', 3, NULL, '2019-20', NULL, 1, NULL, '2021-08-09 09:35:37', '2021-08-09 08:35:37'),
 (14, 1, 0, 'dd', 3, NULL, '2019-20', NULL, 1, NULL, '2021-11-16 12:41:33', '2021-11-16 12:41:33'),
-(15, 1, 0, 'Chemical', 3, NULL, '2019-20', NULL, 1, NULL, '2021-11-16 12:53:16', '2021-11-16 12:53:16');
+(15, 1, 0, 'Chemical', 3, NULL, '2019-20', NULL, 1, NULL, '2021-11-16 12:53:16', '2021-11-18 11:20:02');
 
 -- --------------------------------------------------------
 
@@ -1035,7 +1044,7 @@ INSERT INTO `mst_groups` (`id`, `mst_companies_id`, `group_name`, `group_code`, 
 (13, 1, 'test', '2445400', 3, 3, 3, '2019-20', NULL, 1, '2021-06-08 13:18:03', '2021-06-08 13:17:35', '2021-06-08 12:18:03'),
 (14, 1, 'test test', 'test', 2, 3, 3, '2019-20', NULL, 1, '2021-06-10 09:58:11', '2021-06-10 09:57:45', '2021-06-10 08:58:11'),
 (15, 4, 'Group', '12OI', 2, 2, 2, '2019-20', NULL, 1, NULL, '2021-10-28 11:49:52', '2021-10-28 10:50:04'),
-(17, 1, 'z', 'z', NULL, 3, NULL, '2019-20', NULL, 1, NULL, '2021-11-16 12:48:52', '2021-11-16 12:48:52');
+(17, 1, 'z', 'z', NULL, 3, 3, '2019-20', NULL, 1, NULL, '2021-11-16 12:48:52', '2021-11-18 07:26:00');
 
 -- --------------------------------------------------------
 
@@ -2158,25 +2167,25 @@ ALTER TABLE `user_emp_details`
 -- AUTO_INCREMENT for table `bookings`
 --
 ALTER TABLE `bookings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- AUTO_INCREMENT for table `booking_audit_details`
 --
 ALTER TABLE `booking_audit_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `booking_sample_details`
 --
 ALTER TABLE `booking_sample_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `booking_tests`
 --
 ALTER TABLE `booking_tests`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=243;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=250;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`

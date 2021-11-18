@@ -69,6 +69,7 @@ class BookingController extends Controller
                         ]
                     )
                     ->where('bookings.is_active', 1)
+                    ->where('bookings.mst_companies_id', $loggedInUserData['company_id'])
                     ->orderBy('id', 'desc')
                     ->get();
             }
@@ -699,6 +700,11 @@ class BookingController extends Controller
                             if ($tests['approved'] == "Pending" || !isset($tests['approved']) && isset($tests['chemist_name']) == true) {
                                 $tests['approved'] = "Assigned";
                             }
+
+                            if (!empty($tests['result'])) {
+                                $tests['approved'] = "ForApproval";
+                            }
+
                             $tests_data = array(
                                 "booking_id" => (isset($booking_id) ? $booking_id : 0),
                                 "parent_child" => (isset($tests['parent_child']) ? $tests['parent_child'] : ''),

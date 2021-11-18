@@ -11,6 +11,7 @@ use Log;
 use App\Helpers\Helper;
 use App\Models\BookingTest;
 use Carbon\Carbon;
+use Exception;
 
 use function PHPSTORM_META\type;
 
@@ -25,7 +26,7 @@ class AssignTestsController extends Controller
     {
         //
         try {
-            
+
             $data = Booking::select('id', 'aum_serial_no', 'receipte_date', 'report_type', 'booking_no', 'customer_id')
                 ->with(
                     'customer_id:id,company_name',
@@ -34,7 +35,7 @@ class AssignTestsController extends Controller
                     'samples.product_detail.pharmacopiea_detail:id,pharmacopeia_name',
                     'tests_detail:id,booking_id,p_sr_no,test_name,chemist_name'
                 )->orderBy('id', 'desc')->get()->toarray();
-                    
+
             /* if chemist name is null then in the array booking_tests return tests data for our scenerio to assign tests
             else chemist name already assigned then booking_tests array is empty*/
             $pending_assigned_data = [];
@@ -82,7 +83,6 @@ class AssignTestsController extends Controller
         try {
             $approved_status = $request->approved_status;
             if ($approved_status == "ForApproval") {
-                // dd("hi");
                 $data = BookingTest::select("id", "approved", "booking_id", "result", "p_sr_no", "test_name", "chemist_name", "assigned_date")
                     ->with(
                         'booking_detail:id,aum_serial_no,report_type,receipte_date,booking_no,customer_id',
@@ -94,7 +94,7 @@ class AssignTestsController extends Controller
                         'booking_samples_detail.product_detail.pharmacopiea_detail:id,pharmacopeia_name'
                     )
                     ->where('booking_tests.result', "!=", '')
-                    ->orderBy('id', 'desc')
+                    ->orderBy('booking_tests.assigned_date', 'desc')
                     ->get()->toarray();
             } else {
                 $data = BookingTest::select("id", "approved", "booking_id", "p_sr_no", "test_name", "chemist_name", "assigned_date")
@@ -108,7 +108,7 @@ class AssignTestsController extends Controller
                         'booking_samples_detail.product_detail.pharmacopiea_detail:id,pharmacopeia_name'
                     )
                     ->where('approved', $approved_status)
-                    ->orderBy('id', 'desc')
+                    ->orderBy('booking_tests.assigned_date', 'desc')
                     ->get()->toarray();
             }
 
@@ -118,6 +118,7 @@ class AssignTestsController extends Controller
             return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);
         }
     }
+
 
 
     /**
@@ -151,7 +152,7 @@ class AssignTestsController extends Controller
                     $date = Carbon::now();
 
                     if ($assign_tests_chemist != null) {
-                        $assign_tests_chemist->update(array('assigned_date' => $date, 'approved' => 'Assigned', 'chemist_name' => $chemist_name));
+                        $assign_tests_chemist->update(array('assigned_date' => $date, 'approved' => 'Assigned', 'chemist_name' => $chemist_name, "updated_at" => $date));
                     }
                 }
             }
@@ -164,13 +165,35 @@ class AssignTestsController extends Controller
 
     /**
      * Display the specified resource.
-     *
+     * Get test data(with[booking,samples]) for Analytics
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show_test($id)
     {
         //
+        try {
+            $data = BookingTest::select(
+                'id',
+                'booking_id',
+                'parent',
+                'test_name',
+                'min_limit',
+                'result',
+                'unit',
+                'result2',
+                'label_claim',
+                'max_limit',
+                'method'
+            )->with('booking_detail:id,booking_type,receipte_date,report_type,booking_no')
+                ->with('booking_samples_detail:id,booking_id,product_id,batch_no', 'booking_samples_detail.product_detail:id,product_name,generic_product_id', 'booking_samples_detail.product_detail.generic_product_id:id,product_name')
+                ->where('id', $id)->get()->toarray();
+
+            return Helper::response("Fetch assign tests data for analytics Successfully", Response::HTTP_OK, true, $data);
+        } catch (Exception $e) {
+            $exportData = array();
+            return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);
+        }
     }
 
     /**
@@ -185,15 +208,36 @@ class AssignTestsController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
+     * Update test result in booking test.
+     * 
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update_test_result(Request $request, $id)
     {
         //
+        try {
+            //code...
+
+            $data = BookingTest::find($id);
+            $datetime = Carbon::now();
+            if ($data != null) {
+                $data->update(array(
+                    //forapproved
+                    'result' => $request->result,
+                    'method' => $request->method,
+                    'unit'   => $request->unit,
+                    'approved' => "ForApproval",
+                    'updated_at' => $datetime
+                ));
+            }
+
+            return Helper::response("Update test result in booking test Successfully", Response::HTTP_OK, true, $data);
+        } catch (Exception $e) {
+            $exportData = array();
+            return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);
+        }
     }
 
     /**

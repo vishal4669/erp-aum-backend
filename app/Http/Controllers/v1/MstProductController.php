@@ -388,9 +388,9 @@ class MstProductController extends Controller
                 'generic_product_name' => '',
                 'deleted_at' => ''
             );
-         } else {
+        } else {
 
-             $data_Arr['generic_product_id'] = $data_Arr['generic_product_id'];
+            $data_Arr['generic_product_id'] = $data_Arr['generic_product_id'];
         }
         for ($i = 0; $i < $len; $i++) {
 
@@ -442,18 +442,15 @@ class MstProductController extends Controller
             ->orderBy('id', 'desc')
             ->get()->toarray();
 
-        if($data_Arr['generic_product_id']['deleted_at'] == null || $data_Arr['generic_product_id']['deleted_at'] == '')
-        {
+        if ($data_Arr['generic_product_id']['deleted_at'] == null || $data_Arr['generic_product_id']['deleted_at'] == '') {
             $data_Arr['generic_dropdown'] = $generic_data;
-        }
-        else
-        {
+        } else {
             $deleted_generic_product_merge = array(
                 'id' => $data_Arr['generic_product_id']['id'],
                 'product_name' => $data_Arr['generic_product_id']['generic_product_name'],
                 'deleted_at' => $data_Arr['generic_product_id']['deleted_at']
             );
-            array_push($generic_data,$deleted_generic_product_merge);
+            array_push($generic_data, $deleted_generic_product_merge);
             $data_Arr['generic_dropdown'] = $generic_data;
         }
         return Helper::response("This Product Shown Successfully", Response::HTTP_OK, true, $data_Arr);

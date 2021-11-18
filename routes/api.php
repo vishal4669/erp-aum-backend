@@ -188,11 +188,13 @@ Route::group(['middleware' => ['jwt.verify'], 'prefix' => 'v1'], function () {
     Route::get('getTest/{id}', 'App\Http\Controllers\v1\TestController@show');
     Route::post('editTest/{id}', 'App\Http\Controllers\v1\TestController@update');
     Route::post('deleteTest/{id}', 'App\Http\Controllers\v1\TestController@destroy');
-
+    
     //Assign Tests
     Route::get('listAssignTests', 'App\Http\Controllers\v1\AssignTestsController@index');
     Route::post('assignTests', 'App\Http\Controllers\v1\AssignTestsController@assign_tests_chemist');
     Route::get('statusWiseTests', 'App\Http\Controllers\v1\AssignTestsController@statusWiseTests');
+    Route::post('showTest/{id}', 'App\Http\Controllers\v1\AssignTestsController@show_test');
+    Route::post('updateTestResult/{id}', 'App\Http\Controllers\v1\AssignTestsController@update_test_result');
     
     //Counter
     Route::get('listCounts', 'App\Http\Controllers\v1\CounterController@index');

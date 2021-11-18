@@ -47,8 +47,9 @@ class BookingTest extends Model
         "updated_by",
         "selected_year",
         "copied_from_year",
-        "is_active"
-        
+        "is_active",
+        "updated_at"
+
     ];
 
     /**
@@ -80,16 +81,13 @@ class BookingTest extends Model
         return $this->hasOne(BookingSampleDetail::class, 'booking_id', 'booking_id');
     }
     /**
-     * Get the statusWiseTests associated with the BookingTest
+     * Get the count of BookingTest where approved status pending
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     static public function count_pending_assign_tests()
     {
-        $datacount = DB::table('booking_tests')->where("approved","Pending")->count();
+        $datacount = DB::table('booking_tests')->where("approved", "Pending")->count();
         return $datacount;
-
     }
-
- 
 }
