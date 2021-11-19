@@ -160,14 +160,14 @@ Route::group(['middleware' => ['jwt.verify'], 'prefix' => 'v1'], function () {
     Route::post('editProduct/{id}', 'App\Http\Controllers\v1\MstProductController@update');
     Route::post('deleteProduct/{id}', 'App\Http\Controllers\v1\MstProductController@destroy');
     Route::get('exportproductlist', 'App\Http\Controllers\v1\MstProductController@exportlist');
-    
+
     // Instruments master
     Route::post('addInstrument', 'App\Http\Controllers\v1\InstrumentController@store');
     Route::get('listInstrument', 'App\Http\Controllers\v1\InstrumentController@index');
     Route::get('getInstrument/{id}', 'App\Http\Controllers\v1\InstrumentController@show');
     Route::post('editInstrument/{id}', 'App\Http\Controllers\v1\InstrumentController@update');
     Route::post('deleteInstrument/{id}', 'App\Http\Controllers\v1\InstrumentController@destroy');
-    
+
     // Booking
     Route::post('addBooking', 'App\Http\Controllers\v1\BookingController@store');
     Route::post('editBooking/{id}', 'App\Http\Controllers\v1\BookingController@update');
@@ -188,18 +188,17 @@ Route::group(['middleware' => ['jwt.verify'], 'prefix' => 'v1'], function () {
     Route::get('getTest/{id}', 'App\Http\Controllers\v1\TestController@show');
     Route::post('editTest/{id}', 'App\Http\Controllers\v1\TestController@update');
     Route::post('deleteTest/{id}', 'App\Http\Controllers\v1\TestController@destroy');
-    
+
     //Assign Tests
     Route::get('listAssignTests', 'App\Http\Controllers\v1\AssignTestsController@index');
     Route::post('assignTests', 'App\Http\Controllers\v1\AssignTestsController@assign_tests_chemist');
     Route::get('statusWiseTests', 'App\Http\Controllers\v1\AssignTestsController@statusWiseTests');
-    Route::post('showTest/{id}', 'App\Http\Controllers\v1\AssignTestsController@show_test');
+    Route::get('showTest/{id}', 'App\Http\Controllers\v1\AssignTestsController@show_test');
     Route::post('updateTestResult/{id}', 'App\Http\Controllers\v1\AssignTestsController@update_test_result');
-    
+    Route::post('TestApproveReject/{id?}', 'App\Http\Controllers\v1\AssignTestsController@tests_approve_reject');
+
     //Counter
     Route::get('listCounts', 'App\Http\Controllers\v1\CounterController@index');
-
-
 });
 
 Route::group(['prefix' => 'v1'], function () {

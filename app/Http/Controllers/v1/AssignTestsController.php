@@ -22,7 +22,7 @@ class AssignTestsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($count_request = "")
     {
         //
         try {
@@ -45,6 +45,7 @@ class AssignTestsController extends Controller
                     array_push($pending_assigned_data, $item);
                 }
             }
+
             /* booking have multiple tests but multiple tests have one booking so what we need here 
             as per scenerio each tests must have their booking data.*/
             $pending_assigned_tests = [];
@@ -65,10 +66,13 @@ class AssignTestsController extends Controller
                     array_push($pending_assigned_tests, $new_tests_arr);
                 }
             }
-
-            return Helper::response("Assign Tests List Shown Successfully", Response::HTTP_OK, true, $pending_assigned_tests);
+            if ($count_request == '' || !isset($count_request)) {
+                return Helper::response("Assign Tests List Shown Successfully", Response::HTTP_OK, true, $pending_assigned_tests);
+            } else {
+                return count($pending_assigned_tests);
+            }
         } catch (Exception $e) {
-            $data = array();
+            $pending_assigned_tests = array();
             return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $pending_assigned_tests);
         }
     }
@@ -77,11 +81,15 @@ class AssignTestsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function statusWiseTests(Request $request)
+    public function statusWiseTests(Request $request, $count_request = '')
     {
         //
         try {
-            $approved_status = $request->approved_status;
+            if ($count_request == '' || !isset($count_request)) {
+                $approved_status = $request->approved_status;
+            } else {
+                $approved_status = $count_request;
+            }
             if ($approved_status == "ForApproval") {
                 $data = BookingTest::select("id", "approved", "booking_id", "result", "p_sr_no", "test_name", "chemist_name", "assigned_date")
                     ->with(
@@ -97,7 +105,7 @@ class AssignTestsController extends Controller
                     ->orderBy('booking_tests.assigned_date', 'desc')
                     ->get()->toarray();
             } else {
-                $data = BookingTest::select("id", "approved", "booking_id", "p_sr_no", "test_name", "chemist_name", "assigned_date")
+                $data = BookingTest::select("id", "approved", "booking_id", "p_sr_no", "test_name", "chemist_name", "assigned_date","result","approval_date_time")
                     ->with(
                         'booking_detail:id,aum_serial_no,report_type,receipte_date,booking_no,customer_id',
                         'booking_detail.customer_id:id,company_name'
@@ -111,8 +119,11 @@ class AssignTestsController extends Controller
                     ->orderBy('booking_tests.assigned_date', 'desc')
                     ->get()->toarray();
             }
-
-            return Helper::response("Status Wise Tests List Shown Successfully", Response::HTTP_OK, true, $data);
+            if ($count_request == '' || !isset($count_request)) {
+                return Helper::response("Status Wise Tests List Shown Successfully", Response::HTTP_OK, true, $data);
+            } else {
+                return count($data);
+            }
         } catch (Exception $e) {
             $data = array();
             return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);
@@ -156,9 +167,8 @@ class AssignTestsController extends Controller
                     }
                 }
             }
-            return Helper::response("Assign tests to chemist Successfully", Response::HTTP_OK, true);
+            return Helper::response("Tests Are Assigned To Chemist Successfully", Response::HTTP_OK, true);
         } catch (Exception $e) {
-            $exportData = array();
             return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false);
         }
     }
@@ -185,13 +195,18 @@ class AssignTestsController extends Controller
                 'label_claim',
                 'max_limit',
                 'method'
-            )->with('booking_detail:id,booking_type,receipte_date,report_type,booking_no')
-                ->with('booking_samples_detail:id,booking_id,product_id,batch_no', 'booking_samples_detail.product_detail:id,product_name,generic_product_id', 'booking_samples_detail.product_detail.generic_product_id:id,product_name')
+            )->with('parent')
+                ->with('booking_detail:id,booking_type,receipte_date,report_type,booking_no')
+                ->with(
+                    'booking_samples_detail:id,booking_id,product_id,batch_no',
+                    'booking_samples_detail.product_detail:id,product_name,generic_product_id',
+                    'booking_samples_detail.product_detail.generic_product_id:id,product_name'
+                )
                 ->where('id', $id)->get()->toarray();
 
-            return Helper::response("Fetch assign tests data for analytics Successfully", Response::HTTP_OK, true, $data);
+            return Helper::response("Fetch Assign Tests Data For Analytics Successfully", Response::HTTP_OK, true, $data);
         } catch (Exception $e) {
-            $exportData = array();
+            $data = array();
             return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);
         }
     }
@@ -233,10 +248,48 @@ class AssignTestsController extends Controller
                 ));
             }
 
-            return Helper::response("Update test result in booking test Successfully", Response::HTTP_OK, true, $data);
+            return Helper::response("Test Result Is Updated For Booking Test Successfully", Response::HTTP_OK, true, $data);
         } catch (Exception $e) {
-            $exportData = array();
+            $data = array();
             return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);
+        }
+    }
+    /**
+     * Update test status in booking test[approve_reject].
+     * 
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function tests_approve_reject(Request $request, $id = "")
+    {
+        //
+        try {
+            //code...
+            if ($id == "" || !isset($id)) {
+                $data = $request->all();
+                $approved_status = $data['approved'];
+                $test_id = $data['test_id'];
+                $datetime = Carbon::now();
+                foreach ($test_id as $key => $item) {
+                    $update_status = BookingTest::find($item);
+                    if ($update_status != null) {
+                        $update_status->update(array("approved" => $approved_status, "approval_date_time" => $datetime, "updated_at" => $datetime));
+                    }
+                }
+            } else {
+                $data = $request->all();
+                $approved_status = $data['approved'];
+                $datetime = Carbon::now();
+                $update_status = BookingTest::find($id);
+                if ($update_status != null) {
+                    $update_status->update(array("approved" => $approved_status, "approval_date_time" => $datetime, "updated_at" => $datetime));
+                }
+            }
+
+            return Helper::response("Approved Status Updated Successfully", Response::HTTP_OK, true);
+        } catch (Exception $e) {
+            return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false);
         }
     }
 

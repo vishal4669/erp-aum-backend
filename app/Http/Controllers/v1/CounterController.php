@@ -1,8 +1,13 @@
 <?php
+
 namespace App\Http\Controllers\v1;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Models\BookingTest;
+use App\Helpers\Helper;
+use App\Http\Controllers\v1\AssignTestsController;
+
 class CounterController extends Controller
 {
     /**
@@ -10,14 +15,34 @@ class CounterController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
-        $count_pending_assign_tests = BookingTest::count_pending_assign_tests();
-        $all_count = array(
-            "Pending_assign_tests" => $count_pending_assign_tests
-        );
-        dd($all_count);
+        //      
+        try {
+            $loggedInUserData = Helper::getUserData();
+            // $count_pending_assign_tests = BookingTest::count_pending_assign_tests();
+
+        // using AssignTestsController
+            $data = new AssignTestsController;
+            $PendingTests_Count = $data->index($count_request = "Pending");
+            $Analitics_count = $data->statusWiseTests($request,$count_request = "Assigned");
+            $ForApproval_count = $data->statusWiseTests($request,$count_request = "ForApproval");
+            $Approved_count = $data->statusWiseTests($request,$count_request = "Approved");
+            $Rejected_count = $data->statusWiseTests($request,$count_request = "Rejected");
+
+            $all_count = array(
+                "PendingTests_Count" => $PendingTests_Count,
+                "Analitics_count" => $Analitics_count,
+                "ForApproval_count" => $ForApproval_count,
+                "Approved_count" => $Approved_count,
+                "Rejected_count" => $Rejected_count,
+            );
+            
+            return Helper::response("Count Data Shown Successfully", Response::HTTP_OK, true, $all_count);
+        } catch (Exception $e) {
+            $exportData = array();
+            return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $all_count);
+        }
     }
 
     /**

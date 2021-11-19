@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: sdb-e.hosting.stackcp.net
--- Generation Time: Nov 18, 2021 at 01:43 PM
+-- Generation Time: Nov 19, 2021 at 01:52 PM
 -- Server version: 10.4.18-MariaDB-log
 -- PHP Version: 7.1.33
 
@@ -279,9 +279,9 @@ CREATE TABLE `booking_tests` (
 --
 
 INSERT INTO `booking_tests` (`id`, `booking_id`, `parent_child`, `p_sr_no`, `by_pass`, `parent`, `product_details`, `test_name`, `label_claim`, `percentage_of_label_claim`, `min_limit`, `max_limit`, `result`, `label_claim_result`, `label_claim_unit`, `result2`, `mean`, `na_content`, `final_na_content`, `unit`, `expanded_uncertanity`, `amount`, `division`, `method`, `test_time`, `test_date_time`, `assigned_date`, `approval_date_time`, `approved`, `chemist_name`, `created_by`, `updated_by`, `created_at`, `updated_at`, `selected_year`, `copied_from_year`, `is_active`, `deleted_at`) VALUES
-(5, 4, 'Parent', '', 1, 20, 'testing here', 'dgfdg', '202', NULL, '33', '101', '', '', '', '', '', '', '', '', '', '1111.00', '', '', NULL, NULL, '2021-11-18 15:59:09', NULL, 'Assigned', 81, 3, 3, '2021-10-19 13:40:39', '2021-11-18 15:59:09', '2019-20', NULL, 1, NULL),
+(5, 4, 'Parent', '', 1, 20, 'testing here', 'dgfdg', '202', NULL, '33', '101', 'amazed', '', '', '', '', '', '', NULL, '', '1111.00', '', NULL, NULL, NULL, '2021-11-18 15:59:09', NULL, 'ForApproval', 81, 3, 3, '2021-10-19 13:40:39', '2021-11-19 18:42:01', '2019-20', NULL, 1, NULL),
 (10, 18, 'Parent', '', 1, 20, 'testing here', 'dgfdg', '202', NULL, '33', '101', '', '', '', '', '', '', '', '', '', '1111.00', '', '', NULL, NULL, '2021-11-18 15:59:09', NULL, 'Assigned', 81, 3, 3, '2021-10-20 07:20:41', '2021-11-18 15:59:09', '2019-20', NULL, 1, NULL),
-(11, 25, 'Parent', '', 1, 22, 'description', 'newparams022', 'labe', NULL, '10', '100', '', '', '', '', '', '', '', '', '', '500.00', '', '', NULL, NULL, '2021-11-18 15:59:09', NULL, 'Assigned', 81, 3, 3, '2021-10-20 11:20:57', '2021-11-18 15:59:09', '2019-20', NULL, 1, NULL),
+(11, 25, 'Parent', '', 1, 22, 'description', 'newparams022', 'labe', NULL, '10', '100', 'hey result is added', '', '', '', '', '', '', '1', '', '500.00', '', 'method is added', NULL, NULL, '2021-11-18 15:59:09', NULL, 'ForApproval', 81, 3, 3, '2021-10-20 11:20:57', '2021-11-19 18:46:27', '2019-20', NULL, 1, NULL),
 (12, 25, 'Parent', '', 1, 13, 'description1', 'newparams122', 'lab1', NULL, '20', '200', '', '', '', '', '', '', '', '', '', '700.00', '', '', NULL, NULL, '2021-11-18 15:59:09', NULL, 'Assigned', 81, 3, 3, '2021-10-20 11:20:57', '2021-11-18 15:59:09', '2019-20', NULL, 1, NULL),
 (13, 26, 'Parent', '', 2, 15, '', 'Assay123', '1000', NULL, '7852', '', '', '', '', '', '', '', '', '', '', '0.00', '', '', NULL, NULL, '2021-11-18 15:59:09', NULL, 'Assigned', 81, 3, 3, '2021-10-20 11:21:59', '2021-11-18 15:59:09', '2019-20', NULL, 1, NULL),
 (14, 26, 'Parent', '', 2, 0, '', 'test parameter', '', NULL, '', '', '', '', '', '', '', '', '', '', '', '5000.00', '', '', NULL, NULL, NULL, NULL, 'Pending', 1, 3, 3, '2021-10-20 11:21:59', '2021-11-17 09:18:04', '2019-20', NULL, 1, NULL),
@@ -320,7 +320,7 @@ INSERT INTO `booking_tests` (`id`, `booking_id`, `parent_child`, `p_sr_no`, `by_
 (196, 38, 'Parent', '1', 2, 15, 'Product Details1', 'Assay1232', '10001', NULL, '7853', '7856', '', '', '', '', '', '', '', '', '', '2500.00', '', '', NULL, NULL, NULL, NULL, 'Pending', NULL, 5, 3, '2021-11-09 13:39:46', '2021-11-09 13:39:46', '2019-20', NULL, 1, NULL),
 (197, 38, 'Child', '1.1', 2, 2, 'Product Details2', 'test parameter1', '10002', NULL, '7854', '7880', '', '', '', '', '', '', '', '', '', '5000.00', '', '', NULL, NULL, NULL, NULL, 'Pending', NULL, 0, 3, '2021-11-09 13:39:46', '2021-11-09 13:39:46', '2019-20', NULL, 1, NULL),
 (201, 32, 'Child', '1', 2, 16, 'test', 'test', '1', NULL, '2', '3', '', '', '', '', '', '', '', '', '', '44.00', '', '', NULL, NULL, NULL, NULL, 'Pending', NULL, 3, 3, '2021-11-10 07:01:11', '2021-11-10 07:01:11', '2019-20', NULL, 1, NULL),
-(214, 46, 'Parent', '1', 1, 18, 'White to off white colored round shape tablet with one side break line and other side plain.', 'Average weight', '', NULL, '', '', '', '', '', '', '', '', '', '', '', '0.00', '', '', NULL, NULL, '2021-11-18 16:02:19', NULL, 'Assigned', 81, 3, 3, '2021-11-10 11:06:15', '2021-11-18 16:02:19', '2019-20', NULL, 1, NULL),
+(214, 46, 'Parent', '1', 1, 18, 'White to off white colored round shape tablet with one side break line and other side plain.', 'Average weight', '', NULL, '', '', '40.20mg', '', '', '', '', '', '', '1', '', '0.00', '', 'tech1', NULL, NULL, '2021-11-18 16:02:19', NULL, 'ForApproval', 81, 3, 3, '2021-11-10 11:06:15', '2021-11-19 18:40:06', '2019-20', NULL, 1, NULL),
 (215, 46, 'Parent', '2', 1, 17, '', 'Average weight', '', NULL, '', '', '', '', '', '', '', '', '', '', '', '0.00', '', '', NULL, NULL, NULL, NULL, 'Pending', NULL, 3, 3, '2021-11-10 11:06:15', '2021-11-10 11:06:15', '2019-20', NULL, 1, NULL),
 (216, 46, 'Child', '2.1', 1, 18, '', 'Identification', '', NULL, '', 'The principal spot in the chromatogram obtained with the test solution corresponds to that obtained with reference solution.', '', '', '', '', '', '', '', '', '', '200.00', '', '', NULL, NULL, NULL, NULL, 'Pending', NULL, 3, 3, '2021-11-10 11:06:15', '2021-11-10 11:06:15', '2019-20', NULL, 1, NULL),
 (219, 47, 'Parent', '1', 2, 0, 'White to off white colored round shape tablet with one side break line and other side plain.', 'Average weight', '', NULL, '', '', '', '', '', '', '', '', '', '', '', '0.00', '', '', NULL, NULL, '2021-11-17 00:00:00', NULL, 'Assigned', 81, 3, 3, '2021-11-10 11:18:34', '2021-11-17 12:14:39', '2019-20', NULL, 1, NULL),

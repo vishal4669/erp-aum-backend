@@ -63,7 +63,8 @@ class BookingController extends Controller
                     ->select(
                         [
                             'bookings.id', 'bookings.aum_serial_no', 'bookings.booking_no',
-                            'bookings.booking_type', 'samples.product_type',
+                            'bookings.booking_type', 
+                            // 'bookings.booking_type', 'samples.product_type',
                             DB::raw('DATE_FORMAT(bookings.receipte_date, "%Y-%m-%d") as receipte_date'),
                             'bookings.is_active', 'mst_products.product_name'
                         ]
