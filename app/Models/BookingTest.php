@@ -11,6 +11,7 @@ class BookingTest extends Model
 {
     use HasFactory;
     use SoftDeletes;
+
     protected $fillable = [
         "booking_id",
         "parent_child",
@@ -81,4 +82,34 @@ class BookingTest extends Model
         return $this->hasOne(BookingSampleDetail::class, 'booking_id', 'booking_id');
     }
 
+    /**
+     * Get chemist data''
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function chemist_detail()
+    {
+        return $this->hasOne(User::class, 'id', 'chemist_name')
+            ->withTrashed()
+            ->withDefault([
+                "id" => "",
+                "first_name" => "",
+                "middle_name" => "",
+                "last_name" => ""
+            ]);
+    }
+    /**
+     * Get unit data''
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function unit_detail()
+    {
+        return $this->hasOne(Unit::class, 'id', 'unit')
+            ->withTrashed()
+            ->withDefault([
+                "id" => "",
+                "unit_name" => ""
+            ]);
+    }
 }

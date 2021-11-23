@@ -199,6 +199,11 @@ Route::group(['middleware' => ['jwt.verify'], 'prefix' => 'v1'], function () {
 
     //Counter
     Route::get('listCounts', 'App\Http\Controllers\v1\CounterController@index');
+
+    //Roll and Rights
+    Route::post('assignRoleRights', 'App\Http\Controllers\v1\RoleRightsController@assign_role_rights');
+    Route::post('updateRoleRights/{id}', 'App\Http\Controllers\v1\RoleRightsController@update_role_rights');
+    Route::get('getRoleRights/{id}','App\Http\Controllers\v1\RoleRightsController@show_role_rights');
 });
 
 Route::group(['prefix' => 'v1'], function () {

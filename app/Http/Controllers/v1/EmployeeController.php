@@ -90,6 +90,7 @@ class EmployeeController extends Controller
 
         try {
             // dd($request->email);
+            DB::trasaction();
             $rules = [
 
                 // Employee Form Fields
@@ -127,7 +128,7 @@ class EmployeeController extends Controller
                 // employee photo and signature
                 'signature' => 'nullable|mimes:jpeg,jpg,png,pdf',
                 'photo' => 'nullable|mimes:jpeg,jpg,png',
-                
+
             ];
 
             $messages = [
@@ -180,7 +181,7 @@ class EmployeeController extends Controller
                 //documents related messages
                 'signature.mimes' => 'The Employee Signature must be a file of type: jpeg, jpg, png, pdf.',
                 'photo.mimes' => 'The Employee Photo must be a file of type: jpeg, jpg, png.',
-                
+
 
             ];
 
@@ -237,43 +238,44 @@ class EmployeeController extends Controller
             $random_string = Helper::generateRandomString();
 
             $photo = (isset($request['photo']) && !empty($request['photo'])) ? $request['photo'] : '';
-            if(!empty($photo)){
-                $photo_file_name = 'photo_'.$users_id."_".$random_string."." . $photo->getClientOriginalExtension();
+            if (!empty($photo)) {
+                $photo_file_name = 'photo_' . $users_id . "_" . $random_string . "." . $photo->getClientOriginalExtension();
                 $photo->move(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH'), $photo_file_name);
             }
 
             $signature = (isset($request['signature']) && !empty($request['signature'])) ? $request['signature'] : '';
-            if(!empty($signature)){
-                $signature_file_name = 'signature_'.$users_id."_".$random_string."." . $signature->getClientOriginalExtension();
+            if (!empty($signature)) {
+                $signature_file_name = 'signature_' . $users_id . "_" . $random_string . "." . $signature->getClientOriginalExtension();
                 $signature->move(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH'), $signature_file_name);
             }
 
             $userData = Employee::find($users_id);
-            $userData->photo = ($photo_file_name && $photo_file_name!='') ? config('constants.EMPLOYEE_DOCUMENTS_URL').'/'.$photo_file_name : $userData->photo;
-            $userData->signature = ($signature_file_name && $signature_file_name!='') ? config('constants.EMPLOYEE_DOCUMENTS_URL').'/'.$signature_file_name : $userData->signature;
+            $userData->photo = ($photo_file_name && $photo_file_name != '') ? config('constants.EMPLOYEE_DOCUMENTS_URL') . '/' . $photo_file_name : $userData->photo;
+            $userData->signature = ($signature_file_name && $signature_file_name != '') ? config('constants.EMPLOYEE_DOCUMENTS_URL') . '/' . $signature_file_name : $userData->signature;
             $userData->save();
 
             //Update User related details
-            if(isset($request->address)){
+            if (isset($request->address)) {
                 $this->addUpdateUserAddressDetails($request->address, $users_id);
             }
-            if(isset($request->education)){
+            if (isset($request->education)) {
                 $this->addUserEducationDetails($request->education, $users_id);
             }
-            if(isset($request->employment)){
+            if (isset($request->employment)) {
                 $this->addUserEmploymentDetails($request->employment, $users_id);
             }
-            if(isset($request->company)){
+            if (isset($request->company)) {
                 $this->addUpdateUserCompanyDetails($request->company, $users_id);
             }
-            if(isset($request->document)){
+            if (isset($request->document)) {
                 $this->addUpdateUserDocumentDetails($request->document, $users_id);
             }
-
+            DB::commit();
             Log::info("Employee Created with details : " . json_encode($request->all()));
 
             return Helper::response("Employee added Successfully", Response::HTTP_CREATED, true, $userData);
         } catch (Exception $e) {
+            DB::rollback();
             $data = array();
             return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);
         }
@@ -452,37 +454,37 @@ class EmployeeController extends Controller
             $random_string = Helper::generateRandomString();
 
             $photo = (isset($request['photo']) && !empty($request['photo'])) ? $request['photo'] : '';
-            if(!empty($photo)){
-                $photo_file_name = 'photo_'.$id."_".$random_string."." . $photo->getClientOriginalExtension();
+            if (!empty($photo)) {
+                $photo_file_name = 'photo_' . $id . "_" . $random_string . "." . $photo->getClientOriginalExtension();
                 $photo->move(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH'), $photo_file_name);
             }
 
             $signature = (isset($request['signature']) && !empty($request['signature'])) ? $request['signature'] : '';
-            if(!empty($signature)){
-                $signature_file_name = 'signature_'.$id."_".$random_string."." . $signature->getClientOriginalExtension();
+            if (!empty($signature)) {
+                $signature_file_name = 'signature_' . $id . "_" . $random_string . "." . $signature->getClientOriginalExtension();
                 $signature->move(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH'), $signature_file_name);
             }
 
-            $employee->photo = ($photo_file_name && $photo_file_name!='') ? config('constants.EMPLOYEE_DOCUMENTS_URL').'/'.$photo_file_name : $employee->photo;
-            $employee->signature = ($signature_file_name && $signature_file_name!='') ? config('constants.EMPLOYEE_DOCUMENTS_URL').'/'.$signature_file_name : $employee->signature;
+            $employee->photo = ($photo_file_name && $photo_file_name != '') ? config('constants.EMPLOYEE_DOCUMENTS_URL') . '/' . $photo_file_name : $employee->photo;
+            $employee->signature = ($signature_file_name && $signature_file_name != '') ? config('constants.EMPLOYEE_DOCUMENTS_URL') . '/' . $signature_file_name : $employee->signature;
 
 
             $employee->update($input_data);
 
             //Update User related details
-            if(isset($request->address)){
+            if (isset($request->address)) {
                 $this->addUpdateUserAddressDetails($request->address, $id);
             }
-            if(isset($request->education)){
+            if (isset($request->education)) {
                 $this->addUserEducationDetails($request->education, $id);
             }
-            if(isset($request->employment)){
+            if (isset($request->employment)) {
                 $this->addUserEmploymentDetails($request->employment, $id);
             }
-            if(isset($request->company)){
+            if (isset($request->company)) {
                 $this->addUpdateUserCompanyDetails($request->company, $id);
             }
-            if(isset($request->document)){
+            if (isset($request->document)) {
                 $this->addUpdateUserDocumentDetails($request->document, $id);
             }
 
@@ -727,106 +729,105 @@ class EmployeeController extends Controller
      */
     function addUpdateUserDocumentDetails($document_data, $users_id = '')
     {
-        
-            // already exists data
-            $userDoc = UserDocDetail::where('users_id', $users_id);
-            $countDocumentData = $userDoc->count();
 
-            // to get the old data 
-            $userDocData = UserDocDetail::where('users_id', $users_id)->first();
+        // already exists data
+        $userDoc = UserDocDetail::where('users_id', $users_id);
+        $countDocumentData = $userDoc->count();
 
-            $loggedInUserData = Helper::getUserData();
-            $random_string = Helper::generateRandomString();
+        // to get the old data 
+        $userDocData = UserDocDetail::where('users_id', $users_id)->first();
 
-            $documentArray = array(
-                'users_id' => $users_id,
-                'aadhar_number' => (isset($document_data['aadhar_number'])) ? $document_data['aadhar_number'] : '',
-                'election_card_number' => (isset($document_data['election_card_number'])) ? $document_data['election_card_number'] : '',
-                'pan_card_number' => (isset($document_data['pan_card_number'])) ? $document_data['pan_card_number'] : '',
-                'passport_number' => (isset($document_data['passport_number'])) ? $document_data['passport_number'] : '',
-                'driving_license_number' => (isset($document_data['driving_license_number'])) ? $document_data['driving_license_number'] : '',
-                'is_active' => 1,
-            );
+        $loggedInUserData = Helper::getUserData();
+        $random_string = Helper::generateRandomString();
+
+        $documentArray = array(
+            'users_id' => $users_id,
+            'aadhar_number' => (isset($document_data['aadhar_number'])) ? $document_data['aadhar_number'] : '',
+            'election_card_number' => (isset($document_data['election_card_number'])) ? $document_data['election_card_number'] : '',
+            'pan_card_number' => (isset($document_data['pan_card_number'])) ? $document_data['pan_card_number'] : '',
+            'passport_number' => (isset($document_data['passport_number'])) ? $document_data['passport_number'] : '',
+            'driving_license_number' => (isset($document_data['driving_license_number'])) ? $document_data['driving_license_number'] : '',
+            'is_active' => 1,
+        );
 
 
-            $aadhar_card_photo = (isset($document_data['aadhar_card_photo']) && !empty($document_data['aadhar_card_photo'])) ? $document_data['aadhar_card_photo'] : '';
+        $aadhar_card_photo = (isset($document_data['aadhar_card_photo']) && !empty($document_data['aadhar_card_photo'])) ? $document_data['aadhar_card_photo'] : '';
 
-            if(!empty($aadhar_card_photo)){
-                $aadhar_card_photo_file_name = 'aadhar_card_'.$users_id."_".$random_string."." . $aadhar_card_photo->getClientOriginalExtension();
-                $aadhar_card_photo->move(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH'), $aadhar_card_photo_file_name);
-                $documentArray["aadhar_card_photo"] = $aadhar_card_photo_file_name;
+        if (!empty($aadhar_card_photo)) {
+            $aadhar_card_photo_file_name = 'aadhar_card_' . $users_id . "_" . $random_string . "." . $aadhar_card_photo->getClientOriginalExtension();
+            $aadhar_card_photo->move(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH'), $aadhar_card_photo_file_name);
+            $documentArray["aadhar_card_photo"] = $aadhar_card_photo_file_name;
 
-                if($countDocumentData > 0){
-                    if (isset($userDocData->aadhar_card_photo) && $userDocData->aadhar_card_photo!='' && File::exists(public_path('images/employee/documents/'.$userDocData->aadhar_card_photo))) {
-                         File::delete(public_path('images/employee/documents/'.$userDocData->aadhar_card_photo));
-                     }
-                }
-            }
-
-            $election_card_photo = (isset($document_data['election_card_photo']) && !empty($document_data['election_card_photo'])) ? $document_data['election_card_photo'] : '';
-
-            if(!empty($election_card_photo)){
-                $election_card_photo_file_name = 'election_card_'.$users_id."_".$random_string."." . $election_card_photo->getClientOriginalExtension();
-                $election_card_photo->move(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH'), $election_card_photo_file_name);
-                $documentArray["election_card_photo"] = $election_card_photo_file_name;
-
-                if($countDocumentData > 0){
-                    if (isset($userDocData->election_card_photo) && $userDocData->election_card_photo!='' && File::exists(public_path('images/employee/documents/'.$userDocData->election_card_photo))) {
-                         File::delete(public_path('images/employee/documents/'.$userDocData->election_card_photo));
-                     }
-                }
-            }
-
-            $pan_card_photo = (isset($document_data['pan_card_photo']) && !empty($document_data['pan_card_photo'])) ? $document_data['pan_card_photo'] : '';
-
-            if(!empty($pan_card_photo)){
-                $pan_card_photo_file_name = 'pan_card_'.$users_id."_".$random_string."." . $pan_card_photo->getClientOriginalExtension();
-                $pan_card_photo->move(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH'), $pan_card_photo_file_name);
-                $documentArray["pan_card_photo"] = $pan_card_photo_file_name;
-
-                if($countDocumentData > 0){
-                    if (isset($userDocData->pan_card_photo) && $userDocData->pan_card_photo!='' && File::exists(public_path('images/employee/documents/'.$userDocData->pan_card_photo))) {
-                         File::delete(public_path('images/employee/documents/'.$userDocData->pan_card_photo));
-                     }
-                }
-            }
-
-            $passport_photo = (isset($document_data['passport_photo']) && !empty($document_data['passport_photo'])) ? $document_data['passport_photo'] : '';
-
-            if(!empty($passport_photo)){
-                $passport_photo_file_name = 'passport_'.$users_id."_".$random_string."." . $passport_photo->getClientOriginalExtension();
-                $passport_photo->move(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH'), $passport_photo_file_name);
-                $documentArray["passport_photo"] = $passport_photo_file_name;
-
-                if($countDocumentData > 0){
-                    if (isset($userDocData->passport_photo) && $userDocData->passport_photo!='' && File::exists(public_path('images/employee/documents/'.$userDocData->passport_photo))) {
-                         File::delete(public_path('images/employee/documents/'.$userDocData->passport_photo));
-                     }
-                }
-            }
-
-            $driving_license_photo = (isset($document_data['driving_license_photo']) && !empty($document_data['driving_license_photo'])) ? $document_data['driving_license_photo'] : '';
-
-            if(!empty($driving_license_photo)){
-                $driving_license_photo_file_name = 'driving_license_'.$users_id."_".$random_string."." . $driving_license_photo->getClientOriginalExtension();
-                $driving_license_photo->move(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH'), $driving_license_photo_file_name);
-                $documentArray["driving_license_photo"] = $driving_license_photo_file_name;
-
-                if($countDocumentData > 0){
-                    if (isset($userDocData->driving_license_photo) && $userDocData->driving_license_photo!='' && File::exists(public_path('images/employee/documents/'.$userDocData->driving_license_photo))) {
-                         File::delete(public_path('images/employee/documents/'.$userDocData->driving_license_photo));
-                     }
-                }
-            }
-
-            
             if ($countDocumentData > 0) {
-                $documentArray['updated_by'] = $loggedInUserData['logged_in_user_id'];
-                $userDoc->update($documentArray);
-            } else {
-                $documentArray['created_by'] = $loggedInUserData['logged_in_user_id'];
-                UserDocDetail::create($documentArray);
+                if (isset($userDocData->aadhar_card_photo) && $userDocData->aadhar_card_photo != '' && File::exists(public_path('images/employee/documents/' . $userDocData->aadhar_card_photo))) {
+                    File::delete(public_path('images/employee/documents/' . $userDocData->aadhar_card_photo));
+                }
             }
-       
+        }
+
+        $election_card_photo = (isset($document_data['election_card_photo']) && !empty($document_data['election_card_photo'])) ? $document_data['election_card_photo'] : '';
+
+        if (!empty($election_card_photo)) {
+            $election_card_photo_file_name = 'election_card_' . $users_id . "_" . $random_string . "." . $election_card_photo->getClientOriginalExtension();
+            $election_card_photo->move(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH'), $election_card_photo_file_name);
+            $documentArray["election_card_photo"] = $election_card_photo_file_name;
+
+            if ($countDocumentData > 0) {
+                if (isset($userDocData->election_card_photo) && $userDocData->election_card_photo != '' && File::exists(public_path('images/employee/documents/' . $userDocData->election_card_photo))) {
+                    File::delete(public_path('images/employee/documents/' . $userDocData->election_card_photo));
+                }
+            }
+        }
+
+        $pan_card_photo = (isset($document_data['pan_card_photo']) && !empty($document_data['pan_card_photo'])) ? $document_data['pan_card_photo'] : '';
+
+        if (!empty($pan_card_photo)) {
+            $pan_card_photo_file_name = 'pan_card_' . $users_id . "_" . $random_string . "." . $pan_card_photo->getClientOriginalExtension();
+            $pan_card_photo->move(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH'), $pan_card_photo_file_name);
+            $documentArray["pan_card_photo"] = $pan_card_photo_file_name;
+
+            if ($countDocumentData > 0) {
+                if (isset($userDocData->pan_card_photo) && $userDocData->pan_card_photo != '' && File::exists(public_path('images/employee/documents/' . $userDocData->pan_card_photo))) {
+                    File::delete(public_path('images/employee/documents/' . $userDocData->pan_card_photo));
+                }
+            }
+        }
+
+        $passport_photo = (isset($document_data['passport_photo']) && !empty($document_data['passport_photo'])) ? $document_data['passport_photo'] : '';
+
+        if (!empty($passport_photo)) {
+            $passport_photo_file_name = 'passport_' . $users_id . "_" . $random_string . "." . $passport_photo->getClientOriginalExtension();
+            $passport_photo->move(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH'), $passport_photo_file_name);
+            $documentArray["passport_photo"] = $passport_photo_file_name;
+
+            if ($countDocumentData > 0) {
+                if (isset($userDocData->passport_photo) && $userDocData->passport_photo != '' && File::exists(public_path('images/employee/documents/' . $userDocData->passport_photo))) {
+                    File::delete(public_path('images/employee/documents/' . $userDocData->passport_photo));
+                }
+            }
+        }
+
+        $driving_license_photo = (isset($document_data['driving_license_photo']) && !empty($document_data['driving_license_photo'])) ? $document_data['driving_license_photo'] : '';
+
+        if (!empty($driving_license_photo)) {
+            $driving_license_photo_file_name = 'driving_license_' . $users_id . "_" . $random_string . "." . $driving_license_photo->getClientOriginalExtension();
+            $driving_license_photo->move(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH'), $driving_license_photo_file_name);
+            $documentArray["driving_license_photo"] = $driving_license_photo_file_name;
+
+            if ($countDocumentData > 0) {
+                if (isset($userDocData->driving_license_photo) && $userDocData->driving_license_photo != '' && File::exists(public_path('images/employee/documents/' . $userDocData->driving_license_photo))) {
+                    File::delete(public_path('images/employee/documents/' . $userDocData->driving_license_photo));
+                }
+            }
+        }
+
+
+        if ($countDocumentData > 0) {
+            $documentArray['updated_by'] = $loggedInUserData['logged_in_user_id'];
+            $userDoc->update($documentArray);
+        } else {
+            $documentArray['created_by'] = $loggedInUserData['logged_in_user_id'];
+            UserDocDetail::create($documentArray);
+        }
     }
 }

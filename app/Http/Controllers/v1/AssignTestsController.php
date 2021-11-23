@@ -11,7 +11,7 @@ use Log;
 use App\Helpers\Helper;
 use App\Models\BookingTest;
 use Carbon\Carbon;
-use Exception;
+// use Exception;
 
 use function PHPSTORM_META\type;
 
@@ -91,27 +91,62 @@ class AssignTestsController extends Controller
                 $approved_status = $count_request;
             }
             if ($approved_status == "ForApproval") {
-                $data = BookingTest::select("id", "approved", "booking_id", "result", "p_sr_no", "test_name", "chemist_name", "assigned_date")
+                $data = BookingTest::select(
+                    "id",
+                    "approved",
+                    "booking_id",
+                    "p_sr_no",
+                    "test_name",
+                    "chemist_name",
+                    "assigned_date",
+                    "result",
+                    "approval_date_time",
+                    "label_claim",
+                    "unit",
+                    "method",
+                    "min_limit",
+                    "max_limit"
+                )
+                    ->with('unit_detail:id,unit_name')
+                    ->with('chemist_detail:id,first_name,middle_name,last_name')
                     ->with(
                         'booking_detail:id,aum_serial_no,report_type,receipte_date,booking_no,customer_id',
                         'booking_detail.customer_id:id,company_name'
                     )
                     ->with(
-                        'booking_samples_detail:id,booking_id,product_id',
+                        'booking_samples_detail:id,booking_id,product_id,batch_no',
                         'booking_samples_detail.product_detail:id,product_name,pharmacopeia_id',
                         'booking_samples_detail.product_detail.pharmacopiea_detail:id,pharmacopeia_name'
                     )
+                    ->where('approved', $approved_status)
                     ->where('booking_tests.result', "!=", '')
                     ->orderBy('booking_tests.assigned_date', 'desc')
                     ->get()->toarray();
             } else {
-                $data = BookingTest::select("id", "approved", "booking_id", "p_sr_no", "test_name", "chemist_name", "assigned_date","result","approval_date_time")
+                $data = BookingTest::select(
+                    "id",
+                    "approved",
+                    "booking_id",
+                    "p_sr_no",
+                    "test_name",
+                    "chemist_name",
+                    "assigned_date",
+                    "result",
+                    "approval_date_time",
+                    "label_claim",
+                    "unit",
+                    "method",
+                    "min_limit",
+                    "max_limit"
+                )
+                ->with('unit_detail:id,unit_name')
+                    ->with('chemist_detail:id,first_name,middle_name,last_name')
                     ->with(
                         'booking_detail:id,aum_serial_no,report_type,receipte_date,booking_no,customer_id',
                         'booking_detail.customer_id:id,company_name'
                     )
                     ->with(
-                        'booking_samples_detail:id,booking_id,product_id',
+                        'booking_samples_detail:id,booking_id,product_id,batch_no',
                         'booking_samples_detail.product_detail:id,product_name,pharmacopeia_id',
                         'booking_samples_detail.product_detail.pharmacopiea_detail:id,pharmacopeia_name'
                     )
@@ -167,7 +202,7 @@ class AssignTestsController extends Controller
                     }
                 }
             }
-            return Helper::response("Tests Are Assigned To Chemist Successfully", Response::HTTP_OK, true);
+            return Helper::response("Tests Are Assigned/Reassigned To Chemist Successfully", Response::HTTP_OK, true);
         } catch (Exception $e) {
             return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false);
         }

@@ -63,8 +63,7 @@ class BookingController extends Controller
                     ->select(
                         [
                             'bookings.id', 'bookings.aum_serial_no', 'bookings.booking_no',
-                            'bookings.booking_type', 
-                            // 'bookings.booking_type', 'samples.product_type',
+                            'bookings.booking_type', 'samples.product_type',
                             DB::raw('DATE_FORMAT(bookings.receipte_date, "%Y-%m-%d") as receipte_date'),
                             'bookings.is_active', 'mst_products.product_name'
                         ]
@@ -490,7 +489,7 @@ class BookingController extends Controller
                 'booking_sample_details.*.sampling_date_from'  => 'nullable|date',
                 'booking_sample_details.*.sampling_date_to'    => 'nullable|date_format:Y-m-d|after:booking_sample_details.*.sampling_date_from',
                 'booking_tests.*.amount'    => 'nullable|numeric|between:0,999999999999999999999999999.99',
-                'booking_sample_details.*.batch_no'  => 'nullable|numeric|digits_between:0,25',
+                'booking_sample_details.*.batch_no'  => 'nullable',
                 'booking_sample_details.*.packsize'  => 'max:55',
                 'booking_sample_details.*.request_quantity'  => 'nullable|numeric',
                 'booking_sample_details.*.sample_code'  => 'max:100',
@@ -529,8 +528,8 @@ class BookingController extends Controller
                 'booking_sample_details.*.sample_quantity.numeric'  => 'booking sample details of sample quantity must be numeric value.',
                 'booking_sample_details.*.batch_size_qty_rec.numeric'  => 'booking sample details of batch size qty rec must be numeric value.',
                 'booking_sample_details.*.request_quantity.numeric'  => 'booking sample details of request quantity must be numeric value.',
-                'booking_sample_details.*.batch_no.numeric'  => 'booking sample details of batch_no must be numeric value.',
-                'booking_sample_details.*.batch_no.digits_between'  => 'booking sample details of batch_no must be between 0 and 25 digits.',
+                // 'booking_sample_details.*.batch_no.numeric'  => 'booking sample details of batch_no must be numeric value.',
+                // 'booking_sample_details.*.batch_no.digits_between'  => 'booking sample details of batch_no must be between 0 and 25 digits.',
                 'booking_sample_details.*.product_id.required'  => 'The Product Name Field Is Required.',
                 'booking_sample_details.*.sampling_date_to.after'    => 'Sampling Date To Must Be A Date After Sampling Date From.',
                 'booking_tests.*.amount.numeric'  => 'booking tests details of amount must be numeric value.',
@@ -615,7 +614,7 @@ class BookingController extends Controller
             $booking_sample_data = array(
                 "booking_id" => (isset($booking_id) ? $booking_id : 0),
                 "product_id"    => (isset($booking_samples[0]['product_id']) ? $booking_samples[0]['product_id'] : 0),
-                "batch_no"  => (isset($booking_samples[0]['batch_no']) ? $booking_samples[0]['batch_no'] : 0),
+                "batch_no"  => (isset($booking_samples[0]['batch_no']) ? $booking_samples[0]['batch_no'] : ''),
                 "packsize"  => (isset($booking_samples[0]['packsize']) ? $booking_samples[0]['packsize'] : ''),
                 "request_quantity"  => (isset($booking_samples[0]['request_quantity']) ? $booking_samples[0]['request_quantity'] : 0),
                 "sample_code"   => (isset($booking_samples[0]['sample_code']) ? $booking_samples[0]['sample_code'] : ''),
@@ -697,9 +696,17 @@ class BookingController extends Controller
                             !empty($tests['percentage_of_label_claim']) or
                             !empty($tests['chemsit_name'])
                         ) {
-
-                            if ($tests['approved'] == "Pending" || !isset($tests['approved']) && isset($tests['chemist_name']) == true) {
+                            $assigned_date =  NULL;
+                            $approval_date_time = NULL;
+                            if (($tests['approved'] == "Pending" && isset($tests['chemist_name']) == true) || (!isset($tests['approved']) && isset($tests['chemist_name']) == true)) {
                                 $tests['approved'] = "Assigned";
+                                $assigned_date = Carbon::now();
+                            }
+                            if ($tests['approved'] == "Assigned") {
+                                $assigned_date = Carbon::now();
+                            }
+                            if ($tests['approved'] == "Approved" || $tests['approved'] == "Rejected") {
+                                $approval_date_time = Carbon::now();
                             }
 
                             if (!empty($tests['result'])) {
@@ -724,7 +731,7 @@ class BookingController extends Controller
                                 "mean" => (isset($tests['mean']) ? $tests['mean'] : ''),
                                 "na_content" => (isset($tests['na_content']) ? $tests['na_content'] : ''),
                                 "final_na_content" => (isset($tests['final_na_content']) ? $tests['na_content'] : ''),
-                                "unit" => (isset($tests['unit']) ? $tests['unit'] : ''),
+                                "unit" => (isset($tests['unit']) ? $tests['unit'] : NULL),
                                 "expanded_uncertanity" => (isset($tests['expanded_uncertanity']) ? $tests['expanded_uncertanity'] : ''),
                                 "amount" => (isset($tests['amount']) ? $tests['amount'] : 0),
                                 "division" => (isset($tests['division']) ? $tests['division'] : ''),
@@ -732,7 +739,8 @@ class BookingController extends Controller
                                 "division" => (isset($tests['division']) ? $tests['division'] : ''),
                                 "test_time" => (isset($tests['test_time']) ? $tests['test_time'] : NULL),
                                 "test_date_time" => (isset($tests['test_date_time']) ? $tests['test_date_time'] : NULL),
-                                "approval_date_time" => (isset($tests['approval_date_time']) ? $tests['approval_date_time'] : NULL),
+                                "assigned_date" => (isset($assigned_date) ? $assigned_date : NULL),
+                                "approval_date_time" => (isset($approval_date_time) ? $approval_date_time : NULL),
                                 "approved" => (isset($tests['approved']) ? $tests['approved'] : ''),
                                 "percentage_of_label_claim" => (isset($tests['percentage_of_label_claim']) ? $tests['percentage_of_label_claim'] : NULL),
                                 "chemist_name" => (isset($tests['chemist_name']) ? $tests['chemist_name'] : NULL),
@@ -1095,7 +1103,7 @@ class BookingController extends Controller
                 'booking_sample_details.*.sampling_date_from'  => 'nullable|date',
                 'booking_sample_details.*.sampling_date_to'    => 'nullable|date_format:Y-m-d|after:booking_sample_details.*.sampling_date_from',
                 'booking_tests.*.amount'    => 'nullable|numeric|between:0,999999999999999999999999999.99',
-                'booking_sample_details.*.batch_no'  => 'nullable|numeric|digits_between:0,25',
+                'booking_sample_details.*.batch_no'  => 'nullable',
                 'booking_sample_details.*.packsize'  => 'max:55',
                 'booking_sample_details.*.request_quantity'  => 'nullable|numeric',
                 'booking_sample_details.*.sample_code'  => 'max:100',
@@ -1134,8 +1142,8 @@ class BookingController extends Controller
                 'booking_sample_details.*.batch_size_qty_rec.numeric'  => 'booking sample details of batch size qty rec must be numeric value.',
                 'booking_sample_details.*.batch_size_qty_rec.digits_between'  => 'booking sample details of batch_size_qty_rec must be between 0 and 25 digits',
                 'booking_sample_details.*.request_quantity.numeric'  => 'booking sample details of request quantity must be numeric value.',
-                'booking_sample_details.*.batch_no.numeric'  => 'booking sample details of batch_no must be numeric value.',
-                'booking_sample_details.*.batch_no.digits_between'  => 'booking sample details of batch_no must be between 0 and 25 digits.',
+                // 'booking_sample_details.*.batch_no.numeric'  => 'booking sample details of batch_no must be numeric value.',
+                // 'booking_sample_details.*.batch_no.digits_between'  => 'booking sample details of batch_no must be between 0 and 25 digits.',
                 'booking_sample_details.*.product_id.required'  => 'The Product Name Field Is Required.',
                 'booking_sample_details.*.sampling_date_to.after'    => 'Sampling Date To Must Be A Date After Sampling Date From.',
                 'booking_tests.*.amount.numeric'  => 'booking tests details of amount must be numeric value.',
