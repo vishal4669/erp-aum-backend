@@ -711,8 +711,10 @@ class BookingController extends Controller
 
                             if (!empty($tests['result'])) {
                                 $tests['approved'] = "ForApproval";
+                                if (!isset($tests['test_date_time'])) {
+                                    $tests['test_date_time'] = Carbon::now();
+                                }
                             }
-
                             $tests_data = array(
                                 "booking_id" => (isset($booking_id) ? $booking_id : 0),
                                 "parent_child" => (isset($tests['parent_child']) ? $tests['parent_child'] : ''),

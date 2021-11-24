@@ -279,6 +279,7 @@ class AssignTestsController extends Controller
                     'method' => $request->method,
                     'unit'   => $request->unit,
                     'approved' => "ForApproval",
+                    'test_date_time' => $datetime,
                     'updated_at' => $datetime
                 ));
             }

@@ -20,6 +20,7 @@ use App\Models\UserDocDetail;
 use App\Models\UserEduDetail;
 use App\Models\UserEmpDetail;
 use File;
+use DB;
 
 class EmployeeController extends Controller
 {
@@ -87,17 +88,17 @@ class EmployeeController extends Controller
 
     public function store(Request $request)
     {
-
+        DB::beginTransaction();
         try {
             // dd($request->email);
-            DB::trasaction();
+            // return Helper::response("DEBUG", Response::HTTP_CREATED, true, $request->photo);
             $rules = [
 
                 // Employee Form Fields
                 'first_name' => 'required|string|max:255',
                 'middle_name' => 'required|string|max:255',
                 'last_name' => 'required|string|max:255',
-                'email' => 'required|email|max:255',
+                'email' => 'required|email|unique:users|max:255',
                 'password' => 'required|min:6|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,15}$/',
                 'birth_date' => 'required|date',
                 'mobile' => 'required|min:10|max:10',
@@ -225,7 +226,8 @@ class EmployeeController extends Controller
                 'deposit' => $request->get('deposit'),
                 'selected_year' => $loggedInUserData['selected_year'],
                 'is_admin' => 0,
-                'is_active' => 1,
+                'is_approved' => "Pending",
+                'is_active' => 0,
                 'created_by' => $loggedInUserData['logged_in_user_id'],
                 'updated_at' => NULL
             ]);
@@ -413,7 +415,13 @@ class EmployeeController extends Controller
             }
 
             $loggedInUserData = Helper::getUserData();
-
+            $is_approved = "Pending";
+            if (
+                isset($request->is_approved) &&
+                ($request->is_approved == "Approved" || $request->is_approved == "Rejected")
+            ) {
+                $is_approved = $request->is_approved;
+            }
             $input_data = [
                 'title' => $request->get('title'),
                 'first_name' => $request->get('first_name'),
@@ -442,6 +450,8 @@ class EmployeeController extends Controller
                 'caste' => $request->get('caste'),
                 'reporting_authority' => $request->get('reporting_authority'),
                 'deposit' => $request->get('deposit'),
+                'is_approved' =>  $is_approved,
+                'is_active' => ($is_approved == 'Approved') ? 1 : 0,
                 'selected_year' => $loggedInUserData['selected_year'],
                 'updated_by' => $loggedInUserData['logged_in_user_id']
             ];

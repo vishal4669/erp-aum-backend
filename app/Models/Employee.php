@@ -53,6 +53,7 @@ class Employee extends Model
         'booking_ratetiny',
         'selected_year',
         'copied_from_year',
+        'is_approved',
         'is_active',
         'created_by',
         'updated_by',
