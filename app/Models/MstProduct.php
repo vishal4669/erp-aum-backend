@@ -81,4 +81,21 @@ class MstProduct extends Model
          return $this->hasOne(Pharmacopeia::class, 'id', 'pharmacopeia_id')->withTrashed();
      }
 
+     //Product data for BookingPrintController
+     public function generic_product_data()
+    {
+        return $this->hasOne(MstProduct::class, 'id', 'generic_product_id')
+        ->withTrashed()
+        ->withDefault([
+            "id"=>"",
+            "name_of_sample"=> "",
+            "product_generic"=> "",
+            "generic_product_id"=>"",
+            "generic_product_data"=>array(
+                "id"=>"",
+                "generic_name"=> ""
+            )
+            
+        ]);
+    }
 }

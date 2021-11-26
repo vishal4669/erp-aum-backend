@@ -77,5 +77,10 @@ class BookingSampleDetail extends Model
     }
  
 
+    //Product data for BookingPrintController
+    public function product_data()
+    {
+        return $this->hasOne(MstProduct::class, 'id', 'product_id')->withTrashed();
+    }
 
 }

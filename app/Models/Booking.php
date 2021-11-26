@@ -50,6 +50,9 @@ class Booking extends Model
         "discipline",
         "booking_group",
         "statement_ofconformity",
+        "coa_print",
+        "coa_print_count",
+        "roa_print_count",
         "coa_release_date",
         "block",
         "is_active",
@@ -59,6 +62,9 @@ class Booking extends Model
         "updated_at"
     ];
 
+    protected $casts = [
+        "coa_print" => 'array'
+    ];
     /**
      * Get all of the comments for the booking
      *
@@ -69,6 +75,10 @@ class Booking extends Model
         return $this->hasMany(BookingSampleDetail::class);
     }
     public function tests()
+    {
+        return $this->hasMany(BookingTest::class);
+    }
+    public function tests_status()
     {
         return $this->hasMany(BookingTest::class);
     }
@@ -109,4 +119,37 @@ class Booking extends Model
         // return $this->hasMany(BookingTest::class)->where('chemist_name',NULL)->orwhere('chemist_name',0)->withTrashed();
         return $this->hasMany(BookingTest::class)->where('approved','Pending')->withTrashed();
     }
+
+
+
+    //BookingPrintController "original_manufacturer == manufacturer_id"
+    public function original_manufacturer()
+    {
+        return $this->hasOne(Customer::class, 'id', 'original_manufacturer')
+        ->withTrashed()
+        ->withDefault([
+            "id" => "",
+            "company_name"=> ""
+        ]);
+    }
+    public function supplier()
+    {
+        return $this->hasOne(Customer::class, 'id', 'supplier')
+        ->withTrashed()
+        ->withDefault([
+            "id" => "",
+            "company_name"=> ""
+        ]);
+    }
+    //booking samples for BookingPrintController here "original_manufacturer == manufacturer_id"
+    public function sample_data()
+    {
+        return $this->hasMany(BookingSampleDetail::class);
+    }
+    //booking tests_data for BookingPrintController
+    public function tests_data()
+    {
+        return $this->hasMany(BookingTest::class,'booking_id','id');
+    }
+
 }

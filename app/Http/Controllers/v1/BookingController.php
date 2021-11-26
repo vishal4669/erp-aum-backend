@@ -435,6 +435,7 @@ class BookingController extends Controller
      */
     public function store(Request $request)
     {
+
         DB::beginTransaction();
         if (!isset(Booking::where('booking_no', $request->booking_no)->latest()->first()->booking_no)) {
             $last_booking_id = 1;
@@ -697,24 +698,24 @@ class BookingController extends Controller
                             !empty($tests['chemsit_name'])
                         ) {
                             $assigned_date =  NULL;
-                            $approval_date_time = NULL;
-                            if (($tests['approved'] == "Pending" && isset($tests['chemist_name']) == true) || (!isset($tests['approved']) && isset($tests['chemist_name']) == true)) {
-                                $tests['approved'] = "Assigned";
-                                $assigned_date = Carbon::now();
-                            }
+                            // $approval_date_time = NULL;
+                            // if (($tests['approved'] == "Pending" && isset($tests['chemist_name']) == true) || (!isset($tests['approved']) && isset($tests['chemist_name']) == true)) {
+                            //     $tests['approved'] = "Assigned";
+                            //     $assigned_date = Carbon::now();
+                            // }
                             if ($tests['approved'] == "Assigned") {
                                 $assigned_date = Carbon::now();
                             }
-                            if ($tests['approved'] == "Approved" || $tests['approved'] == "Rejected") {
-                                $approval_date_time = Carbon::now();
-                            }
+                            // if ($tests['approved'] == "Approved" || $tests['approved'] == "Rejected") {
+                            //     $approval_date_time = Carbon::now();
+                            // }
 
-                            if (!empty($tests['result'])) {
-                                $tests['approved'] = "ForApproval";
-                                if (!isset($tests['test_date_time'])) {
-                                    $tests['test_date_time'] = Carbon::now();
-                                }
-                            }
+                            // if (!empty($tests['result'])) {
+                            //     $tests['approved'] = "ForApproval";
+                            //     if (!isset($tests['test_date_time'])) {
+                            //         $tests['test_date_time'] = Carbon::now();
+                            //     }
+                            // }
                             $tests_data = array(
                                 "booking_id" => (isset($booking_id) ? $booking_id : 0),
                                 "parent_child" => (isset($tests['parent_child']) ? $tests['parent_child'] : ''),
@@ -867,6 +868,7 @@ class BookingController extends Controller
             // 'samples.pharmacopiea_id:id,pharmacopeia_name',
             'tests',
             'tests.parent',
+            'tests_status:id,booking_id,approved as approved_status',
             'audit',
             'created_by:id,first_name,middle_name,last_name',
             'updated_by:id,first_name,middle_name,last_name'
@@ -1061,6 +1063,56 @@ class BookingController extends Controller
             );
         }
 
+        //Approved Status Dropdown Start
+        if ($data['tests'] != null || !empty($data['tests'])) {
+            foreach ($data['tests'] as $key => $item) {
+                if ($item['approved'] == "Pending") {
+                    $data['tests'][$key]['approved_dropdown'] = array(
+                        "approved" => "Assigned"
+                    );
+                } elseif ($item['approved'] == "Assigned") {
+
+                    $data['tests'][$key]['approved_dropdown'] = array(
+                        "approved" => "ForApproval"
+                    );
+                } elseif ($item['approved'] == "ForApproval") {
+                    $data['tests'][$key]['approved_dropdown'] = array(
+                        "approved" => array(
+                            "Approved",
+                            "Rejected"
+                        )
+                    );
+                } else {
+                    if ($item['approved'] == "Approved" || $item['approved'] == "Rejected") {
+                        $data['tests'][$key]['approved_dropdown'] = array(
+                            "approved" => ""
+                        );
+                    } else {
+                        if ($item['approved'] == Null || $item['approved'] == "") {
+                            $data['tests'][$key]['approved_dropdown'] = array(
+                                "approved" => "Pending"
+                            );
+                        }
+                    }
+                }
+            }
+        }
+        //Approved Status Dropdown End
+        //Result Dropdown Start
+        $result_dropdown = BookingTest::select('result')
+            ->whereNotNull('result')
+            ->where('result', '<>', '')
+            ->distinct()
+            ->get()
+            ->toarray();
+        if (!empty($result_dropdown)) {
+            $data['result_dropdown'] = $result_dropdown;
+        } else {
+            $data['result_dropdown'] = array(
+                "result" => ""
+            );
+        }
+        //Result Dropdown End
         $data = $this->contact_type($type = '', $data, true);
         $data = $this->get_products($data);
 
@@ -1087,6 +1139,7 @@ class BookingController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // return Helper::response("DEBuG", Response::HTTP_OK, true, $request->all());
         try {
 
             $rules = [
