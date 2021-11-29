@@ -88,10 +88,13 @@ class EmployeeController extends Controller
 
     public function store(Request $request)
     {
+        $req = $request->all();
+        $education = json_decode($req['education'], true);
+        $employment = json_decode($req['employment'], true);
+
         DB::beginTransaction();
         try {
-            // dd($request->email);
-            // return Helper::response("DEBUG", Response::HTTP_CREATED, true, $request->photo);
+
             $rules = [
 
                 // Employee Form Fields
@@ -261,10 +264,10 @@ class EmployeeController extends Controller
                 $this->addUpdateUserAddressDetails($request->address, $users_id);
             }
             if (isset($request->education)) {
-                $this->addUserEducationDetails($request->education, $users_id);
+                $this->addUserEducationDetails($education, $users_id);
             }
             if (isset($request->employment)) {
-                $this->addUserEmploymentDetails($request->employment, $users_id);
+                $this->addUserEmploymentDetails($employment, $users_id);
             }
             if (isset($request->company)) {
                 $this->addUpdateUserCompanyDetails($request->company, $users_id);
@@ -619,6 +622,7 @@ class EmployeeController extends Controller
             $educationDetails->delete();
 
             // check if data already present for the user
+
             $education_count = count($edu_data);
 
             if ($education_count) {
@@ -705,7 +709,7 @@ class EmployeeController extends Controller
             $companyArray = array(
                 'users_id' => $users_id,
                 'mst_companies_id' => (isset($company_data['mst_companies_id'])) ? $company_data['mst_companies_id'] : '',
-                'reporting_authority_id' => (isset($company_data['reporting_authority_id'])) ? $company_data['reporting_authority_id'] : '',
+                'reporting_authority_id' => (isset($company_data['reporting_authority_id'])) ? $company_data['reporting_authority_id'] : NULL,
                 'mst_departments_id' => (isset($company_data['mst_departments_id'])) ? $company_data['reporting_authority_id'] : '',
                 'mst_positions_id' => (isset($company_data['mst_positions_id'])) ? $company_data['mst_positions_id'] : '',
                 'join_date' => (isset($company_data['join_date'])) ? $company_data['join_date'] : '',

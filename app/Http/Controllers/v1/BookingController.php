@@ -23,6 +23,8 @@ use DB;
 use Carbon\Carbon;
 use Illuminate\Validation\Rule;
 use Mockery\Undefined;
+use App\Mail\BookingSuccessfull;
+use Illuminate\Support\Facades\Mail;
 
 use function PHPUnit\Framework\isEmpty;
 
@@ -46,7 +48,7 @@ class BookingController extends Controller
                     ->select(
                         [
                             'bookings.id', 'bookings.aum_serial_no', 'bookings.booking_no',
-                            'bookings.booking_type',
+                            'bookings.booking_type','bookings.coa_print_count',
                             DB::raw('DATE_FORMAT(bookings.receipte_date, "%Y-%m-%d") as receipte_date'),
                             'bookings.is_active', 'mst_products.product_name', 'mst_products.product_generic'
                         ]
@@ -63,7 +65,7 @@ class BookingController extends Controller
                     ->select(
                         [
                             'bookings.id', 'bookings.aum_serial_no', 'bookings.booking_no',
-                            'bookings.booking_type', 'samples.product_type',
+                            'bookings.booking_type', 'bookings.coa_print_count','samples.product_type',
                             DB::raw('DATE_FORMAT(bookings.receipte_date, "%Y-%m-%d") as receipte_date'),
                             'bookings.is_active', 'mst_products.product_name'
                         ]
@@ -596,6 +598,11 @@ class BookingController extends Controller
                 $this->addupdateAuditDetails($request->booking_audit_details, $booking_data->id);
             }
             DB::commit();
+            $id = $booking_data['id'];
+            $is_mail_data = True;
+            $email_data = $this->show($id, $is_mail_data);
+            $send_email_to = $email_data['customer_id']['user_name'];
+            Mail::to(users: $send_email_to)->send(new BookingSuccessfull($email_data));
             Log::info("Booking Created with details : " . json_encode($request->all()));
             return Helper::response("Booking added Successfully", Response::HTTP_CREATED, true, $booking_data);
         } catch (Exception $e) {
@@ -703,9 +710,9 @@ class BookingController extends Controller
                             //     $tests['approved'] = "Assigned";
                             //     $assigned_date = Carbon::now();
                             // }
-                            if ($tests['approved'] == "Assigned") {
-                                $assigned_date = Carbon::now();
-                            }
+                            // if ($tests['approved'] == "Assigned") {
+                            //     $assigned_date = Carbon::now();
+                            // }
                             // if ($tests['approved'] == "Approved" || $tests['approved'] == "Rejected") {
                             //     $approval_date_time = Carbon::now();
                             // }
@@ -855,12 +862,12 @@ class BookingController extends Controller
      * @param  \App\Models\booking  $booking
      * @return \Illuminate\Http\Response
      */
-    public function show(booking $booking, $id)
+    public function show($id, $is_mail_data = '')
     {
         //
         $loggedInUserData = Helper::getUserData();
         $data = Booking::with(
-            'customer_id:id,company_name,deleted_at',
+            'customer_id:id,company_name,user_name,deleted_at',
             'manufacturer_id:id,company_name,deleted_at,company_name as manufacturer_name',
             'supplier_id:id,company_name,deleted_at,company_name as supplier_name',
             'samples',
@@ -1116,7 +1123,11 @@ class BookingController extends Controller
         $data = $this->contact_type($type = '', $data, true);
         $data = $this->get_products($data);
 
-        return Helper::response("This Booking Shown Successfully", Response::HTTP_OK, true, $data);
+        if ($is_mail_data != '') {
+            return $data;
+        } else {
+            return Helper::response("This Booking Shown Successfully", Response::HTTP_OK, true, $data);
+        }
     }
 
     /**

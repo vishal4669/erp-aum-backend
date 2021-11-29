@@ -117,29 +117,65 @@ class Booking extends Model
     public function tests_detail()
     {
         // return $this->hasMany(BookingTest::class)->where('chemist_name',NULL)->orwhere('chemist_name',0)->withTrashed();
-        return $this->hasMany(BookingTest::class)->where('approved','Pending')->withTrashed();
+        return $this->hasMany(BookingTest::class)->where('approved', 'Pending')->withTrashed();
     }
 
 
 
     //BookingPrintController "original_manufacturer == manufacturer_id"
+    public function customer_data()
+    {
+        return $this->hasOne(Customer::class, 'id', 'customer_id')
+            ->withTrashed()
+            ->withDefault([
+                "id" => "",
+                "company_name" => "",
+                "user_name" => ""
+            ]);
+    }
+    // Customer Contact Info
+    public function customer_contact_data()
+    {
+        return $this->hasOne(CustomerContactInfo::class, 'mst_customer_id', 'customer_id')
+            ->withTrashed()
+            ->withDefault([
+                "id" => "",
+                "mst_customer_id" => "",
+                "street_1" => "",
+                "street_2" => "",
+                "area" => "",
+                "pin" => "",
+                "city" => "",
+                "state" => "",
+                "country" => "",
+            ]);
+    }
+    public function state_name()
+    {
+        return $this->hasOne(State::class, 'id', 'state')
+            ->withTrashed()
+            ->withDefault([
+                "id" => "",
+                "company_name" => ""
+            ]);
+    }
     public function original_manufacturer()
     {
         return $this->hasOne(Customer::class, 'id', 'original_manufacturer')
-        ->withTrashed()
-        ->withDefault([
-            "id" => "",
-            "company_name"=> ""
-        ]);
+            ->withTrashed()
+            ->withDefault([
+                "id" => "",
+                "company_name" => ""
+            ]);
     }
     public function supplier()
     {
         return $this->hasOne(Customer::class, 'id', 'supplier')
-        ->withTrashed()
-        ->withDefault([
-            "id" => "",
-            "company_name"=> ""
-        ]);
+            ->withTrashed()
+            ->withDefault([
+                "id" => "",
+                "company_name" => ""
+            ]);
     }
     //booking samples for BookingPrintController here "original_manufacturer == manufacturer_id"
     public function sample_data()
@@ -149,7 +185,6 @@ class Booking extends Model
     //booking tests_data for BookingPrintController
     public function tests_data()
     {
-        return $this->hasMany(BookingTest::class,'booking_id','id');
+        return $this->hasMany(BookingTest::class, 'booking_id', 'id');
     }
-
 }

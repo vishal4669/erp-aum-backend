@@ -56,4 +56,5 @@ class Customer extends Model
         return $this->hasMany('App\Models\CustomerContactPerson', 'mst_customer_id');
   }
 
+ 
 }

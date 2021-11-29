@@ -71,31 +71,37 @@ class MstProduct extends Model
         return $this->hasOne(MstProduct::class, 'id', 'generic_product_id')->withTrashed();
     }
 
-     /**
+    /**
      * Get the pharmacopiea detail associated with the BookingSampleDetail for AssignTests table
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-     public function pharmacopiea_detail()
-     {
-         return $this->hasOne(Pharmacopeia::class, 'id', 'pharmacopeia_id')->withTrashed();
-     }
+    public function pharmacopiea_detail()
+    {
+        return $this->hasOne(Pharmacopeia::class, 'id', 'pharmacopeia_id')->withTrashed();
+    }
 
-     //Product data for BookingPrintController
-     public function generic_product_data()
+    //Product data for BookingPrintController
+    public function generic_product_data()
     {
         return $this->hasOne(MstProduct::class, 'id', 'generic_product_id')
-        ->withTrashed()
-        ->withDefault([
-            "id"=>"",
-            "name_of_sample"=> "",
-            "product_generic"=> "",
-            "generic_product_id"=>"",
-            "generic_product_data"=>array(
-                "id"=>"",
-                "generic_name"=> ""
-            )
-            
-        ]);
+            ->withTrashed()
+            ->withDefault([
+
+                "id" => "",
+                "generic_name" => ""
+
+
+            ]);
+    }
+    //pharmacopiea_data in Product data for BookingPrintController
+    public function pharmacopiea_data()
+    {
+        return $this->hasOne(Pharmacopeia::class, 'id', 'pharmacopeia_id')
+            ->withTrashed()
+            ->withDefault([
+                "id" => "",
+                "pharmacopeia_name" => ""
+            ]);
     }
 }

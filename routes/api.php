@@ -206,7 +206,7 @@ Route::group(['middleware' => ['jwt.verify'], 'prefix' => 'v1'], function () {
     Route::get('getRoleRights/{id}','App\Http\Controllers\v1\RoleRightsController@show_role_rights');
     
     //ROA COA Print in Booking
-    Route::post('RoaCoaPrint/{id}/{type?}','App\Http\Controllers\v1\BookingPrintController@roa_coa_print');
+    Route::get('RoaCoaPrint/{id}/{type?}','App\Http\Controllers\v1\BookingPrintController@roa_coa_print');
     
 });
 
