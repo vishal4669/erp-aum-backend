@@ -56,5 +56,22 @@ class Customer extends Model
         return $this->hasMany('App\Models\CustomerContactPerson', 'mst_customer_id');
   }
 
- 
+ // Customer Contact Info
+ public function customer_contact_data()
+ {
+     return $this->hasOne(CustomerContactInfo::class, 'mst_customer_id', 'id')->where('contact_info_type',1)
+         ->withTrashed()
+         ->withDefault([
+             "id" => "",
+             "mst_customer_id" => "",
+             "street_1" => "",
+             "street_2" => "",
+             "area" => "",
+             "pin" => "",
+             "city" => "",
+             "state" => "",
+             "country" => "",
+         ]);
+ }
+
 }

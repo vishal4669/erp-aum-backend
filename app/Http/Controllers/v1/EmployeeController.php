@@ -62,7 +62,9 @@ class EmployeeController extends Controller
             } else {
                 $data = Employee::with(['address', 'right', 'company', 'education', 'employment', 'document'])
                     ->where('users.is_resigned', 0)
-                    ->where('users.is_active', 1)
+                    ->where('users.is_approved', "Pending")
+                    ->orWhere('users.is_approved', "Approved")
+                    ->orWhere('users.is_approved', "Rejected")
                     ->where('users.selected_year', $loggedInUserData['selected_year'])
                     ->where('users.mst_companies_id', $loggedInUserData['company_id']);
                 if ($is_reporting_authority) {

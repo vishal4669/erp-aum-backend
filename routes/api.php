@@ -17,8 +17,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('clear_cache', function () {
     \Artisan::call('cache:clear');
+    \Artisan::call('key:generate');
     \Artisan::call('config:clear');
     \Artisan::call('view:clear');
+    \Artisan::call('composer update vendor/package');
+
     dd("Cache is cleared");
 });
 
@@ -207,6 +210,7 @@ Route::group(['middleware' => ['jwt.verify'], 'prefix' => 'v1'], function () {
     
     //ROA COA Print in Booking
     Route::get('RoaCoaPrint/{id}/{type?}','App\Http\Controllers\v1\BookingPrintController@roa_coa_print');
+    Route::get('RoaCoaShow/{id}/','App\Http\Controllers\v1\BookingPrintController@roa_coa_show');
     
 });
 

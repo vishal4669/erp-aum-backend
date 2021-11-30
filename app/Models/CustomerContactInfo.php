@@ -33,5 +33,5 @@ class CustomerContactInfo extends Model
         'created_by',
         'updated_by',
     ];
+
 }
-        

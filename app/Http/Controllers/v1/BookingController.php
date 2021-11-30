@@ -494,14 +494,14 @@ class BookingController extends Controller
                 'booking_tests.*.amount'    => 'nullable|numeric|between:0,999999999999999999999999999.99',
                 'booking_sample_details.*.batch_no'  => 'nullable',
                 'booking_sample_details.*.packsize'  => 'max:55',
-                'booking_sample_details.*.request_quantity'  => 'nullable|numeric',
+                'booking_sample_details.*.request_quantity'  => 'nullable',
                 'booking_sample_details.*.sample_code'  => 'max:100',
                 'booking_sample_details.*.sample_location'  => 'max:150',
                 'booking_sample_details.*.sample_packaging'  => 'max:255',
                 'booking_sample_details.*.sample_type'  => 'max:60',
                 'booking_sample_details.*.sample_drawn_by'  => 'max:255',
-                'booking_sample_details.*.sample_quantity'  => 'nullable|numeric',
-                'booking_sample_details.*.batch_size_qty_rec'  => 'nullable|numeric|digits_between:0,25',
+                'booking_sample_details.*.sample_quantity'  => 'nullable',
+                'booking_sample_details.*.batch_size_qty_rec'  => 'nullable',
                 'booking_tests.*.p_sr_no'  => 'max:10',
                 'booking_tests.*.label_claim'  => 'max:155',
                 'booking_tests.*.percentage_of_label_claim'  => 'nullable|numeric|between:0,999999999999999999999999999.99',
@@ -527,10 +527,6 @@ class BookingController extends Controller
                 "booking_no.unique" => "The Booking No Field Must Be Unique.",
                 "mfg_date.required" => "The Mfg Date Field Is Required.",
                 "exp_date.required" => "The Exp Date Field Is Required.",
-                'booking_sample_details.*.batch_size_qty_rec.digits_between'  => 'booking sample details of batch_size_qty_rec must be between 0 and 25 digits',
-                'booking_sample_details.*.sample_quantity.numeric'  => 'booking sample details of sample quantity must be numeric value.',
-                'booking_sample_details.*.batch_size_qty_rec.numeric'  => 'booking sample details of batch size qty rec must be numeric value.',
-                'booking_sample_details.*.request_quantity.numeric'  => 'booking sample details of request quantity must be numeric value.',
                 // 'booking_sample_details.*.batch_no.numeric'  => 'booking sample details of batch_no must be numeric value.',
                 // 'booking_sample_details.*.batch_no.digits_between'  => 'booking sample details of batch_no must be between 0 and 25 digits.',
                 'booking_sample_details.*.product_id.required'  => 'The Product Name Field Is Required.',
@@ -602,7 +598,7 @@ class BookingController extends Controller
             $is_mail_data = True;
             $email_data = $this->show($id, $is_mail_data);
             $send_email_to = $email_data['customer_id']['user_name'];
-            Mail::to(users: $send_email_to)->send(new BookingSuccessfull($email_data));
+            // Mail::to(users: $send_email_to)->send(new BookingSuccessfull($email_data));
             Log::info("Booking Created with details : " . json_encode($request->all()));
             return Helper::response("Booking added Successfully", Response::HTTP_CREATED, true, $booking_data);
         } catch (Exception $e) {
@@ -624,10 +620,10 @@ class BookingController extends Controller
                 "product_id"    => (isset($booking_samples[0]['product_id']) ? $booking_samples[0]['product_id'] : 0),
                 "batch_no"  => (isset($booking_samples[0]['batch_no']) ? $booking_samples[0]['batch_no'] : ''),
                 "packsize"  => (isset($booking_samples[0]['packsize']) ? $booking_samples[0]['packsize'] : ''),
-                "request_quantity"  => (isset($booking_samples[0]['request_quantity']) ? $booking_samples[0]['request_quantity'] : 0),
+                "request_quantity"  => (isset($booking_samples[0]['request_quantity']) ? $booking_samples[0]['request_quantity'] : ''),
                 "sample_code"   => (isset($booking_samples[0]['sample_code']) ? $booking_samples[0]['sample_code'] : ''),
                 "sample_description"    => (isset($booking_samples[0]['sample_description']) ? $booking_samples[0]['sample_description'] : ''),
-                "sample_quantity"   => (isset($booking_samples[0]['sample_quantity']) ? $booking_samples[0]['sample_quantity'] : 0),
+                "sample_quantity"   => (isset($booking_samples[0]['sample_quantity']) ? $booking_samples[0]['sample_quantity'] : ''),
                 "sample_location"   => (isset($booking_samples[0]['sample_location']) ? $booking_samples[0]['sample_location'] : ''),
                 "sample_packaging"  => (isset($booking_samples[0]['sample_packaging']) ? $booking_samples[0]['sample_packaging'] : ''),
                 "sample_type"   => (isset($booking_samples[0]['sample_type']) ? $booking_samples[0]['sample_type'] : ''),
@@ -639,7 +635,7 @@ class BookingController extends Controller
                 "chemist"   => (isset($booking_samples[0]['chemist']) ? $booking_samples[0]['chemist'] : 1),
                 "sample_condition"  => (isset($booking_samples[0]['sample_condition']) ? $booking_samples[0]['sample_condition'] : ''),
                 "is_sample_condition"   => (isset($booking_samples[0]['is_sample_condition']) ? $booking_samples[0]['is_sample_condition'] : 0),
-                "batch_size_qty_rec"    => (isset($booking_samples[0]['batch_size_qty_rec']) ? $booking_samples[0]['batch_size_qty_rec'] : 0),
+                "batch_size_qty_rec"    => (isset($booking_samples[0]['batch_size_qty_rec']) ? $booking_samples[0]['batch_size_qty_rec'] : ''),
                 "notes" => (isset($booking_samples[0]['notes']) ? $booking_samples[0]['notes'] : ''),
                 "sample_drawn_by"   => (isset($booking_samples[0]['sample_drawn_by']) ? $booking_samples[0]['sample_drawn_by'] : ''),
                 "is_active" => 1,
@@ -875,7 +871,6 @@ class BookingController extends Controller
             // 'samples.pharmacopiea_id:id,pharmacopeia_name',
             'tests',
             'tests.parent',
-            'tests_status:id,booking_id,approved as approved_status',
             'audit',
             'created_by:id,first_name,middle_name,last_name',
             'updated_by:id,first_name,middle_name,last_name'
@@ -1084,10 +1079,9 @@ class BookingController extends Controller
                     );
                 } elseif ($item['approved'] == "ForApproval") {
                     $data['tests'][$key]['approved_dropdown'] = array(
-                        "approved" => array(
-                            "Approved",
-                            "Rejected"
-                        )
+                        "approved" =>
+                            "Approved"
+                        
                     );
                 } else {
                     if ($item['approved'] == "Approved" || $item['approved'] == "Rejected") {
@@ -1171,14 +1165,14 @@ class BookingController extends Controller
                 'booking_tests.*.amount'    => 'nullable|numeric|between:0,999999999999999999999999999.99',
                 'booking_sample_details.*.batch_no'  => 'nullable',
                 'booking_sample_details.*.packsize'  => 'max:55',
-                'booking_sample_details.*.request_quantity'  => 'nullable|numeric',
+                'booking_sample_details.*.request_quantity'  => 'nullable',
                 'booking_sample_details.*.sample_code'  => 'max:100',
                 'booking_sample_details.*.sample_location'  => 'max:150',
                 'booking_sample_details.*.sample_packaging'  => 'max:255',
                 'booking_sample_details.*.sample_type'  => 'max:60',
                 'booking_sample_details.*.sample_drawn_by'  => 'max:255',
-                'booking_sample_details.*.sample_quantity'  => 'nullable|numeric',
-                'booking_sample_details.*.batch_size_qty_rec'  => 'nullable|numeric|digits_between:0,25',
+                'booking_sample_details.*.sample_quantity'  => 'nullable',
+                'booking_sample_details.*.batch_size_qty_rec'  => 'nullable',
                 'booking_tests.*.p_sr_no'  => 'max:10',
                 'booking_tests.*.label_claim'  => 'max:155',
                 'booking_tests.*.percentage_of_label_claim'  => 'nullable|numeric|between:0,999999999999999999999999999.99',
@@ -1204,10 +1198,6 @@ class BookingController extends Controller
                 "booking_no.unique" => "The Booking No Field Must Be Unique.",
                 "mfg_date.required" => "The Mfg Date Field Is Required.",
                 "exp_date.required" => "The Exp Date Field Is Required.",
-                'booking_sample_details.*.sample_quantity.numeric'  => 'booking sample details of sample quantity must be numeric value.',
-                'booking_sample_details.*.batch_size_qty_rec.numeric'  => 'booking sample details of batch size qty rec must be numeric value.',
-                'booking_sample_details.*.batch_size_qty_rec.digits_between'  => 'booking sample details of batch_size_qty_rec must be between 0 and 25 digits',
-                'booking_sample_details.*.request_quantity.numeric'  => 'booking sample details of request quantity must be numeric value.',
                 // 'booking_sample_details.*.batch_no.numeric'  => 'booking sample details of batch_no must be numeric value.',
                 // 'booking_sample_details.*.batch_no.digits_between'  => 'booking sample details of batch_no must be between 0 and 25 digits.',
                 'booking_sample_details.*.product_id.required'  => 'The Product Name Field Is Required.',

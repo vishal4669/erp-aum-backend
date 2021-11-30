@@ -133,32 +133,7 @@ class Booking extends Model
                 "user_name" => ""
             ]);
     }
-    // Customer Contact Info
-    public function customer_contact_data()
-    {
-        return $this->hasOne(CustomerContactInfo::class, 'mst_customer_id', 'customer_id')
-            ->withTrashed()
-            ->withDefault([
-                "id" => "",
-                "mst_customer_id" => "",
-                "street_1" => "",
-                "street_2" => "",
-                "area" => "",
-                "pin" => "",
-                "city" => "",
-                "state" => "",
-                "country" => "",
-            ]);
-    }
-    public function state_name()
-    {
-        return $this->hasOne(State::class, 'id', 'state')
-            ->withTrashed()
-            ->withDefault([
-                "id" => "",
-                "company_name" => ""
-            ]);
-    }
+
     public function original_manufacturer()
     {
         return $this->hasOne(Customer::class, 'id', 'original_manufacturer')
