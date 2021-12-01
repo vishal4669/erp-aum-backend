@@ -39,7 +39,9 @@ class BookingPrintController extends Controller
                 'exp_date as date_of_expiry',
                 'receipte_date',
                 'coa_release_date as report_issue_date',
-                'statement_ofconformity'
+                'statement_ofconformity',
+                'report_type',
+                'aum_serial_no'
             )
                 ->with(
                     'customer_data:id,company_name,user_name',
@@ -48,9 +50,10 @@ class BookingPrintController extends Controller
                 ->with('original_manufacturer:id,company_name')
                 ->with('supplier:id,company_name')
                 ->with('sample_data:id,booking_id,product_id,batch_no as lot_batch_no,batch_size_qty_rec,sample_quantity as sample_qty_rec,sample_condition as condition_of_sample', 'sample_data.product_data:id,product_name as name_of_sample,product_generic,pharmacopeia_id,generic_product_id', 'sample_data.product_data.generic_product_data:id,product_name as generic_name', 'sample_data.product_data.pharmacopiea_data:id,pharmacopeia_name')
-                ->with('tests_data:id,booking_id,test_name as test_parameter,label_claim,result,max_limit,product_details,test_date_time as date_of_performance_test,method as method_used,approved')
+                ->with('tests_data:id,booking_id,test_name as test_parameter,label_claim,result,max_limit,product_details,test_date_time as date_of_performance_test,method as method_used,approved,approval_date_time')
                 ->where('id', $id)
                 ->get()->toarray();
+
 
             $state_id = $data[0]['customer_data']['customer_contact_data']['state'];
             $country_id = $data[0]['customer_data']['customer_contact_data']['country'];
@@ -97,6 +100,20 @@ class BookingPrintController extends Controller
                 }
             } else {
                 if ($can_coa_print == 1) {
+                    $rules = [
+                        'tests_data.*.result' => 'required',
+                        'tests_data.*.approval_date_time' => 'required',
+                    ];
+                    $msg = [
+                        'tests_data.*.result.required' => 'Tests Results Must Be Required For' . $type . '',
+                        'tests_data.*.approval_date_time.required' => 'Tests Approval Date Time Must Be Required For' . $type . '',
+                    ];
+                    $validator = Validator::make($data[0], $rules, $msg);
+
+                    if ($validator->fails()) {
+                        $data = array();
+                        return Helper::response($validator->errors()->all(), Response::HTTP_OK, false, $data);
+                    }
 
                     if ($print_allows->coa_print == null) {
                         $coa_print_Arr = array(
@@ -182,7 +199,9 @@ class BookingPrintController extends Controller
                 'exp_date as date_of_expiry',
                 'receipte_date',
                 'coa_release_date as report_issue_date',
-                'statement_ofconformity'
+                'statement_ofconformity',
+                'report_type',
+                'aum_serial_no'
             )
                 ->with(
                     'customer_data:id,company_name,user_name',

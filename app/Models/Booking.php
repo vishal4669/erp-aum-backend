@@ -130,7 +130,18 @@ class Booking extends Model
             ->withDefault([
                 "id" => "",
                 "company_name" => "",
-                "user_name" => ""
+                "user_name" => "",
+                "customer_contact_data" => array(
+                    "id" => "",
+                    "mst_customer_id" => "",
+                    "street_1" => "",
+                    "street_2" => "",
+                    "area" => "",
+                    "pin" => "",
+                    "city" => "",
+                    "state" => 0,
+                    "country" => 0
+                )
             ]);
     }
 

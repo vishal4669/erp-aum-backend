@@ -48,7 +48,7 @@ class BookingController extends Controller
                     ->select(
                         [
                             'bookings.id', 'bookings.aum_serial_no', 'bookings.booking_no',
-                            'bookings.booking_type','bookings.coa_print_count',
+                            'bookings.booking_type', 'bookings.coa_print_count',
                             DB::raw('DATE_FORMAT(bookings.receipte_date, "%Y-%m-%d") as receipte_date'),
                             'bookings.is_active', 'mst_products.product_name', 'mst_products.product_generic'
                         ]
@@ -65,7 +65,7 @@ class BookingController extends Controller
                     ->select(
                         [
                             'bookings.id', 'bookings.aum_serial_no', 'bookings.booking_no',
-                            'bookings.booking_type', 'bookings.coa_print_count','samples.product_type',
+                            'bookings.booking_type', 'bookings.coa_print_count', 'samples.product_type',
                             DB::raw('DATE_FORMAT(bookings.receipte_date, "%Y-%m-%d") as receipte_date'),
                             'bookings.is_active', 'mst_products.product_name'
                         ]
@@ -513,6 +513,7 @@ class BookingController extends Controller
                 'booking_tests.*.division'  => 'max:255',
                 'booking_tests.*.method'  => 'max:255',
                 'booking_tests.*.approved'  => 'max:20',
+
             ];
             $massage = [
                 "report_type.required" => "The Report Type Field Is Required.",
@@ -668,10 +669,10 @@ class BookingController extends Controller
                 $testdata = BookingTest::where('booking_id', $booking_id);
                 $testdata->forceDelete();
 
-                foreach ($booking_tests as $tests) {
-                    // print_r("=====4");
+                foreach ($booking_tests as $key => $tests) {
+
                     if (!empty($tests['by_pass']) and !empty($tests['parent_child'])) {
-                        // print_r("=====5");
+
                         if (
                             !empty($tests['p_sr_no']) or
                             !empty($tests['parent_id']) or
@@ -700,25 +701,11 @@ class BookingController extends Controller
                             !empty($tests['percentage_of_label_claim']) or
                             !empty($tests['chemsit_name'])
                         ) {
-                            $assigned_date =  NULL;
-                            // $approval_date_time = NULL;
-                            // if (($tests['approved'] == "Pending" && isset($tests['chemist_name']) == true) || (!isset($tests['approved']) && isset($tests['chemist_name']) == true)) {
-                            //     $tests['approved'] = "Assigned";
-                            //     $assigned_date = Carbon::now();
-                            // }
-                            // if ($tests['approved'] == "Assigned") {
-                            //     $assigned_date = Carbon::now();
-                            // }
-                            // if ($tests['approved'] == "Approved" || $tests['approved'] == "Rejected") {
-                            //     $approval_date_time = Carbon::now();
-                            // }
-
-                            // if (!empty($tests['result'])) {
-                            //     $tests['approved'] = "ForApproval";
-                            //     if (!isset($tests['test_date_time'])) {
-                            //         $tests['test_date_time'] = Carbon::now();
-                            //     }
-                            // }
+                            $assigned_date = $tests['assigned_date'];
+                            if ($tests['approved'] == "Assigned") {
+                                $assigned_date = Carbon::now();
+                            }
+                            
                             $tests_data = array(
                                 "booking_id" => (isset($booking_id) ? $booking_id : 0),
                                 "parent_child" => (isset($tests['parent_child']) ? $tests['parent_child'] : ''),
@@ -746,7 +733,7 @@ class BookingController extends Controller
                                 "test_time" => (isset($tests['test_time']) ? $tests['test_time'] : NULL),
                                 "test_date_time" => (isset($tests['test_date_time']) ? $tests['test_date_time'] : NULL),
                                 "assigned_date" => (isset($assigned_date) ? $assigned_date : NULL),
-                                "approval_date_time" => (isset($approval_date_time) ? $approval_date_time : NULL),
+                                "approval_date_time" => (isset($tests['approval_date_time']) ? $tests['approval_date_time'] : NULL),
                                 "approved" => (isset($tests['approved']) ? $tests['approved'] : ''),
                                 "percentage_of_label_claim" => (isset($tests['percentage_of_label_claim']) ? $tests['percentage_of_label_claim'] : NULL),
                                 "chemist_name" => (isset($tests['chemist_name']) ? $tests['chemist_name'] : NULL),
@@ -1080,8 +1067,8 @@ class BookingController extends Controller
                 } elseif ($item['approved'] == "ForApproval") {
                     $data['tests'][$key]['approved_dropdown'] = array(
                         "approved" =>
-                            "Approved"
-                        
+                        "Approved"
+
                     );
                 } else {
                     if ($item['approved'] == "Approved" || $item['approved'] == "Rejected") {
@@ -1146,19 +1133,18 @@ class BookingController extends Controller
     {
         // return Helper::response("DEBuG", Response::HTTP_OK, true, $request->all());
         try {
-
             $rules = [
-                "report_type" => "required",
-                "booking_type" => "required",
-                'invoice_date' => 'required_if:booking_type,Invoice',
-                'invoice_no' => 'required_if:booking_type,Invoice',
-                'dispatch_date_time' => 'required_if:is_report_dispacthed,1',
-                'dispatch_mode' => 'required_if:is_report_dispacthed,1',
-                'dispatch_details' => 'required_if:is_report_dispacthed,1',
-                "receipte_date" => "required",
-                "customer_id" => "required",
-                'mfg_date'  => 'required|date',
-                'exp_date'    => 'required|date_format:Y-m-d|after:mfg_date',
+                // "report_type" => "required",
+                // "booking_type" => "required",
+                // 'invoice_date' => 'required_if:booking_type,Invoice',
+                // 'invoice_no' => 'required_if:booking_type,Invoice',
+                // 'dispatch_date_time' => 'required_if:is_report_dispacthed,1',
+                // 'dispatch_mode' => 'required_if:is_report_dispacthed,1',
+                // 'dispatch_details' => 'required_if:is_report_dispacthed,1',
+                // "receipte_date" => "required",
+                // "customer_id" => "required",
+                // 'mfg_date'  => 'required|date',
+                // 'exp_date'    => 'required|date_format:Y-m-d|after:mfg_date',
                 'booking_sample_details.*.product_id'  => 'required|Integer',
                 'booking_sample_details.*.sampling_date_from'  => 'nullable|date',
                 'booking_sample_details.*.sampling_date_to'    => 'nullable|date_format:Y-m-d|after:booking_sample_details.*.sampling_date_from',
@@ -1173,6 +1159,9 @@ class BookingController extends Controller
                 'booking_sample_details.*.sample_drawn_by'  => 'max:255',
                 'booking_sample_details.*.sample_quantity'  => 'nullable',
                 'booking_sample_details.*.batch_size_qty_rec'  => 'nullable',
+                'booking_tests.*.result'  => 'required_if:booking_tests.*.approved,ForApproval',
+                'booking_tests.*.test_date_time'  => 'required_if:booking_tests.*.approved,ForApproval',
+                'booking_tests.*.approval_date_time'  => 'required_if:booking_tests.*.approved,Approved,Rejected',
                 'booking_tests.*.p_sr_no'  => 'max:10',
                 'booking_tests.*.label_claim'  => 'max:155',
                 'booking_tests.*.percentage_of_label_claim'  => 'nullable|numeric|between:0,999999999999999999999999999.99',
@@ -1184,6 +1173,8 @@ class BookingController extends Controller
                 'booking_tests.*.division'  => 'max:255',
                 'booking_tests.*.method'  => 'max:255',
                 'booking_tests.*.approved'  => 'max:20',
+                'booking_tests.*.chemist_name'  => 'required_if:booking_tests.*.approved,Assigned'
+
             ];
             $massage = [
                 "report_type.required" => "The Report Type Field Is Required.",
@@ -1198,16 +1189,18 @@ class BookingController extends Controller
                 "booking_no.unique" => "The Booking No Field Must Be Unique.",
                 "mfg_date.required" => "The Mfg Date Field Is Required.",
                 "exp_date.required" => "The Exp Date Field Is Required.",
-                // 'booking_sample_details.*.batch_no.numeric'  => 'booking sample details of batch_no must be numeric value.',
-                // 'booking_sample_details.*.batch_no.digits_between'  => 'booking sample details of batch_no must be between 0 and 25 digits.',
                 'booking_sample_details.*.product_id.required'  => 'The Product Name Field Is Required.',
                 'booking_sample_details.*.sampling_date_to.after'    => 'Sampling Date To Must Be A Date After Sampling Date From.',
                 'booking_tests.*.amount.numeric'  => 'booking tests details of amount must be numeric value.',
-
+                'booking_tests.*.chemist_name.required_if'  => 'Chemist Name is Required in a Tests If Approved Status is in Assigned.',
+                'booking_tests.*.result.required_if'  => 'Result Field is Required in a Tests If Approved Status is in ForApproval.',
+                'booking_tests.*.test_date_time.required_if'  => 'Test Date Time Field is Required in a Tests If Approved Status is in ForApproval.',
+                'booking_tests.*.approval_date_time.required_if'  => 'Approval Date Time Field is Required in a Tests If Approved Status is in Approved or Rejected.',
 
             ];
 
             $validator = Validator::make($request->all(), $rules, $massage);
+
             if ($validator->fails()) {
                 $data = array();
                 return Helper::response($validator->errors()->all(), Response::HTTP_OK, false, $data);
