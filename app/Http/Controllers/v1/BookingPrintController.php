@@ -54,98 +54,101 @@ class BookingPrintController extends Controller
                 ->where('id', $id)
                 ->get()->toarray();
 
-
-            $state_id = $data[0]['customer_data']['customer_contact_data']['state'];
-            $country_id = $data[0]['customer_data']['customer_contact_data']['country'];
-            if ($state_id != null && $state_id != 0 && $state_id != '') {
-                $state_data = State::select('id', 'state_name')->where('id', $state_id)->get()->toarray();
-                $data[0]['customer_data']['customer_contact_data']['state'] = $state_data;
-            } else {
-                $data[0]['customer_data']['customer_contact_data']['state'] = array(
-                    "id" => "",
-                    "state_name" => ""
-                );
-            }
-            if ($country_id != null && $country_id != 0 && $country_id != '') {
-                $country_data = Country::select('id', 'country_name')->where('id', $country_id)->get()->toarray();
-                $data[0]['customer_data']['customer_contact_data']['country'] = $country_data;
-            } else {
-                $data[0]['customer_data']['customer_contact_data']['country'] = array(
-                    "id" => "",
-                    "country_name" => ""
-                );
-            }
-
-            $can_coa_print = 1;
-            $can_roa_print = 1;
-            foreach ($data[0]['tests_data'] as $key => $item) {
-                if ($item['approved'] != "Approved") {
-                    $can_coa_print = 0;
-                }
-                if ($item['approved'] != "Assigned") {
-                    $can_roa_print = 0;
-                }
-            }
-            if ($type == "Roa_print") {
-                if ($can_roa_print == 1) {
-                    if ($print_allows->roa_print_count != 1) {
-                        $print_allows->update(array('roa_print_count' => 1));
-                        return Helper::response("Roa Print Generated Successfully", Response::HTTP_OK, true, $data);
-                    } else {
-                        return Helper::response("Roa Print already Generated", Response::HTTP_OK, true);
-                    }
+            if (!empty($data['tests_data'])) {
+                $state_id = $data[0]['customer_data']['customer_contact_data']['state'];
+                $country_id = $data[0]['customer_data']['customer_contact_data']['country'];
+                if ($state_id != null && $state_id != 0 && $state_id != '') {
+                    $state_data = State::select('id', 'state_name')->where('id', $state_id)->get()->toarray();
+                    $data[0]['customer_data']['customer_contact_data']['state'] = $state_data;
                 } else {
-                    $msg = "All the Tests Must Be 'Assigned' For Roa Print.";
-                    return Helper::response($msg, Response::HTTP_OK, false);
+                    $data[0]['customer_data']['customer_contact_data']['state'] = array(
+                        "id" => "",
+                        "state_name" => ""
+                    );
                 }
-            } else {
-                if ($can_coa_print == 1) {
-                    $rules = [
-                        'tests_data.*.result' => 'required',
-                        'tests_data.*.approval_date_time' => 'required',
-                    ];
-                    $msg = [
-                        'tests_data.*.result.required' => 'Tests Results Must Be Required For' . $type . '',
-                        'tests_data.*.approval_date_time.required' => 'Tests Approval Date Time Must Be Required For' . $type . '',
-                    ];
-                    $validator = Validator::make($data[0], $rules, $msg);
+                if ($country_id != null && $country_id != 0 && $country_id != '') {
+                    $country_data = Country::select('id', 'country_name')->where('id', $country_id)->get()->toarray();
+                    $data[0]['customer_data']['customer_contact_data']['country'] = $country_data;
+                } else {
+                    $data[0]['customer_data']['customer_contact_data']['country'] = array(
+                        "id" => "",
+                        "country_name" => ""
+                    );
+                }
 
-                    if ($validator->fails()) {
-                        $data = array();
-                        return Helper::response($validator->errors()->all(), Response::HTTP_OK, false, $data);
+                $can_coa_print = 1;
+                $can_roa_print = 1;
+                foreach ($data[0]['tests_data'] as $key => $item) {
+                    if ($item['approved'] != "Approved") {
+                        $can_coa_print = 0;
                     }
-
-                    if ($print_allows->coa_print == null) {
-                        $coa_print_Arr = array(
-                            $type
-                        );
-                        $print_allows->update(array('coa_print' => $coa_print_Arr, 'coa_print_count' => $print_allows->coa_print_count + 1));
-                        return Helper::response($type . " Generated Successfully", Response::HTTP_OK, true, $data);
-                    } else {
-                        $coa_print_Arr = $print_allows->coa_print;
-                        if (in_array($type, $coa_print_Arr) == false) {
-                            if (count($coa_print_Arr) >= 3) {
-                                $msg = "Coa Generation is already finished.";
-                                return Helper::response($msg, Response::HTTP_OK, true);
-                            } else {
-                                array_push($coa_print_Arr, $type);
-                                $print_allows->update(array('coa_print' => $coa_print_Arr, 'coa_print_count' => $print_allows->coa_print_count + 1));
-                                if (count($coa_print_Arr) == 3) {
-                                    $print_allows->update(array('booking_type' => 'Report'));
-                                }
-                                return Helper::response($type . " Generated Successfully", Response::HTTP_OK, true, $data);
-                            }
+                    if ($item['approved'] != "Assigned") {
+                        $can_roa_print = 0;
+                    }
+                }
+                if ($type == "Roa_print") {
+                    if ($can_roa_print == 1) {
+                        if ($print_allows->roa_print_count != 1) {
+                            $print_allows->update(array('roa_print_count' => 1));
+                            return Helper::response("Roa Print Generated Successfully", Response::HTTP_OK, true, $data);
                         } else {
-                            $msg = $type . " Already Generated.";
-                            return Helper::response($msg, Response::HTTP_OK, false);
+                            return Helper::response("Roa Print already Generated", Response::HTTP_OK, true);
                         }
+                    } else {
+                        $msg = "All the Tests Must Be 'Assigned' For Roa Print.";
+                        return Helper::response($msg, Response::HTTP_OK, false);
                     }
                 } else {
-                    $msg = "All the Tests Must Be 'Approved' For Coa Print.";
-                    return Helper::response($msg, Response::HTTP_OK, false);
+                    if ($can_coa_print == 1) {
+                        $rules = [
+                            'tests_data.*.result' => 'required',
+                            'tests_data.*.approval_date_time' => 'required',
+                        ];
+                        $msg = [
+                            'tests_data.*.result.required' => 'Tests Results Must Be Required For' . $type . '',
+                            'tests_data.*.approval_date_time.required' => 'Tests Approval Date Time Must Be Required For' . $type . '',
+                        ];
+                        $validator = Validator::make($data[0], $rules, $msg);
+
+                        if ($validator->fails()) {
+                            $data = array();
+                            return Helper::response($validator->errors()->all(), Response::HTTP_OK, false, $data);
+                        }
+
+                        if ($print_allows->coa_print == null) {
+                            $coa_print_Arr = array(
+                                $type
+                            );
+                            $print_allows->update(array('coa_print' => $coa_print_Arr, 'coa_print_count' => $print_allows->coa_print_count + 1));
+                            return Helper::response($type . " Generated Successfully", Response::HTTP_OK, true, $data);
+                        } else {
+                            $coa_print_Arr = $print_allows->coa_print;
+                            if (in_array($type, $coa_print_Arr) == false) {
+                                if (count($coa_print_Arr) >= 3) {
+                                    $msg = "Coa Generation is already finished.";
+                                    return Helper::response($msg, Response::HTTP_OK, true);
+                                } else {
+                                    array_push($coa_print_Arr, $type);
+                                    $print_allows->update(array('coa_print' => $coa_print_Arr, 'coa_print_count' => $print_allows->coa_print_count + 1));
+                                    if (count($coa_print_Arr) == 3) {
+                                        $print_allows->update(array('booking_type' => 'Report'));
+                                    }
+                                    return Helper::response($type . " Generated Successfully", Response::HTTP_OK, true, $data);
+                                }
+                            } else {
+                                $msg = $type . " Already Generated.";
+                                return Helper::response($msg, Response::HTTP_OK, false);
+                            }
+                        }
+                    } else {
+                        $msg = "All the Tests Must Be 'Approved' For Coa Print.";
+                        return Helper::response($msg, Response::HTTP_OK, false);
+                    }
                 }
+                return Helper::response("Data Shown Successfully For Roa/Coa", Response::HTTP_OK, true, $data);
+            } else {
+                return Helper::response("No Tests Data Available For Roa/Coa", Response::HTTP_OK, false);
             }
-            return Helper::response("Data Shown Successfully For Roa/Coa", Response::HTTP_OK, true, $data);
         } catch (Exception $e) {
             $data = array();
             return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);
@@ -213,34 +216,37 @@ class BookingPrintController extends Controller
                 ->with('tests_data:id,booking_id,test_name as test_parameter,label_claim,result,max_limit,product_details,test_date_time as date_of_performance_test,method as method_used,approved')
                 ->where('id', $id)
                 ->get()->toarray();
-
-            $state_id = $data[0]['customer_data']['customer_contact_data']['state'];
-            $country_id = $data[0]['customer_data']['customer_contact_data']['country'];
-            if ($state_id != null && $state_id != 0 && $state_id != '') {
-                $state_data = State::select('id', 'state_name')->where('id', $state_id)->get()->toarray();
-                $data[0]['customer_data']['customer_contact_data']['state'] = array(
-                    "id" => $state_data[0]['id'],
-                    "state_name" => $state_data[0]['state_name']
-                );
+            if (!empty($data['tests_data'])) {
+                $state_id = $data[0]['customer_data']['customer_contact_data']['state'];
+                $country_id = $data[0]['customer_data']['customer_contact_data']['country'];
+                if ($state_id != null && $state_id != 0 && $state_id != '') {
+                    $state_data = State::select('id', 'state_name')->where('id', $state_id)->get()->toarray();
+                    $data[0]['customer_data']['customer_contact_data']['state'] = array(
+                        "id" => $state_data[0]['id'],
+                        "state_name" => $state_data[0]['state_name']
+                    );
+                } else {
+                    $data[0]['customer_data']['customer_contact_data']['state'] = array(
+                        "id" => "",
+                        "state_name" => ""
+                    );
+                }
+                if ($country_id != null && $country_id != 0 && $country_id != '') {
+                    $country_data = Country::select('id', 'country_name')->where('id', $country_id)->get()->toarray();
+                    $data[0]['customer_data']['customer_contact_data']['country'] = array(
+                        "id" => $country_data[0]['id'],
+                        "country_name" => $country_data[0]['country_name']
+                    );
+                } else {
+                    $data[0]['customer_data']['customer_contact_data']['country'] = array(
+                        "id" => "",
+                        "country_name" => ""
+                    );
+                }
+                return Helper::response("Data Shown Successfully For Roa/Coa", Response::HTTP_OK, true, $data);
             } else {
-                $data[0]['customer_data']['customer_contact_data']['state'] = array(
-                    "id" => "",
-                    "state_name" => ""
-                );
+                return Helper::response("No Tests Data Available For Roa/Coa", Response::HTTP_OK, false);
             }
-            if ($country_id != null && $country_id != 0 && $country_id != '') {
-                $country_data = Country::select('id', 'country_name')->where('id', $country_id)->get()->toarray();
-                $data[0]['customer_data']['customer_contact_data']['country'] = array(
-                    "id" => $country_data[0]['id'],
-                    "country_name" => $country_data[0]['country_name']
-                );
-            } else {
-                $data[0]['customer_data']['customer_contact_data']['country'] = array(
-                    "id" => "",
-                    "country_name" => ""
-                );
-            }
-            return Helper::response("Data Shown Successfully For Roa/Coa", Response::HTTP_OK, true, $data);
         } catch (Exception $e) {
             $data = array();
             return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);

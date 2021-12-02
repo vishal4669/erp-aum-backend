@@ -58,6 +58,7 @@ class EmployeeController extends Controller
                 $data =  Employee::join('user_company_info as company', 'company.users_id', 'users.id')
                     ->where('company.mst_positions_id', $chemist_id[0]['id'])
                     ->where('users.is_active', 1)
+                    ->where('users.mst_companies_id', $loggedInUserData['company_id'])
                     ->get(['users.id', 'users.first_name', 'users.middle_name', 'users.last_name']);
             } else {
                 $data = Employee::with(['address', 'right', 'company', 'education', 'employment', 'document'])
@@ -715,7 +716,7 @@ class EmployeeController extends Controller
                 'mst_departments_id' => (isset($company_data['mst_departments_id'])) ? $company_data['reporting_authority_id'] : '',
                 'mst_positions_id' => (isset($company_data['mst_positions_id'])) ? $company_data['mst_positions_id'] : '',
                 'join_date' => (isset($company_data['join_date'])) ? $company_data['join_date'] : '',
-                'resign_date' => (isset($company_data['resign_date'])) ? $company_data['resign_date'] : '',
+                'resign_date' => (isset($company_data['resign_date'])) ? $company_data['resign_date'] : NULL,
                 'bank_name' => (isset($company_data['bank_name'])) ? $company_data['bank_name'] : '',
                 'bank_branch_name' => (isset($company_data['bank_branch_name'])) ? $company_data['bank_branch_name'] : '',
                 'salary_per_month' => (isset($company_data['salary_per_month'])) ? $company_data['salary_per_month'] : '',

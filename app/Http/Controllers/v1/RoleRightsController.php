@@ -15,9 +15,18 @@ class RoleRightsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function assign_role_design()
     {
         //
+        try {
+            $data = RoleRights::all();
+            
+            return Helper::response("Roll and Rights Are Show Successfully", Response::HTTP_OK, true, $data);
+        } catch (Exception $e) {
+            //throw $th;
+            $data =  array();
+            return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);
+        }
     }
 
     /**

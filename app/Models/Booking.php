@@ -166,11 +166,11 @@ class Booking extends Model
     //booking samples for BookingPrintController here "original_manufacturer == manufacturer_id"
     public function sample_data()
     {
-        return $this->hasMany(BookingSampleDetail::class);
+        return $this->hasMany(BookingSampleDetail::class)->withTrashed();;
     }
     //booking tests_data for BookingPrintController
     public function tests_data()
     {
-        return $this->hasMany(BookingTest::class, 'booking_id', 'id');
+        return $this->hasMany(BookingTest::class, 'booking_id', 'id')->withTrashed();
     }
 }

@@ -684,28 +684,24 @@ class BookingController extends Controller
                             !empty($tests['result']) or
                             !empty($tests['label_claim_result']) or
                             !empty($tests['label_claim_unit']) or
-                            !empty($tests['result2']) or
                             !empty($tests['mean']) or
                             !empty($tests['na_content']) or
-                            !empty($tests['final_na_content']) or
-                            !empty($tests['na_content']) or
                             !empty($tests['unit']) or
-                            !empty($tests['expanded_uncertanity']) or
                             !empty($tests['amount']) or
-                            !empty($tests['division']) or
                             !empty($tests['method']) or
-                            !empty($tests['test_time']) or
                             !empty($tests['test_date_time']) or
                             !empty($tests['approval_date_time']) or
                             !empty($tests['approved']) or
-                            !empty($tests['percentage_of_label_claim']) or
                             !empty($tests['chemsit_name'])
                         ) {
-                            $assigned_date = $tests['assigned_date'];
-                            if ($tests['approved'] == "Assigned") {
+                            $assigned_date = NULL;
+                            if ($tests['approved'] == "Assigned" && $tests['assigned_date'] == null) {
                                 $assigned_date = Carbon::now();
                             }
-                            
+                            if ($tests['assigned_date'] != null || $tests['assigned_date'] != '') {
+                                $assigned_date = $tests['assigned_date'];
+                            }
+
                             $tests_data = array(
                                 "booking_id" => (isset($booking_id) ? $booking_id : 0),
                                 "parent_child" => (isset($tests['parent_child']) ? $tests['parent_child'] : ''),
@@ -720,22 +716,14 @@ class BookingController extends Controller
                                 "result" => (isset($tests['result']) ? $tests['result'] : ''),
                                 "label_claim_result" => (isset($tests['label_claim_result']) ? $tests['label_claim_result'] : ''),
                                 "label_claim_unit" => (isset($tests['label_claim_unit']) ? $tests['label_claim_unit'] : ''),
-                                "result2" => (isset($tests['result2']) ? $tests['result2'] : ''),
                                 "mean" => (isset($tests['mean']) ? $tests['mean'] : ''),
-                                "na_content" => (isset($tests['na_content']) ? $tests['na_content'] : ''),
-                                "final_na_content" => (isset($tests['final_na_content']) ? $tests['na_content'] : ''),
                                 "unit" => (isset($tests['unit']) ? $tests['unit'] : NULL),
-                                "expanded_uncertanity" => (isset($tests['expanded_uncertanity']) ? $tests['expanded_uncertanity'] : ''),
                                 "amount" => (isset($tests['amount']) ? $tests['amount'] : 0),
-                                "division" => (isset($tests['division']) ? $tests['division'] : ''),
                                 "method" => (isset($tests['method']) ? $tests['method'] : ''),
-                                "division" => (isset($tests['division']) ? $tests['division'] : ''),
-                                "test_time" => (isset($tests['test_time']) ? $tests['test_time'] : NULL),
                                 "test_date_time" => (isset($tests['test_date_time']) ? $tests['test_date_time'] : NULL),
                                 "assigned_date" => (isset($assigned_date) ? $assigned_date : NULL),
                                 "approval_date_time" => (isset($tests['approval_date_time']) ? $tests['approval_date_time'] : NULL),
                                 "approved" => (isset($tests['approved']) ? $tests['approved'] : ''),
-                                "percentage_of_label_claim" => (isset($tests['percentage_of_label_claim']) ? $tests['percentage_of_label_claim'] : NULL),
                                 "chemist_name" => (isset($tests['chemist_name']) ? $tests['chemist_name'] : NULL),
                                 "selected_year" => $loggedInUserData['selected_year'],
                                 "is_active" => (isset($tests['is_active']) ? $tests['is_active'] : 1),
@@ -1134,17 +1122,17 @@ class BookingController extends Controller
         // return Helper::response("DEBuG", Response::HTTP_OK, true, $request->all());
         try {
             $rules = [
-                // "report_type" => "required",
-                // "booking_type" => "required",
-                // 'invoice_date' => 'required_if:booking_type,Invoice',
-                // 'invoice_no' => 'required_if:booking_type,Invoice',
-                // 'dispatch_date_time' => 'required_if:is_report_dispacthed,1',
-                // 'dispatch_mode' => 'required_if:is_report_dispacthed,1',
-                // 'dispatch_details' => 'required_if:is_report_dispacthed,1',
-                // "receipte_date" => "required",
-                // "customer_id" => "required",
-                // 'mfg_date'  => 'required|date',
-                // 'exp_date'    => 'required|date_format:Y-m-d|after:mfg_date',
+                "report_type" => "required",
+                "booking_type" => "required",
+                'invoice_date' => 'required_if:booking_type,Invoice',
+                'invoice_no' => 'required_if:booking_type,Invoice',
+                'dispatch_date_time' => 'required_if:is_report_dispacthed,1',
+                'dispatch_mode' => 'required_if:is_report_dispacthed,1',
+                'dispatch_details' => 'required_if:is_report_dispacthed,1',
+                "receipte_date" => "required",
+                "customer_id" => "required",
+                'mfg_date'  => 'required|date',
+                'exp_date'    => 'required|date_format:Y-m-d|after:mfg_date',
                 'booking_sample_details.*.product_id'  => 'required|Integer',
                 'booking_sample_details.*.sampling_date_from'  => 'nullable|date',
                 'booking_sample_details.*.sampling_date_to'    => 'nullable|date_format:Y-m-d|after:booking_sample_details.*.sampling_date_from',
