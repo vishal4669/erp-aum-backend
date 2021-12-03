@@ -12,15 +12,14 @@ class Helper
     public static function response($message = '', $status = 200, $success_status = true, $data = [])
     {
         $response_array = array(
-                //'message' => $message,
-                'message' => is_array($message) ? implode(" <br> ", $message) : $message,
-                'status' => $status,
-                'success' => $success_status,
-                'data' => $data
+            //'message' => $message,
+            'message' => is_array($message) ? implode(" <br> ", $message) : $message,
+            'status' => $status,
+            'success' => $success_status,
+            'data' => $data
         );
 
         return response($response_array, $status);
-
     }
 
     /**
@@ -30,11 +29,11 @@ class Helper
     {
         $years_array = array();
 
-        for($i=0; $i<=6; $i++){            
+        for ($i = -1; $i <= 6; $i++) {
             $j = $i + 1;
-            $year_data = date('Y', strtotime('-'.$j.' year')).'-'.date('y', strtotime('-'.$i.' year'));
+            $year_data = date('Y', strtotime('-' . $j . ' year')) . '-' . date('y', strtotime('-' . $i . ' year'));
             array_push($years_array, $year_data);
-        }   
+        }
 
         return $years_array;
     }
@@ -42,14 +41,16 @@ class Helper
     /**
      * It will generate the random string as per the given count parameter default it will be 5
      * 
-    */
-    public static function generateRandomString($count = 5){
-        $random_string = Str::random($count);   
+     */
+    public static function generateRandomString($count = 5)
+    {
+        $random_string = Str::random($count);
 
         return $random_string;
     }
 
-    public static function getUserData(){
+    public static function getUserData()
+    {
         $userdata = array();
 
         $token = JWTAuth::parseToken();
@@ -59,7 +60,4 @@ class Helper
 
         return $userdata;
     }
-
-
-
 }

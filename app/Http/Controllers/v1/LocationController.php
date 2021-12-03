@@ -29,7 +29,7 @@ class LocationController extends Controller
                 $data = Location::select('mst_locations.*', 'c.company_name')
                         ->leftjoin('mst_companies as c', 'c.id', '=', 'mst_locations.mst_companies_id')
                         ->where('mst_locations.is_active',1)
-                        ->where('mst_locations.selected_year', $loggedInUserData['selected_year'])
+                        // ->where('mst_locations.selected_year', $loggedInUserData['selected_year'])
                         ->where('mst_locations.mst_companies_id', $loggedInUserData['company_id'])
                         ->orderBy('mst_locations.id', 'desc')
                         ->get();

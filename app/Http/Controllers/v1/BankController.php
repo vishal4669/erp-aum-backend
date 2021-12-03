@@ -28,7 +28,7 @@ class BankController extends Controller
                 $data = Bank::select('mst_banks.*', 'c.company_name')
                         ->leftjoin('mst_companies as c', 'c.id', '=', 'mst_banks.mst_companies_id')
                         ->where('mst_banks.is_active',1)
-                        ->where('mst_banks.selected_year', $loggedInUserData['selected_year'])
+                        // ->where('mst_banks.selected_year', $loggedInUserData['selected_year'])
                         ->where('mst_banks.mst_companies_id', $loggedInUserData['company_id'])
                         ->orderBy('mst_banks.id', 'desc')
                         ->get();

@@ -66,7 +66,7 @@ class EmployeeController extends Controller
                     ->where('users.is_approved', "Pending")
                     ->orWhere('users.is_approved', "Approved")
                     ->orWhere('users.is_approved', "Rejected")
-                    ->where('users.selected_year', $loggedInUserData['selected_year'])
+                    // ->where('users.selected_year', $loggedInUserData['selected_year'])
                     ->where('users.mst_companies_id', $loggedInUserData['company_id']);
                 if ($is_reporting_authority) {
                     $data  = $data->where('users.is_reporting_authority', 1);

@@ -33,7 +33,7 @@ class DepartmentController extends Controller
                     ->leftjoin('mst_companies as c', 'c.id', '=', 'mst_departments.mst_companies_id')
                     ->leftjoin('mst_branches as b', 'b.id', '=', 'mst_departments.mst_branches_id')
                     ->where('mst_departments.is_active', 1)
-                    ->where('mst_departments.selected_year', $loggedInUserData['selected_year'])
+                    // ->where('mst_departments.selected_year', $loggedInUserData['selected_year'])
                     ->where('mst_departments.mst_companies_id', $loggedInUserData['company_id'])
                     ->orderBy('mst_departments.id', 'desc')
                     ->get();

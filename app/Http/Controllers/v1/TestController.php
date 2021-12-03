@@ -32,7 +32,7 @@ class TestController extends Controller
                 $data = Test::select('mst_tests.*', 't.procedure_name as parent_name')
                         ->leftjoin('mst_tests as t', 't.id', '=', 'mst_tests.parent_id')
                         ->where('mst_tests.is_active',1)
-                        ->where('mst_tests.selected_year', $loggedInUserData['selected_year'])
+                        // ->where('mst_tests.selected_year', $loggedInUserData['selected_year'])
                         ->where('mst_tests.mst_companies_id', $loggedInUserData['company_id'])
                         ->orderBy('mst_tests.id', 'desc')
                         ->get();

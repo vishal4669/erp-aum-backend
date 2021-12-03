@@ -24,6 +24,7 @@ class CommonController extends Controller
     {
         try {
             $data = Helper::yearsList();
+            // dd($data);
             return Helper::response("Years List Shown Successfully", Response::HTTP_OK, true,$data);
         } catch (Exception $e) {
             $data = array();

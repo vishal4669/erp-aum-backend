@@ -32,7 +32,7 @@ class InstrumentController extends Controller
                 $data = Instrument::select('mst_instruments.*', 'c.company_name')
                     ->leftjoin('mst_companies as c', 'c.id', '=', 'mst_instruments.mst_companies_id')
                     ->where('mst_instruments.is_active', 1)
-                    ->where('mst_instruments.selected_year', $loggedInUserData['selected_year'])
+                    // ->where('mst_instruments.selected_year', $loggedInUserData['selected_year'])
                     ->where('mst_instruments.mst_companies_id', $loggedInUserData['company_id'])
                     ->orderBy('mst_instruments.id', 'desc')
                     ->get();

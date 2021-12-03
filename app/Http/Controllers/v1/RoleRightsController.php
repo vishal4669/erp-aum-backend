@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\v1;
 
 use App\Helpers\Helper;
+use App\Models\RoleRightDesign;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\RoleRights;
@@ -19,11 +20,12 @@ class RoleRightsController extends Controller
     {
         //
         try {
-            $data = RoleRights::all();
+
+            $data = RoleRightDesign::all();
             
             return Helper::response("Roll and Rights Are Show Successfully", Response::HTTP_OK, true, $data);
+
         } catch (Exception $e) {
-            //throw $th;
             $data =  array();
             return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);
         }

@@ -1147,8 +1147,8 @@ class BookingController extends Controller
                 'booking_sample_details.*.sample_drawn_by'  => 'max:255',
                 'booking_sample_details.*.sample_quantity'  => 'nullable',
                 'booking_sample_details.*.batch_size_qty_rec'  => 'nullable',
-                'booking_tests.*.result'  => 'required_if:booking_tests.*.approved,ForApproval',
-                'booking_tests.*.test_date_time'  => 'required_if:booking_tests.*.approved,ForApproval',
+                'booking_tests.*.result'  => 'required_if:booking_tests.*.approved,ForApproval,Approved,Rejected',
+                'booking_tests.*.test_date_time'  => 'required_if:booking_tests.*.approved,ForApproval,Approved,Rejected',
                 'booking_tests.*.approval_date_time'  => 'required_if:booking_tests.*.approved,Approved,Rejected',
                 'booking_tests.*.p_sr_no'  => 'max:10',
                 'booking_tests.*.label_claim'  => 'max:155',
@@ -1161,7 +1161,7 @@ class BookingController extends Controller
                 'booking_tests.*.division'  => 'max:255',
                 'booking_tests.*.method'  => 'max:255',
                 'booking_tests.*.approved'  => 'max:20',
-                'booking_tests.*.chemist_name'  => 'required_if:booking_tests.*.approved,Assigned'
+                'booking_tests.*.chemist_name'  => 'required_if:booking_tests.*.approved,Assigned,ForApproval,Approved,Rejected',
 
             ];
             $massage = [
@@ -1180,9 +1180,9 @@ class BookingController extends Controller
                 'booking_sample_details.*.product_id.required'  => 'The Product Name Field Is Required.',
                 'booking_sample_details.*.sampling_date_to.after'    => 'Sampling Date To Must Be A Date After Sampling Date From.',
                 'booking_tests.*.amount.numeric'  => 'booking tests details of amount must be numeric value.',
-                'booking_tests.*.chemist_name.required_if'  => 'Chemist Name is Required in a Tests If Approved Status is in Assigned.',
-                'booking_tests.*.result.required_if'  => 'Result Field is Required in a Tests If Approved Status is in ForApproval.',
-                'booking_tests.*.test_date_time.required_if'  => 'Test Date Time Field is Required in a Tests If Approved Status is in ForApproval.',
+                'booking_tests.*.chemist_name.required_if'  => 'Chemist Name is Required in a Tests If Approved Status is in Assigned, ForApproval, Approved, Rejected.',
+                'booking_tests.*.result.required_if'  => 'Result Field is Required in a Tests If Approved Status is in ForApproval, Approved, Rejected.',
+                'booking_tests.*.test_date_time.required_if'  => 'Test Date Time Field is Required in a Tests If Approved Status is in ForApproval, Approved, Rejected.',
                 'booking_tests.*.approval_date_time.required_if'  => 'Approval Date Time Field is Required in a Tests If Approved Status is in Approved or Rejected.',
 
             ];

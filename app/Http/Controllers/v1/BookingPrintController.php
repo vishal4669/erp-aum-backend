@@ -50,11 +50,11 @@ class BookingPrintController extends Controller
                 ->with('original_manufacturer:id,company_name')
                 ->with('supplier:id,company_name')
                 ->with('sample_data:id,booking_id,product_id,batch_no as lot_batch_no,batch_size_qty_rec,sample_quantity as sample_qty_rec,sample_condition as condition_of_sample', 'sample_data.product_data:id,product_name as name_of_sample,product_generic,pharmacopeia_id,generic_product_id', 'sample_data.product_data.generic_product_data:id,product_name as generic_name', 'sample_data.product_data.pharmacopiea_data:id,pharmacopeia_name')
-                ->with('tests_data:id,booking_id,test_name as test_parameter,label_claim,result,max_limit,product_details,test_date_time as date_of_performance_test,method as method_used,approved,approval_date_time')
+                ->with('tests_data:id,booking_id,test_name as test_parameter,label_claim,result,max_limit,product_details,test_date_time as date_of_performance_test,method as method_used,approved,approval_date_time,parent,parent_child,p_sr_no')
                 ->where('id', $id)
                 ->get()->toarray();
 
-            if (!empty($data['tests_data'])) {
+            if (!empty($data[0]['tests_data'])) {
                 $state_id = $data[0]['customer_data']['customer_contact_data']['state'];
                 $country_id = $data[0]['customer_data']['customer_contact_data']['country'];
                 if ($state_id != null && $state_id != 0 && $state_id != '') {
@@ -187,7 +187,6 @@ class BookingPrintController extends Controller
         //
         try {
 
-            $print_allows = booking::find($id);
             $data = Booking::select(
                 'id',
                 'booking_no as certificate_no',
@@ -213,10 +212,11 @@ class BookingPrintController extends Controller
                 ->with('original_manufacturer:id,company_name')
                 ->with('supplier:id,company_name')
                 ->with('sample_data:id,booking_id,product_id,batch_no as lot_batch_no,batch_size_qty_rec,sample_quantity as sample_qty_rec,sample_condition as condition_of_sample', 'sample_data.product_data:id,product_name as name_of_sample,product_generic,pharmacopeia_id,generic_product_id', 'sample_data.product_data.generic_product_data:id,product_name as generic_name', 'sample_data.product_data.pharmacopiea_data:id,pharmacopeia_name')
-                ->with('tests_data:id,booking_id,test_name as test_parameter,label_claim,result,max_limit,product_details,test_date_time as date_of_performance_test,method as method_used,approved')
+                ->with('tests_data:id,booking_id,test_name as test_parameter,label_claim,result,max_limit,product_details,test_date_time as date_of_performance_test,method as method_used,approved,parent,parent_child,p_sr_no')
                 ->where('id', $id)
                 ->get()->toarray();
-            if (!empty($data['tests_data'])) {
+
+            if (!empty($data[0]['tests_data'])) {
                 $state_id = $data[0]['customer_data']['customer_contact_data']['state'];
                 $country_id = $data[0]['customer_data']['customer_contact_data']['country'];
                 if ($state_id != null && $state_id != 0 && $state_id != '') {

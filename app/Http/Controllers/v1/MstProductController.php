@@ -51,7 +51,7 @@ class MstProductController extends Controller
                 )
                     ->with('pharmacopeia:id,pharmacopeia_name', 'generic:id,product_name')
                     ->where('is_active', 1)
-                    ->where('selected_year', $loggedInUserData['selected_year'])
+                    // ->where('selected_year', $loggedInUserData['selected_year'])
                     ->where('mst_companies_id', $loggedInUserData['company_id'])
                     ->orderBy('id', 'desc')
                     ->get();

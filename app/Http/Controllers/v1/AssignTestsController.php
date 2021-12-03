@@ -139,7 +139,7 @@ class AssignTestsController extends Controller
                     "min_limit",
                     "max_limit"
                 )
-                ->with('unit_detail:id,unit_name')
+                    ->with('unit_detail:id,unit_name')
                     ->with('chemist_detail:id,first_name,middle_name,last_name')
                     ->with(
                         'booking_detail:id,aum_serial_no,report_type,receipte_date,booking_no,customer_id',
@@ -305,21 +305,56 @@ class AssignTestsController extends Controller
             if ($id == "" || !isset($id)) {
                 $data = $request->all();
                 $approved_status = $data['approved'];
+                if ($approved_status == "Rejected") {
+                    $approved_status = "Assigned";
+                }
                 $test_id = $data['test_id'];
                 $datetime = Carbon::now();
+                if ($approved_status == "Assigned") {
+                    $update_test = array(
+                        "approved" => $approved_status,
+                        "approval_date_time" => $datetime,
+                        "assigned_date" => $datetime,
+                        "updated_at" => $datetime
+                    );
+                } else {
+                    $update_test = array(
+                        "approved" => $approved_status,
+                        "approval_date_time" => $datetime,
+                        "updated_at" => $datetime
+                    );
+                }
                 foreach ($test_id as $key => $item) {
                     $update_status = BookingTest::find($item);
                     if ($update_status != null) {
-                        $update_status->update(array("approved" => $approved_status, "approval_date_time" => $datetime, "updated_at" => $datetime));
+                        $update_status->update($update_test);
                     }
                 }
             } else {
                 $data = $request->all();
+             
                 $approved_status = $data['approved'];
+                if ($approved_status == "Rejected") {
+                    $approved_status = "Assigned";
+                }
                 $datetime = Carbon::now();
+                if ($approved_status == "Assigned") {
+                    $update_test = array(
+                        "approved" => $approved_status,
+                        "approval_date_time" => $datetime,
+                        "assigned_date" => $datetime,
+                        "updated_at" => $datetime
+                    );
+                } else {
+                    $update_test = array(
+                        "approved" => $approved_status,
+                        "approval_date_time" => $datetime,
+                        "updated_at" => $datetime
+                    );
+                }
                 $update_status = BookingTest::find($id);
                 if ($update_status != null) {
-                    $update_status->update(array("approved" => $approved_status, "approval_date_time" => $datetime, "updated_at" => $datetime));
+                    $update_status->update($update_test);
                 }
             }
 
