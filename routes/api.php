@@ -54,6 +54,7 @@ Route::group(['middleware' => ['jwt.verify'], 'prefix' => 'v1'], function () {
 
     // Customer Masters
     Route::get('listCustomer', 'App\Http\Controllers\v1\CustomerController@index');
+    Route::get('exportCustomerData', 'App\Http\Controllers\v1\CustomerController@export_customer_data');
     Route::post('addCustomer', 'App\Http\Controllers\v1\CustomerController@store');
     Route::get('getCustomer/{id}', 'App\Http\Controllers\v1\CustomerController@show');
     Route::post('editCustomer/{id}', 'App\Http\Controllers\v1\CustomerController@update');
@@ -178,7 +179,7 @@ Route::group(['middleware' => ['jwt.verify'], 'prefix' => 'v1'], function () {
     Route::get('getBooking/{id}', 'App\Http\Controllers\v1\BookingController@show');
     Route::get('booking_no/{report_type?}/{receipte_date?}', 'App\Http\Controllers\v1\BookingController@last_booking_no');
     Route::get('contact_type/{type?}', 'App\Http\Controllers\v1\BookingController@contact_type');
-    Route::get('exportlist', 'App\Http\Controllers\v1\BookingController@exportlist');
+    Route::get('exportBookingData', 'App\Http\Controllers\v1\BookingController@exportlist');
     Route::post('deleteBooking/{id}', 'App\Http\Controllers\v1\BookingController@destroy');
     Route::post('getproduct/{id}', 'App\Http\Controllers\v1\BookingController@getproduct');
 

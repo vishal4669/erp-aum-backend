@@ -65,7 +65,8 @@ class BookingController extends Controller
                     ->select(
                         [
                             'bookings.id', 'bookings.aum_serial_no', 'bookings.booking_no',
-                            'bookings.booking_type', 'bookings.coa_print_count', 'samples.product_type',
+                            'bookings.booking_type', 'bookings.coa_print_count',
+                            // 'bookings.booking_type', 'bookings.coa_print_count', 'samples.product_type',
                             DB::raw('DATE_FORMAT(bookings.receipte_date, "%Y-%m-%d") as receipte_date'),
                             'bookings.is_active', 'mst_products.product_name'
                         ]
@@ -279,10 +280,8 @@ class BookingController extends Controller
             )
                 ->with(
                     'customer_id:id,company_name',
-                    'samples:id,booking_id,
-                    
-                    ,batch_no',
-                    'samples.product_id:id,generic_product_id',
+                    'samples:id,booking_id,batch_no,product_id',
+                    'samples.product_id:id,product_name,generic_product_id',
                     'tests:booking_id,test_name,amount',
                     'audit:booking_id,comments',
                     'created_by:id,first_name,middle_name,last_name',
@@ -294,27 +293,40 @@ class BookingController extends Controller
                 ->get();
 
             $exportData_Arr = $exportData->toArray();
+
             $len = count($exportData_Arr);
             $i = 0;
             for ($i = 0; $i < $len; $i++) {
-
-                if ($exportData_Arr[$i]['samples'][0]['product_id'] != null) {
-                    $generic_id = $exportData_Arr[$i]['samples'][0]['product_id']['generic_product_id'];
-                    if ($generic_id != 0 and $generic_id != '') {
-                        $product_id = $exportData_Arr[$i]['samples'][0]['product_id']['id'];
-                        $generic_product_name = MstProduct::where('id', '=', $generic_id)->get(['product_name']);
-                        $generic_product_name = $generic_product_name->toArray();
-                        $exportData_Arr[$i]['samples'][0]['product_id']['generic_product_name'] = $generic_product_name[0]['product_name'];
+                if (!empty($exportData_Arr[$i]['samples'])) {
+                    if ($exportData_Arr[$i]['samples'][0]['product_id'] != null || $exportData_Arr[$i]['samples'][0]['product_id'] != "" || !empty($exportData_Arr[$i]['samples'][0]['product_id'])) {
+                        $generic_id = $exportData_Arr[$i]['samples'][0]['product_id']['generic_product_id'];
+                        if ($generic_id != 0 && $generic_id != "") {
+                            $product_id = $exportData_Arr[$i]['samples'][0]['product_id']['id'];
+                            $generic_product_name = MstProduct::where('id', '=', $generic_id)->get(['product_name']);
+                            $generic_product_name = $generic_product_name->toArray();
+                            $exportData_Arr[$i]['samples'][0]['product_id']['generic_product_name'] = $generic_product_name[0]['product_name'];
+                        } else {
+                            $exportData_Arr[$i]['samples'][0]['product_id']['generic_product_name'] = '';
+                        }
                     } else {
-                        $exportData_Arr[$i]['samples'][0]['product_id']['generic_product_name'] = '';
+                        $exportData_Arr[$i]['samples'][0]['product_id'] = array(
+                            'id' => '',
+                            'generic_product_id' => '',
+                            'generic_product_name' => ''
+                        );
                     }
                 } else {
-                    $exportData_Arr[$i]['samples'][0]['product_id'] = array(
-                        'id' => '',
-                        'generic_product_id' => '',
-                        'generic_product_name' => ''
+                    $exportData_Arr[$i]['samples'] = array(
+                        "id" => "",
+                        "booking_id" => "",
+                        "batch_no" => "",
+                        "product_id" => array(
+                            "id" => "",
+                            "generic_product_id" => ""
+                        )
                     );
                 }
+
                 if ($exportData_Arr[$i]['customer_id'] == null) {
                     $exportData_Arr[$i]['customer_id'] = array(
                         "id" => "",
@@ -336,6 +348,12 @@ class BookingController extends Controller
                         "first_name" => "",
                         "middle_name" => "",
                         "last_name" => ""
+                    );
+                }
+                if (empty($exportData_Arr[$i]['audit'])) {
+                    $exportData_Arr[$i]['audit'] = array(
+                        "booking_id" => "",
+                        "comments" => "",
                     );
                 }
             }
@@ -492,7 +510,7 @@ class BookingController extends Controller
                 'booking_sample_details.*.sampling_date_from'  => 'nullable|date',
                 'booking_sample_details.*.sampling_date_to'    => 'nullable|date_format:Y-m-d|after:booking_sample_details.*.sampling_date_from',
                 'booking_tests.*.amount'    => 'nullable|numeric|between:0,999999999999999999999999999.99',
-                'booking_sample_details.*.batch_no'  => 'nullable',
+                'booking_sample_details.*.batch_no'  => 'nullable|unique:booking_sample_details',
                 'booking_sample_details.*.packsize'  => 'max:55',
                 'booking_sample_details.*.request_quantity'  => 'nullable',
                 'booking_sample_details.*.sample_code'  => 'max:100',
@@ -528,8 +546,7 @@ class BookingController extends Controller
                 "booking_no.unique" => "The Booking No Field Must Be Unique.",
                 "mfg_date.required" => "The Mfg Date Field Is Required.",
                 "exp_date.required" => "The Exp Date Field Is Required.",
-                // 'booking_sample_details.*.batch_no.numeric'  => 'booking sample details of batch_no must be numeric value.',
-                // 'booking_sample_details.*.batch_no.digits_between'  => 'booking sample details of batch_no must be between 0 and 25 digits.',
+                'booking_sample_details.*.batch_no.unique'  => 'booking sample details of batch_no has already been taken.',
                 'booking_sample_details.*.product_id.required'  => 'The Product Name Field Is Required.',
                 'booking_sample_details.*.sampling_date_to.after'    => 'Sampling Date To Must Be A Date After Sampling Date From.',
                 'booking_tests.*.amount.numeric'  => 'booking tests details of amount must be numeric value.',
@@ -542,6 +559,7 @@ class BookingController extends Controller
             }
             $uniqcustomer_arr = $this->uniqcustomer($request);
             $loggedInUserData = Helper::getUserData();
+            // dd($loggedInUserData['company_id']);
             $booking_data = Booking::create([
                 "mst_companies_id"  => $loggedInUserData['company_id'],
                 "booking_type"  => (isset($request->booking_type) ? $request->booking_type : ''),
@@ -845,7 +863,7 @@ class BookingController extends Controller
             'samples.get_product:id,product_name,generic_product_id,product_generic,pharmacopeia_id,deleted_at',
             // 'samples.pharmacopiea_id:id,pharmacopeia_name',
             'tests',
-            'tests.parent',
+            'tests.parent:id,machine_name as parent_name',
             'audit',
             'created_by:id,first_name,middle_name,last_name',
             'updated_by:id,first_name,middle_name,last_name'

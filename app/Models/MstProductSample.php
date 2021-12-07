@@ -43,6 +43,6 @@ class MstProductSample extends Model
     }
     public function parent()
     {
-        return $this->hasOne(MstProductParent::class, 'id', 'parent');
+        return $this->hasOne(Machine::class, 'id', 'parent');
     }
 }

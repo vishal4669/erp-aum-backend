@@ -58,9 +58,16 @@ class BookingTest extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
+    // public function parent()
+    // {
+    //     return $this->hasOne(MstProductParent::class, 'id', 'parent');
+    // }
     public function parent()
     {
-        return $this->hasOne(MstProductParent::class, 'id', 'parent');
+        return $this->hasOne(Machine::class, 'id', 'parent')->withDefault([
+            "id" => "",
+            "parent_name" => ""
+        ]);
     }
 
     /**
@@ -110,6 +117,17 @@ class BookingTest extends Model
             ->withDefault([
                 "id" => "",
                 "unit_name" => ""
+            ]);
+    }
+
+    //booking tests_data for BookingPrintController parent_data for machine
+    public function parent_data()
+    {
+        return $this->hasOne(Machine::class, 'id', 'parent')
+            ->withTrashed()
+            ->withDefault([
+                "id" => "",
+                "parent_name" => ""
             ]);
     }
 }

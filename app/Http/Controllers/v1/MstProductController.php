@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Helpers\Helper;
+use App\Models\Machine;
 use Auth;
 use DB;
 use App\Models\MstProduct;
@@ -128,7 +129,7 @@ class MstProductController extends Controller
     public function parent_list()
     {
         try {
-            $parentData = MstProductParent::orderBy('id', 'desc')->get();
+            $parentData = Machine::select('id','machine_name as parent_name')->orderBy('id', 'desc')->get();
 
             return Helper::response("Parent Data Shown Successfully", Response::HTTP_OK, true, $parentData);
         } catch (Exception $e) {
@@ -368,7 +369,7 @@ class MstProductController extends Controller
     public function show($id)
     {
         $loggedInUserData = Helper::getUserData();
-        $data = MstProduct::with('pharmacopeia:id,pharmacopeia_name', 'generic_product_id:id,product_name as generic_product_name,deleted_at', 'samples', 'samples.parameter', 'samples.parent')->find($id);
+        $data = MstProduct::with('pharmacopeia:id,pharmacopeia_name', 'generic_product_id:id,product_name as generic_product_name,deleted_at', 'samples', 'samples.parameter', 'samples.parent:id,machine_name as parent_name')->find($id);
         $data_Arr = $data->toArray();
         $len = count($data_Arr['samples']);
         $i = 0;

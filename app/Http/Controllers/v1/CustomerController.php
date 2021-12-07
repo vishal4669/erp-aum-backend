@@ -60,6 +60,36 @@ class CustomerController extends Controller
             return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);
         }
     }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function export_customer_data(Request $request)
+    {
+        try {
+            // $loggedInUserData = Helper::getUserData();
+            $data = Customer::select(
+                'id',
+                'Company_name',
+                'contact_person_name',
+                'tally_alias_name'
+            )
+            ->with('home_contact_no:id,mst_customer_id,contact_no as account_admin_contact_no,home_qc_contact_no,contact_info_type')
+            ->with('other_contact_no:id,mst_customer_id,contact_no as qa_contact_no,contact_info_type')
+            ->get();
+            $data_arr = $data->isEmpty();
+
+            if ($data_arr) {
+                return Helper::response("Customer Data For Export is Empty", Response::HTTP_OK, true, $data);
+            } else {
+                return Helper::response("Customer Data For Export Shown Successfully", Response::HTTP_OK, true, $data);
+            }
+        } catch (Exception $e) {
+            $data = array();
+            return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);
+        }
+    }
 
     /**
      * Show the form for creating a new resource.

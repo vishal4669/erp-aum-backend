@@ -51,6 +51,7 @@ class Booking extends Model
         "booking_group",
         "statement_ofconformity",
         "coa_print",
+        "roa_print",
         "coa_print_count",
         "roa_print_count",
         "coa_release_date",
@@ -62,9 +63,6 @@ class Booking extends Model
         "updated_at"
     ];
 
-    protected $casts = [
-        "coa_print" => 'array'
-    ];
     /**
      * Get all of the comments for the booking
      *
@@ -173,4 +171,10 @@ class Booking extends Model
     {
         return $this->hasMany(BookingTest::class, 'booking_id', 'id')->withTrashed();
     }
+    //booking tests_data for BookingPrintController
+    public function latest_test_date_time()
+    {
+        return $this->hasOne(BookingTest::class, 'booking_id', 'id')->orderBy('id', 'desc')->withTrashed();
+    }
+    
 }
