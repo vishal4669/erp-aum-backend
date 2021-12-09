@@ -719,7 +719,10 @@ class BookingController extends Controller
                             if ($tests['assigned_date'] != null || $tests['assigned_date'] != '') {
                                 $assigned_date = $tests['assigned_date'];
                             }
-
+                            if($tests['approved'] == "Rejected")
+                            {
+                                $tests['approved'] = "Assigned";
+                            }
                             $tests_data = array(
                                 "booking_id" => (isset($booking_id) ? $booking_id : 0),
                                 "parent_child" => (isset($tests['parent_child']) ? $tests['parent_child'] : ''),
@@ -862,7 +865,7 @@ class BookingController extends Controller
             'samples',
             'samples.get_product:id,product_name,generic_product_id,product_generic,pharmacopeia_id,deleted_at',
             // 'samples.pharmacopiea_id:id,pharmacopeia_name',
-            'tests',
+            'tests','tests.unit_data:id,unit_name',
             'tests.parent:id,machine_name as parent_name',
             'audit',
             'created_by:id,first_name,middle_name,last_name',

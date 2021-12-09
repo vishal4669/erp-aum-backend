@@ -53,7 +53,7 @@ class BookingPrintController extends Controller
                 ->with('original_manufacturer:id,company_name')
                 ->with('supplier:id,company_name')
                 ->with('sample_data:id,booking_id,product_id,batch_no as lot_batch_no,batch_size_qty_rec,sample_quantity as sample_qty_rec,sample_condition as condition_of_sample', 'sample_data.product_data:id,product_name as name_of_sample,product_generic,pharmacopeia_id,generic_product_id,sample_description', 'sample_data.product_data.generic_product_data:id,product_name as generic_name', 'sample_data.product_data.pharmacopiea_data:id,pharmacopeia_name')
-                ->with('tests_data:id,booking_id,test_name as test_parameter,label_claim,result,max_limit,product_details,test_date_time as date_of_performance_test,method as method_used,approved,approval_date_time,parent,parent_child,p_sr_no,approval_date_time', 'tests_data.parent_data:id,machine_name as parent_name')
+                ->with('tests_data:id,booking_id,test_name as test_parameter,label_claim,result,max_limit,product_details,test_date_time as date_of_performance_test,method as method_used,approved,approval_date_time,parent,parent_child,p_sr_no,approval_date_time', 'tests_data.parent_data:id,machine_name as parent_name','tests_data.chemist_detail:id,first_name,middle_name,last_name')
                 ->with('latest_test_date_time:id,booking_id,test_date_time')
                 ->where('id', $id)
                 ->get()->toarray();
@@ -90,9 +90,9 @@ class BookingPrintController extends Controller
                         "country_name" => ""
                     );
                 }
-
-                $can_coa_print = 1;
+    
                 $can_roa_print = 1;
+                $can_coa_print = 1;
                 foreach ($data[0]['tests_data'] as $key => $item) {
                     if ($item['approved'] != "Approved") {
                         $can_coa_print = 0;
@@ -101,7 +101,10 @@ class BookingPrintController extends Controller
                         $can_roa_print = 0;
                     }
                 }
-                if ($type == "Roa_Print" || $type == "Check_Roa") {
+                $check_type = ['ROA_PRINT_1','NABL_ROA_PRINT_1','NABL_ROA_PRINT_2','Check_Roa'];
+                $is_present = in_array($type,$check_type);
+
+                if ($is_present == true) {                   
                     $validator = Validator::make($data[0], $rules, $msg);
 
                     if ($validator->fails()) {
@@ -127,7 +130,12 @@ class BookingPrintController extends Controller
                         $msg = "All the Tests Can Be 'Assigned' or 'ForApproval' or 'Approved' & Can not be 'Pending' For Roa Print.";
                         return Helper::response($msg, Response::HTTP_OK, false);
                     }
-                } else {
+                
+                } 
+                // dd("COA");
+                if($type === "COA_PRINT" OR $type === "NABL_PRINT" OR $type === "COA_AYUSH " OR $type === "Check_Coa" )
+                print_r("============================");
+                dd($type);
                     if ($can_coa_print == 1) {
                         $rules['tests_data.*.approval_date_time'] = "required";
                         $rules['tests_data.*.date_of_performance_test'] = "required";
@@ -161,7 +169,9 @@ class BookingPrintController extends Controller
                         $msg = "All the Tests Must Be 'Approved' For Coa Print.";
                         return Helper::response($msg, Response::HTTP_OK, false);
                     }
-                }
+                
+            
+
                 return Helper::response("Data Shown Successfully For Roa/Coa", Response::HTTP_OK, true, $data);
             } else {
                 return Helper::response("No Tests Data Available For Roa/Coa", Response::HTTP_OK, false);
@@ -232,7 +242,7 @@ class BookingPrintController extends Controller
                 ->with('original_manufacturer:id,company_name')
                 ->with('supplier:id,company_name')
                 ->with('sample_data:id,booking_id,product_id,batch_no as lot_batch_no,batch_size_qty_rec,sample_quantity as sample_qty_rec,sample_condition as condition_of_sample', 'sample_data.product_data:id,product_name as name_of_sample,product_generic,pharmacopeia_id,generic_product_id,sample_description', 'sample_data.product_data.generic_product_data:id,product_name as generic_name', 'sample_data.product_data.pharmacopiea_data:id,pharmacopeia_name')
-                ->with('tests_data:id,booking_id,test_name as test_parameter,label_claim,result,max_limit,product_details,test_date_time as date_of_performance_test,method as method_used,approved,parent,parent_child,p_sr_no,approval_date_time', 'tests_data.parent_data:id,machine_name as parent_name')
+                ->with('tests_data:id,booking_id,test_name as test_parameter,label_claim,result,max_limit,product_details,test_date_time as date_of_performance_test,method as method_used,approved,parent,parent_child,p_sr_no,approval_date_time,chemist_name', 'tests_data.parent_data:id,machine_name as parent_name', 'tests_data.chemist_detail:id,first_name,middle_name,last_name')
                 ->with('latest_test_date_time:id,booking_id,test_date_time')
                 ->where('id', $id)
                 ->get()->toarray();

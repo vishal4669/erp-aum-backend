@@ -66,7 +66,7 @@ class EmployeeController extends Controller
                     ->where('users.is_approved', "Pending")
                     ->orWhere('users.is_approved', "Approved")
                     ->orWhere('users.is_approved', "Rejected")
-                    // ->where('users.selected_year', $loggedInUserData['selected_year'])
+                    ->where('users.selected_year', $loggedInUserData['selected_year'])
                     ->where('users.mst_companies_id', $loggedInUserData['company_id']);
                 if ($is_reporting_authority) {
                     $data  = $data->where('users.is_reporting_authority', 1);
@@ -117,7 +117,7 @@ class EmployeeController extends Controller
                 'address.0.street2' => 'required|max:255',
                 'address.0.email' => 'nullable|email',
                 'address.0.emergency_contact_name' => 'required|max:255',
-                'address.0.emergency_contact_number' => 'required|min:10|max:10',
+                'address.1.emergency_contact_number' => 'required|min:10|max:10',
 
                 // Company Info form fields
                 'company.mst_companies_id' => 'required',
@@ -168,9 +168,9 @@ class EmployeeController extends Controller
                 'address.0.email' => 'Please enter valid email for address Email',
                 'address.0.emergency_contact_name.required' => 'Emergency Contact Name field is required.',
                 'address.0.emergency_contact_name.max' => 'Emergency Contact Name should not me greater than 255 characters.',
-                'address.0.emergency_contact_number.required' => 'Emergency Contact Number field is required.',
-                'address.0.emergency_contact_number.min' => 'Emergency Contact Number should not be less than 10 characters.',
-                'address.0.emergency_contact_number.max' => 'Emergency Contact Number should not me greater than 10 characters.',
+                'address.1.emergency_contact_number.required' => 'Emergency Contact Number field is required.',
+                'address.1.emergency_contact_number.min' => 'Emergency Contact Number should not be less than 10 characters.',
+                'address.1.emergency_contact_number.max' => 'Emergency Contact Number should not me greater than 10 characters.',
 
                 // for company form messages
                 'company.*.mst_companies_id.required' => 'Employee Company field is required.',
@@ -542,7 +542,7 @@ class EmployeeController extends Controller
      * Update employee address details
      *
      * @param  int  $users_id
-     * @param  array  $request 
+     * @param  array  $request
      * @return \Illuminate\Http\Response
      */
     function addUpdateUserAddressDetails($address_data, $users_id = '')
@@ -611,7 +611,7 @@ class EmployeeController extends Controller
      * Update employee education details
      *
      * @param  int  $users_id
-     * @param  array  $request 
+     * @param  array  $request
      * @return \Illuminate\Http\Response
      */
     function addUserEducationDetails($edu_data, $users_id = '')
@@ -620,7 +620,7 @@ class EmployeeController extends Controller
         if (!empty($edu_data)) {
             $loggedInUserData = Helper::getUserData();
 
-            // Delete all old   
+            // Delete all old
             $educationDetails = UserEduDetail::where('users_id', $users_id);
             $educationDetails->delete();
 
@@ -657,7 +657,7 @@ class EmployeeController extends Controller
      * Update employee employment details
      *
      * @param  int  $users_id
-     * @param  array  $request 
+     * @param  array  $request
      * @return \Illuminate\Http\Response
      */
     function addUserEmploymentDetails($employment_data, $users_id = '')
@@ -665,7 +665,7 @@ class EmployeeController extends Controller
         if (!empty($employment_data)) {
             $loggedInUserData = Helper::getUserData();
 
-            // Delete all old   
+            // Delete all old
             $employmentDetails = UserEmpDetail::where('users_id', $users_id);
             $employmentDetails->delete();
 
@@ -699,7 +699,7 @@ class EmployeeController extends Controller
      * Update employee company details
      *
      * @param  int  $users_id
-     * @param  array  $request 
+     * @param  array  $request
      * @return \Illuminate\Http\Response
      */
     function addUpdateUserCompanyDetails($company_data, $users_id = '')
@@ -715,7 +715,7 @@ class EmployeeController extends Controller
                 'reporting_authority_id' => (isset($company_data['reporting_authority_id'])) ? $company_data['reporting_authority_id'] : NULL,
                 'mst_departments_id' => (isset($company_data['mst_departments_id'])) ? $company_data['reporting_authority_id'] : '',
                 'mst_positions_id' => (isset($company_data['mst_positions_id'])) ? $company_data['mst_positions_id'] : '',
-                'join_date' => (isset($company_data['join_date'])) ? $company_data['join_date'] : '',
+                'join_date' => (isset($company_data['join_date'])) ? $company_data['join_date'] : NULL,
                 'resign_date' => (isset($company_data['resign_date'])) ? $company_data['resign_date'] : NULL,
                 'bank_name' => (isset($company_data['bank_name'])) ? $company_data['bank_name'] : '',
                 'bank_branch_name' => (isset($company_data['bank_branch_name'])) ? $company_data['bank_branch_name'] : '',
@@ -741,7 +741,7 @@ class EmployeeController extends Controller
      * Update employee documents details
      *
      * @param  int  $users_id
-     * @param  array  $request 
+     * @param  array  $request
      * @return \Illuminate\Http\Response
      */
     function addUpdateUserDocumentDetails($document_data, $users_id = '')
@@ -751,7 +751,7 @@ class EmployeeController extends Controller
         $userDoc = UserDocDetail::where('users_id', $users_id);
         $countDocumentData = $userDoc->count();
 
-        // to get the old data 
+        // to get the old data
         $userDocData = UserDocDetail::where('users_id', $users_id)->first();
 
         $loggedInUserData = Helper::getUserData();

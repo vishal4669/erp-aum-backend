@@ -332,7 +332,7 @@ class AssignTestsController extends Controller
                 }
             } else {
                 $data = $request->all();
-             
+
                 $approved_status = $data['approved'];
                 if ($approved_status == "Rejected") {
                     $approved_status = "Assigned";

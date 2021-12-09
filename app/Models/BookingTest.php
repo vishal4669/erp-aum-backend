@@ -106,6 +106,20 @@ class BookingTest extends Model
             ]);
     }
     /**
+     * Get unit name''
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function unit_data()
+    {
+        return $this->hasOne(Unit::class, 'id', 'unit')
+            ->withTrashed()
+            ->withDefault([
+                "id" => "",
+                "unit_name" => "",
+            ]);
+    }
+    /**
      * Get unit data''
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne

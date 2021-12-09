@@ -207,13 +207,12 @@ Route::group(['middleware' => ['jwt.verify'], 'prefix' => 'v1'], function () {
     //Roll and Rights
     Route::post('assignRoleRights', 'App\Http\Controllers\v1\RoleRightsController@assign_role_rights');
     Route::post('updateRoleRights/{id}', 'App\Http\Controllers\v1\RoleRightsController@update_role_rights');
-    Route::get('getRoleRights/{id}','App\Http\Controllers\v1\RoleRightsController@show_role_rights');
+    Route::get('getRoleRights/{id}', 'App\Http\Controllers\v1\RoleRightsController@show_role_rights');
     Route::get('assignRoleDesign', 'App\Http\Controllers\v1\RoleRightsController@assign_role_design');
-    
+
     //ROA COA Print in Booking
-    Route::get('RoaCoaPrint/{id}/{type?}','App\Http\Controllers\v1\BookingPrintController@roa_coa_print');
-    Route::get('RoaCoaShow/{id}/','App\Http\Controllers\v1\BookingPrintController@roa_coa_show');
-    
+    Route::get('RoaCoaPrint/{id}/{type?}', 'App\Http\Controllers\v1\BookingPrintController@roa_coa_print');
+    Route::get('RoaCoaShow/{id}/', 'App\Http\Controllers\v1\BookingPrintController@roa_coa_show');
 });
 
 Route::group(['prefix' => 'v1'], function () {
