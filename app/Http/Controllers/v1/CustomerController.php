@@ -38,7 +38,7 @@ class CustomerController extends Controller
                     // ->where('mst_customers.selected_year', $loggedInUserData['selected_year'])
                     ->where('mst_customers.mst_companies_id', $loggedInUserData['company_id'])
                     ->orderBy('mst_customers.id', 'desc')
-                    ->paginate(10);
+                    ->get();
             } elseif ($is_dropdown) {
                 $data = Customer::leftJoin('mst_customers_contact_info as c_info', 'c_info.mst_customer_id', '=', 'mst_customers.id')
                     ->where('c_info.contact_info_type', '1')

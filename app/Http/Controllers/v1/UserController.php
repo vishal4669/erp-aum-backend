@@ -28,9 +28,9 @@ class UserController extends Controller
             // check for the resigned employees
             $is_resigned = User::where('email', $request->email)->pluck('is_resigned')->first();
 
-            if($is_resigned){
+            if ($is_resigned) {
                 $res = Helper::response("You are not authorized to login into system, please contact system administrator", Response::HTTP_UNAUTHORIZED, true, []);
-                Log::info("User Login -> Resigned User Try Login with Email : ".$request->email);
+                Log::info("User Login -> Resigned User Try Login with Email : " . $request->email);
 
                 return $res;
             }
@@ -54,8 +54,8 @@ class UserController extends Controller
 
             return $res;
         }
+       
         $user = Auth::user();
-
         $data = array('token' => $token, 'user' => $user, 'user_login_data' => $customClaims);
         $res = Helper::response("User logged in successfully",  Response::HTTP_OK, true, $data);
 

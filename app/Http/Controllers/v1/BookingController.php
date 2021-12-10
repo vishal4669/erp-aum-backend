@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 use App\Helpers\Helper;
+use App\Mail\BookingStatus;
 use App\Models\BookingAuditDetail;
 use App\Models\MstProduct;
 use App\Models\Pharmacopeia;
@@ -559,7 +560,6 @@ class BookingController extends Controller
             }
             $uniqcustomer_arr = $this->uniqcustomer($request);
             $loggedInUserData = Helper::getUserData();
-            // dd($loggedInUserData['company_id']);
             $booking_data = Booking::create([
                 "mst_companies_id"  => $loggedInUserData['company_id'],
                 "booking_type"  => (isset($request->booking_type) ? $request->booking_type : ''),
@@ -719,8 +719,7 @@ class BookingController extends Controller
                             if ($tests['assigned_date'] != null || $tests['assigned_date'] != '') {
                                 $assigned_date = $tests['assigned_date'];
                             }
-                            if($tests['approved'] == "Rejected")
-                            {
+                            if ($tests['approved'] == "Rejected") {
                                 $tests['approved'] = "Assigned";
                             }
                             $tests_data = array(
@@ -865,7 +864,8 @@ class BookingController extends Controller
             'samples',
             'samples.get_product:id,product_name,generic_product_id,product_generic,pharmacopeia_id,deleted_at',
             // 'samples.pharmacopiea_id:id,pharmacopeia_name',
-            'tests','tests.unit_data:id,unit_name',
+            'tests',
+            'tests.unit_data:id,unit_name',
             'tests.parent:id,machine_name as parent_name',
             'audit',
             'created_by:id,first_name,middle_name,last_name',
@@ -1268,6 +1268,7 @@ class BookingController extends Controller
 
             $this->addupdateBookingSample($request->booking_sample_details, $id);
             $this->addupdateBookingTests($request->booking_tests, $id);
+            $this->statusWiseMail($request->all(),$id);
             $this->addupdateAuditDetails($request->booking_audit_details, $id);
 
             $booking_table = Booking::find($id);
@@ -1282,6 +1283,38 @@ class BookingController extends Controller
         }
     }
 
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function statusWiseMail($data,$id)
+    {
+        //
+        $mail_data = array(
+            'booking_no' => isset($data['booking_no']) ? $data['booking_no'] : 'Not Specified',
+            'report_type' => isset($data['report_type']) ? $data['report_type'] : 'Not Specified',
+            'booking_type' => isset($data['booking_type']) ? $data['booking_type'] : 'Not Specified',
+            'receipte_date' => isset($data['receipte_date']) ? $data['receipte_date'] : 'Not Specified',
+            'reference_no' => isset($data['reference_no']) ? $data['reference_no'] : 'Not Specified',
+            'is_report_dispacthed' => $data['is_report_dispacthed'] == 1 ? "YES" : "NO",
+            'nabl_scope' => $data['nabl_scope'] == 1 ? "YES" : "NO",
+            'statement_ofconformity' => isset($data['statement_ofconformity']) ? $data['statement_ofconformity'] : 'Not Specified',
+            'coa_release_date' => isset($data['coa_release_date']) ? $data['coa_release_date'] : 'Not Specified',
+            'test_name' => isset($data['test_name']) ? $data['test_name'] : 'Not Specified',
+            'label_claim' => isset($data['label_claim']) ? $data['label_claim'] : 'Not Specified',
+            'max_limit' => isset($data['max_limit']) ? $data['max_limit'] : 'Not Specified',
+            'result' => isset($data['result']) ? $data['result'] : 'Not Specified',
+            'label_claim_result' => isset($data['label_claim_result']) ? $data['label_claim_result'] : 'Not Specified',
+            'mean' => isset($data['mean']) ? $data['mean'] : 'Not Specified',
+            'approved' => isset($data['approved']) ? $data['approved'] : 'Not Specified',
+        );
+        $is_mail_data = True;
+        $email_data = $this->show($id, $is_mail_data);
+        $send_email_to = $email_data['customer_id']['user_name'];
+        Mail::to(users:$send_email_to)->send(new BookingStatus($mail_data));
+
+    }
     /**
      * Remove the specified resource from storage.
      *
