@@ -40,14 +40,28 @@ class EmployeeController extends Controller
             $is_dropdown = (isset($request->is_dropdown) && $request->is_dropdown == 1) ? 1 : 0;
             $is_reporting_authority = (isset($request->is_reporting_authority) && $request->is_reporting_authority == 1) ? 1 : 0;
             $is_chemist = (isset($request->is_chemist) && $request->is_chemist == 1) ? 1 : 0;
+            $is_resigned  = (isset($request->is_resigned) && $request->is_resigned  == 1) ? 1 : 0;
 
             if ($is_dropdown) {
-                $data = Employee::with(['address', 'right', 'company', 'education', 'employment', 'document'])
-                    ->where('users.is_resigned', 0)
-                    ->where('users.is_active', 1)
-                    ->where('users.mst_companies_id', $loggedInUserData['company_id']);
-                if ($is_reporting_authority) {
-                    $data  = $data->where('users.is_reporting_authority', 1);
+                if ($is_resigned == 0 || $is_reporting_authority == 0) {
+                    $data = Employee::with(['address', 'right', 'company', 'company.reporting_authority_name:id,first_name,middle_name,last_name', 'education', 'employment', 'document'])
+                        ->where('users.is_resigned', 0)
+                        ->where('users.is_active', 1)
+                        ->Where('users.is_approved', "Approved")
+                        ->where('users.mst_companies_id', $loggedInUserData['company_id']);
+
+                    if ($is_reporting_authority) {
+                        $data  = $data->where('users.is_reporting_authority', 1);
+                    }
+                } else {
+                    $data = Employee::with(['address', 'right', 'company', 'education', 'employment', 'document'])
+                        ->where('users.is_resigned', 0)
+                        ->where('users.is_active', 1)
+                        ->Where('users.is_approved', "Approved")
+                        ->where('users.mst_companies_id', $loggedInUserData['company_id']);
+                    if ($is_reporting_authority) {
+                        $data  = $data->where('users.is_reporting_authority', 1);
+                    }
                 }
                 $data  = $data->orderBy('users.id', 'desc')
                     ->get();
@@ -340,7 +354,7 @@ class EmployeeController extends Controller
                 'address.0.street2' => 'required|max:255',
                 'address.0.email' => 'nullable|email',
                 'address.0.emergency_contact_name' => 'required|max:255',
-                'address.0.emergency_contact_number' => 'required|min:10|max:10',
+                'address.1.emergency_contact_number' => 'required|min:10|max:10',
 
                 // Company Info form fields
                 'company.mst_companies_id' => 'required',
@@ -616,7 +630,6 @@ class EmployeeController extends Controller
      */
     function addUserEducationDetails($edu_data, $users_id = '')
     {
-        // dd($edu_data);
         if (!empty($edu_data)) {
             $loggedInUserData = Helper::getUserData();
 
@@ -713,7 +726,7 @@ class EmployeeController extends Controller
                 'users_id' => $users_id,
                 'mst_companies_id' => (isset($company_data['mst_companies_id'])) ? $company_data['mst_companies_id'] : '',
                 'reporting_authority_id' => (isset($company_data['reporting_authority_id'])) ? $company_data['reporting_authority_id'] : NULL,
-                'mst_departments_id' => (isset($company_data['mst_departments_id'])) ? $company_data['reporting_authority_id'] : '',
+                'mst_departments_id' => (isset($company_data['mst_departments_id'])) ? $company_data['mst_departments_id'] : '',
                 'mst_positions_id' => (isset($company_data['mst_positions_id'])) ? $company_data['mst_positions_id'] : '',
                 'join_date' => (isset($company_data['join_date'])) ? $company_data['join_date'] : NULL,
                 'resign_date' => (isset($company_data['resign_date'])) ? $company_data['resign_date'] : NULL,

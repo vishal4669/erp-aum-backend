@@ -23,7 +23,7 @@ class UserEduDetail extends Model
         'university',
         'from_year',
         'to_year',        
-        'percentage',
+        'percentage_grade',
         'specialization',
         'is_active',
         'created_by',

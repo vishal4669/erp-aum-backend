@@ -52,4 +52,17 @@ class UserCompanyInfo extends Model
         return (isset($dept_data->department_name)) ? $dept_data->department_name : '';
     }
 
+      /*
+    * Get user address details
+    */
+    public function reporting_authority_name (){
+        return $this->hasOne(User::class, 'id','reporting_authority_id')->withTrashed()
+            ->withDefault([
+                "id"=> "",
+                "first_name"=> "",
+                "middle_name"=> "",
+                "last_name"=> ""
+            ]);
+  }
+
 }

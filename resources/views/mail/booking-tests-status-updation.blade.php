@@ -69,24 +69,13 @@
     </style>
 
 <body style="margin: 0 !important; padding: 0 !important; background-color: #eeeeee;" bgcolor="#eeeeee">
-    <div style="display: none; font-size: 1px; color: #fefefe; line-height: 1px; font-family: Open Sans, Helvetica, Arial, sans-serif; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden;">
-        For what reason would it be advisable for me to think about business content? That might be little bit risky to have crew member like them.
-    </div>
+    
     <table border="0" cellpadding="0" cellspacing="0" width="100%">
         <tr>
             <td align="center" style="background-color: #eeeeee;" bgcolor="#eeeeee">
                 <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:600px;">
                     <tr>
-                        <td align="center" valign="top" style="font-size:0; padding: 35px;" bgcolor="#F44336">
-                            <div style="display:inline-block; max-width:50%; min-width:100px; vertical-align:top; width:100%;">
-                                <table align="left" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:300px;">
-                                    <tr>
-                                        <td align="left" valign="top" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 36px; font-weight: 800; line-height: 48px;" class="mobile-center">
-                                            <h1 style="font-size: 36px; font-weight: 800; margin: 0; color: #ffffff;">BBBootstrap</h1>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
+                        <td align="center" valign="top" style="font-size:0; padding: 35px;" bgcolor="#5b73e8">
                             <div style="display:inline-block; max-width:50%; min-width:100px; vertical-align:top; width:100%;" class="mobile-hide">
                                 <table align="left" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:300px;">
                                     <tr>
@@ -94,9 +83,9 @@
                                             <table cellspacing="0" cellpadding="0" border="0" align="right">
                                                 <tr>
                                                     <td style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400;">
-                                                        <p style="font-size: 18px; font-weight: 400; margin: 0; color: #ffffff;"><a href="#" target="_blank" style="color: #ffffff; text-decoration: none;">Shop &nbsp;</a></p>
+                                                        <p style="font-size: 18px; font-weight: 400; margin: 0; color: #ffffff;"><a href="#" target="_blank" style="color: #ffffff; text-decoration: none;">&nbsp;</a></p>
                                                     </td>
-                                                    <td style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 24px;"> <a href="#" target="_blank" style="color: #ffffff; text-decoration: none;"><img src="logo-dark.png" width="27" height="23" style="display: block; border: 0px;" /></a> </td>
+                                                    <td style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 24px;"> <a href="#" target="_blank" style="color: #ffffff; text-decoration: none;"><img src="{{HTML::image('images/logo-light.png')}}" width="290" height="1000" style="display: block; border: 0px;margin-left: -19px;" /></a> </td>
                                                 </tr>
                                             </table>
                                         </td>
@@ -105,98 +94,64 @@
                             </div>
                         </td>
                     </tr>
+
                     <tr>
                         <td align="center" style="padding: 35px 35px 20px 35px; background-color: #ffffff;" bgcolor="#ffffff">
                             <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:600px;">
                                 <tr>
                                     <td align="center" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding-top: 25px;"> <img src="https://img.icons8.com/carbon-copy/100/000000/checked-checkbox.png" width="125" height="120" style="display: block; border: 0px;" /><br>
-                                        <h2 style="font-size: 30px; font-weight: 800; line-height: 36px; color: #333333; margin: 0;"> Thank You For Your Order! </h2>
+                                        <h2 style="font-size: 30px; font-weight: 800; line-height: 36px; color: #333333; margin: 0;"> Booking Test Status Changed Successfully! </h2>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding-top: 10px;">
-                                        <p style="font-size: 16px; font-weight: 400; line-height: 24px; color: #777777;"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium iste ipsa numquam odio dolores, nam. </p>
+                                        <p style="font-size: 16px; font-weight: 400; line-height: 24px; color: #777777;"> AUM Research Laboratories (ARL) is emerging innovation driven R&D & Testing Lab with Head Quarter in Ahmedabad, Gujarat.</p>
                                     </td>
+                                </tr>
+                                <tr>
+                                    <h1><center>Booking Information #</center></h1>
                                 </tr>
                                 <tr>
                                     <td align="left" style="padding-top: 20px;">
                                         <table cellspacing="0" cellpadding="0" border="0" width="100%">
+                                            
                                             <tr>
-                                                <td width="75%" align="left" bgcolor="#eeeeee" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 800; line-height: 24px; padding: 10px;"> Order Confirmation # </td>
-                                                <td width="25%" align="left" bgcolor="#eeeeee" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 800; line-height: 24px; padding: 10px;"> 2345678 </td>
+                                                <td width="75%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;"> Booking No </td>
+                                                <td width="25%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;"> {{{$mail_data['booking_no']!= '' || $mail_data['booking_no'] != null ? $mail_data['booking_no'] : 'Not Specified'}}}</td>
                                             </tr>
                                             <tr>
-                                                <td width="75%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;"> Purchased Item (1) </td>
-                                                <td width="25%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;"> $100.00 </td>
+                                                <td width="75%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 5px 10px;"> Booking Type  </td>
+                                                <td width="25%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 5px 10px;"> {{{$mail_data['booking_type']!= '' || $mail_data['booking_type'] != null ? $mail_data['booking_type'] : 'Not Specified'}}} </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td width="75%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 5px 10px;"> Report Type </td>
+                                                <td width="25%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 5px 10px;"> {{{$mail_data['report_type']!= '' || $mail_data['report_type'] != null ? $mail_data['report_type'] : 'Not Specified'}}} </td>
                                             </tr>
                                             <tr>
-                                                <td width="75%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 5px 10px;"> Shipping + Handling </td>
-                                                <td width="25%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 5px 10px;"> $10.00 </td>
+                                                <td width="75%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 5px 10px;"> Receipte Date </td>
+                                                <td width="25%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 5px 10px;"> {{{$mail_data['receipte_date']!= '' || $mail_data['receipte_date'] != null ? $mail_data['receipte_date'] : 'Not Specified'}}} </td>
                                             </tr>
                                             <tr>
-                                                <td width="75%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 5px 10px;"> Sales Tax </td>
-                                                <td width="25%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 5px 10px;"> $5.00 </td>
+                                                <td width="75%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 5px 10px;"> Reference No </td>
+                                                <td width="25%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 5px 10px;"> {{{$mail_data['reference_no']!= '' || $mail_data['reference_no'] != null ? $mail_data['reference_no'] : 'Not Specified'}}} </td>
                                             </tr>
-                                        </table>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td align="left" style="padding-top: 20px;">
-                                        <table cellspacing="0" cellpadding="0" border="0" width="100%">
                                             <tr>
-                                                <td width="75%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 800; line-height: 24px; padding: 10px; border-top: 3px solid #eeeeee; border-bottom: 3px solid #eeeeee;"> TOTAL </td>
-                                                <td width="25%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 800; line-height: 24px; padding: 10px; border-top: 3px solid #eeeeee; border-bottom: 3px solid #eeeeee;"> $115.00 </td>
+                                                <td width="75%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 5px 10px;"> Is Report Dispacthed </td>
+                                                <td width="25%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 5px 10px;"> {{ $mail_data['is_report_dispacthed'] == 1 ? "Yes" : "NO" }}</td>
                                             </tr>
-                                        </table>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="center" height="100%" valign="top" width="100%" style="padding: 0 35px 35px 35px; background-color: #ffffff;" bgcolor="#ffffff">
-                            <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:660px;">
-                                <tr>
-                                    <td align="center" valign="top" style="font-size:0;">
-                                        <div style="display:inline-block; max-width:50%; min-width:240px; vertical-align:top; width:100%;">
-                                            <table align="left" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:300px;">
-                                                <tr>
-                                                    <td align="left" valign="top" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px;">
-                                                        <p style="font-weight: 800;">Delivery Address</p>
-                                                        <p>675 Massachusetts Avenue<br>11th Floor<br>Cambridge, MA 02139</p>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                        <div style="display:inline-block; max-width:50%; min-width:240px; vertical-align:top; width:100%;">
-                                            <table align="left" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:300px;">
-                                                <tr>
-                                                    <td align="left" valign="top" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px;">
-                                                        <p style="font-weight: 800;">Estimated Delivery Date</p>
-                                                        <p>January 1st, 2016</p>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="center" style=" padding: 35px; background-color: #ff7361;" bgcolor="#1b9ba3">
-                            <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:600px;">
-                                <tr>
-                                    <td align="center" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding-top: 25px;">
-                                        <h2 style="font-size: 24px; font-weight: 800; line-height: 30px; color: #ffffff; margin: 0;"> Get 30% off your next order. </h2>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td align="center" style="padding: 25px 0 15px 0;">
-                                        <table border="0" cellspacing="0" cellpadding="0">
                                             <tr>
-                                                <td align="center" style="border-radius: 5px;" bgcolor="#66b3b7"> <a href="#" target="_blank" style="font-size: 18px; font-family: Open Sans, Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; border-radius: 5px; background-color: #F44336; padding: 15px 30px; border: 1px solid #F44336; display: block;">Shop Again</a> </td>
+                                                <td width="75%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 5px 10px;"> Nabl Scope </td>
+                                                <td width="25%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 5px 10px;">  {{ $mail_data['nabl_scope'] == 1 ? "Yes" : "NO" }}</td>
                                             </tr>
+                                            <tr>
+                                                <td width="75%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 5px 10px;"> Statement Of Conformity </td>
+                                                <td width="25%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 5px 10px;"> {{{$mail_data['statement_ofconformity']!= '' || $mail_data['statement_ofconformity'] != null ? $mail_data['statement_ofconformity'] : 'Not Specified'}}} </td>
+                                            </tr>
+                                            <tr>
+                                                <td width="75%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 5px 10px;"> Coa Release Date </td>
+                                                <td width="25%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 5px 10px;"> {{{$mail_data['coa_release_date']!= '' || $mail_data['coa_release_date'] != null ? $mail_data['coa_release_date'] : 'Not Specified'}}} </td>
+                                            </tr>                                          
                                         </table>
                                     </td>
                                 </tr>
@@ -204,19 +159,76 @@
                         </td>
                     </tr>
                     <tr>
+                        <td style="background-color: #ffffff;" bgcolor="#ffffff">
+                            <table style="font-family: arial, sans-serif;
+                            border-collapse: collapse;
+                            width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th style="border: 1px solid #dddddd;
+                                        text-align: left;
+                                        padding: 8px;">
+                                            <h3><center>Test No</center> </h3>
+                                        </th>
+                                        <th style="border: 1px solid #dddddd;
+                                        text-align: left;
+                                        padding: 8px;">
+                                            <h3><center>Test Name</center> </h3>
+                                        </th>
+                                        <th style="border: 1px solid #dddddd;
+                                        text-align: left;
+                                        padding: 8px;">
+                                            <h3><center>Test Details</center> </h3>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if(!empty($mail_data['booking_tests']))
+                                    
+                                        @foreach ($mail_data['booking_tests'] as $key=>$item)
+                                        <tr style="border: 1px solid #dddddd;
+                                        text-align: left;
+                                        padding: 8px;background-color: #dddddd;">
+                                            <td style="border: 1px solid #dddddd;
+                                            text-align: left;
+                                            padding: 8px;"> <center>{{ $key+1 }}</center>   </td>
+                                            <td style="border: 1px solid #dddddd;
+                                            text-align: left;
+                                            padding: 8px;"><center>{{{$item['test_name'] != '' || $item['test_name'] != null ? $item['test_name'] : 'Not Specified'}}}</center>  </td>
+                                            <td style="border: 1px solid #dddddd;
+                                            text-align: left;
+                                            padding: 8px;"><center>{{{$item['approved'] != '' || $item['approved'] != null ? $item['approved'] : 'Not Specified'}}}</center>  </td>
+                                        </tr>
+                                        @endforeach                
+                                    @else
+                                    <tr style="border: 1px solid #dddddd;
+                                    text-align: left;
+                                    padding: 8px;background-color: #dddddd;">
+                                        <td style="border: 1px solid #dddddd;
+                                        text-align: left;
+                                        padding: 8px;"> <center>No Test Available</center>   </td>
+                                        <td style="border: 1px solid #dddddd;
+                                        text-align: left;
+                                        padding: 8px;"><center>No Test Available</td>
+                                        <td style="border: 1px solid #dddddd;
+                                        text-align: left;
+                                        padding: 8px;"><center>No Test Available</center>  </td>
+                                    </tr>
+                                    @endif
+                                   
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr> 
                         <td align="center" style="padding: 35px; background-color: #ffffff;" bgcolor="#ffffff">
                             <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:600px;">
                                 <tr>
-                                    <td align="center"> <img src="logo-footer.png" width="37" height="37" style="display: block; border: 0px;" /> </td>
+                                    <td align="center"> <img src="{{URL::asset('images/logo-dark.png')}}"  style="display: block; border: 0px;" /> </td>
                                 </tr>
                                 <tr>
                                     <td align="center" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 24px; padding: 5px 0 10px 0;">
-                                        <p style="font-size: 14px; font-weight: 800; line-height: 18px; color: #333333;"> 675 Parko Avenue<br> LA, CA 02232 </p>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 24px;">
-                                        <p style="font-size: 14px; font-weight: 400; line-height: 20px; color: #777777;"> If you didn't create an account using this email address, please ignore this email or <a href="#" target="_blank" style="color: #777777;">unsusbscribe</a>. </p>
+                                        <p style="font-size: 14px; font-weight: 800; line-height: 18px; color: #333333;"> Block 843/P/3, opp. Amardeep plastics, <br> Rakanpur, Gujarat 382721 </p>
                                     </td>
                                 </tr>
                             </table>

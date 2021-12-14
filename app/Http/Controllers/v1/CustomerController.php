@@ -75,9 +75,9 @@ class CustomerController extends Controller
                 'contact_person_name',
                 'tally_alias_name'
             )
-            ->with('home_contact_no:id,mst_customer_id,contact_no as account_admin_contact_no,home_qc_contact_no,contact_info_type')
-            ->with('other_contact_no:id,mst_customer_id,contact_no as qa_contact_no,contact_info_type')
-            ->get();
+                ->with('home_contact_no:id,mst_customer_id,contact_no as account_admin_contact_no,home_qc_contact_no,contact_info_type')
+                ->with('other_contact_no:id,mst_customer_id,contact_no as qa_contact_no,contact_info_type')
+                ->get();
             $data_arr = $data->isEmpty();
 
             if ($data_arr) {
@@ -250,73 +250,80 @@ class CustomerController extends Controller
         try {
 
             $customerData = Customer::with(['contact_info', 'contact_person'])->find($id);
+            $contact_info = $customerData->toArray();
+            $contact_info = $contact_info['contact_info'];
+            if (empty($contact_info) != true) {
+                //homecustom arr key
+                $customerData['contact_info'][0]['homestreet'] = $customerData['contact_info'][0]['street_1'];
+                $customerData['contact_info'][0]['pincode'] = $customerData['contact_info'][0]['pin'];
+                $customerData['contact_info'][0]['country_id'] = $customerData['contact_info'][0]['country'];
+                $customerData['contact_info'][0]['admin_contact'] = $customerData['contact_info'][0]['contact_no'];
+                $customerData['contact_info'][0]['admin_email'] = $customerData['contact_info'][0]['email'];
+                $customerData['contact_info'][0]['homestreet2'] = $customerData['contact_info'][0]['street_2'];
+                $customerData['contact_info'][0]['state_id'] = $customerData['contact_info'][0]['state'];
+                $customerData['contact_info'][0]['landline'] = $customerData['contact_info'][0]['home_landline'];
+                $customerData['contact_info'][0]['qc_contact'] = $customerData['contact_info'][0]['home_qc_contact_no'];
+                $customerData['contact_info'][0]['pancard_no'] = $customerData['contact_info'][0]['home_pan_card'];
 
-            //homecustom arr key
-            $customerData['contact_info'][0]['homestreet'] = $customerData['contact_info'][0]['street_1'];
-            $customerData['contact_info'][0]['pincode'] = $customerData['contact_info'][0]['pin'];
-            $customerData['contact_info'][0]['country_id'] = $customerData['contact_info'][0]['country'];
-            $customerData['contact_info'][0]['admin_contact'] = $customerData['contact_info'][0]['contact_no'];
-            $customerData['contact_info'][0]['admin_email'] = $customerData['contact_info'][0]['email'];
-            $customerData['contact_info'][0]['homestreet2'] = $customerData['contact_info'][0]['street_2'];
-            $customerData['contact_info'][0]['state_id'] = $customerData['contact_info'][0]['state'];
-            $customerData['contact_info'][0]['landline'] = $customerData['contact_info'][0]['home_landline'];
-            $customerData['contact_info'][0]['qc_contact'] = $customerData['contact_info'][0]['home_qc_contact_no'];
-            $customerData['contact_info'][0]['pancard_no'] = $customerData['contact_info'][0]['home_pan_card'];
-            //othercustom arr key
-            $customerData['contact_info'][1]['street'] = $customerData['contact_info'][1]['street_1'];
-            $customerData['contact_info'][1]['area1'] = $customerData['contact_info'][1]['area'];
-            $customerData['contact_info'][1]['pincode1'] = $customerData['contact_info'][1]['pin'];
-            $customerData['contact_info'][1]['corr_country_id'] = $customerData['contact_info'][1]['country'];
-            $customerData['contact_info'][1]['qa_contact'] = $customerData['contact_info'][1]['contact_no'];
-            $customerData['contact_info'][1]['qa_email'] = $customerData['contact_info'][1]['email'];
-            $customerData['contact_info'][1]['street2'] = $customerData['contact_info'][1]['street_2'];
-            $customerData['contact_info'][1]['city1'] = $customerData['contact_info'][1]['city'];
-            $customerData['contact_info'][1]['corr_state_id'] = $customerData['contact_info'][1]['state'];
-            $customerData['contact_info'][1]['website'] = $customerData['contact_info'][1]['other_website'];
-            $customerData['contact_info'][1]['qc_email'] = $customerData['contact_info'][1]['other_qc_email'];
-
-
-            unset(
-                $customerData['contact_info'][0]['street_1'],
-                $customerData['contact_info'][0]['pin'],
-                $customerData['contact_info'][0]['country'],
-                $customerData['contact_info'][0]['contact_no'],
-                $customerData['contact_info'][0]['email'],
-                $customerData['contact_info'][0]['street_2'],
-                $customerData['contact_info'][0]['state'],
-                $customerData['contact_info'][0]['home_landline'],
-                $customerData['contact_info'][0]['home_qc_contact_no'],
-                $customerData['contact_info'][0]['home_pan_card'],
-
-                $customerData['contact_info'][1]['street_1'],
-                $customerData['contact_info'][1]['area'],
-                $customerData['contact_info'][1]['pin'],
-                $customerData['contact_info'][1]['country'],
-                $customerData['contact_info'][1]['contact_no'],
-                $customerData['contact_info'][1]['email'],
-                $customerData['contact_info'][1]['street_2'],
-                $customerData['contact_info'][1]['city'],
-                $customerData['contact_info'][1]['state'],
-                $customerData['contact_info'][1]['other_website'],
-                $customerData['contact_info'][1]['other_qc_email'],
-
-            );
+                //othercustom arr key
+                $customerData['contact_info'][1]['street_1'] = $customerData['contact_info'][1]['street_1'];
+                $customerData['contact_info'][1]['area1'] = $customerData['contact_info'][1]['area'];
+                $customerData['contact_info'][1]['pincode1'] = $customerData['contact_info'][1]['pin'];
+                $customerData['contact_info'][1]['corr_country_id'] = $customerData['contact_info'][1]['country'];
+                $customerData['contact_info'][1]['qa_contact'] = $customerData['contact_info'][1]['contact_no'];
+                $customerData['contact_info'][1]['qa_email'] = $customerData['contact_info'][1]['email'];
+                $customerData['contact_info'][1]['street2'] = $customerData['contact_info'][1]['street_2'];
+                $customerData['contact_info'][1]['city1'] = $customerData['contact_info'][1]['city'];
+                $customerData['contact_info'][1]['corr_state_id'] = $customerData['contact_info'][1]['state'];
+                $customerData['contact_info'][1]['website'] = $customerData['contact_info'][1]['other_website'];
+                $customerData['contact_info'][1]['qc_email'] = $customerData['contact_info'][1]['other_qc_email'];
 
 
-            foreach ($customerData['contact_person'] as $conatct_person) {
-                $conatct_person['contact_person_name'] = $conatct_person['name'];
-                $conatct_person['contact_person_mobile'] = $conatct_person['mobile'];
-                $conatct_person['contact_person_email'] = $conatct_person['email'];
-                $conatct_person['mst_departments_id'] = $conatct_person['department'];
-                $conatct_person['mst_positions_id'] = $conatct_person['position'];
                 unset(
-                    $conatct_person['name'],
-                    $conatct_person['mobile'],
-                    $conatct_person['email'],
-                    $conatct_person['department'],
-                    $conatct_person['position']
+                    $customerData['contact_info'][0]['street_1'],
+                    $customerData['contact_info'][0]['pin'],
+                    $customerData['contact_info'][0]['country'],
+                    $customerData['contact_info'][0]['contact_no'],
+                    $customerData['contact_info'][0]['email'],
+                    $customerData['contact_info'][0]['street_2'],
+                    $customerData['contact_info'][0]['state'],
+                    $customerData['contact_info'][0]['home_landline'],
+                    $customerData['contact_info'][0]['home_qc_contact_no'],
+                    $customerData['contact_info'][0]['home_pan_card'],
+
+                    $customerData['contact_info'][1]['street_1'],
+                    $customerData['contact_info'][1]['area'],
+                    $customerData['contact_info'][1]['pin'],
+                    $customerData['contact_info'][1]['country'],
+                    $customerData['contact_info'][1]['contact_no'],
+                    $customerData['contact_info'][1]['email'],
+                    $customerData['contact_info'][1]['street_2'],
+                    $customerData['contact_info'][1]['city'],
+                    $customerData['contact_info'][1]['state'],
+                    $customerData['contact_info'][1]['other_website'],
+                    $customerData['contact_info'][1]['other_qc_email'],
+
                 );
             }
+            $contact_person = $customerData->toArray();
+            $contact_person = $contact_person['contact_person'];
+            if (empty($contact_person) != true) {
+                foreach ($customerData['contact_person'] as $conatct_person) {
+                    $conatct_person['contact_person_name'] = $conatct_person['name'];
+                    $conatct_person['contact_person_mobile'] = $conatct_person['mobile'];
+                    $conatct_person['contact_person_email'] = $conatct_person['email'];
+                    $conatct_person['mst_departments_id'] = $conatct_person['department'];
+                    $conatct_person['mst_positions_id'] = $conatct_person['position'];
+                    unset(
+                        $conatct_person['name'],
+                        $conatct_person['mobile'],
+                        $conatct_person['email'],
+                        $conatct_person['department'],
+                        $conatct_person['position']
+                    );
+                }
+            }
+
             return Helper::response("Customer Data Shown Successfully", Response::HTTP_OK, true, $customerData);
         } catch (Exception $e) {
             $data = array();

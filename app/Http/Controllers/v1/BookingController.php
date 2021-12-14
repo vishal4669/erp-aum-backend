@@ -1288,27 +1288,28 @@ class BookingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function statusWiseMail($data,$id)
+    public function statusWiseMail($mail_data,$id)
     {
         //
-        $mail_data = array(
-            'booking_no' => isset($data['booking_no']) ? $data['booking_no'] : 'Not Specified',
-            'report_type' => isset($data['report_type']) ? $data['report_type'] : 'Not Specified',
-            'booking_type' => isset($data['booking_type']) ? $data['booking_type'] : 'Not Specified',
-            'receipte_date' => isset($data['receipte_date']) ? $data['receipte_date'] : 'Not Specified',
-            'reference_no' => isset($data['reference_no']) ? $data['reference_no'] : 'Not Specified',
-            'is_report_dispacthed' => $data['is_report_dispacthed'] == 1 ? "YES" : "NO",
-            'nabl_scope' => $data['nabl_scope'] == 1 ? "YES" : "NO",
-            'statement_ofconformity' => isset($data['statement_ofconformity']) ? $data['statement_ofconformity'] : 'Not Specified',
-            'coa_release_date' => isset($data['coa_release_date']) ? $data['coa_release_date'] : 'Not Specified',
-            'test_name' => isset($data['test_name']) ? $data['test_name'] : 'Not Specified',
-            'label_claim' => isset($data['label_claim']) ? $data['label_claim'] : 'Not Specified',
-            'max_limit' => isset($data['max_limit']) ? $data['max_limit'] : 'Not Specified',
-            'result' => isset($data['result']) ? $data['result'] : 'Not Specified',
-            'label_claim_result' => isset($data['label_claim_result']) ? $data['label_claim_result'] : 'Not Specified',
-            'mean' => isset($data['mean']) ? $data['mean'] : 'Not Specified',
-            'approved' => isset($data['approved']) ? $data['approved'] : 'Not Specified',
-        );
+        
+        // $mail_data = array(
+        //     'booking_no' => isset($data['booking_no']) ? $data['booking_no'] : 'Not Specified',
+        //     'report_type' => isset($data['report_type']) ? $data['report_type'] : 'Not Specified',
+        //     'booking_type' => isset($data['booking_type']) ? $data['booking_type'] : 'Not Specified',
+        //     'receipte_date' => isset($data['receipte_date']) ? $data['receipte_date'] : 'Not Specified',
+        //     'reference_no' => isset($data['reference_no']) ? $data['reference_no'] : 'Not Specified',
+        //     'is_report_dispacthed' => $data['is_report_dispacthed'] == 1 ? "YES" : "NO",
+        //     'nabl_scope' => $data['nabl_scope'] == 1 ? "YES" : "NO",
+        //     'statement_ofconformity' => isset($data['statement_ofconformity']) ? $data['statement_ofconformity'] : 'Not Specified',
+        //     'coa_release_date' => isset($data['coa_release_date']) ? $data['coa_release_date'] : 'Not Specified',
+        //     'test_name' => isset($data['test_name']) ? $data['test_name'] : 'Not Specified',
+        //     'label_claim' => isset($data['label_claim']) ? $data['label_claim'] : 'Not Specified',
+        //     'max_limit' => isset($data['max_limit']) ? $data['max_limit'] : 'Not Specified',
+        //     'result' => isset($data['result']) ? $data['result'] : 'Not Specified',
+        //     'label_claim_result' => isset($data['label_claim_result']) ? $data['label_claim_result'] : 'Not Specified',
+        //     'mean' => isset($data['mean']) ? $data['mean'] : 'Not Specified',
+        //     'approved' => isset($data['approved']) ? $data['approved'] : 'Not Specified',
+        // );
         $is_mail_data = True;
         $email_data = $this->show($id, $is_mail_data);
         $send_email_to = $email_data['customer_id']['user_name'];
