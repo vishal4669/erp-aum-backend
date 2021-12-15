@@ -7,6 +7,8 @@ use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\Models\Test;
 use App\Helpers\Helper;
+use App\Models\MstSampleParameter;
+use App\Models\MstTestParameter;
 use Auth;
 use Log;
 use Illuminate\Support\Facades\Validator;
@@ -151,6 +153,10 @@ class TestController extends Controller
             $input_data['is_active'] = 1;  
             $input_data['created_by'] = $loggedInUserData['logged_in_user_id'];
 
+            if(isset($request->test_parameter))
+            {
+                $this->testParameter($request->test_parameter);
+            }
             Log::info("Test Created with details : ".json_encode($input_data));
 
             $data = Test::create($input_data);
@@ -160,6 +166,40 @@ class TestController extends Controller
             return Helper::response(trans("message.something_went_wrong"),$e->getStatusCode(),false,$data);
         }  
     }
+
+        /**
+     *Call Back Function For Tests Parameters.
+     *
+     * @param  $testParams_Data
+     * @return 
+     */
+
+    public function testParameter($testParams_data)
+    {  
+            $loggedInUserData = Helper::getUserData();
+            if(!empty($testParams_data))
+            {
+                foreach($testParams_data as $key=>$item)
+                {
+                    $testParams_arr = array(
+                        'mst_companies_id' => $loggedInUserData['company_id'],
+                        "test_by_pass"=> (isset($item['test_by_pass'])) ? $item['test_by_pass'] : null,
+                        "test_parameter_name"   => (isset($item['test_parameter_name'])) ? $item['test_parameter_name'] : '',
+                        "test_alpha"    => (isset($item['test_alpha'])) ? $item['test_alpha'] : '',
+                        "formula"   => (isset($item['formula'])) ? $item['formula'] : '',
+                        "type"  => (isset($item['type'])) ? $item['type'] : '',
+                        "unit"  => (isset($item['unit'])) ? $item['unit'] : '',
+                        "value" => (isset($item['value'])) ? $item['value'] : '',
+                        "sort"  => (isset($item['sort'])) ? $item['sort'] : '',
+                        'is_active' => 1,
+                        "created_by" => $loggedInUserData['logged_in_user_id'],
+                        "selected_year" => $loggedInUserData['selected_year'],
+                    );
+
+                    MstTestParameter::create($testParams_arr);
+                }
+            }
+        }
 
     /**
      * Display the specified resource.
@@ -231,6 +271,11 @@ class TestController extends Controller
             $input_data['parent_id'] = (isset($input['parent_id']) && $input['parent_id']!='' && $input['parent_id']!=null) ? $input['parent_id'] : 0;  
             $input_data['updated_by'] = $loggedInUserData['logged_in_user_id']; 
 
+            if(isset($request->test_parameter))
+            {
+                $this->testParameter($request->test_parameter);
+            }
+            
             Log::info("Category updated with details : ".json_encode(array('data' => $input_data, 'id' => $id)));
 
             $test = Test::find($id);

@@ -46,7 +46,7 @@ class AssignTestsController extends Controller
                 }
             }
 
-            /* booking have multiple tests but multiple tests have one booking so what we need here 
+            /* booking have multiple tests but multiple tests have one booking so what we need here
             as per scenerio each tests must have their booking data.*/
             $pending_assigned_tests = [];
             foreach ($pending_assigned_data as $key => $item) {
@@ -226,10 +226,11 @@ class AssignTestsController extends Controller
                 'min_limit',
                 'result',
                 'unit',
-                'result2',
                 'label_claim',
                 'max_limit',
-                'method'
+                'method',
+                'label_claim_unit',
+                'label_claim_result'
             )->with('parent')
                 ->with('booking_detail:id,booking_type,receipte_date,report_type,booking_no')
                 ->with(
@@ -259,7 +260,7 @@ class AssignTestsController extends Controller
 
     /**
      * Update test result in booking test.
-     * 
+     *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -292,7 +293,7 @@ class AssignTestsController extends Controller
     }
     /**
      * Update test status in booking test[approve_reject].
-     * 
+     *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -332,7 +333,6 @@ class AssignTestsController extends Controller
                 }
             } else {
                 $data = $request->all();
-
                 $approved_status = $data['approved'];
                 if ($approved_status == "Rejected") {
                     $approved_status = "Assigned";

@@ -174,19 +174,7 @@ class BookingPrintController extends Controller
     public function ROA_PRINT($id, $type, $data, $can_roa_print, $print_allows)
     {
         //
-        $rules = [
-            'tests_data.*.result' => 'required'
-        ];
-        $msg = [
-            'tests_data.*.result.required' => "Test Result Must Be Required For ROA Print."
-        ];
-        $validator = Validator::make($data[0], $rules, $msg);
-
-        if ($validator->fails()) {
-            $data = array();
-            return Helper::response($validator->errors()->all(), Response::HTTP_OK, false, $data);
-        }
-
+        
         if ($can_roa_print == 1) {
             if ($print_allows->roa_print_count != 1) {
                 if ($type == "Check_Roa") {

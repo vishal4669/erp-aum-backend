@@ -1031,6 +1031,7 @@ class BookingController extends Controller
         $chemist_data =  Employee::join('user_company_info as company', 'company.users_id', 'users.id')
             ->where('company.mst_positions_id', $chemist_id[0]['id'])
             ->where('users.is_active', 1)
+            ->where('users.is_approved', "Approved")
             ->where('users.mst_companies_id', $loggedInUserData['company_id'])
             ->get(['users.id', 'users.first_name', 'users.middle_name', 'users.last_name', 'users.deleted_at'])->toarray();
 
@@ -1268,7 +1269,7 @@ class BookingController extends Controller
 
             $this->addupdateBookingSample($request->booking_sample_details, $id);
             $this->addupdateBookingTests($request->booking_tests, $id);
-            $this->statusWiseMail($request->all(),$id);
+            // $this->statusWiseMail($request->all(), $id);
             $this->addupdateAuditDetails($request->booking_audit_details, $id);
 
             $booking_table = Booking::find($id);
@@ -1288,33 +1289,20 @@ class BookingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function statusWiseMail($mail_data,$id)
+    public function statusWiseMail($mail_data, $id)
     {
         //
-        
-        // $mail_data = array(
-        //     'booking_no' => isset($data['booking_no']) ? $data['booking_no'] : 'Not Specified',
-        //     'report_type' => isset($data['report_type']) ? $data['report_type'] : 'Not Specified',
-        //     'booking_type' => isset($data['booking_type']) ? $data['booking_type'] : 'Not Specified',
-        //     'receipte_date' => isset($data['receipte_date']) ? $data['receipte_date'] : 'Not Specified',
-        //     'reference_no' => isset($data['reference_no']) ? $data['reference_no'] : 'Not Specified',
-        //     'is_report_dispacthed' => $data['is_report_dispacthed'] == 1 ? "YES" : "NO",
-        //     'nabl_scope' => $data['nabl_scope'] == 1 ? "YES" : "NO",
-        //     'statement_ofconformity' => isset($data['statement_ofconformity']) ? $data['statement_ofconformity'] : 'Not Specified',
-        //     'coa_release_date' => isset($data['coa_release_date']) ? $data['coa_release_date'] : 'Not Specified',
-        //     'test_name' => isset($data['test_name']) ? $data['test_name'] : 'Not Specified',
-        //     'label_claim' => isset($data['label_claim']) ? $data['label_claim'] : 'Not Specified',
-        //     'max_limit' => isset($data['max_limit']) ? $data['max_limit'] : 'Not Specified',
-        //     'result' => isset($data['result']) ? $data['result'] : 'Not Specified',
-        //     'label_claim_result' => isset($data['label_claim_result']) ? $data['label_claim_result'] : 'Not Specified',
-        //     'mean' => isset($data['mean']) ? $data['mean'] : 'Not Specified',
-        //     'approved' => isset($data['approved']) ? $data['approved'] : 'Not Specified',
-        // );
-        $is_mail_data = True;
-        $email_data = $this->show($id, $is_mail_data);
-        $send_email_to = $email_data['customer_id']['user_name'];
-        Mail::to(users:$send_email_to)->send(new BookingStatus($mail_data));
+        // if (!empty($mail_data['booking_tests'])) {
+        //     $is_status_changed = 1;
+        //     foreach($mail_data['booking_tests'] as $test)
+        //     {
 
+        //     }
+        //     $is_mail_data = True;
+        //     $email_data = $this->show($id, $is_mail_data);
+        //     $send_email_to = $email_data['customer_id']['user_name'];
+        //     Mail::to(users: $send_email_to)->send(new BookingStatus($mail_data));
+        // }
     }
     /**
      * Remove the specified resource from storage.
