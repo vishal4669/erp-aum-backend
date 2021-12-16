@@ -108,7 +108,8 @@ class EmployeeController extends Controller
         $req = $request->all();
         $education = json_decode($req['education'], true);
         $employment = json_decode($req['employment'], true);
-
+        $req['education'] = $education;
+        $req['employment'] = $employment;
         DB::beginTransaction();
         try {
 
@@ -125,31 +126,38 @@ class EmployeeController extends Controller
                 'phone' => 'nullable|min:10|max:10',
 
                 // Address form fields
-                'address.0.mst_countries_id' => 'required',
-                'address.0.mst_states_id' => 'required',
-                'address.0.street1' => 'required|max:255',
-                'address.0.street2' => 'required|max:255',
-                'address.0.email' => 'nullable|email',
-                'address.0.emergency_contact_name' => 'required|max:255',
-                'address.1.emergency_contact_number' => 'required|min:10|max:10',
+                // 'address.0.mst_countries_id' => 'required',
+                // 'address.0.mst_states_id' => 'required',
+                // 'address.0.street1' => 'required|max:255',
+                // 'address.0.street2' => 'required|max:255',
+                // 'address.0.email' => 'nullable|email',
+                // 'address.0.emergency_contact_name' => 'required|max:255',
+                // 'address.1.emergency_contact_number' => 'required|min:10|max:10',
 
                 // Company Info form fields
-                'company.mst_companies_id' => 'required',
-                'company.mst_departments_id' => 'required',
-                'company.mst_positions_id' => 'required',
-                'company.join_date' => 'nullable|date',
+                // 'company.mst_companies_id' => 'required',
+                // 'company.mst_departments_id' => 'required',
+                // 'company.mst_positions_id' => 'required',
+                // 'company.join_date' => 'nullable|date',
 
-                //documents related messages
+                // documents related messages
                 'document.aadhar_card_photo' => 'nullable|mimes:jpeg,jpg,png,pdf',
                 'document.election_card_photo' => 'nullable|mimes:jpeg,jpg,png,pdf',
                 'document.pan_card_photo' => 'nullable|mimes:jpeg,jpg,png,pdf',
                 'document.passport_photo' => 'nullable|mimes:jpeg,jpg,png,pdf',
                 'document.driving_license_photo' => 'nullable|mimes:jpeg,jpg,png,pdf',
+                'document.pan_card_number' => 'nullable|regex:/[A-Z]{5}[0-9]{4}[A-Z]{1}/',
 
                 // employee photo and signature
                 'signature' => 'nullable|mimes:jpeg,jpg,png,pdf',
                 'photo' => 'nullable|mimes:jpeg,jpg,png',
 
+                // education validation
+                'education.*.from_year' => 'nullable|digits:4',
+
+                // employment validation
+                'employment.*.emp_from_year' => 'nullable|digits:4',
+                'employment.*.emp_to_year' => 'nullable|digits:4',
             ];
 
             $messages = [
@@ -198,15 +206,21 @@ class EmployeeController extends Controller
                 'document.pan_card_photo.mimes' => 'The Pan Card must be a file of type: jpeg, jpg, png, pdf.',
                 'document.passport_photo.mimes' => 'The Aadhar Passport must be a file of type: jpeg, jpg, png, pdf.',
                 'document.driving_license_photo.mimes' => 'The Driving License must be a file of type: jpeg, jpg, png, pdf.',
+                'document.pan_card_number.regex' => 'Please enter valid Pan example:"ABCDE7190K" 10 digit number',
 
                 //documents related messages
                 'signature.mimes' => 'The Employee Signature must be a file of type: jpeg, jpg, png, pdf.',
                 'photo.mimes' => 'The Employee Photo must be a file of type: jpeg, jpg, png.',
 
+                // education related messages
+                'education.*.from_year.digits' => '"From Year" Must Be 4 Digits In Education Details.',
 
+                // employment related messages
+                'employment.*.emp_from_year.digits' => '"From Year" Must Be 4 Digits In Employment Details.',
+                'employment.*.emp_to_year.digits' => '"To Year" Must Be 4 Digits In Employment Details.',
             ];
 
-            $validator = Validator::make($request->all(), $rules, $messages);
+            $validator = Validator::make($req, $rules, $messages);
 
             if ($validator->fails()) {
                 $data = array();
@@ -509,7 +523,7 @@ class EmployeeController extends Controller
                 $this->addUserEducationDetails($request->education, $id);
             }
             if (isset($request->employment)) {
-                $this->addUserEmploymentDetails($request->employment, $id);
+                return $this->addUserEmploymentDetails($request->employment, $id);
             }
             if (isset($request->company)) {
                 $this->addUpdateUserCompanyDetails($request->company, $id);
@@ -702,6 +716,7 @@ class EmployeeController extends Controller
                         );
 
                         UserEmpDetail::create($empArray);
+                        return true;
                     }
                 }
             }

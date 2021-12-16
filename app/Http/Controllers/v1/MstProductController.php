@@ -129,7 +129,7 @@ class MstProductController extends Controller
     public function parent_list()
     {
         try {
-            $parentData = Machine::select('id','machine_name as parent_name')->orderBy('id', 'desc')->get();
+            $parentData = Machine::select('id', 'machine_name as parent_name')->orderBy('id', 'desc')->get();
 
             return Helper::response("Parent Data Shown Successfully", Response::HTTP_OK, true, $parentData);
         } catch (Exception $e) {
@@ -254,6 +254,7 @@ class MstProductController extends Controller
     {
         DB::beginTransaction();
         try {
+            $loggedInUserData = Helper::getUserData();
             $validator = Validator::make($request->all(), [
                 "product_name" => 'required|string|max:255',
                 "product_generic" => 'required|string|max:255',
@@ -265,14 +266,33 @@ class MstProductController extends Controller
                 $data = array();
                 return Helper::response($validator->errors()->all(), Response::HTTP_OK, false, $data);
             }
-            $loggedInUserData = Helper::getUserData();
+            $generic_product = $request->get('generic_product_id');
+            $generic_product_id = 0;
+            if ($generic_product != null) {
+                $is_exist = MstProduct::where('product_name', $generic_product)->get()->toarray();
+                if (empty($is_exist)) {
+                    $new_product_from_generic = MstProduct::create([
+                        "mst_companies_id" => $loggedInUserData['company_id'],
+                        "product_name" => ($generic_product) ? $generic_product : '',
+                        "is_generic" => ($request->get('is_generic')) ? $request->get('is_generic') : 0,
+                        "is_active" => ($request->get('is_active')) ? $request->get('is_active') : 1,
+                        "selected_year" => $loggedInUserData['selected_year'],
+                        'created_by' => $loggedInUserData['logged_in_user_id'],
+                        'updated_at' => NULL
+                    ]);
+                    $generic_product_id = $new_product_from_generic->id;
+                } else {
+                    $generic_product_id = $is_exist[0]['id'];
+                }
+            }
+
             $data = MstProduct::create([
                 "mst_companies_id" => $loggedInUserData['company_id'],
                 "product_name" => ($request->get('product_name')) ? $request->get('product_name') : '',
                 "product_generic" => ($request->get('product_generic')) ? $request->get('product_generic') : '',
                 "marker_specification" => ($request->get('marker_specification')) ? $request->get('marker_specification') : '',
                 "pharmacopeia_id" => ($request->get('pharmacopeia_id')) ? $request->get('pharmacopeia_id') : 0,
-                "generic_product_id" => ($request->get('generic_product_id')) ? $request->get('generic_product_id') : 0,
+                "generic_product_id" => ($generic_product_id) ? $generic_product_id : 0,
                 "packing_detail" => ($request->get('packing_detail')) ? $request->get('packing_detail') : '',
                 "sample_description" => ($request->get('sample_description')) ? $request->get('sample_description') : '',
                 "hsn_code" => ($request->get('hsn_code')) ? $request->get('hsn_code') : '',
@@ -473,19 +493,24 @@ class MstProductController extends Controller
             ->orderBy('mst_tests.id', 'desc')
             ->get();
         $data_Arr = $data_Arr->toarray();
-        foreach ($data['samples'] as $key => $item) {
-            // print_r($item['parameter']['deleted_at']);
-            if ($item['parameter']['deleted_at'] != null || $item['parameter']['deleted_at']  != '') {
-                //if test selected & also deleted then merge with data_arr(tests list)
-                if (!in_array($item['parameter'], $data_Arr)) {
-                    array_push($data_Arr, $item['parameter']);
+        if (!empty($data['samples'])) {
+            foreach ($data['samples'] as $key => $item) {
+                // print_r($item['parameter']['deleted_at']);
+                if (!empty($item['parameter'])) {
+                    if ($item['parameter']['deleted_at'] != null || $item['parameter']['deleted_at']  != '') {
+                        //if test selected & also deleted then merge with data_arr(tests list)
+                        if (!in_array($item['parameter'], $data_Arr)) {
+                            array_push($data_Arr, $item['parameter']);
+                        }
+                        $data['parameter_dropdown'] = $data_Arr;
+                    } else {
+                        //if selected test not deleted or test mst_sample_parameter_id "0 or null" then list simple tests
+                        $data['parameter_dropdown'] = $data_Arr;
+                    }
                 }
-                $data['parameter_dropdown'] = $data_Arr;
-            } else {
-                //if selected test not deleted or test mst_sample_parameter_id "0 or null" then list simple tests
-                $data['parameter_dropdown'] = $data_Arr;
             }
         }
+
 
         return $data;
     }

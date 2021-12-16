@@ -27,7 +27,6 @@ class BookingTest extends Model
         "result",
         "label_claim_result",
         "label_claim_unit",
-        "result2",
         "mean",
         "na_content",
         "final_na_content",

@@ -10,6 +10,7 @@ class MstTestParameter extends Model
     use HasFactory;
     protected $fillable = [
         "mst_companies_id",
+        "test_id",
         "test_by_pass",
         "test_parameter_name",
         "test_alpha",
@@ -18,6 +19,9 @@ class MstTestParameter extends Model
         "unit",
         "value",
         "sort",
-        "is_active"
+        "is_active",
+        "created_by",
+        "updated_by",
+        "selected_year"
     ];
 }

@@ -230,7 +230,8 @@ class AssignTestsController extends Controller
                 'max_limit',
                 'method',
                 'label_claim_unit',
-                'label_claim_result'
+                'label_claim_result',
+                'mean'
             )->with('parent')
                 ->with('booking_detail:id,booking_type,receipte_date,report_type,booking_no')
                 ->with(
@@ -279,12 +280,14 @@ class AssignTestsController extends Controller
                     'result' => $request->result,
                     'method' => $request->method,
                     'unit'   => $request->unit,
+                    'label_claim_result'   => $request->label_claim_result,
+                    'label_claim_unit'  => $request->label_claim_unit,
+                    'mean'  => $request->mean,
                     'approved' => "ForApproval",
                     'test_date_time' => $datetime,
                     'updated_at' => $datetime
                 ));
             }
-
             return Helper::response("Test Result Is Updated For Booking Test Successfully", Response::HTTP_OK, true, $data);
         } catch (Exception $e) {
             $data = array();

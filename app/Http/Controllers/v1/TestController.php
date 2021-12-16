@@ -142,6 +142,7 @@ class TestController extends Controller
             $loggedInUserData = Helper::getUserData();
 
             $input = $request->all();
+            $input_data['id'] = auth()->id();
             $input_data['procedure_name'] = $input['procedure_name'];  
             $input_data['price'] = $input['price'];  
             $input_data['test_code'] = $input['test_code'];  
@@ -152,10 +153,10 @@ class TestController extends Controller
             $input_data['mst_companies_id'] = $loggedInUserData['company_id'];
             $input_data['is_active'] = 1;  
             $input_data['created_by'] = $loggedInUserData['logged_in_user_id'];
-
+            
             if(isset($request->test_parameter))
             {
-                $this->testParameter($request->test_parameter);
+                $this->testParameter($request->test_parameter,$input_data['id']);
             }
             Log::info("Test Created with details : ".json_encode($input_data));
 
@@ -174,15 +175,22 @@ class TestController extends Controller
      * @return 
      */
 
-    public function testParameter($testParams_data)
+    public function testParameter($testParams_data,$test_id = "")
     {  
             $loggedInUserData = Helper::getUserData();
             if(!empty($testParams_data))
             {
+                $delete_exist_test = MstTestParameter::where("test_id",$test_id);
+                if($delete_exist_test != null || !empty($delete_exist_test))
+                {
+                    $delete_exist_test->delete();
+                }
+
                 foreach($testParams_data as $key=>$item)
                 {
                     $testParams_arr = array(
                         'mst_companies_id' => $loggedInUserData['company_id'],
+                        "test_id" => $test_id,
                         "test_by_pass"=> (isset($item['test_by_pass'])) ? $item['test_by_pass'] : null,
                         "test_parameter_name"   => (isset($item['test_parameter_name'])) ? $item['test_parameter_name'] : '',
                         "test_alpha"    => (isset($item['test_alpha'])) ? $item['test_alpha'] : '',
@@ -193,6 +201,7 @@ class TestController extends Controller
                         "sort"  => (isset($item['sort'])) ? $item['sort'] : '',
                         'is_active' => 1,
                         "created_by" => $loggedInUserData['logged_in_user_id'],
+                        "updated_by" => $loggedInUserData['logged_in_user_id'],
                         "selected_year" => $loggedInUserData['selected_year'],
                     );
 
@@ -273,7 +282,7 @@ class TestController extends Controller
 
             if(isset($request->test_parameter))
             {
-                $this->testParameter($request->test_parameter);
+                $this->testParameter($request->test_parameter,$id);
             }
             
             Log::info("Category updated with details : ".json_encode(array('data' => $input_data, 'id' => $id)));

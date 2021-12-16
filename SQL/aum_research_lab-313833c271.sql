@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: sdb-e.hosting.stackcp.net
--- Generation Time: Dec 15, 2021 at 01:46 PM
+-- Generation Time: Dec 16, 2021 at 01:16 PM
 -- Server version: 10.4.18-MariaDB-log
 -- PHP Version: 7.1.33
 
@@ -89,7 +89,8 @@ CREATE TABLE `bookings` (
 --
 
 INSERT INTO `bookings` (`id`, `mst_companies_id`, `booking_type`, `invoice_no`, `report_type`, `invoice_date`, `receipte_date`, `booking_no`, `customer_id`, `reference_no`, `remarks`, `manufacturer_id`, `supplier_id`, `mfg_date`, `mfg_options`, `exp_date`, `exp_options`, `analysis_date`, `aum_serial_no`, `d_format`, `d_format_options`, `grade`, `grade_options`, `project_name`, `project_options`, `mfg_lic_no`, `is_report_dispacthed`, `dispatch_date_time`, `dispatch_mode`, `dispatch_details`, `signature`, `verified_by`, `nabl_scope`, `cancel`, `cancel_remarks`, `priority`, `discipline`, `booking_group`, `statement_ofconformity`, `coa_print`, `roa_print`, `coa_print_count`, `roa_print_count`, `coa_release_date`, `block`, `created_by`, `updated_by`, `created_at`, `updated_at`, `selected_year`, `copied_from_year`, `copied_from_company`, `is_active`, `deleted_at`) VALUES
-(1, 4, 'Entry', NULL, 'FP', '2021-12-15', '2021-12-02', 'ARL/COA/FP/211202/001', 1, 'Reliance Formulations', '', 2, 3, '2021-12-02', 'N/S', '2021-12-03', 'N/S', '2021-12-01', 1, '', 'N/S', '', 'N/S', '', 'N/S', '45/7894', 0, 'Invalid date', NULL, NULL, 0, 'None', 0, 'None', '', 'High', 'Chemical', 'Drugs and Pharmaceuticals', 'PASS', NULL, 'ROA_PRINT_1', 0, 1, NULL, NULL, 3, 3, '2021-12-15 11:12:12', '2021-12-15 11:41:33', '2019-20', NULL, NULL, 1, NULL);
+(1, 4, 'Entry', NULL, 'FP', '2021-12-16', '2021-12-02', 'ARL/COA/FP/211202/001', 1, 'Reliance Formulations', '', 2, 3, '2021-12-02', 'N/S', '2021-12-03', 'N/S', '2021-12-01', 1, '', 'N/S', '', 'N/S', '', 'N/S', '45/7894', 0, 'Invalid date', NULL, NULL, 0, 'None', 0, 'None', '', 'High', 'Chemical', 'Drugs and Pharmaceuticals', 'PASS', NULL, 'ROA_PRINT_1', 0, 1, NULL, NULL, 3, 3, '2021-12-15 11:12:12', '2021-12-16 15:04:09', '2019-20', NULL, NULL, 1, NULL),
+(2, 4, 'Entry', NULL, 'TP', '2021-12-16', '2021-12-25', 'ARL/COA/TP/211225/001', 1, '', '', 5, 6, '2021-12-16', 'N/S', '2021-12-31', 'N/S', '2021-12-16', 2, '', 'N/S', '', 'N/S', '', 'N/S', '', 0, 'Invalid date', NULL, NULL, 0, 'None', 0, 'None', '', 'High', 'Chemical', 'Drugs and Pharmaceuticals', 'PASS', NULL, NULL, 0, 0, NULL, NULL, 3, 3, '2021-12-16 14:29:26', '2021-12-16 15:02:14', '2019-20', NULL, NULL, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -112,6 +113,13 @@ CREATE TABLE `booking_audit_details` (
   `is_active` tinyint(1) NOT NULL,
   `deleted_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `booking_audit_details`
+--
+
+INSERT INTO `booking_audit_details` (`id`, `booking_id`, `audit_remarks`, `reason`, `comments`, `created_by`, `updated_by`, `created_at`, `updated_at`, `selected_year`, `copied_from_year`, `is_active`, `deleted_at`) VALUES
+(1, 1, '', '', '', 3, NULL, '2021-12-15 19:18:45', NULL, '2019-20', NULL, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -158,7 +166,8 @@ CREATE TABLE `booking_sample_details` (
 --
 
 INSERT INTO `booking_sample_details` (`id`, `booking_id`, `product_id`, `batch_no`, `packsize`, `request_quantity`, `sample_code`, `sample_description`, `sample_quantity`, `sample_location`, `sample_packaging`, `sample_type`, `sampling_date_from`, `sampling_date_from_options`, `sampling_date_to`, `sampling_date_to_options`, `sample_received_through`, `chemist`, `sample_condition`, `is_sample_condition`, `batch_size_qty_rec`, `notes`, `sample_drawn_by`, `created_by`, `updated_by`, `created_at`, `updated_at`, `selected_year`, `copied_from_year`, `is_active`, `deleted_at`) VALUES
-(1, 1, 1, '1248', '', '', '', 'White powder', '10', '', '', '', NULL, 'N/S', NULL, 'N/S', 'By Courier', 1, '', 0, '', '', '', 3, 3, '2021-12-15 11:12:12', '2021-12-15 12:13:28', '2019-20', NULL, 1, NULL);
+(1, 1, 1, '1248', '', '', '', 'White powder', '10', '', '', '', NULL, 'N/S', NULL, 'N/S', 'By Courier', 1, '', 0, '', '', '', 3, 3, '2021-12-15 11:12:12', '2021-12-16 18:41:27', '2019-20', NULL, 1, NULL),
+(2, 2, 1, '', '', '', '', '', '', '', '', '', NULL, 'N/S', NULL, 'N/S', 'By Courier', 1, '', 0, '', '', '', 3, 3, '2021-12-16 14:29:26', '2021-12-16 15:02:13', '2019-20', NULL, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -205,9 +214,12 @@ CREATE TABLE `booking_tests` (
 --
 
 INSERT INTO `booking_tests` (`id`, `booking_id`, `parent_child`, `p_sr_no`, `by_pass`, `parent`, `product_details`, `test_name`, `label_claim`, `min_limit`, `max_limit`, `result`, `label_claim_result`, `label_claim_unit`, `mean`, `unit`, `amount`, `method`, `test_date_time`, `assigned_date`, `approval_date_time`, `approved`, `chemist_name`, `created_by`, `updated_by`, `created_at`, `updated_at`, `selected_year`, `copied_from_year`, `is_active`, `deleted_at`) VALUES
-(13, 1, 'Parent', '1', 2, 0, '', 'Assay', '10.0 mg', 'NLT 90.0 %to', 'NMT 110.0 %', '201.14', '', '', '', NULL, '0.00', '', '2021-12-15 11:29:30', '2021-12-15 11:28:03', '2021-12-15 11:30:43', 'Assigned', 141, 3, 3, '2021-12-15 12:13:28', '2021-12-15 12:13:28', '2019-20', NULL, 1, NULL),
-(14, 1, 'Parent', '2', 2, 0, '', 'Assay', '10.0 mg', 'NLT 90.0 %to', 'NMT 110.0 %', '879.36', '', '', '', NULL, '0.00', '', '2021-12-15 11:29:48', '2021-12-15 11:28:03', '2021-12-15 11:30:43', 'Approved', 141, 3, 3, '2021-12-15 12:13:28', '2021-12-15 12:13:28', '2019-20', NULL, 1, NULL),
-(15, 1, 'Parent', '3', 2, 0, '', 'Dissolution', '', 'NMT 15 %', '', '7487.63', '', '', '', NULL, '0.00', '', '2021-12-15 11:30:06', '2021-12-15 11:28:03', '2021-12-15 11:30:43', 'Approved', 141, 3, 3, '2021-12-15 12:13:28', '2021-12-15 12:13:28', '2019-20', NULL, 1, NULL);
+(25, 2, 'Parent', '1', 2, 0, 'White to almost white tablet medicine', 'Description', '500 mg', 'NLT 90.0 %to', 'NMT 110.0 %', '', '', 'mg', '', NULL, '0.00', '', NULL, NULL, NULL, 'Pending', NULL, 3, 3, '2021-12-16 15:02:14', '2021-12-16 15:02:14', '2019-20', NULL, 1, NULL),
+(26, 2, 'Parent', '2', 2, 0, 'test', '', '10.0 mg', 'NLT 90.0 %to', 'NMT 110.0 %', '', '', '', '', NULL, '0.00', '', NULL, NULL, NULL, 'Pending', NULL, 3, 3, '2021-12-16 15:02:14', '2021-12-16 15:02:14', '2019-20', NULL, 1, NULL),
+(27, 2, 'Parent', '3', 2, 0, '', '', '', '', '', '', '', '', '', NULL, '0.00', '', NULL, NULL, NULL, 'Pending', NULL, 3, 3, '2021-12-16 15:02:14', '2021-12-16 15:02:14', '2019-20', NULL, 1, NULL),
+(46, 1, 'Parent', '1', 2, 0, 'White to almost white tablet', 'Description', '500 mg', 'NLT 90.0 %to', 'NMT 110.0 %', '50.20', '251', 'mg', '25.1', 1, '0.00', '', NULL, NULL, NULL, 'Pending', NULL, 3, 3, '2021-12-16 18:41:27', '2021-12-16 18:41:27', '2019-20', NULL, 1, NULL),
+(47, 1, 'Parent', '2', 2, 0, 'test', '', '10.0 mg', 'NLT 90.0 %to', 'NMT 110.0 %', '', '', 'mg', '', NULL, '0.00', '', NULL, NULL, NULL, 'Pending', NULL, 3, 3, '2021-12-16 18:41:27', '2021-12-16 18:41:27', '2019-20', NULL, 1, NULL),
+(48, 1, 'Parent', '3', 2, 0, '', '', '200 mg', '', '', '', '', 'mg', '', NULL, '0.00', '', NULL, NULL, NULL, 'Pending', NULL, 3, 3, '2021-12-16 18:41:27', '2021-12-16 18:41:27', '2019-20', NULL, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -668,7 +680,9 @@ INSERT INTO `mst_customers` (`id`, `mst_companies_id`, `company_name`, `gst_numb
 (1, 4, 'Reliance Formulation Pvt Ltd.', '24AABCR3233L1ZI', 'kushal', NULL, 'qcreliancepharma@gmail.com', '$2y$10$0fECFjhpAByskh5haH4HK.4Xu8BTx88cSEVM3n7GVSYn6Q5aUaZ.a', NULL, 'Customer', 'High', NULL, '', NULL, NULL, NULL, NULL, NULL, 3, NULL, '2021-12-15 11:07:56', NULL, '2019-20', NULL, 1, NULL),
 (2, 4, 'Reliance', NULL, NULL, NULL, NULL, NULL, NULL, 'Manufacturer', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, NULL, '2021-12-15 11:12:12', NULL, '2019-20', NULL, 1, NULL),
 (3, 4, 'Reliance', NULL, NULL, NULL, NULL, NULL, NULL, 'Supplier', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, NULL, '2021-12-15 11:12:12', NULL, '2019-20', NULL, 1, NULL),
-(4, 4, 'Divine Infosys', NULL, 'Vishal Kotak', 'Bhavesh Gajjar', 'wordpress.divine@gmail.com', '$2y$10$bTDQSZW2my.A7NDThk7NaONMebSIUOKPrJWFj67oKAeJ4NdUq8Ap2', '2016-09-14', 'Service Provider', 'High', 'We believe design is the essence of any website that showcases the core strength of the business and reaches out to innumerable people.', '20211215154052.png', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s.', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s.', '900700000', '1234567890', '5', 3, NULL, '2021-12-15 15:40:52', NULL, '2019-20', NULL, 1, NULL);
+(4, 4, 'Divine Infosys', NULL, 'Vishal Kotak', 'Bhavesh Gajjar', 'wordpress.divine@gmail.com', '$2y$10$bTDQSZW2my.A7NDThk7NaONMebSIUOKPrJWFj67oKAeJ4NdUq8Ap2', '2016-09-14', 'Service Provider', 'High', 'We believe design is the essence of any website that showcases the core strength of the business and reaches out to innumerable people.', '20211215154052.png', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s.', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s.', '900700000', '1234567890', '5', 3, NULL, '2021-12-15 15:40:52', NULL, '2019-20', NULL, 1, NULL),
+(5, 4, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Manufacturer', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, NULL, '2021-12-16 14:29:26', NULL, '2019-20', NULL, 1, NULL),
+(6, 4, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Supplier', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, NULL, '2021-12-16 14:29:26', NULL, '2019-20', NULL, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -981,21 +995,21 @@ INSERT INTO `mst_positions` (`id`, `mst_departments_id`, `mst_companies_id`, `po
 CREATE TABLE `mst_products` (
   `id` int(23) NOT NULL,
   `mst_companies_id` int(11) NOT NULL,
-  `product_name` varchar(255) NOT NULL,
-  `product_generic` varchar(55) NOT NULL,
-  `marker_specification` varchar(255) NOT NULL,
-  `pharmacopeia_id` int(5) NOT NULL,
+  `product_name` varchar(255) DEFAULT NULL,
+  `product_generic` varchar(55) DEFAULT NULL,
+  `marker_specification` varchar(255) DEFAULT NULL,
+  `pharmacopeia_id` int(5) DEFAULT NULL,
   `generic_product_id` int(23) DEFAULT NULL,
-  `packing_detail` varchar(255) NOT NULL,
-  `sample_description` text NOT NULL,
-  `hsn_Code` varchar(55) NOT NULL,
-  `is_generic` tinyint(1) NOT NULL COMMENT 'Default 0',
-  `selected_year` varchar(25) NOT NULL,
+  `packing_detail` varchar(255) DEFAULT NULL,
+  `sample_description` text DEFAULT NULL,
+  `hsn_Code` varchar(55) DEFAULT NULL,
+  `is_generic` tinyint(1) DEFAULT NULL COMMENT 'Default 0',
+  `selected_year` varchar(25) DEFAULT NULL,
   `copied_from_year` int(4) DEFAULT NULL,
-  `is_active` tinyint(1) NOT NULL COMMENT 'Default 1',
-  `created_by` int(11) NOT NULL,
+  `is_active` tinyint(1) DEFAULT NULL COMMENT 'Default 1',
+  `created_by` int(11) DEFAULT NULL,
   `updated_by` int(11) DEFAULT NULL,
-  `created_at` datetime NOT NULL,
+  `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -1005,7 +1019,11 @@ CREATE TABLE `mst_products` (
 --
 
 INSERT INTO `mst_products` (`id`, `mst_companies_id`, `product_name`, `product_generic`, `marker_specification`, `pharmacopeia_id`, `generic_product_id`, `packing_detail`, `sample_description`, `hsn_Code`, `is_generic`, `selected_year`, `copied_from_year`, `is_active`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 4, 'Acenol Tablet', 'Finished Product', 'IHS', 1, 0, '', 'White to almost white tablet', '', 0, '2019-20', NULL, 1, 3, 3, '2021-12-15 11:00:05', '2021-12-15 11:44:59', NULL);
+(1, 4, 'Acenol Tablet', 'Finished Product', 'IHS', 1, 0, '', 'White to almost white tablet', '', 0, '2019-20', NULL, 1, 3, 3, '2021-12-15 11:00:05', '2021-12-16 13:01:32', NULL),
+(2, 4, 'Paracitamol Tablet', 'Finished Product', '', 1, 0, '', 'sample description for paracitamol tablet', '', 1, '2019-20', NULL, 1, 3, 3, '2021-12-16 14:41:01', '2021-12-16 18:36:26', NULL),
+(3, 4, 'NEW PRODUCT1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2019-20', NULL, 1, 1, NULL, '2021-12-16 15:00:50', NULL, NULL),
+(4, 4, 'Viksss', 'Raw Metriall', 'motion sicknesss', 5, 3, 'Shipped', 'motion sickness', '342356', 1, '2019-20', NULL, 1, 1, NULL, '2021-12-16 15:00:50', NULL, NULL),
+(5, 4, 'Viksss', 'Raw Metriall', 'motion sicknesss', 5, 3, 'Shipped', 'motion sickness', '342356', 1, '2019-20', NULL, 1, 1, NULL, '2021-12-16 15:01:04', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1040,9 +1058,15 @@ CREATE TABLE `mst_product_samples` (
 --
 
 INSERT INTO `mst_product_samples` (`id`, `mst_product_id`, `by_pass`, `parent`, `mst_sample_parameter_id`, `label_claim`, `min_limit`, `max_limit`, `amount`, `method`, `description`, `division`, `nabl`, `formula`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(12, 1, 2, 0, 0, '', 'NLT 90.0 %to', 'NMT 110.0 %', '0.00', '', '', '', '', '', 3, 3, '2021-12-15 11:44:59', '2021-12-15 11:44:59', NULL),
-(13, 1, 2, 0, 0, '10.0 mg', 'NLT 90.0 %to', 'NMT 110.0 %', '0.00', '', '', '', '', '', 3, 3, '2021-12-15 11:44:59', '2021-12-15 11:44:59', NULL),
-(14, 1, 2, 0, 0, '', '', '', '0.00', '', '', '', '', '', 3, 3, '2021-12-15 11:44:59', '2021-12-15 11:44:59', NULL);
+(15, 1, 2, 0, 5, '', 'NLT 90.0 %to', 'NMT 110.0 %', '0.00', '', '', '', '', '', 3, 3, '2021-12-16 13:01:32', '2021-12-16 13:01:32', NULL),
+(16, 1, 2, 0, 0, '10.0 mg', 'NLT 90.0 %to', 'NMT 110.0 %', '0.00', '', '', '', '', '', 3, 3, '2021-12-16 13:01:32', '2021-12-16 13:01:32', NULL),
+(17, 1, 2, 0, 0, '', '', '', '0.00', '', '', '', '', '', 3, 3, '2021-12-16 13:01:32', '2021-12-16 13:01:32', NULL),
+(24, 4, 1, 22, 0, 'label claim', '10', '100', '500.00', 'method', 'description', 'A', 'nabl', 'formula', 1, 1, '2021-12-16 15:00:50', '2021-12-16 15:00:50', NULL),
+(25, 4, 1, 13, 69, 'label claim1', '20', '200', '700.00', 'method1', 'description1', 'A1', 'nabl1', 'formula1', 1, 1, '2021-12-16 15:00:50', '2021-12-16 15:00:50', NULL),
+(26, 5, 1, 22, 0, 'label claim', '10', '100', '500.00', 'method', 'description', 'A', 'nabl', 'formula', 1, 1, '2021-12-16 15:01:04', '2021-12-16 15:01:04', NULL),
+(27, 5, 1, 13, 69, 'label claim1', '20', '200', '700.00', 'method1', 'description1', 'A1', 'nabl1', 'formula1', 1, 1, '2021-12-16 15:01:04', '2021-12-16 15:01:04', NULL),
+(32, 2, 2, 0, 5, '200 mg', '25', '60', '0.00', 'test', '', '', '', '', 3, 3, '2021-12-16 18:36:26', '2021-12-16 18:36:26', NULL),
+(33, 2, 2, 0, 0, '', 'NLT 90.0 %to', 'NMT 110.0 %', '0.00', '', '', '', '', '', 3, 3, '2021-12-16 18:36:26', '2021-12-16 18:36:26', NULL);
 
 -- --------------------------------------------------------
 
@@ -1132,7 +1156,8 @@ INSERT INTO `mst_tests` (`id`, `mst_companies_id`, `procedure_name`, `price`, `t
 (1, 1, 'Test 01', '10.20', 'TEST01', 'Cate 01', 'Test 01', 0, 1, 1, '2021-11-09 12:26:27', '2021-11-09 12:27:16', '2019-20', NULL, 1, '2021-11-09 12:27:16'),
 (2, 1, 'Test 02', '10', 'TEST01', 'Cate 1', 'Test', 0, 1, NULL, '2021-11-09 12:27:22', '2021-11-09 12:27:22', '2019-20', NULL, 1, '2021-11-09 12:27:16'),
 (3, 1, 'Test 03', '10.50', 'TEST02', 'Cate 1', 'Test', 0, 1, NULL, '2021-11-09 12:27:31', '2021-11-09 12:27:31', '2019-20', NULL, 1, NULL),
-(4, 1, 'Test 04', '10.50', 'TEST020', 'Cate 1', 'Test', 0, 1, NULL, '2021-11-09 12:27:31', '2021-11-09 12:27:31', '2019-20', NULL, 1, '2021-11-09 12:27:16');
+(4, 1, 'Test 04', '10.50', 'TEST020', 'Cate 1', 'Test', 0, 1, NULL, '2021-11-09 12:27:31', '2021-11-09 12:27:31', '2019-20', NULL, 1, '2021-11-09 12:27:16'),
+(5, 4, 'Description', 'price', 'test_code', 'test_category', 'test_procedure', 1, 1, NULL, '2021-12-16 13:01:11', '2021-12-16 13:01:11', '2019-20', NULL, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -1160,6 +1185,14 @@ CREATE TABLE `mst_test_parameters` (
   `is_active` tinyint(1) DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `mst_test_parameters`
+--
+
+INSERT INTO `mst_test_parameters` (`id`, `mst_companies_id`, `test_by_pass`, `test_parameter_name`, `test_alpha`, `formula`, `type`, `unit`, `value`, `sort`, `created_by`, `updated_by`, `created_at`, `updated_at`, `selected_year`, `copied_from_year`, `is_active`, `deleted_at`) VALUES
+(1, 4, 1, 'test_parameter_name', 'test_alpha', 'formula', 'type', 'unit', 'y', 'sort', 1, NULL, '2021-12-16 13:01:11', '2021-12-16 13:01:11', '2019-20', NULL, 1, NULL),
+(2, 4, 1, 'test_parameter_name', 'test_alpha', 'formula', 'type', 'unit', 'y', 'sort', 1, NULL, '2021-12-16 13:01:11', '2021-12-16 13:01:11', '2019-20', NULL, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -2068,25 +2101,25 @@ ALTER TABLE `user_emp_details`
 -- AUTO_INCREMENT for table `bookings`
 --
 ALTER TABLE `bookings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `booking_audit_details`
 --
 ALTER TABLE `booking_audit_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `booking_sample_details`
 --
 ALTER TABLE `booking_sample_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `booking_tests`
 --
 ALTER TABLE `booking_tests`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -2134,7 +2167,7 @@ ALTER TABLE `mst_countries`
 -- AUTO_INCREMENT for table `mst_customers`
 --
 ALTER TABLE `mst_customers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `mst_customers_contact_info`
@@ -2206,13 +2239,13 @@ ALTER TABLE `mst_positions`
 -- AUTO_INCREMENT for table `mst_products`
 --
 ALTER TABLE `mst_products`
-  MODIFY `id` int(23) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(23) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `mst_product_samples`
 --
 ALTER TABLE `mst_product_samples`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `mst_states`
@@ -2224,13 +2257,13 @@ ALTER TABLE `mst_states`
 -- AUTO_INCREMENT for table `mst_tests`
 --
 ALTER TABLE `mst_tests`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `mst_test_parameters`
 --
 ALTER TABLE `mst_test_parameters`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `mst_units`
