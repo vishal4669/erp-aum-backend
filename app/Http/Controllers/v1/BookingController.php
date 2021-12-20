@@ -538,7 +538,7 @@ class BookingController extends Controller
                 "report_type.required" => "The Report Type Field Is Required.",
                 "booking_type.required" => "The Booking Type Field Is Required.",
                 "receipte_date.required" => "The Receipte Date Field Is Required.",
-                "customer_id.required" => "The Customer Id Field Is Required.",
+                "customer_id.required" => "The Customer Name Field Is Required.",
                 'invoice_date.required_if' => 'The Invoice Date Field Is Required.',
                 'invoice_no.required_if' => 'The Invoice No Field Is Required.',
                 'dispatch_date_time.required_if' => 'The Dispatch Date Time Field Is Required.',
