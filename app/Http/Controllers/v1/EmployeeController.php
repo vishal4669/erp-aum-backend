@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\Models\Employee;
+use App\Models\User;
 use App\Helpers\Helper;
 use App\Models\Position;
 use Auth;
@@ -41,6 +42,7 @@ class EmployeeController extends Controller
             $is_reporting_authority = (isset($request->is_reporting_authority) && $request->is_reporting_authority == 1) ? 1 : 0;
             $is_chemist = (isset($request->is_chemist) && $request->is_chemist == 1) ? 1 : 0;
             $is_resigned  = (isset($request->is_resigned) && $request->is_resigned  == 1) ? 1 : 0;
+            $is_dashboard  = (isset($request->is_dashboard) && $request->is_dashboard  == 1) ? 1 : 0;
 
             if ($is_dropdown) {
                 if ($is_resigned == 0 || $is_reporting_authority == 0) {
@@ -78,8 +80,20 @@ class EmployeeController extends Controller
                 //deleted data not require
                 $data = Employee::with(['address', 'right', 'company', 'education', 'employment', 'document'])
                     ->where('users.is_resigned', 1)
-                    ->where('users.is_active', 1)
-                    ->where('users.selected_year', $loggedInUserData['selected_year'])
+                    ->where('deleted_at', NULL) //deleted data not require condition
+                    //  ->where('users.is_active', 1) not needed is active condition
+                    //->where('users.selected_year', $loggedInUserData['selected_year'])
+                    ->where('users.mst_companies_id', $loggedInUserData['company_id']);
+                if ($is_reporting_authority) {
+                    $data  = $data->where('users.is_reporting_authority', 1);
+                }
+                $data  = $data->orderBy('users.id', 'desc')
+                    ->get();
+            } elseif ($is_dashboard) {
+                $data = Employee::with(['address', 'right', 'company', 'education', 'employment', 'document'])
+                    ->where('users.is_resigned', 0)
+                    ->where('users.is_approved', "Pending")
+                    ->where('users.is_active', 0)
                     ->where('users.mst_companies_id', $loggedInUserData['company_id']);
                 if ($is_reporting_authority) {
                     $data  = $data->where('users.is_reporting_authority', 1);
@@ -88,10 +102,8 @@ class EmployeeController extends Controller
                     ->get();
             } else {
                 //deleted data not require
-                $data = Employee::with(['address', 'right', 'company', 'education', 'employment', 'document'])
+                $data = Employee::with('address', 'right', 'company', 'education', 'employment', 'document')
                     ->where('users.is_resigned', 0)
-                    ->where('users.is_active', 1)
-                    ->where('users.selected_year', $loggedInUserData['selected_year'])
                     ->where('users.mst_companies_id', $loggedInUserData['company_id']);
                 if ($is_reporting_authority) {
                     $data  = $data->where('users.is_reporting_authority', 1);
@@ -126,11 +138,11 @@ class EmployeeController extends Controller
             $rules = [
 
                 // Employee Form Fields
-                'first_name' => 'required|string|max:255',
-                'middle_name' => 'required|string|max:255',
-                'last_name' => 'required|string|max:255',
-                'email' => 'required|email|unique:users|max:255',
-                'password' => 'required|min:6|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,15}$/',
+                'first_name' => 'required|regex:/^[a-zA-Z\s]+$/u|max:255',
+                'middle_name' => 'required|regex:/^[a-zA-Z\s]+$/u|max:255',
+                'last_name' => 'required|regex:/^[a-zA-Z\s]+$/u|max:255',
+                // 'email' => 'required|email|unique:users|max:255',
+                // 'password' => 'required|min:6|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,15}$/',
                 'birth_date' => 'required|date',
                 'mobile' => 'required|min:10|max:10',
                 'phone' => 'nullable|min:10|max:10',
@@ -149,6 +161,9 @@ class EmployeeController extends Controller
                 'company.mst_departments_id' => 'required',
                 'company.mst_positions_id' => 'required',
                 'company.join_date' => 'nullable|date',
+                'company.username' => 'unique:user_company_info,username,NULL,id,deleted_at,NULL|max:255',
+                'company.password' => 'required',
+                //'company.password' => 'required|min:6|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,15}$/',
 
                 // documents related messages
                 'document.aadhar_card_photo' => 'nullable|mimes:jpeg,jpg,png,pdf',
@@ -160,7 +175,7 @@ class EmployeeController extends Controller
                 'document.aadhar_number' => 'nullable|regex:/^[0-9]{4}[ -]?[0-9]{4}[ -]?[0-9]{4}$/',
                 'document.election_card_number' => 'nullable|regex:/^([a-zA-Z]){3}([0-9]){7}?$/',
                 'document.passport_number' => 'nullable|regex:/^[A-PR-WYa-pr-wy][1-9]\\d\\s?\\d{4}[1-9]$/',
-                'document.driving_license_number' => 'nullable|regex:/^(([A-Z]{2}[0-9]{2})( )|([A-Z]{2}-[0-9]{2}))((19|20)[0-9][0-9])[0-9]{7}$/',
+                //'document.driving_license_number' => 'nullable|regex:/^(([A-Z]{2}[0-9]{2})( )|([A-Z]{2}-[0-9]{2}))((19|20)[0-9][0-9])[0-9]{7}$/',
 
                 // employee photo and signature
                 'signature' => 'nullable|mimes:jpeg,jpg,png,pdf',
@@ -178,15 +193,18 @@ class EmployeeController extends Controller
             $messages = [
                 'first_name.required' => 'Employee First Name field is required.',
                 'first_name.max' => 'Employee First Name should not me greater than 255 characters.',
+                'first_name.regex' => 'Only Allowed Letters & Spaces in Employee First Name',
                 'middle_name.required' => 'Employee Middle Name field is required.',
                 'middle_name.max' => 'Employee Middle Name should not me greater than 255 characters.',
+                'middle_name.regex' => 'Only Allowed Letters & Spaces in Employee Middle Name',
                 'last_name.required' => 'Employee Last Name field is required.',
                 'last_name.max' => 'Employee Last Name should not me greater than 255 characters.',
-                'email.required' => 'Email field is required.',
-                'email.email' => 'Please enter valid email for Employee Email',
-                'email.max' => 'Email should not me greater than 255 characters.',
-                'password.required' => 'password field is required.',
-                'password.regex' => 'password invalid : minimum 8 max 15 characters, only one uppercase letter,at least one lowercase letter, one number and one special character:',
+                'last_name.regex' => 'Only Allowed Letters & Spaces in Employee Last Name',
+                // 'email.required' => 'Email field is required.',
+                // 'email.email' => 'Please enter valid email for Employee Email',
+                // 'email.max' => 'Email should not me greater than 255 characters.',
+                // 'password.required' => 'password field is required.',
+                // 'password.regex' => 'password invalid : minimum 8 max 15 characters, only one uppercase letter,at least one lowercase letter, one number and one special character:',
                 'birth_date.required' => 'Birth Date field is required.',
                 'birth_date.date' => 'Please enter valid date for Employee Date Of Birth.',
                 'mobile.required' => 'Mobile field is required.',
@@ -210,10 +228,13 @@ class EmployeeController extends Controller
                 'address.1.emergency_contact_number.max' => 'Emergency Contact Number should not me greater than 10 characters.',
 
                 // for company form messages
-                'company.*.mst_companies_id.required' => 'Employee Company field is required.',
-                'company.*.mst_departments_id.required' => 'Company Department field is required.',
-                'company.*.mst_positions_id.required' => 'Company Position field is required.',
-                'company.*.join_date.date' => 'Please enter valid date for Employee Company Join Date.',
+                'company.mst_companies_id.required' => 'Employee Company field is required.',
+                'company.mst_departments_id.required' => 'Company Department field is required.',
+                'company.mst_positions_id.required' => 'Company Position field is required.',
+                'company.join_date.date' => 'Please enter valid date for Employee Company Join Date.',
+                'company.username.required' => 'User Name field is required.',
+                'company.username.unique' => 'Username is Already Taken Please enter Username Manually.',
+                'company.password.required' => 'Password Field is Required.',
 
                 //documents related messages
                 'document.aadhar_card_photo.mimes' => 'The Aadhar Card must be a file of type: jpeg, jpg, png, pdf.',
@@ -221,11 +242,11 @@ class EmployeeController extends Controller
                 'document.pan_card_photo.mimes' => 'The Pan Card must be a file of type: jpeg, jpg, png, pdf.',
                 'document.passport_photo.mimes' => 'The Aadhar Passport must be a file of type: jpeg, jpg, png, pdf.',
                 'document.driving_license_photo.mimes' => 'The Driving License must be a file of type: jpeg, jpg, png, pdf.',
-                'document.pan_card_number.regex' => 'Please enter valid Pan example:"ABCDE7190K" 10 digit number',
-                'document.aadhar_number.regex' => 'Aadhar Number Format is Invalid, Aadhar Number Support Following Format [1234 5678 9123] or [123456789123] or [1234-5678-9123]',
-                'document.election_card_number.regex' => 'Election Card Number Format is Invalid, Support Following Format [ABC1234566].',
-                'document.passport_number.regex' => 'Passport Number Format is Invalid, Support Following Format [A2190457].',
-                // 'document.driving_license_number.regex' => 'Passport Number Format is Invalid, Support Following Format [A2190457].',
+                'document.pan_card_number.regex' => 'Invalid Pan Number Format.',
+                'document.aadhar_number.regex' => 'Invalid Aadhar Number Format.',
+                'document.election_card_number.regex' => 'Invalid Election Card Number Format.',
+                'document.passport_number.regex' => 'Invalid Passport Number Format.',
+                //'document.driving_license_number.regex' => 'Passport Number Format is Invalid, Support Following Format [A2190457].',
 
                 //documents related messages
                 'signature.mimes' => 'The Employee Signature must be a file of type: jpeg, jpg, png, pdf.',
@@ -240,12 +261,12 @@ class EmployeeController extends Controller
                 'employment.*.emp_to_year.digits' => '"To Year" Must Be 4 Digits In Employment Details.',
             ];
 
-            $validator = Validator::make($req, $rules, $messages);
+            // $validator = Validator::make($req, $rules, $messages);
 
-            if ($validator->fails()) {
-                $data = array();
-                return Helper::response($validator->errors()->all(), Response::HTTP_OK, false, $data);
-            }
+            // if ($validator->fails()) {
+            //     $data = array();
+            //     return Helper::response($validator->errors()->all(), Response::HTTP_OK, false, $data);
+            // }
 
             $loggedInUserData = Helper::getUserData();
             $username = null;
@@ -407,10 +428,23 @@ class EmployeeController extends Controller
                 'document.pan_card_photo' => 'nullable|mimes:jpeg,jpg,png,pdf',
                 'document.passport_photo' => 'nullable|mimes:jpeg,jpg,png,pdf',
                 'document.driving_license_photo' => 'nullable|mimes:jpeg,jpg,png,pdf',
+                'document.pan_card_number' => 'nullable|regex:/[A-Z]{5}[0-9]{4}[A-Z]{1}/',
+                'document.aadhar_number' => 'nullable|regex:/^[0-9]{4}[ -]?[0-9]{4}[ -]?[0-9]{4}$/',
+                'document.election_card_number' => 'nullable|regex:/^([a-zA-Z]){3}([0-9]){7}?$/',
+                'document.passport_number' => 'nullable|regex:/^[A-PR-WYa-pr-wy][1-9]\\d\\s?\\d{4}[1-9]$/',
+                'document.driving_license_number' => 'nullable|regex:/^(([A-Z]{2}[0-9]{2})( )|([A-Z]{2}-[0-9]{2}))((19|20)[0-9][0-9])[0-9]{7}$/',
 
                 // employee photo and signature
                 'photo' => 'nullable|mimes:jpeg,jpg,png',
                 'signature' => 'nullable|mimes:jpeg,jpg,png,pdf',
+
+                // education validation
+                'education.*.from_year' => 'nullable|digits:4',
+                'education.*.to_year' => 'nullable|digits:4',
+
+                // employment validation
+                'employment.*.emp_from_year' => 'nullable|digits:4',
+                'employment.*.emp_to_year' => 'nullable|digits:4',
             ];
 
             $messages = [
@@ -459,10 +493,23 @@ class EmployeeController extends Controller
                 'document.pan_card_photo.mimes' => 'The Pan Card must be a file of type: jpeg, jpg, png, pdf.',
                 'document.passport_photo.mimes' => 'The Aadhar Passport must be a file of type: jpeg, jpg, png, pdf.',
                 'document.driving_license_photo.mimes' => 'The Driving License must be a file of type: jpeg, jpg, png, pdf.',
+                'document.pan_card_number.regex' => 'Please enter valid Pan example:"ABCDE7190K" 10 digit number',
+                'document.aadhar_number.regex' => 'Aadhar Number Format is Invalid, Aadhar Number Support Following Format [1234 5678 9123] or [123456789123] or [1234-5678-9123]',
+                'document.election_card_number.regex' => 'Election Card Number Format is Invalid, Support Following Format [ABC1234566].',
+                'document.passport_number.regex' => 'Passport Number Format is Invalid, Support Following Format [A2190457].',
+                //'document.driving_license_number.regex' => 'Passport Number Format is Invalid, Support Following Format [A2190457].',
 
                 //documents related messages
                 'photo.mimes' => 'The Employee Photo must be a file of type: jpeg, jpg, png.',
                 'signature.mimes' => 'The Employee Signature must be a file of type: jpeg, jpg, png, pdf.',
+
+                // education related messages
+                'education.*.from_year.digits' => '"From Year" Must Be 4 Digits In Education Details.',
+                'education.*.to_year.digits' => '"To Year" Must Be 4 Digits In Education Details.',
+
+                // employment related messages
+                'employment.*.emp_from_year.digits' => '"From Year" Must Be 4 Digits In Employment Details.',
+                'employment.*.emp_to_year.digits' => '"To Year" Must Be 4 Digits In Employment Details.',
 
             ];
 
@@ -548,7 +595,7 @@ class EmployeeController extends Controller
                 $this->addUserEducationDetails($request->education, $id);
             }
             if (isset($request->employment)) {
-                return $this->addUserEmploymentDetails($request->employment, $id);
+                $this->addUserEmploymentDetails($request->employment, $id);
             }
             if (isset($request->company)) {
                 $this->addUpdateUserCompanyDetails($request->company, $id);
@@ -574,16 +621,38 @@ class EmployeeController extends Controller
     public function destroy($id)
     {
         try {
-            $data = array();
-            $employee = Employee::find($id);
+            $users = Employee::find($id);
+            $user_AddressDetail = UserAddressDetail::where("users_id", $id);
+            $user_AssignRight = UserAssignRight::where("users_id", $id);
+            $user_CompanyInfo = UserCompanyInfo::where("users_id", $id);
+            $user_DocDetail = UserDocDetail::where("users_id", $id);
+            $user_EduDetail = UserEduDetail::where("users_id", $id);
+            $user_EmpDetail = UserEmpDetail::where("users_id", $id);
 
-            Log::info("Employee deleted with : " . json_encode(array('id' => $id)));
-
-            if (!empty($employee)) {
-                $employee->delete();
+            // dd($users);
+            if (!empty($users)) {
+                $users->delete();
+                if (!empty($user_AddressDetail)) {
+                    $user_AddressDetail->delete();
+                }
+                if (!empty($user_AssignRight)) {
+                    $user_AssignRight->delete();
+                }
+                if (!empty($user_CompanyInfo)) {
+                    $user_CompanyInfo->delete();
+                }
+                if (!empty($user_DocDetail)) {
+                    $user_DocDetail->delete();
+                }
+                if (!empty($user_EduDetail)) {
+                    $user_EduDetail->delete();
+                }
+                if (!empty($user_EmpDetail)) {
+                    $user_EmpDetail->delete();
+                }
+                Log::info("Users deleted with : " . json_encode(array('id' => $id)));
                 return Helper::response("Employee deleted successfully", Response::HTTP_OK, true, $data);
             }
-
             return Helper::response("Employee not exists", Response::HTTP_NOT_FOUND, false, $data);
         } catch (Exception $e) {
             $data = array();
@@ -674,7 +743,7 @@ class EmployeeController extends Controller
 
             // Delete all old
             $educationDetails = UserEduDetail::where('users_id', $users_id);
-            $educationDetails->delete();
+            $educationDetails->forceDelete();
 
             // check if data already present for the user
 
@@ -719,7 +788,7 @@ class EmployeeController extends Controller
 
             // Delete all old
             $employmentDetails = UserEmpDetail::where('users_id', $users_id);
-            $employmentDetails->delete();
+            $employmentDetails->forceDelete();
 
             // check if data already present for the user
             $employment_count = count($employment_data);
@@ -741,7 +810,6 @@ class EmployeeController extends Controller
                         );
 
                         UserEmpDetail::create($empArray);
-                        return true;
                     }
                 }
             }
@@ -774,7 +842,7 @@ class EmployeeController extends Controller
                 'bank_branch_name' => (isset($company_data['bank_branch_name'])) ? $company_data['bank_branch_name'] : '',
                 'salary_per_month' => (isset($company_data['salary_per_month'])) ? $company_data['salary_per_month'] : '',
                 'username' => (isset($company_data['username'])) ? $company_data['username'] : '',
-                'password' => (isset($company_data['password'])) ? $company_data['password'] : '',
+                'password' => (isset($company_data['password'])) ? Hash::make($company_data['password']) : '',
                 'in_time' => (isset($company_data['in_time'])) ? $company_data['in_time'] : '',
                 'out_time' => (isset($company_data['out_time'])) ? $company_data['out_time'] : '',
                 'email_username' => (isset($company_data['email_username'])) ? $company_data['email_username'] : '',

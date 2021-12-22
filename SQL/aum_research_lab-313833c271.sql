@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: sdb-e.hosting.stackcp.net
--- Generation Time: Dec 20, 2021 at 01:49 PM
+-- Generation Time: Dec 22, 2021 at 01:49 PM
 -- Server version: 10.4.18-MariaDB-log
 -- PHP Version: 7.1.33
 
@@ -20,8 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `aum_research_lab-313833c271`
 --
-CREATE DATABASE IF NOT EXISTS `aum_research_lab-313833c271` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
-USE `aum_research_lab-313833c271`;
 
 -- --------------------------------------------------------
 
@@ -321,6 +319,13 @@ CREATE TABLE `mst_branches` (
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='This table is used to store all master companies list';
 
+--
+-- Dumping data for table `mst_branches`
+--
+
+INSERT INTO `mst_branches` (`id`, `mst_companies_id`, `branch_name`, `branch_type`, `branch_code`, `branch_office_no`, `branch_complex_name`, `branch_street_name`, `branch_land_mark`, `branch_area`, `branch_city`, `branch_state`, `branch_country`, `branch_pin`, `branch_phone`, `branch_fax`, `branch_mobile`, `branch_email`, `branch_establish_year`, `created_by`, `updated_by`, `selected_year`, `copied_from_year`, `is_active`, `deleted_at`, `created_at`, `updated_at`) VALUES
+(1, 4, 'Ahmedabad Branch', 'Lab', '9192', '25', 'Aum Research', NULL, NULL, NULL, 'Ahemedabad', 'Gujarat', 'India', 380015, '1234567890', NULL, '1234567890', 'aumresearch@gmail.com', '2000', 3, NULL, '2019-20', NULL, 1, NULL, '2021-12-21 12:08:47', '2021-12-21 12:08:47');
+
 -- --------------------------------------------------------
 
 --
@@ -366,7 +371,7 @@ CREATE TABLE `mst_companies` (
 --
 
 INSERT INTO `mst_companies` (`id`, `company_name`, `created_by`, `updated_by`, `selected_year`, `copied_from_year`, `is_active`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 'Aum Research Laboratries', 1, 2, '2017-18', NULL, 1, '2021-12-02 12:40:35', '2021-05-18 06:47:45', '2021-12-02 09:09:37'),
+(1, 'Aum Research Laboratries', 1, 2, '2017-18', NULL, 1, '2021-12-02 12:40:35', '2021-05-18 06:47:45', '2021-12-21 06:27:29'),
 (4, 'Aum Research Labs Pvt Ltd', 3, 2, '2019-20', NULL, 1, NULL, '2021-05-18 06:10:45', '2021-10-28 10:55:25');
 
 -- --------------------------------------------------------
@@ -776,6 +781,14 @@ CREATE TABLE `mst_departments` (
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='This table is used to store all master companies list';
+
+--
+-- Dumping data for table `mst_departments`
+--
+
+INSERT INTO `mst_departments` (`id`, `mst_companies_id`, `mst_branches_id`, `department_name`, `created_by`, `updated_by`, `selected_year`, `copied_from_year`, `is_active`, `deleted_at`, `created_at`, `updated_at`) VALUES
+(1, 4, 1, 'QC', 3, NULL, '2019-20', NULL, 1, NULL, '2021-12-21 12:09:00', '2021-12-21 12:09:00'),
+(2, 4, 1, 'QA', 3, NULL, '2019-20', NULL, 1, NULL, '2021-12-21 12:09:09', '2021-12-21 12:09:09');
 
 -- --------------------------------------------------------
 
@@ -1539,11 +1552,16 @@ INSERT INTO `users` (`id`, `mst_companies_id`, `title`, `first_name`, `middle_na
 (135, 1, 'Mr.', 'Pragnesh', 'A.', 'Chauhan', 'pragnesh@gmail.com', NULL, 'pragnesh@gmail.com', '$2y$10$Kt1MVUogTSJgWDxBhQoEUeAfSZZUIpKRybqnQn6OPpwAoSPm.xbd6', NULL, 'A+', NULL, '2021-12-01', 'Single', 'photo_136_xl4nA.png', 'M07', '9408072555', '9408072555', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ullamcorper enim id erat tempor sodales. In hac habitasse platea dictumst. Praesent ac convallis odio. Fusce malesuada lorem ante, ac elementum libero rutrum id. Donec ullamcorper mauris eu massa lacinia, sed volutpat dui tempus. Praesent venenatis ornare libero, quis posuere odio vestibulum non. Integer venenatis sem augue, sed tincidunt turpis aliquam sed. Suspendisse sit amet ultrices libero. Nulla facilisi. Integer vulputate rhoncus diam sed rhoncus. Aliquam vestibulum turpis purus, eget vestibulum mi rhoncus ut. Etiam tortor augue, pulvinar et quam eget, rhoncus tempus augue.', 1, NULL, 1, 1, 1, 1, 1, 'Indian', 'Hindu', 'Hindu', 1, 1, 1, 3, NULL, '2019-20', NULL, 'Pending', 1, 0, NULL, '2021-11-22 14:18:23', '2021-11-30 05:11:11'),
 (137, 1, 'Mr.', 'Manoj', 'S', 'Patel', 'mp.inviable_1243@yopmail.com', NULL, 'mp.inviable_1243@yopmail.com', '$2y$10$WFmTt/hFBmz1rC9bHNHcBOA8PAXeWCBfvFth9Q1ufrMmEqc/HLopO', NULL, 'B+ve', 'F', '1988-07-11', 'Married', NULL, 'M01', '2582582588', '2582582588', 'lorem Ipsum dor simit de nur', 2, NULL, 1, 1, 1, 1, 1, 'Indian', 'Hindu', 'Hindu', 1, 100, 1, 3, NULL, '2019-20', NULL, 'Pending', 0, 0, NULL, '2021-11-29 18:10:25', NULL),
 (141, 4, 'Mr.', 'Pragnesh', 'A.', 'Chauhan', 'pragnesh.divineinfosys@gmail.com', NULL, 'pragnesh.divineinfosys@gmail.com', '$2y$10$4PhhTLKUvtTNSeYODq1w6e/jbFPErnGKXXLtLngZKnQUnPGBn1TCu', NULL, 'A+', NULL, '1999-10-08', 'Single', '/images/employee/documents/photo_141_8GHNe.jpg', 'M07', '9537671314', '9537671314', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.', 1, '/images/employee/documents/signature_141_8GHNe.jpg', 1, 1, 1, 1, 1, 'Indian', 'Hindu', 'Hindu', 1, 1, 1, 3, NULL, '2019-20', NULL, 'Approved', 1, 0, NULL, '2021-12-02 15:34:01', '2021-12-15 07:04:44'),
-(143, 4, 'Miss', 'Siya', 'Ajit', 'Shah', 'siya@gmail.com', NULL, 'siya@gmail.com', '$2y$10$VRcoGsRbhW2e9l0kjlJskeIzhcXEPcASQz5vHSoTIvPMMQx0zEN3y', NULL, 'None', NULL, '2021-12-25', 'Single', NULL, NULL, NULL, '1234567890', NULL, 1, NULL, 0, 0, 0, 0, 0, NULL, NULL, NULL, 0, 0, 0, 3, NULL, '2019-20', NULL, 'Approved', 1, 0, NULL, '2021-12-09 16:13:49', '2021-12-09 10:47:07'),
+(143, 4, 'Miss', 'Siya', 'Ajit', 'Shah', 'siya@gmail.com', NULL, 'siya@gmail.com', '$2y$10$VRcoGsRbhW2e9l0kjlJskeIzhcXEPcASQz5vHSoTIvPMMQx0zEN3y', NULL, 'None', NULL, '2021-12-25', 'Single', NULL, NULL, NULL, '1234567890', NULL, 1, NULL, 0, 0, 0, 0, 0, NULL, NULL, NULL, 1, 0, 0, 3, NULL, '2019-20', NULL, 'Approved', 1, 0, NULL, '2021-12-09 16:13:49', '2021-12-21 07:12:17'),
 (144, 4, 'Mr.', 'Samay', 'Sujit', 'Shah', 'test@gmail.com', NULL, 'test@gmail.com', '$2y$10$MFztH2SKSIrkUXlYHddMzOEbgcKnKYA8cfkRJKjktnHawrXs0WHUe', NULL, 'O+', NULL, '2021-12-03', 'Single', '/images/employee/documents/photo_144_Pk9bB.png', '856681', '7777895642', '8888888888', 'Testing Employee With Validation and File Upload', 1, '/images/employee/documents/signature_144_Pk9bB.png', 0, 0, 0, 0, 0, NULL, 'Hindu', 'Hinduisam', 0, 0, 0, 3, NULL, '2019-20', NULL, 'Pending', 0, 0, NULL, '2021-12-13 15:29:35', '2021-12-13 15:29:35'),
-(145, 4, 'Dr.', 'Sasha', 'Chinmay', 'Shekhavat', 'preksha123.divine@gmail.com', NULL, 'preksha123.divine@gmail.com', '$2y$10$NW1tEmlJW5YYNhV9s/..Se1yot/0I.ZBn6gs9NjebWTFR9igZm7bq', NULL, 'None', NULL, '2021-12-25', 'Single', NULL, NULL, NULL, '1234567855', NULL, 1, NULL, 0, 0, 0, 0, 0, 'Indian', NULL, NULL, 0, 0, 0, 3, NULL, '2019-20', NULL, 'Pending', 0, 0, NULL, '2021-12-14 10:43:00', NULL),
+(145, 4, 'Dr.', 'Sasha', 'Chinmay', 'Shekhavat', 'preksha123.divine@gmail.com', NULL, 'preksha123.divine@gmail.com', '$2y$10$NW1tEmlJW5YYNhV9s/..Se1yot/0I.ZBn6gs9NjebWTFR9igZm7bq', NULL, 'None', NULL, '2021-12-25', 'Single', NULL, NULL, NULL, '1234567855', NULL, 1, NULL, 0, 0, 0, 0, 0, 'Indian', NULL, NULL, 0, 0, 0, 3, NULL, '2019-20', NULL, 'Reject', 0, 0, NULL, '2021-12-14 10:43:00', '2021-12-21 05:46:03'),
 (146, 4, 'Mr.', 'Dhiraj', 'Srish', 'Sekhavt', 'dhiraj@gmail.com', NULL, 'dhiraj@gmail.com', '$2y$10$vq8utOOcTLeCdRJYh4qn2eTgmdInlwFnSzPSRc5XF2mLNEazTZ2h.', NULL, 'B+', NULL, '1980-05-02', 'Single', '/images/employee/documents/photo_146_D9hVG.png', '8525', '2222222222', '1111111111', 'Testing For Add Employee', 1, '/images/employee/documents/signature_146_D9hVG.png', 0, 0, 0, 0, 0, 'Indian', 'Hindu', 'Bramhin', 0, 0, 0, 3, NULL, '2019-20', NULL, 'Pending', 0, 0, NULL, '2021-12-14 14:58:12', '2021-12-14 14:58:12'),
-(147, 4, 'Mr.', 'dfdfd', 'mbsdfjd', 'kfhjkdsfkj', 'om.divine@gmail.com', NULL, 'om.divine@gmail.com', '$2y$10$YyEAfAXdU6YRXMNfbNyqeOSoAUG4MSmzZmOxILYClEJ3JRlBT8Pnm', NULL, 'None', NULL, '2021-12-15', 'Single', NULL, NULL, NULL, '1111111111', NULL, 1, NULL, 0, 0, 0, 0, 0, NULL, NULL, NULL, 0, 0, 0, 3, NULL, '2019-20', NULL, 'Pending', 0, 0, '2021-12-14 15:51:56', '2021-12-14 15:46:52', '2021-12-14 15:51:56');
+(147, 4, 'Mr.', 'dfdfd', 'mbsdfjd', 'kfhjkdsfkj', 'om.divine@gmail.com', NULL, 'om.divine@gmail.com', '$2y$10$YyEAfAXdU6YRXMNfbNyqeOSoAUG4MSmzZmOxILYClEJ3JRlBT8Pnm', NULL, 'None', NULL, '2021-12-15', 'Single', NULL, NULL, NULL, '1111111111', NULL, 1, NULL, 0, 0, 0, 0, 0, NULL, NULL, NULL, 0, 0, 0, 3, NULL, '2019-20', NULL, 'Pending', 0, 0, '2021-12-14 15:51:56', '2021-12-14 15:46:52', '2021-12-14 15:51:56'),
+(150, 4, 'Er.', 'Visakha', 'Mohan', 'Patnayak', NULL, NULL, 'Visakha90', '$2y$10$GsFvyM30B4JgPCFOKvPIRe8vPuhjJtKgW4C/AXkeKgkv3Pgxuiix6', NULL, 'B-', 'F', '1990-12-18', 'Married', '/images/employee/documents/photo_150_BP1dl.png', '5080', '4400558890', '1234789045', 'Employee Add is Working Properly or not checking add form flow', 1, '/images/employee/documents/signature_150_BP1dl.png', 0, 0, 0, 0, 0, 'Indian', 'Hindu', 'Darbar', 1, 0, 0, 3, NULL, '2019-20', NULL, 'Pending', 0, 0, NULL, '2021-12-22 13:22:22', '2021-12-22 08:57:38'),
+(151, 4, 'Mr.', 'Mihir', 'Jay', 'Aahuja', NULL, NULL, 'mihir21', '$2y$10$UjqxbLC/HIaGl.FeMZdOoukENNgCfwIL0zLiDJEpuVpA.ko7tVhj2', NULL, 'None', 'M', '2021-12-16', 'Single', NULL, NULL, NULL, '1234567890', NULL, 1, NULL, 0, 0, 0, 0, 0, NULL, NULL, NULL, 0, 0, 0, 3, NULL, '2019-20', NULL, 'Pending', 0, 0, '2021-12-22 14:33:45', '2021-12-22 14:33:36', '2021-12-22 14:33:45'),
+(152, 4, 'Mr.', 'Mihir', 'Jay', 'Aahuja', NULL, NULL, 'mhir123', '$2y$10$BTRT6RjBVHV/dfYozxJjFudJxLRwoVbalcdChIzg/Zg5yscwDpogG', NULL, 'None', 'M', '2021-12-03', 'Single', NULL, NULL, NULL, '1234567890', NULL, 1, NULL, 0, 0, 0, 0, 0, NULL, NULL, NULL, 0, 0, 0, 3, NULL, '2019-20', NULL, 'Pending', 0, 0, '2021-12-22 14:33:45', '2021-12-22 14:36:49', '2021-12-22 09:22:14'),
+(153, 4, 'Mr.', 'Mihir', 'Jay', 'Aahuja', NULL, NULL, 'mihir21', '$2y$10$DONm/p1wsbfrVtkIEkaWcuKPNB0YDwUW38VyzIkKf2aL9/4BOAtcC', NULL, 'A+', 'M', '2021-12-22', 'Single', NULL, NULL, NULL, '1234567890', NULL, 1, NULL, 0, 0, 0, 0, 0, NULL, NULL, NULL, 0, 0, 0, 3, NULL, '2019-20', NULL, 'Pending', 0, 0, NULL, '2021-12-22 15:04:19', NULL),
+(162, 4, 'Mr.', 'Mihir', 'Jay', 'Mehta', NULL, NULL, 'mihir21', '$2y$10$ojNkDXqrsIbcwSO8hNsHeODFv87Oan/juL.YFLpTWPQGCHrbZKCqK', NULL, 'None', 'M', '2021-12-17', 'Single', '/images/employee/documents/photo_162_HU1ok.pdf', NULL, NULL, '1234567890', NULL, 1, NULL, 0, 0, 0, 0, 0, NULL, NULL, NULL, 0, 0, 0, 150, NULL, '2019-20', NULL, 'Pending', 0, 0, NULL, '2021-12-22 18:43:55', '2021-12-22 18:43:55');
 
 -- --------------------------------------------------------
 
@@ -1629,7 +1647,17 @@ INSERT INTO `user_address_details` (`id`, `users_id`, `mst_countries_id`, `mst_s
 (152, 146, 102, 18, 'Home Street', 'Home Street2', 'Area', 'City', 'Pincode', 'dhiraj1@gmail.com', 'Sirsih Sekhvat', '', '', 1, 3, NULL, NULL, '2021-12-14 14:58:12', '2021-12-14 14:58:12'),
 (153, 146, 102, 13, 'Street', 'Street2', 'Area12', 'Cityq12', 'Pincode13', '', '', '8888825632', 'dhirajchemicals.com', 2, 3, NULL, NULL, '2021-12-14 14:58:12', '2021-12-14 14:58:12'),
 (154, 147, 102, 18, 'dfsfdf', 'dgdfgfd', '', '', '', '', 'fdfd', '', '', 1, 3, NULL, NULL, '2021-12-14 15:46:52', '2021-12-14 15:46:52'),
-(155, 147, 0, 0, '', '', '', '', '', '', '', '1234567890', '', 2, 3, NULL, NULL, '2021-12-14 15:46:52', '2021-12-14 15:46:52');
+(155, 147, 0, 0, '', '', '', '', '', '', '', '1234567890', '', 2, 3, NULL, NULL, '2021-12-14 15:46:52', '2021-12-14 15:46:52'),
+(160, 150, 102, 12, '2.Sivans Flats', 'Near Smita Flats, Opposite of shyam Mall', 'Maneknagar', 'Ahmedabad', '380012', 'visakha@gmail.com', 'Mohan Patnayak', '', '', 1, 3, NULL, NULL, '2021-12-22 13:22:22', '2021-12-22 13:22:22'),
+(161, 150, 102, 12, '2.Sivans Flats', 'Near Smita Flats, Opposite of shyam Mall', 'Maneknagar', 'Ahmedabad', '380012', '', '', '5823145230', 'No Website', 2, 3, NULL, NULL, '2021-12-22 13:22:22', '2021-12-22 13:22:22'),
+(162, 151, 102, 14, 'Weybridge Brooklands Business Park, Wellington Way', 'Weybridge Brooklands Business Park, Wellington Way', '', 'Warwickshire', 'KT130TT', '', 'fsd', '', '', 1, 3, NULL, NULL, '2021-12-22 14:33:36', '2021-12-22 14:33:36'),
+(163, 151, 0, 0, 'Weybridge Brooklands Business Park, Wellington Way', '', '', '', 'KT130TT', '', '', '1234567890', '', 2, 3, NULL, NULL, '2021-12-22 14:33:36', '2021-12-22 14:33:36'),
+(164, 152, 102, 17, 'fsdf', 'fsdfs', '', '', '', '', 'dfsdf', '', '', 1, 3, NULL, NULL, '2021-12-22 14:36:49', '2021-12-22 14:36:49'),
+(165, 152, 0, 0, '', '', '', '', '', '', '', '1234566789', '', 2, 3, NULL, NULL, '2021-12-22 14:36:49', '2021-12-22 14:36:49'),
+(166, 153, 102, 19, 'Weybridge Brooklands Business Park, Wellington Way', 'gdfgfg', '', '', 'KT130TT', '', 'ghjhgjghjg', '', '', 1, 3, NULL, NULL, '2021-12-22 15:04:19', '2021-12-22 15:04:19'),
+(167, 153, 0, 0, '', '', '', '', '', '', '', '1234567890', '', 2, 3, NULL, NULL, '2021-12-22 15:04:19', '2021-12-22 15:04:19'),
+(168, 162, 0, 0, '', '', '', '', '', '', '', '', '', 1, 150, NULL, NULL, '2021-12-22 18:43:55', '2021-12-22 18:43:55'),
+(169, 162, 0, 0, '', '', '', '', '', '', '', '', '', 2, 150, NULL, NULL, '2021-12-22 18:43:55', '2021-12-22 18:43:55');
 
 -- --------------------------------------------------------
 
@@ -1697,7 +1725,7 @@ CREATE TABLE `user_company_info` (
 --
 
 INSERT INTO `user_company_info` (`id`, `mst_companies_id`, `users_id`, `reporting_authority_id`, `mst_departments_id`, `mst_positions_id`, `join_date`, `resign_date`, `bank_name`, `bank_branch_name`, `salary_per_month`, `bank_acc_number`, `username`, `password`, `in_time`, `out_time`, `email_username`, `email_password`, `incoming_mail_type`, `incoming_mail_server`, `incoming_mail_server_port`, `outgoing_mail_server`, `outgoing_mail_server_port`, `is_active`, `created_by`, `updated_by`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 4, 4, 2, 1, 8, '2020-05-20', '2021-06-20', 'Bank Name Ltd', 'Vijay Nagar', '5000', '454545554545', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, NULL, '2021-06-16 10:37:22', '2021-12-02 09:12:14'),
+(1, 4, 4, 2, 1, 8, '2020-05-20', '2021-06-20', 'Bank Name Ltd', 'Vijay Nagar', '5000', '454545554545', 'preksha.divine@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, NULL, '2021-06-16 10:37:22', '2021-12-22 06:19:22'),
 (2, 1, 5, 2, 1, 4, '2020-05-20', '2021-06-20', 'Bank Name Ltd', 'Vijay Nagar', '5000', '454545554545', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 3, NULL, '2021-06-16 10:45:46', '2021-11-02 13:15:29'),
 (3, 4, 6, 2, 1, 8, '2020-05-20', '2021-06-20', 'Bank Name Ltd', 'Vijay Nagar', '5000', '454545554545', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, NULL, NULL, '2021-06-18 06:37:10', '2021-12-02 09:12:20'),
 (4, 4, 3, 2, 2, 8, '2020-05-20', '2021-06-20', 'Bank Name Ltd', 'Vijay Nagar', '5000', '454545554545', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, NULL, '2021-06-21 05:52:49', '2021-12-02 09:12:23'),
@@ -1714,9 +1742,13 @@ INSERT INTO `user_company_info` (`id`, `mst_companies_id`, `users_id`, `reportin
 (15, 4, 141, 1, 1, 8, '2021-12-08', NULL, 'ICICI Bank', 'Vijay Nagar', '500000', '454545554545', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 3, NULL, NULL, '2021-12-02 15:34:01', '2021-12-02 15:34:01'),
 (16, 4, 143, NULL, NULL, 8, NULL, NULL, '', '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 3, NULL, NULL, '2021-12-09 16:13:49', '2021-12-09 16:13:49'),
 (17, 4, 144, 84, 9, 4, '2021-12-09', '2021-11-18', 'Vijya Bank', 'Ahemdabad', '50000000', '12345678901', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 3, NULL, NULL, '2021-12-13 15:29:35', '2021-12-14 05:09:51'),
-(18, 4, 145, NULL, NULL, 6, NULL, NULL, '', '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 3, NULL, NULL, '2021-12-14 10:43:00', '2021-12-14 10:43:00'),
+(18, 4, 145, 143, 2, 6, NULL, NULL, '', '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 3, NULL, NULL, '2021-12-14 10:43:00', '2021-12-21 07:06:03'),
 (19, 4, 146, 144, 9, 4, '2021-12-25', '2022-01-02', 'HDFC', 'Satellite', '8000000', '78945612325', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 3, NULL, NULL, '2021-12-14 14:58:12', '2021-12-14 14:58:12'),
-(20, 4, 147, NULL, 9, 6, NULL, NULL, '', '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 3, NULL, NULL, '2021-12-14 15:46:52', '2021-12-14 15:46:52');
+(20, 4, 147, NULL, 9, 6, NULL, NULL, '', '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 3, NULL, NULL, '2021-12-14 15:46:52', '2021-12-14 15:46:52'),
+(21, 4, 150, 143, 1, 8, '2021-12-10', NULL, 'Nutan Bank', 'Bagodra', '25000', NULL, 'Visakha90', 'Visakha90', '13:24', '13:23', 'visakha@gmail.com', 'visakha@gmail.com', '', 'Incoming Mail Server', '8080', 'Outgoing Mail Server', '80', 1, 3, NULL, NULL, '2021-12-22 13:22:22', '2021-12-22 13:22:22'),
+(22, 4, 151, NULL, 2, 6, NULL, NULL, '', '', '', NULL, 'mihir21', 'mihir21', '', '', '', '', '', '', '', '', '', 1, 3, NULL, '2021-12-22 14:33:45', '2021-12-22 14:33:36', '2021-12-22 09:24:47'),
+(23, 4, 152, NULL, 2, 6, NULL, NULL, '', '', '', NULL, 'mhir123', 'mihir21', '', '', '', '', '', '', '', '', '', 1, 3, NULL, '2021-12-22 14:33:45', '2021-12-22 14:36:49', '2021-12-22 09:24:44'),
+(24, 4, 153, NULL, 2, 8, NULL, NULL, '', '', '', NULL, 'mihir21', 'mihir21', '', '', '', '', '', '', '', '', '', 1, 3, NULL, NULL, '2021-12-22 15:04:19', '2021-12-22 15:04:19');
 
 -- --------------------------------------------------------
 
@@ -1758,7 +1790,12 @@ INSERT INTO `user_doc_details` (`id`, `users_id`, `aadhar_card_photo`, `aadhar_n
 (6, 144, 'aadhar_card_144_ieZb5.png', '1234567890', 'election_card_144_ieZb5.png', '124rt78u', 'pan_card_144_ieZb5.png', '7895238263', 'passport_144_ieZb5.pdf', '12345678888', 'driving_license_144_ieZb5.png', '23455678993', 1, 3, NULL, NULL, '2021-12-13 15:29:35', '2021-12-13 15:29:35'),
 (7, 145, NULL, '', NULL, '', NULL, '', NULL, '', NULL, '', 1, 3, NULL, NULL, '2021-12-14 10:43:00', '2021-12-14 10:43:00'),
 (8, 146, 'aadhar_card_146_4kNvY.png', '123456789', 'election_card_146_4kNvY.pdf', '45454fdf', 'pan_card_146_4kNvY.png', '1234r5666', 'passport_146_4kNvY.png', 'fytry54tr', 'driving_license_146_4kNvY.pdf', 'eret4tert54', 1, 3, NULL, NULL, '2021-12-14 14:58:12', '2021-12-14 14:58:12'),
-(9, 147, NULL, '', NULL, '', NULL, '', NULL, '', NULL, '', 1, 3, NULL, NULL, '2021-12-14 15:46:52', '2021-12-14 15:46:52');
+(9, 147, NULL, '', NULL, '', NULL, '', NULL, '', NULL, '', 1, 3, NULL, NULL, '2021-12-14 15:46:52', '2021-12-14 15:46:52'),
+(10, 150, 'aadhar_card_150_WHiTE.pdf', '1234-5678-9123', 'election_card_150_WHiTE.pdf', 'ABC1234566', 'pan_card_150_WHiTE.png', 'ABCDE7190K', 'passport_150_WHiTE.png', 'A2190457', 'driving_license_150_WHiTE.png', 'GJ011234567890', 1, 3, NULL, NULL, '2021-12-22 13:22:22', '2021-12-22 13:22:22'),
+(11, 151, NULL, '', NULL, '', NULL, '', NULL, '', NULL, '', 1, 3, NULL, NULL, '2021-12-22 14:33:36', '2021-12-22 14:33:36'),
+(12, 152, NULL, '', NULL, '', NULL, '', NULL, '', NULL, '', 1, 3, NULL, NULL, '2021-12-22 14:36:49', '2021-12-22 14:36:49'),
+(13, 153, NULL, '', NULL, '', NULL, '', NULL, '', NULL, '', 1, 3, NULL, NULL, '2021-12-22 15:04:19', '2021-12-22 15:04:19'),
+(14, 162, NULL, '', NULL, '', NULL, '', NULL, '', NULL, '', 1, 150, NULL, NULL, '2021-12-22 18:43:55', '2021-12-22 18:43:55');
 
 -- --------------------------------------------------------
 
@@ -1779,40 +1816,43 @@ CREATE TABLE `user_edu_details` (
   `created_by` int(11) DEFAULT NULL,
   `updated_by` int(11) DEFAULT NULL,
   `created_at` datetime NOT NULL,
-  `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp()
+  `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp(),
+  `deleted_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='This table is used to store user education details';
 
 --
 -- Dumping data for table `user_edu_details`
 --
 
-INSERT INTO `user_edu_details` (`id`, `users_id`, `degree`, `university`, `from_year`, `to_year`, `percentage_grade`, `specialization`, `is_active`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
-(3, 4, 'B Tech', 'Ganpat University', 2008, 2012, '81.20', 'Information Technology', 1, 1, NULL, '2021-06-16 10:47:59', '2021-06-16 10:47:59'),
-(4, 4, '10th', 'Gujrat Board', 1992, 1993, '78.50', 'Science', 1, 1, NULL, '2021-06-16 10:47:59', '2021-06-16 10:47:59'),
-(9, 5, 'B Tech', 'Ganpat University', 2008, 2012, '81.20', 'Information Technology', 1, 3, NULL, '2021-06-18 06:39:30', '2021-06-18 06:39:30'),
-(10, 5, '10th', 'Gujrat Board', 1992, 1993, '78.50', 'Science', 1, 3, NULL, '2021-06-18 06:39:30', '2021-06-18 06:39:30'),
-(30, 74, 'BCA', 'GU', 2012, 2015, '80', 'Garduation', 1, 3, NULL, '2021-07-05 11:32:16', '2021-07-05 11:32:16'),
-(31, 74, 'MCA', 'GTU', 2015, 2017, '85', 'Post Graduation', 1, 3, NULL, '2021-07-05 11:32:16', '2021-07-05 11:32:16'),
-(40, 80, 'BCA-a', 'Gujarat University', 2012, 2015, '80', 'Graduation', 1, 3, NULL, '2021-07-06 12:56:37', '2021-07-06 12:56:37'),
-(41, 80, 'BBA-b', 'Gujarat Tech University', 2012, 2015, '60', 'POST Graduation', 1, 3, NULL, '2021-07-06 12:56:37', '2021-07-06 12:56:37'),
-(42, 81, 'BA', 'Gujarat Uni', 2005, 2008, '60', 'Business Admininstarion', 1, 3, NULL, '2021-07-19 10:43:21', '2021-07-19 10:43:21'),
-(43, 81, 'MA', 'Gujarat University', 2008, 2010, '65', 'Masters in BA', 1, 3, NULL, '2021-07-19 10:43:21', '2021-07-19 10:43:21'),
-(44, 85, 'BBA', 'Gujarat University', 2012, 2015, '60', 'Graduation', 1, 3, NULL, '2021-07-19 11:19:29', '2021-07-19 11:19:29'),
-(51, 86, 'B Tech', 'Ganpat University', 2008, 2012, '', 'Information Technology', 1, 1, NULL, '2021-07-20 12:28:54', '2021-07-20 12:28:54'),
-(52, 86, '10th', 'Gujrat Board', 1992, 1993, '', 'Science', 1, 1, NULL, '2021-07-20 12:28:54', '2021-07-20 12:28:54'),
-(55, 3, 'B Tech', 'Ganpat University', 2008, 2012, '81.20', 'Information Technology', 1, 1, NULL, '2021-07-20 12:29:45', '2021-07-20 12:29:45'),
-(56, 3, '10th', 'Gujrat Board', 1992, 1993, '78.50', 'Science', 1, 1, NULL, '2021-07-20 12:29:45', '2021-07-20 12:29:45'),
-(57, 94, 'B Tech', 'Ganpat University', 2008, 2012, NULL, 'Information Technology', 1, 3, NULL, '2021-11-15 07:39:58', '2021-11-15 07:39:58'),
-(58, 94, '10th', 'Gujrat Board', 1992, 1993, NULL, 'Science', 1, 3, NULL, '2021-11-15 07:39:58', '2021-11-15 07:39:58'),
-(59, 96, 'B Tech', 'Ganpat University', 2008, 2012, NULL, 'Information Technology', 1, 3, NULL, '2021-11-15 07:43:05', '2021-11-15 07:43:05'),
-(60, 96, '10th', 'Gujrat Board', 1992, 1993, NULL, 'Science', 1, 3, NULL, '2021-11-15 07:43:05', '2021-11-15 07:43:05'),
-(61, 137, 'B Tech', 'Ganpat University', 2008, 2012, NULL, 'Information Technology', 1, 3, NULL, '2021-11-29 18:10:25', '2021-11-29 18:10:25'),
-(62, 137, '10th', 'Gujrat Board', 1992, 1993, NULL, 'Science', 1, 3, NULL, '2021-11-29 18:10:25', '2021-11-29 18:10:25'),
-(66, 141, 'B Tech', 'Ganpat University', 2008, 2012, NULL, 'B.Ed (Running)', 1, 3, NULL, '2021-12-02 15:34:01', '2021-12-02 15:34:01'),
-(67, 144, 'BCA', 'GU', 2012, 2015, NULL, 'Computer Science', 1, 3, NULL, '2021-12-13 15:29:35', '2021-12-13 15:29:35'),
-(68, 144, 'MCA', 'GTU', 2015, 2017, NULL, 'CS', 1, 3, NULL, '2021-12-13 15:29:35', '2021-12-13 15:29:35'),
-(69, 145, 'MBA', 'Saurashat', 2020, 2021, NULL, 'MBA', 1, 3, NULL, '2021-12-14 10:43:00', '2021-12-14 10:43:00'),
-(70, 146, 'MBA', 'GU', 2010, 2014, '60%', 'Masters', 1, 3, NULL, '2021-12-14 14:58:12', '2021-12-14 14:58:12');
+INSERT INTO `user_edu_details` (`id`, `users_id`, `degree`, `university`, `from_year`, `to_year`, `percentage_grade`, `specialization`, `is_active`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(3, 4, 'B Tech', 'Ganpat University', 2008, 2012, '81.20', 'Information Technology', 1, 1, NULL, '2021-06-16 10:47:59', '2021-06-16 10:47:59', NULL),
+(4, 4, '10th', 'Gujrat Board', 1992, 1993, '78.50', 'Science', 1, 1, NULL, '2021-06-16 10:47:59', '2021-06-16 10:47:59', NULL),
+(9, 5, 'B Tech', 'Ganpat University', 2008, 2012, '81.20', 'Information Technology', 1, 3, NULL, '2021-06-18 06:39:30', '2021-06-18 06:39:30', NULL),
+(10, 5, '10th', 'Gujrat Board', 1992, 1993, '78.50', 'Science', 1, 3, NULL, '2021-06-18 06:39:30', '2021-06-18 06:39:30', NULL),
+(30, 74, 'BCA', 'GU', 2012, 2015, '80', 'Garduation', 1, 3, NULL, '2021-07-05 11:32:16', '2021-07-05 11:32:16', NULL),
+(31, 74, 'MCA', 'GTU', 2015, 2017, '85', 'Post Graduation', 1, 3, NULL, '2021-07-05 11:32:16', '2021-07-05 11:32:16', NULL),
+(40, 80, 'BCA-a', 'Gujarat University', 2012, 2015, '80', 'Graduation', 1, 3, NULL, '2021-07-06 12:56:37', '2021-07-06 12:56:37', NULL),
+(41, 80, 'BBA-b', 'Gujarat Tech University', 2012, 2015, '60', 'POST Graduation', 1, 3, NULL, '2021-07-06 12:56:37', '2021-07-06 12:56:37', NULL),
+(42, 81, 'BA', 'Gujarat Uni', 2005, 2008, '60', 'Business Admininstarion', 1, 3, NULL, '2021-07-19 10:43:21', '2021-07-19 10:43:21', NULL),
+(43, 81, 'MA', 'Gujarat University', 2008, 2010, '65', 'Masters in BA', 1, 3, NULL, '2021-07-19 10:43:21', '2021-07-19 10:43:21', NULL),
+(44, 85, 'BBA', 'Gujarat University', 2012, 2015, '60', 'Graduation', 1, 3, NULL, '2021-07-19 11:19:29', '2021-07-19 11:19:29', NULL),
+(51, 86, 'B Tech', 'Ganpat University', 2008, 2012, '', 'Information Technology', 1, 1, NULL, '2021-07-20 12:28:54', '2021-07-20 12:28:54', NULL),
+(52, 86, '10th', 'Gujrat Board', 1992, 1993, '', 'Science', 1, 1, NULL, '2021-07-20 12:28:54', '2021-07-20 12:28:54', NULL),
+(55, 3, 'B Tech', 'Ganpat University', 2008, 2012, '81.20', 'Information Technology', 1, 1, NULL, '2021-07-20 12:29:45', '2021-07-20 12:29:45', NULL),
+(56, 3, '10th', 'Gujrat Board', 1992, 1993, '78.50', 'Science', 1, 1, NULL, '2021-07-20 12:29:45', '2021-07-20 12:29:45', NULL),
+(57, 94, 'B Tech', 'Ganpat University', 2008, 2012, NULL, 'Information Technology', 1, 3, NULL, '2021-11-15 07:39:58', '2021-11-15 07:39:58', NULL),
+(58, 94, '10th', 'Gujrat Board', 1992, 1993, NULL, 'Science', 1, 3, NULL, '2021-11-15 07:39:58', '2021-11-15 07:39:58', NULL),
+(59, 96, 'B Tech', 'Ganpat University', 2008, 2012, NULL, 'Information Technology', 1, 3, NULL, '2021-11-15 07:43:05', '2021-11-15 07:43:05', NULL),
+(60, 96, '10th', 'Gujrat Board', 1992, 1993, NULL, 'Science', 1, 3, NULL, '2021-11-15 07:43:05', '2021-11-15 07:43:05', NULL),
+(61, 137, 'B Tech', 'Ganpat University', 2008, 2012, NULL, 'Information Technology', 1, 3, NULL, '2021-11-29 18:10:25', '2021-11-29 18:10:25', NULL),
+(62, 137, '10th', 'Gujrat Board', 1992, 1993, NULL, 'Science', 1, 3, NULL, '2021-11-29 18:10:25', '2021-11-29 18:10:25', NULL),
+(66, 141, 'B Tech', 'Ganpat University', 2008, 2012, NULL, 'B.Ed (Running)', 1, 3, NULL, '2021-12-02 15:34:01', '2021-12-02 15:34:01', NULL),
+(67, 144, 'BCA', 'GU', 2012, 2015, NULL, 'Computer Science', 1, 3, NULL, '2021-12-13 15:29:35', '2021-12-13 15:29:35', NULL),
+(68, 144, 'MCA', 'GTU', 2015, 2017, NULL, 'CS', 1, 3, NULL, '2021-12-13 15:29:35', '2021-12-13 15:29:35', NULL),
+(69, 145, 'MBA', 'Saurashat', 2020, 2021, NULL, 'MBA', 1, 3, NULL, '2021-12-14 10:43:00', '2021-12-14 10:43:00', NULL),
+(70, 146, 'MBA', 'GU', 2010, 2014, '60%', 'Masters', 1, 3, NULL, '2021-12-14 14:58:12', '2021-12-14 14:58:12', NULL),
+(71, 150, 'Micoro Biology', 'GU', 2010, 2013, '60', 'Biology', 1, 3, NULL, '2021-12-22 13:22:22', '2021-12-22 13:22:22', NULL),
+(72, 150, 'BSc', 'GTU', 2013, 2017, '65', 'Chemicals', 1, 3, NULL, '2021-12-22 13:22:22', '2021-12-22 13:22:22', NULL);
 
 -- --------------------------------------------------------
 
@@ -1853,7 +1893,10 @@ INSERT INTO `user_emp_details` (`id`, `users_id`, `organisation`, `designation`,
 (47, 141, 'Div Systems LLP', 'Director', 2019, 2020, '25000', 1, 3, NULL, NULL, '2021-12-02 15:34:01', '2021-12-02 15:34:01'),
 (48, 144, 'Test', 'Test Des', 2017, 2020, '2500000', 1, 3, NULL, NULL, '2021-12-13 15:29:35', '2021-12-13 15:29:35'),
 (49, 144, 'Test 1', 'Test 1 Desc', 2020, 2021, '40000000', 1, 3, NULL, NULL, '2021-12-13 15:29:35', '2021-12-13 15:29:35'),
-(50, 146, 'Om Deltas', 'Marketing Manager', 2014, 2020, '6000000', 1, 3, NULL, NULL, '2021-12-14 14:58:12', '2021-12-14 14:58:12');
+(50, 146, 'Om Deltas', 'Marketing Manager', 2014, 2020, '6000000', 1, 3, NULL, NULL, '2021-12-14 14:58:12', '2021-12-14 14:58:12'),
+(51, 150, 'Research Lab 1', 'Junior Traniee', 2017, 2019, '5000000', 1, 3, NULL, NULL, '2021-12-22 13:22:22', '2021-12-22 13:22:22'),
+(52, 152, 'tt', 'ttttttttttttttt', 1234, 5678, '123', 1, 3, NULL, NULL, '2021-12-22 14:36:49', '2021-12-22 14:36:49'),
+(53, 153, 'gdfgdf', 'trdgdfg', 1234, 1234, '54645', 1, 3, NULL, NULL, '2021-12-22 15:04:19', '2021-12-22 15:04:19');
 
 --
 -- Indexes for dumped tables
@@ -2156,7 +2199,7 @@ ALTER TABLE `mst_banks`
 -- AUTO_INCREMENT for table `mst_branches`
 --
 ALTER TABLE `mst_branches`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `mst_categories`
@@ -2198,7 +2241,7 @@ ALTER TABLE `mst_customers_contact_person`
 -- AUTO_INCREMENT for table `mst_departments`
 --
 ALTER TABLE `mst_departments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `mst_groups`
@@ -2312,13 +2355,13 @@ ALTER TABLE `role_right_designs`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=150;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=165;
 
 --
 -- AUTO_INCREMENT for table `user_address_details`
 --
 ALTER TABLE `user_address_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=160;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=170;
 
 --
 -- AUTO_INCREMENT for table `user_assign_rights`
@@ -2330,25 +2373,25 @@ ALTER TABLE `user_assign_rights`
 -- AUTO_INCREMENT for table `user_company_info`
 --
 ALTER TABLE `user_company_info`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `user_doc_details`
 --
 ALTER TABLE `user_doc_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `user_edu_details`
 --
 ALTER TABLE `user_edu_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
 
 --
 -- AUTO_INCREMENT for table `user_emp_details`
 --
 ALTER TABLE `user_emp_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

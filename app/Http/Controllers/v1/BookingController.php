@@ -1320,8 +1320,6 @@ class BookingController extends Controller
             $booking_tests = BookingTest::where("booking_id", $id);
             $booking_audit = BookingAuditDetail::where("booking_id", $id);
 
-            Log::info("Booking deleted with : " . json_encode(array('id' => $id)));
-
             if (!empty($booking)) {
                 $booking->delete();
                 if (!empty($sample_details)) {
@@ -1333,6 +1331,7 @@ class BookingController extends Controller
                 if (!empty($booking_audit)) {
                     $booking_audit->delete();
                 }
+                Log::info("Booking deleted with : " . json_encode(array('id' => $id)));
                 return Helper::response("Booking deleted successfully", Response::HTTP_OK, true, $data);
             }
 

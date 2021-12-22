@@ -13,7 +13,7 @@ class UserCompanyInfo extends Model
 
     protected $table = 'user_company_info';
 
-    protected $appends = ['position_title', 'department_name'];
+    protected $appends = ['position_title', 'department_name','company_name','first_name','last_name'];
 
 
     /**
@@ -61,6 +61,24 @@ class UserCompanyInfo extends Model
     {
         $dept_data = Department::where('id', $this->mst_departments_id)->select('department_name')->first();
         return (isset($dept_data->department_name)) ? $dept_data->department_name : '';
+    }
+
+    public function getCompanyNameAttribute()
+    {
+        $comp_data = Company::where('id', $this->mst_companies_id)->select('company_name')->first();
+        return (isset($comp_data->company_name)) ? $comp_data->company_name : '';
+    }
+
+    public function getFirstNameAttribute()
+    {
+        $first_data = Employee::where('id', $this->users_id)->select('first_name')->first();
+        return (isset($first_data->first_name)) ? $first_data->first_name : '';
+    }
+
+    public function getLastNameAttribute()
+    {
+        $last_data = Employee::where('id', $this->users_id)->select('last_name')->first();
+        return (isset($last_data->last_name)) ? $last_data->last_name : '';
     }
 
       /*

@@ -21,16 +21,16 @@ class UserController extends Controller
         $selected_year = $request->selected_year;
         $company_id = $request->company_id;
 
-        $credentials = $request->only('email', 'password');
-        Log::info("User Login -> " . json_encode(array('credentials' => $request->email)));
+        $credentials = $request->only('username', 'password');
+        Log::info("User Login -> " . json_encode(array('credentials' => $request->username)));
         try {
 
             // check for the resigned employees
-            $is_resigned = User::where('email', $request->email)->pluck('is_resigned')->first();
+            $is_resigned = User::where('username', $request->username)->pluck('is_resigned')->first();
 
             if ($is_resigned) {
                 $res = Helper::response("You are not authorized to login into system, please contact system administrator", Response::HTTP_UNAUTHORIZED, true, []);
-                Log::info("User Login -> Resigned User Try Login with Email : " . $request->email);
+                Log::info("User Login -> Resigned User Try Login with Email : " . $request->username);
 
                 return $res;
             }
@@ -54,7 +54,7 @@ class UserController extends Controller
 
             return $res;
         }
-       
+
         $user = Auth::user();
         $data = array('token' => $token, 'user' => $user, 'user_login_data' => $customClaims);
         $res = Helper::response("User logged in successfully",  Response::HTTP_OK, true, $data);

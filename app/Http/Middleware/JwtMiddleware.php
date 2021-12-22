@@ -24,44 +24,41 @@ class JwtMiddleware
      */
     public function handle($request, Closure $next)
     {
-    
+
         try {
             $user = JWTAuth::parseToken()->authenticate();
         } catch (Exception $e) {
 
-            if ($e instanceof TokenInvalidException){
+            if ($e instanceof TokenInvalidException) {
                 $response_array = array(
-                    'status' => 401,                
+                    'status' => 401,
                     'data' => array(),
                     'success' => true,
-                    'message' => 'Token is Invalid'               
+                    'message' => 'Token is Invalid'
                 );
                 return response($response_array, Response::HTTP_UNAUTHORIZED);
-
-            }else if ($e instanceof TokenExpiredException){
+            } else if ($e instanceof TokenExpiredException) {
                 $response_array = array(
-                     'status' => 401,                
+                    'status' => 401,
                     'data' => array(),
                     'success' => true,
-                    'message' => 'Token is Expired'               
+                    'message' => 'Token is Expired'
                 );
                 return response($response_array, Response::HTTP_UNAUTHORIZED);
-
-            }else if ($e instanceof TokenBlacklistedException){
+            } else if ($e instanceof TokenBlacklistedException) {
                 $response_array = array(
-                     'status' => 401,                
+                    'status' => 401,
                     'data' => array(),
                     'success' => true,
-                    'message' => 'Token is blacklisted or expired'               
+                    'message' => 'Token is blacklisted or expired'
                 );
                 return response($response_array, Response::HTTP_UNAUTHORIZED);
-
-            }else{
+            } else {
                 $response_array = array(
-                     'status' => 401,                
+                    'status' => 401,
                     'data' => array(),
                     'success' => true,
-                    'message' => 'Authorization Token not found'               
+                    'message' => 'Authorization Token not found'
                 );
                 return response($response_array, Response::HTTP_UNAUTHORIZED);
             }
