@@ -71,13 +71,13 @@ class UserCompanyInfo extends Model
 
     public function getFirstNameAttribute()
     {
-        $first_data = Employee::where('id', $this->users_id)->select('first_name')->first();
+        $first_data = Employee::where('id', $this->reporting_authority_id)->select('first_name')->first();
         return (isset($first_data->first_name)) ? $first_data->first_name : '';
     }
 
     public function getLastNameAttribute()
     {
-        $last_data = Employee::where('id', $this->users_id)->select('last_name')->first();
+        $last_data = Employee::where('id', $this->reporting_authority_id)->select('last_name')->first();
         return (isset($last_data->last_name)) ? $last_data->last_name : '';
     }
 
