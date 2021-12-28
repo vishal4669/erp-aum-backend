@@ -22,6 +22,7 @@ use App\Models\UserEduDetail;
 use App\Models\UserEmpDetail;
 use File;
 use DB;
+use Illuminate\Validation\Rule;
 
 class EmployeeController extends Controller
 {
@@ -32,7 +33,7 @@ class EmployeeController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function index(Request $request)
+    public function index(Request $request, $is_dashboard_hr = '')
     {
 
         try {
@@ -42,8 +43,7 @@ class EmployeeController extends Controller
             $is_reporting_authority = (isset($request->is_reporting_authority) && $request->is_reporting_authority == 1) ? 1 : 0;
             $is_chemist = (isset($request->is_chemist) && $request->is_chemist == 1) ? 1 : 0;
             $is_resigned  = (isset($request->is_resigned) && $request->is_resigned  == 1) ? 1 : 0;
-            $is_dashboard_hr  = (isset($request->is_dashboard_hr) && $request->is_dashboard_hr  == 1) ? 1 : 0;
-
+            $is_dashboard_hr  = (isset($request->is_dashboard_hr) && $request->is_dashboard_hr  == 1 || $is_dashboard_hr == 1) ? 1 : 0;
             if ($is_dropdown) {
                 if ($is_resigned == 0 || $is_reporting_authority == 0) {
                     $data = Employee::with(['address', 'right', 'company', 'company.reporting_authority_name:id,first_name,middle_name,last_name', 'education', 'employment', 'document'])
@@ -99,7 +99,7 @@ class EmployeeController extends Controller
                     $data  = $data->where('users.is_reporting_authority', 1);
                 }
                 $data  = $data->orderBy('users.id', 'desc')
-                    ->get();
+                    ->get()->toarray();
             } else {
                 //deleted data not require
                 $data = Employee::with('address', 'right', 'company', 'education', 'employment', 'document')
@@ -128,8 +128,6 @@ class EmployeeController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request->password);
-        // dd(base64_encode($request->password));
         $req = $request->all();
         // need to uncomment when add employee with frontend using form instead of postman
         $education = json_decode($req['education'], true);
@@ -275,7 +273,7 @@ class EmployeeController extends Controller
                 $username = $request->company['username'];
                 $password = base64_encode($request->company['password']);
             }
-            
+
             $data = Employee::create([
                 'mst_companies_id' => $loggedInUserData['company_id'],
                 'title' => $request->get('title'),
@@ -443,15 +441,10 @@ class EmployeeController extends Controller
                 'company.mst_departments_id' => 'required',
                 'company.mst_positions_id' => 'required',
                 'company.join_date' => 'nullable|date',
-                // 'company.username' => 'required|max:255',
+                'company.username' => [Rule::unique('user_company_info','username')->ignore($id, 'users_id')],
                 // 'company.password' => 'required',
 
                 // documents related messages
-                // 'document.aadhar_card_photo' => 'nullable|mimes:jpeg,jpg,png,pdf',
-                // 'document.election_card_photo' => 'nullable|mimes:jpeg,jpg,png,pdf',
-                // 'document.pan_card_photo' => 'nullable|mimes:jpeg,jpg,png,pdf',
-                // 'document.passport_photo' => 'nullable|mimes:jpeg,jpg,png,pdf',
-                // 'document.driving_license_photo' => 'nullable|mimes:jpeg,jpg,png,pdf',
                 'document.pan_card_number' => 'nullable|regex:/[A-Z]{5}[0-9]{4}[A-Z]{1}/',
                 'document.aadhar_number' => 'nullable|regex:/^[0-9]{4}[ -]?[0-9]{4}[ -]?[0-9]{4}$/',
                 'document.election_card_number' => 'nullable|regex:/^([a-zA-Z]){3}([0-9]){7}?$/',
@@ -506,15 +499,10 @@ class EmployeeController extends Controller
                 'company.mst_positions_id.required' => 'Company Position field is required.',
                 'company.join_date.date' => 'Please enter valid date for Employee Company Join Date.',
                 'company.username.required' => 'User Name field is required.',
-                // 'company.username.unique' => 'Username is Already Taken Please enter Username Manually.',
+                'company.username.unique' => 'Username is Already Taken Please Enter Different Username.',
                 'company.password.required' => 'Password Field is Required.',
 
                 //documents related messages
-                // 'document.aadhar_card_photo.mimes' => 'The Aadhar Card must be a file of type: jpeg, jpg, png, pdf.',
-                // 'document.election_card_photo.mimes' => 'The Election Card must be a file of type: jpeg, jpg, png, pdf.',
-                // 'document.pan_card_photo.mimes' => 'The Pan Card must be a file of type: jpeg, jpg, png, pdf.',
-                // 'document.passport_photo.mimes' => 'The Passport must be a file of type: jpeg, jpg, png, pdf.',
-                // 'document.driving_license_photo.mimes' => 'The Driving License must be a file of type: jpeg, jpg, png, pdf.',
                 'document.pan_card_number.regex' => 'Invalid Pan Number Format.',
                 'document.aadhar_number.regex' => 'Invalid Aadhar Number Format.',
                 'document.election_card_number.regex' => 'Invalid Election Card Number Format.',
@@ -567,7 +555,7 @@ class EmployeeController extends Controller
                     $password = $employee->password;
                 }
             }
-    
+
             $input_data = [
                 'title' => $request->get('title'),
                 'first_name' => $request->get('first_name'),
@@ -780,6 +768,7 @@ class EmployeeController extends Controller
      */
     function addUserEducationDetails($edu_data, $users_id = '')
     {
+        // return isset($edu_data[0]['from_year']);
         if (!empty($edu_data)) {
             $loggedInUserData = Helper::getUserData();
 
@@ -801,8 +790,8 @@ class EmployeeController extends Controller
                             'users_id' => $users_id,
                             'degree' => (isset($education_data['degree'])) ? $education_data['degree'] : '',
                             'university' => (isset($education_data['university'])) ? $education_data['university'] : '',
-                            'from_year' => (isset($education_data['from_year'])) ? $education_data['from_year'] : '',
-                            'to_year' => (isset($education_data['to_year'])) ? $education_data['to_year'] : '',
+                            'from_year' => ($education_data['from_year'] != "") ? $education_data['from_year'] : NULL,
+                            'to_year' => ($education_data['to_year'] !== "") ? $education_data['to_year'] : NULL,
                             'percentage_grade' => (isset($education_data['percentage_grade'])) ? $education_data['percentage_grade'] : '',
                             'specialization' => (isset($education_data['specialization'])) ? $education_data['specialization'] : '',
                             'is_active' => 1,
@@ -845,8 +834,8 @@ class EmployeeController extends Controller
                             'users_id' => $users_id,
                             'organisation' => (isset($emp_data['organisation'])) ? $emp_data['organisation'] : '',
                             'designation' => (isset($emp_data['designation'])) ? $emp_data['designation'] : '',
-                            'emp_from_year' => (isset($emp_data['emp_from_year'])) ? $emp_data['emp_from_year'] : NULL,
-                            'emp_to_year' => (isset($emp_data['emp_to_year'])) ? $emp_data['emp_to_year'] : NULL,
+                            'emp_from_year' => ($emp_data['emp_from_year'] !== "") ? $emp_data['emp_from_year'] : NULL,
+                            'emp_to_year' => ($emp_data['emp_to_year'] !== "") ? $emp_data['emp_to_year'] : NULL,
                             'annual_ctc' => (isset($emp_data['annual_ctc'])) ? $emp_data['annual_ctc'] : '',
                             'is_active' => 1,
                             'created_by' => $loggedInUserData['logged_in_user_id']

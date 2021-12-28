@@ -8,6 +8,8 @@ use Illuminate\Http\Response;
 use App\Helpers\Helper;
 use DB;
 use Log;
+use Illuminate\Support\Facades\Validator;
+
 class FormulaController extends Controller
 {
     /**
@@ -15,11 +17,53 @@ class FormulaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         //
+        try {
+            $loggedInUserData = Helper::getUserData();
+            $is_dropdown = (isset($request->is_dropdown) && $request->is_dropdown == 1 ? 1 : 0);
+            if ($is_dropdown) {
+                $data = Formula::where('mst_companies_id', $loggedInUserData['company_id'])
+                    ->where('is_active', 1)
+                    ->orderBy('id', 'desc')
+                    ->get();
+            } else {
+                $data = Formula::where('mst_companies_id', $loggedInUserData['company_id'])
+                    ->where('is_active', 1)
+                    ->orderBy('id', 'desc')
+                    ->get();
+            }
+            Log::info("Formula list details : " . json_encode($request->all()));
+            return Helper::response("Formula List Shown Successfully", Response::HTTP_OK, True, $data);
+        } catch (Exception $e) {
+            $data = array();
+            return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);
+        }
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function export(Request $request)
+    {
+        //
+        try {
+            $loggedInUserData = Helper::getUserData();
+            $data = Formula::where('mst_companies_id', $loggedInUserData['company_id'])
+                ->where('is_active', 1)
+                ->orderBy('id', 'desc')
+                ->get();
+
+            Log::info("Formula Exportlist details : " . json_encode($request->all()));
+            return Helper::response("Formula Exportlist Shown Successfully", Response::HTTP_OK, True, $data);
+        } catch (Exception $e) {
+            $data = array();
+            return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);
+        }
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -39,28 +83,44 @@ class FormulaController extends Controller
     public function store(Request $request)
     {
         //
-       try {
-        $loggedInUserData = Helper::getUserData();
+        try {
+            $loggedInUserData = Helper::getUserData();
 
-        $data = Formula::create([
-            'mst_companies_id' => $loggedInUserData['company_id'],
-            'formula_name' => (isset($request->formula_name)?$request->formula_name:NULL),
-            'formula_type' => (isset($request->formula_type)?$request->formula_type:NULL),
-            'created_by' => $loggedInUserData['logged_in_user_id'],
-            'selected_year' => $loggedInUserData['selected_year'],
-            'is_active' => 1,
-            'updated_at' => NULL
-        ]);
- 
-        DB::commit();
-        Log::info("Formula Created with details : " . json_encode($request->all()));
+            $rules = [
+                'formula_name' => 'required',
+                'formula_type' => 'max:155',
+            ];
 
-        return Helper::response("Formula added Successfully", Response::HTTP_CREATED, true, $data);
-    } catch (Exception $e) {
-        DB::rollback();
-        $data = array();
-        return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);
-    }
+            $messages = [
+                'formula_name.required' => "Formula Name is Required",
+            ];
+
+            $validator = Validator::make($request->all(), $rules, $messages);
+
+            if ($validator->fails()) {
+                $data = array();
+                return Helper::response($validator->errors()->all(), Response::HTTP_OK, false, $data);
+            }
+
+            $data = Formula::create([
+                'mst_companies_id' => $loggedInUserData['company_id'],
+                'formula_name' => (isset($request->formula_name) ? $request->formula_name : NULL),
+                'formula_type' => (isset($request->formula_type) ? $request->formula_type : NULL),
+                'created_by' => $loggedInUserData['logged_in_user_id'],
+                'selected_year' => $loggedInUserData['selected_year'],
+                'is_active' => 1,
+                'updated_at' => Null
+            ]);
+
+            DB::commit();
+            Log::info("Formula Created with details : " . json_encode($request->all()));
+
+            return Helper::response("Formula added Successfully", Response::HTTP_CREATED, true, $data);
+        } catch (Exception $e) {
+            DB::rollback();
+            $data = array();
+            return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);
+        }
     }
 
     /**
@@ -69,9 +129,18 @@ class FormulaController extends Controller
      * @param  \App\Models\Formula  $formula
      * @return \Illuminate\Http\Response
      */
-    public function show(Formula $formula)
+    public function show(Formula $formula, $id)
     {
         //
+        try {
+            $formulaData = Formula::find($id);
+
+            Log::info("Fetch Formula details : " . json_encode(array('id' => $id)));
+            return Helper::response("Formula Data Shown Successfully", Response::HTTP_OK, true, $formulaData);
+        } catch (Exception $e) {
+            $data = array();
+            return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);
+        }
     }
 
     /**
@@ -92,9 +161,45 @@ class FormulaController extends Controller
      * @param  \App\Models\Formula  $formula
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Formula $formula)
+    public function update(Request $request, $id)
     {
         //
+        try {
+            $loggedInUserData = Helper::getUserData();
+            $rules = [
+                'formula_name' => 'required',
+                'formula_type' => 'max:155',
+            ];
+
+            $messages = [
+                'formula_name.required' => "Formula Name is Required",
+            ];
+
+            $validator = Validator::make($request->all(), $rules, $messages);
+
+            if ($validator->fails()) {
+                $data = array();
+                return Helper::response($validator->errors()->all(), Response::HTTP_OK, false, $data);
+            }
+            $data = [
+                'mst_companies_id' => $loggedInUserData['company_id'],
+                'formula_name' => (isset($request->formula_name) ? $request->formula_name : NULL),
+                'formula_type' => (isset($request->formula_type) ? $request->formula_type : NULL),
+                'updated_by' => $loggedInUserData['logged_in_user_id'],
+                'selected_year' => $loggedInUserData['selected_year'],
+            ];
+            $update_formula = Formula::find($id);
+            $update_formula->update($data);
+            dd($update_formula->getChanges());
+            DB::commit();
+            Log::info("Formula Updated with details : " . json_encode($request->all()));
+
+            return Helper::response("Formula updated Successfully", Response::HTTP_CREATED, true, $data);
+        } catch (Exception $e) {
+            DB::rollback();
+            $data = array();
+            return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);
+        }
     }
 
     /**
@@ -103,8 +208,19 @@ class FormulaController extends Controller
      * @param  \App\Models\Formula  $formula
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Formula $formula)
+    public function destroy(Formula $formula, $id)
     {
         //
+        try {
+            $formulaData = Formula::find($id);
+            if ($formulaData !== null) {
+                $formulaData->delete();
+            }
+            Log::info("Delete Formula details : " . json_encode(array('id' => $id)));
+            return Helper::response("Formula Data Deleted Successfully", Response::HTTP_OK, true, $formulaData);
+        } catch (Exception $e) {
+            $data = array();
+            return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);
+        }
     }
 }

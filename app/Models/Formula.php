@@ -4,10 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Formula extends Model
 {
     use HasFactory;
+    use SoftDeletes;
+    
     protected $fillable = [
         "mst_companies_id",
         "formula_name",
@@ -15,10 +18,10 @@ class Formula extends Model
         "created_by",
         "updated_by",
         "created_at",
-        "updated_at",
         "selected_year",
         "copied_from_year",
         "is_active",
+        "updated_at",
     ];
 }
 

@@ -216,9 +216,11 @@ Route::group(['middleware' => ['jwt.verify'], 'prefix' => 'v1'], function () {
 
     //Formula
     Route::post('addFormula', 'App\Http\Controllers\v1\FormulaController@store');
-    // Route::post('updateRoleRights/{id}', 'App\Http\Controllers\v1\RoleRightsController@update_role_rights');
-    // Route::get('getRoleRights/{id}', 'App\Http\Controllers\v1\RoleRightsController@show_role_rights');
-    // Route::get('assignRoleDesign', 'App\Http\Controllers\v1\RoleRightsController@assign_role_design');
+    Route::post('updateFormula/{id}', 'App\Http\Controllers\v1\FormulaController@update');
+    Route::get('getFormula/{id}', 'App\Http\Controllers\v1\FormulaController@show');
+    Route::get('listFormula', 'App\Http\Controllers\v1\FormulaController@index');
+    Route::get('exportFormula', 'App\Http\Controllers\v1\FormulaController@export');
+    Route::post('deleteFormula/{id}', 'App\Http\Controllers\v1\FormulaController@destroy');
 
 });
 

@@ -7,6 +7,7 @@ use Illuminate\Http\Response;
 use App\Models\BookingTest;
 use App\Helpers\Helper;
 use App\Http\Controllers\v1\AssignTestsController;
+use App\Http\Controllers\v1\EmployeeController;
 
 class CounterController extends Controller
 {
@@ -20,22 +21,29 @@ class CounterController extends Controller
         //      
         try {
             $loggedInUserData = Helper::getUserData();
-            // $count_pending_assign_tests = BookingTest::count_pending_assign_tests();
 
         // using AssignTestsController
-            $data = new AssignTestsController;
-            $PendingTests_Count = $data->index($count_request = "Pending");
-            $Analitics_count = $data->statusWiseTests($request,$count_request = "Assigned");
-            $ForApproval_count = $data->statusWiseTests($request,$count_request = "ForApproval");
-            $Approved_count = $data->statusWiseTests($request,$count_request = "Approved");
-            $Rejected_count = $data->statusWiseTests($request,$count_request = "Rejected");
+            $assign_test_data = new AssignTestsController;
+            $PendingTests_Count = $assign_test_data->index($count_request = "Pending");
+            $Analitics_count = $assign_test_data->statusWiseTests($request,$count_request = "Assigned");
+            $ForApproval_count = $assign_test_data->statusWiseTests($request,$count_request = "ForApproval");
+            $Approved_count = $assign_test_data->statusWiseTests($request,$count_request = "Approved");
+            $Rejected_count = $assign_test_data->statusWiseTests($request,$count_request = "Rejected");
 
+        // using EmployeeController
+            $employee_data = new EmployeeController;
+            $hr_count = $employee_data->index($request,$is_dashboard_hr = 1);
+            $hr_count = json_encode($hr_count);
+            $hr_count = json_decode($hr_count);
+            $hr_count = count($hr_count->original->data);
+            
             $all_count = array(
                 "PendingTests_Count" => $PendingTests_Count,
                 "Analitics_count" => $Analitics_count,
                 "ForApproval_count" => $ForApproval_count,
                 "Approved_count" => $Approved_count,
                 "Rejected_count" => $Rejected_count,
+                "Hr_count" => $hr_count
             );
             
             return Helper::response("Count Data Shown Successfully", Response::HTTP_OK, true, $all_count);
