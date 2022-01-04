@@ -230,4 +230,5 @@ Route::group(['prefix' => 'v1'], function () {
 
     Route::get('listStates', 'App\Http\Controllers\v1\CommonController@listStates');
     Route::get('listCountries', 'App\Http\Controllers\v1\CommonController@listCountries');
+    Route::get('countriesWiseStates/{id}', 'App\Http\Controllers\v1\CommonController@countriesWiseStates');
 });

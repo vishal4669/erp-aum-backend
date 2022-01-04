@@ -373,8 +373,6 @@ class CustomerController extends Controller
             $panrule = 'nullable|mimes:jpeg,png,jpg,svg,pdf|max:2048';
         }
 
-
-
         try {
             $rules1 = [
 

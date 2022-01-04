@@ -68,5 +68,16 @@ class CommonController extends Controller
             return Helper::response(trans("message.something_went_wrong"),$e->getStatusCode(),false,$data);
         } 
     }
+
+    public function countriesWiseStates(Request $request,$id)
+    {
+        try {
+            $data = Country::where('id',$id)->with('contry_wise_states')->get();
+            return Helper::response("All Countries List Shown Successfully", Response::HTTP_OK,true,$data);
+        } catch (Exception $e) {
+            $data = array();
+            return Helper::response(trans("message.something_went_wrong"),$e->getStatusCode(),false,$data);
+        } 
+    }
 }
 

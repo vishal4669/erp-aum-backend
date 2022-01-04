@@ -6,6 +6,7 @@ use App\Models\TrainerCafeBooking;
 use Illuminate\Http\Response;
 use JWTAuth;
 use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class Helper
 {
@@ -28,11 +29,27 @@ class Helper
     public static function yearsList()
     {
         $years_array = array();
-
-        for ($i = -1; $i <= 6; $i++) {
-            $j = $i + 1;
-            $year_data = date('Y', strtotime('-' . $j . ' year')) . '-' . date('y', strtotime('-' . $i . ' year'));
-            array_push($years_array, $year_data);
+        $year_len = 7;
+        for ($i = 0; $i <= $year_len; $i++) {
+            $current_date = Carbon::now();
+            $current_year = Carbon::now()->year;
+            $next_year = Carbon::now()->addYear()->format('y') - $i;
+            $finacial_new_year_start = \Carbon\Carbon::createFromFormat('Y-m-d', '' . $current_year . '-03-31');
+            $current_date = \Carbon\Carbon::createFromFormat('Y-m-d', '' . $current_year . '-04-01');
+            $result = $current_date->gt($finacial_new_year_start);
+            if ($result === true) {
+                $finacial_new_year = $finacial_new_year_start->format('Y');
+                if ($finacial_new_year == $current_year) {
+                    $current_year = Carbon::now()->year - $i;
+                    $year_data = $current_year . "-" . $next_year;
+                    array_push($years_array, $year_data);
+                }
+            } else {
+                $j = $i + 1;
+                $current_year = Carbon::now()->year - $j;
+                $year_data = $current_year . "-" . $next_year - 1;
+                array_push($years_array, $year_data);
+            }
         }
 
         return $years_array;

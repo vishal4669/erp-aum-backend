@@ -190,7 +190,6 @@ class FormulaController extends Controller
             ];
             $update_formula = Formula::find($id);
             $update_formula->update($data);
-            dd($update_formula->getChanges());
             DB::commit();
             Log::info("Formula Updated with details : " . json_encode($request->all()));
 

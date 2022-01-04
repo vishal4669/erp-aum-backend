@@ -2,10 +2,14 @@
 
 namespace App\Providers;
 
+use App\Events\FormulaCreated;
+use App\Listeners\FormulaCreatedListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
+use App\Models\Formula;
+use App\Observers\FormulaObserver;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -18,6 +22,9 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        FormulaCreated::class => [
+            FormulaCreatedListener::class
+        ],
     ];
 
     /**
@@ -28,5 +35,7 @@ class EventServiceProvider extends ServiceProvider
     public function boot()
     {
         //
+        Formula::observe(FormulaObserver::class);
+        Formula::observe(FormulaObserver::class);
     }
 }
