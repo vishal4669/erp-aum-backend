@@ -35,19 +35,17 @@ class Helper
             $current_year = Carbon::now()->year;
             $next_year = Carbon::now()->addYear()->format('y') - $i;
             $finacial_new_year_start = \Carbon\Carbon::createFromFormat('Y-m-d', '' . $current_year . '-03-31');
-            $current_date = \Carbon\Carbon::createFromFormat('Y-m-d', '' . $current_year . '-04-01');
+
             $result = $current_date->gt($finacial_new_year_start);
             if ($result === true) {
-                $finacial_new_year = $finacial_new_year_start->format('Y');
-                if ($finacial_new_year == $current_year) {
-                    $current_year = Carbon::now()->year - $i;
-                    $year_data = $current_year . "-" . $next_year;
-                    array_push($years_array, $year_data);
-                }
+                $current_year = Carbon::now()->year - $i;
+                $year_data = $current_year . "-" . $next_year;
+                array_push($years_array, $year_data);
             } else {
                 $j = $i + 1;
                 $current_year = Carbon::now()->year - $j;
-                $year_data = $current_year . "-" . $next_year - 1;
+                $next_year =  $next_year - 1;
+                $year_data = $current_year . "-" . $next_year;
                 array_push($years_array, $year_data);
             }
         }
@@ -77,4 +75,6 @@ class Helper
 
         return $userdata;
     }
+
+    
 }

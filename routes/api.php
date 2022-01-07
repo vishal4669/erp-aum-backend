@@ -15,16 +15,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('clear_cache', function () {
-    \Artisan::call('cache:clear');
-    \Artisan::call('key:generate');
-    \Artisan::call('config:clear');
-    \Artisan::call('view:clear');
-    \Artisan::call('composer update vendor/package');
-
-    dd("Cache is cleared");
-});
-
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -221,14 +211,20 @@ Route::group(['middleware' => ['jwt.verify'], 'prefix' => 'v1'], function () {
     Route::get('listFormula', 'App\Http\Controllers\v1\FormulaController@index');
     Route::get('exportFormula', 'App\Http\Controllers\v1\FormulaController@export');
     Route::post('deleteFormula/{id}', 'App\Http\Controllers\v1\FormulaController@destroy');
+    
+    
 
 });
 
 Route::group(['prefix' => 'v1'], function () {
     Route::get('listYears', 'App\Http\Controllers\v1\CommonController@yearsList');
     Route::get('listCompanies', 'App\Http\Controllers\v1\CommonController@listCompanies');
-
+    //uniqusername
+    // Route::post('isUniqUsername', 'App\Helpers\Helpers@uniq_username');
+    Route::post('isUniqUsername', 'App\Http\Controllers\v1\CommonController@uniq_username');
     Route::get('listStates', 'App\Http\Controllers\v1\CommonController@listStates');
     Route::get('listCountries', 'App\Http\Controllers\v1\CommonController@listCountries');
     Route::get('countriesWiseStates/{id}', 'App\Http\Controllers\v1\CommonController@countriesWiseStates');
+    //clear cache
+    Route::get('/clear/route', 'App\Http\Controllers\v1\CommonController@clearRoute');
 });

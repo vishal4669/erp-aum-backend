@@ -29,7 +29,7 @@ class Country extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function contry_wise_states()
+    public function country_wise_states()
     {
         return $this->hasMany(State::class, 'mst_countries_id', 'id');
             // ->withDefault([

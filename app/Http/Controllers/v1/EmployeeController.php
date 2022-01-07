@@ -23,6 +23,8 @@ use App\Models\UserEmpDetail;
 use File;
 use DB;
 use Illuminate\Validation\Rule;
+use App\Http\Controllers\v1\CommonController;
+use Illuminate\Support\Facades\DB as FacadesDB;
 
 class EmployeeController extends Controller
 {
@@ -31,8 +33,42 @@ class EmployeeController extends Controller
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
+     * working on it
      */
+    // public function index(Request $request, $is_dashboard_hr = '')
+    // {
 
+    //     try {
+
+    //         $loggedInUserData = Helper::getUserData();
+    //         $is_dropdown = (isset($request->is_dropdown) && $request->is_dropdown == 1) ? 1 : 0;
+    //         $is_reporting_authority = (isset($request->is_reporting_authority) && $request->is_reporting_authority == 1) ? 1 : 0;
+    //         $is_chemist = (isset($request->is_chemist) && $request->is_chemist == 1) ? 1 : 0;
+    //         $is_resigned  = (isset($request->is_resigned) && $request->is_resigned  == 1) ? 1 : 0;
+    //         $is_dashboard_hr  = (isset($request->is_dashboard_hr) && $request->is_dashboard_hr  == 1 || $is_dashboard_hr == 1) ? 1 : 0;
+    //         $data = DB::table('view_users')
+    //             ->select("*");
+    //         if ($is_reporting_authority) {
+    //             $data = $data->where('mst_companies_id', $loggedInUserData['company_id']);
+    //         }
+    //         if ($is_chemist) {
+    //             $chemist_id = Position::where('position_title', 'Chemist')->get('id')->toarray();
+    //             $data = $data->where('mst_positions_id', $chemist_id[0]['id']);
+    //         }
+    //         if ($is_resigned) {
+    //             $data = $data->where('is_resigned', 1);
+    //         }
+    //         $data = $data->where('mst_companies_id', $loggedInUserData['company_id'])
+    //             ->get()
+    //             ->toArray();
+    //         dd($data);
+
+    //         return Helper::response("Employee List Shown Successfully", Response::HTTP_OK, true, $data);
+    //     } catch (Exception $e) {
+    //         $data = array();
+    //         return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);
+    //     }
+    // }
     public function index(Request $request, $is_dashboard_hr = '')
     {
 
@@ -128,6 +164,7 @@ class EmployeeController extends Controller
 
     public function store(Request $request)
     {
+
         $req = $request->all();
         // need to uncomment when add employee with frontend using form instead of postman
         $education = json_decode($req['education'], true);
@@ -138,6 +175,7 @@ class EmployeeController extends Controller
         $req['education'] = $education;
         $req['employment'] = $employment;
         DB::beginTransaction();
+
         try {
             $rules = [
 
@@ -273,7 +311,12 @@ class EmployeeController extends Controller
                 $username = $request->company['username'];
                 $password = base64_encode($request->company['password']);
             }
-
+            //check username is uniq or not from employee or customer for their username
+            $is_uniq_username = new CommonController;
+            $is_uniq_username = $is_uniq_username->uniq_username($username);
+            if ($is_uniq_username == 1) {
+                return Helper::response("Username Already Exist Please Enter Uniq Username.", Response::HTTP_OK, false, $username);
+            }
             $data = Employee::create([
                 'mst_companies_id' => $loggedInUserData['company_id'],
                 'title' => $request->get('title'),
@@ -441,7 +484,7 @@ class EmployeeController extends Controller
                 'company.mst_departments_id' => 'required',
                 'company.mst_positions_id' => 'required',
                 'company.join_date' => 'nullable|date',
-                'company.username' => [Rule::unique('user_company_info','username')->ignore($id, 'users_id')],
+                'company.username' => [Rule::unique('user_company_info', 'username')->ignore($id, 'users_id')],
                 // 'company.password' => 'required',
 
                 // documents related messages
@@ -530,12 +573,12 @@ class EmployeeController extends Controller
                 }
             }
 
-            $validator = Validator::make($req, $rules, $messages);
+            // $validator = Validator::make($req, $rules, $messages);
 
-            if ($validator->fails()) {
-                $data = array();
-                return Helper::response($validator->errors()->all(), Response::HTTP_OK, false, $data);
-            }
+            // if ($validator->fails()) {
+            //     $data = array();
+            //     return Helper::response($validator->errors()->all(), Response::HTTP_OK, false, $data);
+            // }
 
             $loggedInUserData = Helper::getUserData();
             $is_approved = "Pending";
@@ -554,6 +597,13 @@ class EmployeeController extends Controller
                 } else {
                     $password = $employee->password;
                 }
+            }
+
+            //check username is uniq or not from employee or customer for their username
+            $is_uniq_username = new CommonController;
+            $is_uniq_username = $is_uniq_username->uniq_username($username, $id, $role = "Employee");
+            if ($is_uniq_username == 1) {
+                return Helper::response("Username Already Exist Please Enter Uniq Username.", Response::HTTP_OK, false, $username);
             }
 
             $input_data = [
@@ -594,7 +644,6 @@ class EmployeeController extends Controller
             $photo_file_name = $signature_file_name = '';
             $random_string = Helper::generateRandomString();
 
-
             $photo = (isset($request['photo']) && !empty($request['photo'])) ? $request['photo'] : '';
             if (!empty($photo)) {
                 if ($employee->photo !== $photo && $request['photo'] !== null) {
@@ -610,10 +659,17 @@ class EmployeeController extends Controller
                     $signature->move(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH'), $signature_file_name);
                 }
             }
+            if ($request->photo != NUll || $request->photo != '') {
+                $employee->photo = ($photo_file_name && $photo_file_name != '') ? config('constants.EMPLOYEE_DOCUMENTS_URL') . '/' . $photo_file_name : $employee->photo;
+            } else {
+                $employee->photo = NULL;
+            }
 
-            $employee->photo = ($photo_file_name && $photo_file_name != '') ? config('constants.EMPLOYEE_DOCUMENTS_URL') . '/' . $photo_file_name : $employee->photo;
-            $employee->signature = ($signature_file_name && $signature_file_name != '') ? config('constants.EMPLOYEE_DOCUMENTS_URL') . '/' . $signature_file_name : $employee->signature;
-
+            if ($request->signature != NUll || $request->signature != '') {
+                $employee->signature = ($signature_file_name && $signature_file_name != '') ? config('constants.EMPLOYEE_DOCUMENTS_URL') . '/' . $signature_file_name : $employee->signature;
+            } else {
+                $employee->signature = NULL;
+            }
 
             $employee->update($input_data);
 

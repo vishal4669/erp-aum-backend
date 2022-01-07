@@ -120,8 +120,8 @@ class CustomerController extends Controller
             $rules = [
 
                 'company_name' => 'required|string|max:255',
-                'gst_number' => 'nullable|max:15|regex:/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/',
-                'user_name' => 'required|email|max:255',
+                'gst_number' => 'max:15|regex:/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/',
+                'user_name' => 'required|max:255',
                 'password' => 'required|min:6|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,15}$/',
                 'customer_contact_info.home_contact_info.*.home_pan_card' => 'nullable|regex:/[A-Z]{5}[0-9]{4}[A-Z]{1}/',
                 'logo' => 'nullable|image|mimes:jpeg,png,jpg,svg|max:2048',
@@ -151,7 +151,7 @@ class CustomerController extends Controller
                 'user_name.email' => 'Please enter valid email for User name',
                 'user_name.max' => 'User name should not me greater than 255 characters.',
                 'password.required' => 'password field is required.',
-                'password.regex' => 'password invalid : minimum eight max 15 characters, only one uppercase letter,at least one lowercase letter, one number and one special character:',
+                'password.regex' => 'password invalid : minimum eight max 15 characters, only one uppercase letter,at least one lowercase letter, one number and one special character',
                 'customer_contact_info.home_contact_info.*.home_pan_card.regex' => 'Please enter valid Pan example:"ABCDE7190K" 10 digit number',
                 'logo.image' => 'please select image file for logo',
                 'logo.mimes' => 'image type must be jpeg,png,jpg,svg',
@@ -185,6 +185,12 @@ class CustomerController extends Controller
                 return Helper::response($validator->errors()->all(), Response::HTTP_OK, false, $data);
             }
 
+            //check username is uniq or not from employee or customer for their username
+            $is_uniq_username = new CommonController;
+            $is_uniq_username = $is_uniq_username->uniq_username($request->get('user_name'));
+            if ($is_uniq_username == 1) {
+                return Helper::response("Username Already Exist Please Enter Uniq Username.", Response::HTTP_OK, false, $request->get('user_name'));
+            }
 
             $imageName = '';
             $loggedInUserData = Helper::getUserData();
@@ -202,7 +208,7 @@ class CustomerController extends Controller
                 'contact_person_name' => $request->get('contact_person_name'),
                 'tally_alias_name' => $request->get('tally_alias_name'),
                 'user_name' => $request->get('user_name'),
-                'password' => ($request->get('password')) ? Hash::make($request->get('password')) : '',
+                'password' => ($request->get('password')) ? base64_encode($request->get('password')) : '',
                 'birth_date' => $request->get('birth_date'),
                 'contact_type' => $request->get('contact_type'),
                 'priority' => $request->get('priority'),
@@ -213,6 +219,8 @@ class CustomerController extends Controller
                 'company_tin_no' => $request->get('company_tin_no'),
                 'company_service_tax_no' => $request->get('company_service_tax_no'),
                 'company_cust_discount' => $request->get('company_cust_discount'),
+                'company_cst_no' => $request->get('company_cst_no'),
+                'company_vat_no' => $request->get('company_vat_no'),
                 'selected_year' => $loggedInUserData['selected_year'],
                 'is_active' => $request->get('is_active'),
                 'created_by' => $loggedInUserData['logged_in_user_id'], //edited
@@ -440,6 +448,13 @@ class CustomerController extends Controller
             if ($validator1->fails()) {
                 $data1 = array();
                 return Helper::response($validator1->errors()->all(), Response::HTTP_OK, false, $data1);
+            }
+
+            //check username is uniq or not from employee or customer for their username
+            $is_uniq_username = new CommonController;
+            $is_uniq_username = $is_uniq_username->uniq_username($request->get('user_name'), $id, $role="Customer");
+            if ($is_uniq_username == 1) {
+                return Helper::response("Username Already Exist Please Enter Uniq Username.", Response::HTTP_OK, false, $request->get('user_name'));
             }
 
             $imageName = NULL;

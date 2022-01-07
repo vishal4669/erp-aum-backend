@@ -18,6 +18,7 @@ class UserController extends Controller
 
     public function authenticate(Request $request)
     {
+
         $selected_year = $request->selected_year;
         $company_id = $request->company_id;
 

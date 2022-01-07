@@ -6,9 +6,13 @@ use App\Models\Formula;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Helpers\Helper;
+use App\Models\Customer;
+use App\Models\Employee;
 use DB;
 use Log;
 use Illuminate\Support\Facades\Validator;
+
+use function PHPUnit\Framework\isEmpty;
 
 class FormulaController extends Controller
 {
@@ -69,10 +73,32 @@ class FormulaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function uniq_username(Request $request)
     {
         //
+        $username = $request->username;
+        $id = $request->id;
+
+        if ($id == '' || $id = null) {
+            $check_employee = Employee::where("username", $username)->get();
+            $check_customer = Customer::where("user_name", $username)->get();
+            if ($check_employee->isEmpty() == false || $check_customer->isEmpty() == false) {
+                //if username already exist in employee or customer table
+                return true;
+            }
+        }
+        else
+        {
+            $check_employee = Employee::whereNotIn('id',$id)->where("username", $username)->get();
+            $check_customer = Customer::whereNotIn('id',$id)->where("user_name", $username)->get();
+            if ($check_employee->isEmpty() == false || $check_customer->isEmpty() == false) {
+                //if username already exist in employee or customer table
+                return true;
+            }
+        }
     }
+
+    
 
     /**
      * Store a newly created resource in storage.
