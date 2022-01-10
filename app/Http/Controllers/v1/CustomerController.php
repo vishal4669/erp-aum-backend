@@ -16,7 +16,7 @@ use DB;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use JWTAuth;
-use Symfony\Component\HttpFoundation\File\File;
+use File;
 
 
 class CustomerController extends Controller
@@ -120,9 +120,9 @@ class CustomerController extends Controller
             $rules = [
 
                 'company_name' => 'required|string|max:255',
-                'gst_number' => 'max:15|regex:/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/',
+                'gst_number' => 'required|max:15|regex:/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/',
                 'user_name' => 'required|max:255',
-                'password' => 'required|min:6|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,15}$/',
+                'password' => 'required|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,15}$/',
                 'customer_contact_info.home_contact_info.*.home_pan_card' => 'nullable|regex:/[A-Z]{5}[0-9]{4}[A-Z]{1}/',
                 'logo' => 'nullable|image|mimes:jpeg,png,jpg,svg|max:2048',
                 'company_tin_no' => ['nullable', 'regex:/^(9\d{2})([ \-]?)([7]\d|8[0-8])([ \-]?)(\d{4})$/'],
@@ -146,7 +146,7 @@ class CustomerController extends Controller
             $messages = [
                 'company_name.required' => 'Company name field is required.',
                 'company_name.max' => 'Company name should not me greater than 255 characters.',
-                'gst_number.regex' => 'it is invalid GST (Goods and Services Tax) number',
+                'gst_number.regex' => 'GST No Field is Required.',
                 'user_name.required' => 'User name field is required.',
                 'user_name.email' => 'Please enter valid email for User name',
                 'user_name.max' => 'User name should not me greater than 255 characters.',
@@ -347,8 +347,9 @@ class CustomerController extends Controller
      */
     public function update(Request $request, $id)
     {
-
+        //return Helper::response("customer data", Response::HTTP_OK, true, $request->all());
         $req = $request->all();
+        // return $req;
         $someArray = json_decode($req['contact_person_data'], true);
         $req['contact_person_data'] = $someArray;
         $apipass = Customer::where('id', $id)->value('password');
@@ -363,8 +364,9 @@ class CustomerController extends Controller
             $passrule = 'required';
             $password = $request->get('password');
         } else {
-            $passrule = 'required|min:6|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,15}$/';
-            $password = Hash::make($request->get('password'));
+            $passrule = 'required|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,15}$/';
+            //$password = Hash::make($request->get('password'));
+            $password = base64_encode($request->get('password'));
         }
 
         if ($request->logo == $apilogo || $request->logo == "null") {
@@ -385,8 +387,8 @@ class CustomerController extends Controller
             $rules1 = [
 
                 'company_name' => 'required|string|max:255',
-                'gst_number' => 'nullable|max:15|regex:/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/',
-                'user_name' => 'required|email|max:255',
+                'gst_number' => 'required|max:15|regex:/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/',
+                'user_name' => 'required|max:255',
                 'password' => $passrule,
                 'customer_contact_info.home_contact_info.*.home_pan_card' => 'nullable|regex:/[A-Z]{5}[0-9]{4}[A-Z]{1}/',
                 'logo' => $logorule,
@@ -410,11 +412,11 @@ class CustomerController extends Controller
             $messages1 = [
                 'company_name.required' => 'Company name field is required.',
                 'company_name.max' => 'Company name should not me greater than 255 characters.',
-                'gst_number.regex' => 'it is invalid GST (Goods and Services Tax) number',
+                'gst_number.regex' => 'GST No Field is Required.',
                 'user_name.required' => 'User name field is required.',
                 'user_name.max' => 'User name should not me greater than 255 characters.',
                 'password.required' => 'password field is required.',
-                'password.regex' => 'password invalid : minimum eight max 15 characters, only one uppercase letter,at least one lowercase letter, one number and one special character:',
+                'password.regex' => 'password invalid : minimum eight max 15 characters, only one uppercase letter,at least one lowercase letter, one number and one special character.',
                 'customer_contact_info.home_contact_info.*.home_pan_card.regex' => 'Please enter valid Pan example:"ABCDE7190K" 10 digit number',
                 'logo.image' => 'please select image file for logo',
                 'logo.mimes' => 'image type must be jpeg,png,jpg,svg',
@@ -452,22 +454,31 @@ class CustomerController extends Controller
 
             //check username is uniq or not from employee or customer for their username
             $is_uniq_username = new CommonController;
-            $is_uniq_username = $is_uniq_username->uniq_username($request->get('user_name'), $id, $role="Customer");
+            $is_uniq_username = $is_uniq_username->uniq_username($request->get('user_name'), $id, $role = "Customer");
             if ($is_uniq_username == 1) {
                 return Helper::response("Username Already Exist Please Enter Uniq Username.", Response::HTTP_OK, false, $request->get('user_name'));
             }
 
             $imageName = NULL;
             $loggedInUserData = Helper::getUserData();
-            if ($apilogo !== $request->get('logo') && $request->logo !== "null") {
-                if ($request->logo != "" || $request->logo != null) {
+
+            if ($apilogo !== $request->logo && $request->logo  !== "null") {
+                if ($request->logo !== "" && $request->logo !== null) {
                     $files = $request->file('logo');
                     $imageName = date('YmdHis') . "." . $files->getClientOriginalExtension();
                     $files->move(public_path('images/customers/logo'), $imageName);
                     $data['logo'] = $imageName;
-                }
-            }
 
+                    if (isset($apilogo) && $apilogo != '' && File::exists(public_path('images/customers/logo/' . $apilogo))) {
+                        File::delete(public_path('images/customers/logo/' . $apilogo));
+                    }
+                }
+            } else {
+                $data['logo'] = $request->logo;
+            }
+            if (empty($request->logo) && File::exists(public_path('images/customers/logo/' . $apilogo))) {
+                File::delete(public_path('images/customers/logo/' . $apilogo));
+            }
             $bithdate = $request->get('birth_date');
             if ($bithdate != "null" && $bithdate != null) {
                 $birth_date = $request->get('birth_date');
@@ -487,7 +498,7 @@ class CustomerController extends Controller
                 'contact_type' => $request->get('contact_type'),
                 'priority' => $request->get('priority'),
                 'notes' => $request->get('notes'),
-                'logo' => ($request->file('logo')) ? $imageName : $request->get('logo'),
+                'logo' => isset($request->logo) ? $data['logo'] : NULL,
                 'education_details' => $request->get('education_details'),
                 'prev_details' => $request->get('prev_details'),
                 'company_tin_no' => $request->get('company_tin_no'),
@@ -501,7 +512,7 @@ class CustomerController extends Controller
             $customer_id = $id;
             $all_req = $request->all();
             // //add customer contact-information
-            $this->addupdateCustomerContactInfo($all_req, $request->get('customer_contact_info'), $customer_id);
+            return $this->addupdateCustomerContactInfo($all_req, $request->get('customer_contact_info'), $customer_id);
             $this->addupdateCustomerContactPerson($req['contact_person_data'], $customer_id);
 
             Log::info("Customer updated with details : " . json_encode(array('data' => $input_data, 'id' => $customer_id)));
@@ -607,19 +618,26 @@ class CustomerController extends Controller
                     $apipan = CustomerContactInfo::where('mst_customer_id', $customer_id)->where('contact_info_type', 2)->value('other_pan_card_copy');
 
 
-
                     if ($apipan != $files) {
                         if (array_key_exists("other_pan_card_copy", $all_req['customer_contact_info']['other_contact_info'][0])) {
                             if ($files !== null  && $files !== "undefined") {
                                 $imageName = date('YmdHis') . "." . $files->getClientOriginalExtension();
                                 $files->move(public_path('images/customers/pancard_copy'), $imageName);
                                 $othercontactArray['other_pan_card_copy'] = $imageName;
+
+                                if (isset($apipan) && $apipan != '' && File::exists(public_path('images/customers/pancard_copy/' . $apipan))) {
+                                    File::delete(public_path('images/customers/pancard_copy/' . $apipan));
+                                }
                             }
                         }
+                    } else {
+                        $imageName = $apipan;
                     }
 
                     if ($files == null || $files == "undefined") {
-                        $imageName = $apipan;
+                        if (isset($apipan) && $apipan != '' && File::exists(public_path('images/customers/pancard_copy/' . $apipan))) {
+                            File::delete(public_path('images/customers/pancard_copy/' . $apipan));
+                        }
                     }
 
                     // check if data already present for the customer
@@ -677,7 +695,7 @@ class CustomerController extends Controller
 
         if (!empty($contact_person_data)) {
 
-            // Delete all old   
+            // Delete all old
             $customercontactperson = CustomerContactPerson::where('mst_customer_id', $customer_id);
             $customercontactperson->forceDelete();
 

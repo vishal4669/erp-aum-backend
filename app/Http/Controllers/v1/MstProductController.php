@@ -20,10 +20,6 @@ use Illuminate\Support\Arr;
 use JWTAuth;
 
 
-
-
-
-
 class MstProductController extends Controller
 {
     /**

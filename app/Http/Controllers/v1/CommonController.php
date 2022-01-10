@@ -24,7 +24,8 @@ class CommonController extends Controller
     public function clearRoute()
     {
         \Artisan::call('cache:clear');
-        \Artisan::call('key:generate');
+        // \Artisan::call('key:generate');
+        \Artisan::call('route:cache');
         \Artisan::call('config:clear');
         \Artisan::call('view:clear');
         // \Artisan::call('composer update vendor/package');

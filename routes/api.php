@@ -211,9 +211,13 @@ Route::group(['middleware' => ['jwt.verify'], 'prefix' => 'v1'], function () {
     Route::get('listFormula', 'App\Http\Controllers\v1\FormulaController@index');
     Route::get('exportFormula', 'App\Http\Controllers\v1\FormulaController@export');
     Route::post('deleteFormula/{id}', 'App\Http\Controllers\v1\FormulaController@destroy');
-    
-    
 
+    //Method
+    Route::get('listMethod', 'App\Http\Controllers\v1\MethodController@index');
+    Route::post('addMethod', 'App\Http\Controllers\v1\MethodController@store');
+    Route::post('updateMethod/{id}', 'App\Http\Controllers\v1\MethodController@update');
+    Route::get('getMethod/{id}', 'App\Http\Controllers\v1\MethodController@show');
+    Route::get('deleteMethod/{id}', 'App\Http\Controllers\v1\MethodController@destroy');
 });
 
 Route::group(['prefix' => 'v1'], function () {

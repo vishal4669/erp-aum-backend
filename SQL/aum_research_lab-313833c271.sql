@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: sdb-e.hosting.stackcp.net
--- Generation Time: Jan 07, 2022 at 01:51 PM
+-- Generation Time: Jan 10, 2022 at 02:11 PM
 -- Server version: 10.4.18-MariaDB-log
 -- PHP Version: 7.1.33
 
@@ -265,6 +265,32 @@ CREATE TABLE `formulas` (
 INSERT INTO `formulas` (`id`, `mst_companies_id`, `formula_name`, `formula_type`, `created_by`, `updated_by`, `created_at`, `updated_at`, `selected_year`, `copied_from_year`, `is_active`, `deleted_at`) VALUES
 (1, 4, '[AAI×Φ]÷[Φ- W]=100± [EAAI+EW]', 'Assay', 1, NULL, '2021-12-28 15:57:26', NULL, '2019-20', NULL, 1, NULL),
 (2, 4, '(CI)=(t×SD)÷ (n)1/2', 'Assay Chemical', 1, 1, '2021-12-28 15:58:06', '2021-12-28 16:26:40', '2019-20', NULL, 1, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `methods`
+--
+
+CREATE TABLE `methods` (
+  `id` int(11) NOT NULL COMMENT 'Primary Key, Auto Increment',
+  `name` varchar(255) DEFAULT NULL,
+  `type` varchar(155) DEFAULT NULL,
+  `date` date DEFAULT NULL,
+  `file_1` text DEFAULT NULL,
+  `file_2` text DEFAULT NULL,
+  `file_3` text DEFAULT NULL,
+  `file_4` text DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  `created_by` int(11) DEFAULT NULL,
+  `updated_by` int(11) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `selected_year` varchar(50) DEFAULT NULL,
+  `copied_from_year` varchar(50) DEFAULT NULL,
+  `is_active` tinyint(4) DEFAULT NULL,
+  `deleted_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -691,8 +717,10 @@ INSERT INTO `mst_customers` (`id`, `mst_companies_id`, `company_name`, `gst_numb
 (4, 4, 'Divine Infosys', NULL, 'Vishal Kotak', 'Bhavesh Gajjar', 'wordpress.divine@gmail.com', '$2y$10$bTDQSZW2my.A7NDThk7NaONMebSIUOKPrJWFj67oKAeJ4NdUq8Ap2', '2016-09-14', 'Service Provider', 'High', 'We believe design is the essence of any website that showcases the core strength of the business and reaches out to innumerable people.', '20211215154052.png', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s.', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s.', '900700000', '1234567890', '5', NULL, NULL, 3, NULL, '2021-12-15 15:40:52', NULL, '2019-20', NULL, 1, NULL),
 (5, 4, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Manufacturer', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, NULL, '2021-12-16 14:29:26', NULL, '2019-20', NULL, 1, NULL),
 (6, 4, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Supplier', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, NULL, '2021-12-16 14:29:26', NULL, '2019-20', NULL, 1, NULL),
-(7, 4, 'Test Company', '18AABCU9603R1ZM', 'test company name', 'test@test', 'testcompany123', '$2y$10$vEXA1yMrZKY.iyodZYWPFuwlRhhqhdN7cC8yoOANt2Js9ECdP2es2', NULL, 'Customer', 'High', NULL, '', NULL, NULL, NULL, NULL, NULL, 'QWET1234', '1234568', 1, NULL, '2022-01-07 16:14:44', NULL, '2019-20', NULL, 1, NULL),
-(8, 4, 'test', '10AABCU9603R1Z2', NULL, NULL, 'test123', 'VGVzdCFAIzEyMzQ1Ng==', NULL, 'Customer', 'High', NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2022-01-07 18:45:39', NULL, '2019-20', NULL, 1, NULL);
+(7, 4, 'Test Company', '18AABCU9603R1ZM', 'test company name', 'test@test', 'testcompany123', 'VGVzdCFAIzEyMzQ=', NULL, 'Customer', 'High', NULL, NULL, NULL, NULL, NULL, 'dfgfd', '6', 'QWET1234', '1234568', 1, 1, '2022-01-07 16:14:44', '2022-01-10 17:44:31', '2019-20', NULL, 1, NULL),
+(8, 4, 'test', '10AABCU9603R1Z2', NULL, NULL, 'test123', 'VGVzdCFAIzEyMzQ1Ng==', NULL, 'Customer', 'High', NULL, 'null', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, '2022-01-07 18:45:39', '2022-01-10 17:56:12', '2019-20', NULL, 1, NULL),
+(9, 4, 'test123', '18AABCU9603R1ZM', NULL, NULL, 'jayshah123', 'VGVzdEAxMjM0', NULL, 'Customer', 'High', NULL, '20220110172357.png', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2022-01-10 17:14:00', '2022-01-10 17:14:41', '2019-20', NULL, 1, '2022-01-10 17:14:41'),
+(10, 4, 'Test Company', '18AABCU9603R1ZM', NULL, NULL, 'abc@xyz', 'VGVzdEAxMjM0NQ==', NULL, 'Customer', 'High', NULL, '20220110175657.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, '2022-01-10 17:43:47', '2022-01-10 17:56:57', '2019-20', NULL, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -735,10 +763,14 @@ INSERT INTO `mst_customers_contact_info` (`id`, `mst_customer_id`, `street_1`, `
 (2, 1, 'undefined', '', '', '', '', 0, 0, NULL, '', '', NULL, NULL, 2, '', NULL, '', 150, 150, '2021-12-15 11:07:56', '2021-12-23 14:57:51', NULL),
 (3, 4, 'Palladium, 511-512, Corporate Rd, Makarba, Ahmedabad, Gujarat 380051', 'Palladium, 511-512, Corporate Rd, Makarba, Ahmedabad, Gujarat 380051', 'Makarba', '380015', 'Ahmedabad', 12, 102, '079-27507178', NULL, NULL, '', NULL, 1, '9408072555', '9408072555', 'wordpress.divine@gmail.com', 3, 3, '2021-12-15 15:40:52', '2021-12-15 15:40:52', NULL),
 (4, 4, 'Palladium, 511-512, Corporate Rd, Makarba, Ahmedabad, Gujarat 380051', 'Weybridge Brooklands Business Park, Wellington Way', 'Makarba', '380015', 'Warwickshire', 12, 102, NULL, '', 'wordpress.divine@gmail.com', NULL, '20211215154052.png', 2, '9408072555', NULL, 'wordpress.divine@gmail.com', 3, 3, '2021-12-15 15:40:52', '2021-12-15 15:40:52', NULL),
-(5, 7, '', '', '', '', '', 296, 16, '', NULL, NULL, '', NULL, 1, '', '', '', 1, 1, '2022-01-07 16:14:44', '2022-01-07 16:14:44', NULL),
-(6, 7, '', '', '', '', '', 296, 16, NULL, '', '', NULL, NULL, 2, '', NULL, '', 1, 1, '2022-01-07 16:14:44', '2022-01-07 16:14:44', NULL),
-(7, 8, '', '', '', '', '', 125, 8, '', NULL, NULL, '', NULL, 1, '', '', '', 1, 1, '2022-01-07 18:45:39', '2022-01-07 18:45:39', NULL),
-(8, 8, '', '', '', '', '', 125, 8, NULL, '', '', NULL, NULL, 2, '', NULL, '', 1, 1, '2022-01-07 18:45:39', '2022-01-07 18:45:39', NULL);
+(5, 7, '', '', '', '', '', 193, 0, '', NULL, NULL, '', NULL, 1, '', '', '', 1, 1, '2022-01-07 16:14:44', '2022-01-10 17:44:31', NULL),
+(6, 7, 'undefined', '', '', '', '', 124, 0, NULL, '', '', NULL, '20220110143654.pdf', 2, '', NULL, '', 1, 1, '2022-01-07 16:14:44', '2022-01-10 17:44:31', NULL),
+(7, 8, '', '', '', '', '', 125, 15, '', NULL, NULL, '', NULL, 1, '', '', '', 1, 1, '2022-01-07 18:45:39', '2022-01-10 17:56:12', NULL),
+(8, 8, 'undefined', '', '', '', '', 287, 15, NULL, '', '', NULL, NULL, 2, '', NULL, '', 1, 1, '2022-01-07 18:45:39', '2022-01-10 17:56:12', NULL),
+(9, 9, '', '', '', '', '', 160, 0, '', NULL, NULL, '', NULL, 1, '', '', '', 1, 1, '2022-01-10 17:14:00', '2022-01-10 17:14:41', '2022-01-10 17:14:41'),
+(10, 9, '', '', '', '', '', 0, 0, NULL, '', '', NULL, NULL, 2, '', NULL, '', 1, 1, '2022-01-10 17:14:00', '2022-01-10 17:14:41', '2022-01-10 17:14:41'),
+(11, 10, '', '', '', '', '', 95, 1, '', NULL, NULL, '', NULL, 1, '', '', '', 1, 1, '2022-01-10 17:43:47', '2022-01-10 17:56:57', NULL),
+(12, 10, 'undefined', '', '', '', '', 3, 1, NULL, '', '', NULL, '20220110175013.pdf', 2, '', NULL, '', 1, 1, '2022-01-10 17:43:47', '2022-01-10 17:56:57', NULL);
 
 -- --------------------------------------------------------
 
@@ -5400,8 +5432,8 @@ INSERT INTO `user_address_details` (`id`, `users_id`, `mst_countries_id`, `mst_s
 (241, 204, 0, 0, '', '', '', '', '', '', '', '1234567890', '', 2, 1, 1, NULL, '2021-12-28 11:26:57', '2021-12-28 11:27:22'),
 (244, 210, 4, 95, 'test', 'test 12', '', '', '', '', 'test 12', '', '', 1, 1, 1, NULL, '2022-01-06 17:04:33', '2022-01-07 12:43:34'),
 (245, 210, 89, 1212, 'ret', 'rewf', '', '', '', '', '', '1234567890', '', 2, 1, 1, NULL, '2022-01-06 17:04:33', '2022-01-07 12:43:34'),
-(246, 211, 88, 1187, 'White Oak Ave7', 'White Oak Ave7', 'Langley7', 'Los Angles7', '917307', 'jane@doe.com7', 'Jane Doe7', '', '', 1, 1, 1, NULL, '2022-01-07 18:47:36', '2022-01-07 19:00:45'),
-(247, 211, 87, 1159, 'White Oak Ave7', 'White Oak Ave7', 'Motera7', 'Los Angles7', '917307', '', '', '9408072557', 'https://www.matthewrufh.com7/', 2, 1, 1, NULL, '2022-01-07 18:47:36', '2022-01-07 19:00:45');
+(246, 211, 88, 1187, 'White Oak Ave7', 'White Oak Ave7', 'Langley7', 'Los Angles7', '917307', 'jane@doe.com7', 'Jane Doe7', '', '', 1, 1, 1, NULL, '2022-01-07 18:47:36', '2022-01-10 17:58:11'),
+(247, 211, 87, 1159, 'White Oak Ave7', 'White Oak Ave7', 'Motera7', 'Los Angles7', '917307', '', '', '9408072557', 'https://www.matthewrufh.com7/', 2, 1, 1, NULL, '2022-01-07 18:47:36', '2022-01-10 17:58:11');
 
 -- --------------------------------------------------------
 
@@ -5503,7 +5535,7 @@ INSERT INTO `user_company_info` (`id`, `mst_companies_id`, `users_id`, `reportin
 (32, 4, 151, NULL, 1, 4, NULL, NULL, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 1, 1, 1, NULL, '2021-12-28 11:03:52', '2021-12-28 11:06:59'),
 (33, 4, 204, NULL, 2, 4, NULL, NULL, '', '', '', '', 'test', 'eWNlbzhjYWxlMQ==', '', '', '', '', 'IMAP', '', '', '', '', 1, 1, 1, NULL, '2021-12-28 11:26:57', '2021-12-28 11:27:22'),
 (34, 4, 210, NULL, 1, 8, NULL, NULL, '', '', '', '', 'jiya91', 'aDY3c3Q3eXd1Yw==', '', '', '', '', 'IMAP', '', '', '', '', 1, 1, 1, NULL, '2022-01-06 17:04:33', '2022-01-07 12:43:34'),
-(35, 4, 211, 211, 1, 8, '2022-01-09', NULL, 'Bank Name Ltd7', 'Vijay Nagar7', '50007', '454545554545', 'pragnesh22', 'dno2Mzd6eXN3cTk=', '18:46', '18:46', 'jane7@doe.com', 'jane@doe.com', 'POP', 'server7', '33067', 'server7', '33077', 1, 1, 1, NULL, '2022-01-07 18:47:36', '2022-01-07 19:00:45');
+(35, 4, 211, 211, 1, 8, '2022-01-09', NULL, 'Bank Name Ltd7', 'Vijay Nagar7', '50007', '454545554545', 'pragnesh22', 'dno2Mzd6eXN3cTk=', '18:46', '18:46', 'jane7@doe.com', 'jane@doe.com', 'POP', 'server7', '33067', 'server7', '33077', 1, 1, 1, NULL, '2022-01-07 18:47:36', '2022-01-10 17:58:11');
 
 -- --------------------------------------------------------
 
@@ -5560,7 +5592,7 @@ INSERT INTO `user_doc_details` (`id`, `users_id`, `aadhar_card_photo`, `aadhar_n
 (21, 190, NULL, '', NULL, '', NULL, '', NULL, '', NULL, '', 1, 1, NULL, '2021-12-28 11:00:58', '2021-12-28 11:00:44', '2021-12-28 11:00:58'),
 (22, 204, NULL, '', NULL, '', NULL, '', NULL, '', NULL, '', 1, 1, 1, NULL, '2021-12-28 11:26:57', '2021-12-28 11:27:22'),
 (23, 210, 'aadhar_card_210_ZmahL.jpg', '', 'election_card_210_ZmahL.png', '', 'pan_card_210_ZmahL.pdf', '', 'passport_210_ZmahL.pdf', '', 'driving_license_210_ZmahL.png', '', 1, 1, 1, NULL, '2022-01-06 17:04:33', '2022-01-07 12:43:34'),
-(24, 211, NULL, '', NULL, '', NULL, '', NULL, '', NULL, 'MP05855555557', 1, 1, 1, NULL, '2022-01-07 18:47:36', '2022-01-07 19:00:45');
+(24, 211, NULL, '', NULL, '', NULL, '', NULL, '', NULL, 'MP05855555557', 1, 1, 1, NULL, '2022-01-07 18:47:36', '2022-01-10 17:58:11');
 
 -- --------------------------------------------------------
 
@@ -5631,8 +5663,8 @@ INSERT INTO `user_edu_details` (`id`, `users_id`, `degree`, `university`, `from_
 (188, 150, 'BE', 'GU', 2008, 2012, '60', 'Instrumentation', 1, 1, NULL, '2021-12-27 10:55:40', '2021-12-27 10:55:40', NULL),
 (189, 150, 'ME', 'GTU', 2012, 2016, '80', 'Instrumentation 1', 1, 1, NULL, '2021-12-27 10:55:40', '2021-12-27 10:55:40', NULL),
 (193, 204, 'test', '', 1204, NULL, '', '', 1, 1, NULL, '2021-12-28 11:27:22', '2021-12-28 11:27:22', NULL),
-(196, 211, 'B Tech7', 'Ganpat University7', 2007, 2017, '97', 'B.Ed (Running)7', 1, 1, NULL, '2022-01-07 19:00:45', '2022-01-07 19:00:45', NULL),
-(197, 211, 'MBA7', 'Ganpat University7', 2007, 2017, '97', 'B.Ed (Running)7', 1, 1, NULL, '2022-01-07 19:00:45', '2022-01-07 19:00:45', NULL);
+(198, 211, 'B Tech7', 'Ganpat University7', 2007, 2017, '97', 'B.Ed (Running)7', 1, 1, NULL, '2022-01-10 17:58:11', '2022-01-10 17:58:11', NULL),
+(199, 211, 'MBA7', 'Ganpat University7', 2007, 2017, '97', 'B.Ed (Running)7', 1, 1, NULL, '2022-01-10 17:58:11', '2022-01-10 17:58:11', NULL);
 
 -- --------------------------------------------------------
 
@@ -5685,28 +5717,16 @@ INSERT INTO `user_emp_details` (`id`, `users_id`, `organisation`, `designation`,
 (151, 146, 'Om Deltas', 'Marketing Manager', 2014, 2020, '6000000', 1, 1, NULL, NULL, '2021-12-24 19:16:07', '2021-12-24 19:16:07'),
 (164, 150, 'Research Lab 1', 'Junior Traniee', 2017, 2019, '5000000', 1, 1, NULL, NULL, '2021-12-27 10:55:40', '2021-12-27 10:55:40'),
 (165, 150, 'Research Lab 2', 'Junior Traniee 1', 2019, 2021, '6000000', 1, 1, NULL, NULL, '2021-12-27 10:55:40', '2021-12-27 10:55:40'),
-(169, 211, 'Business services7', 'Director7', 2017, 2027, '25007', 1, 1, NULL, NULL, '2022-01-07 19:00:45', '2022-01-07 19:00:45'),
-(170, 211, 'Business services7', 'Director7', 2027, 2027, '25007', 1, 1, NULL, NULL, '2022-01-07 19:00:45', '2022-01-07 19:00:45');
+(171, 211, 'Business services7', 'Director7', 2017, 2027, '25007', 1, 1, NULL, NULL, '2022-01-10 17:58:11', '2022-01-10 17:58:11'),
+(172, 211, 'Business services7', 'Director7', 2027, 2027, '25007', 1, 1, NULL, NULL, '2022-01-10 17:58:11', '2022-01-10 17:58:11');
 
 -- --------------------------------------------------------
 
 --
--- Stand-in structure for view `view_bookings`
+-- Stand-in structure for view `view_users`
 -- (See below for the actual view)
 --
-CREATE TABLE `view_bookings` (
-`id` int(11)
-,`booking_type` varchar(55)
-,`booking_no` varchar(255)
-);
-
--- --------------------------------------------------------
-
---
--- Stand-in structure for view `view_test1`
--- (See below for the actual view)
---
-CREATE TABLE `view_test1` (
+CREATE TABLE `view_users` (
 `id` int(11)
 ,`mst_companies_id` int(11)
 ,`is_approved` varchar(55)
@@ -5729,25 +5749,20 @@ CREATE TABLE `view_test1` (
 ,`street2` varchar(255)
 ,`area` varchar(255)
 ,`city` varchar(255)
+,`position_title` varchar(255)
+,`department_name` varchar(255)
+,`reporting_authority` text
+,`company_name` varchar(255)
 );
 
 -- --------------------------------------------------------
 
 --
--- Structure for view `view_bookings`
+-- Structure for view `view_users`
 --
-DROP TABLE IF EXISTS `view_bookings`;
+DROP TABLE IF EXISTS `view_users`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`aumresearch`@`%` SQL SECURITY DEFINER VIEW `view_bookings`  AS  select `bookings`.`id` AS `id`,`bookings`.`booking_type` AS `booking_type`,`bookings`.`booking_no` AS `booking_no` from `bookings` ;
-
--- --------------------------------------------------------
-
---
--- Structure for view `view_test1`
---
-DROP TABLE IF EXISTS `view_test1`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`aumresearch`@`%` SQL SECURITY DEFINER VIEW `view_test1`  AS  select `users`.`id` AS `id`,`users`.`mst_companies_id` AS `mst_companies_id`,`users`.`is_approved` AS `is_approved`,`users`.`first_name` AS `first_name`,`users`.`middle_name` AS `middle_name`,`users`.`last_name` AS `last_name`,`users`.`username` AS `username`,`users`.`machine_code` AS `machine_code`,`users`.`mobile` AS `mobile`,`users`.`phone` AS `phone`,`users`.`attendance` AS `attendance`,`users`.`is_resigned` AS `is_resigned`,`users`.`is_active` AS `is_active`,`user_company_info`.`mst_companies_id` AS `company`,`user_company_info`.`mst_positions_id` AS `mst_positions_id`,`user_company_info`.`mst_departments_id` AS `mst_departments_id`,`user_company_info`.`reporting_authority_id` AS `reporting_authority_id`,`address`.`email` AS `email`,`address`.`street1` AS `street1`,`address`.`street2` AS `street2`,`address`.`area` AS `area`,`address`.`city` AS `city` from ((`users` left join `user_company_info` on(`users`.`id` = `user_company_info`.`users_id`)) left join (select `user_address_details`.`id` AS `id`,`user_address_details`.`users_id` AS `users_id`,`user_address_details`.`mst_countries_id` AS `mst_countries_id`,`user_address_details`.`mst_states_id` AS `mst_states_id`,`user_address_details`.`street1` AS `street1`,`user_address_details`.`street2` AS `street2`,`user_address_details`.`area` AS `area`,`user_address_details`.`city` AS `city`,`user_address_details`.`pincode` AS `pincode`,`user_address_details`.`email` AS `email`,`user_address_details`.`emergency_contact_name` AS `emergency_contact_name`,`user_address_details`.`emergency_contact_number` AS `emergency_contact_number`,`user_address_details`.`website` AS `website`,`user_address_details`.`address_type` AS `address_type`,`user_address_details`.`created_by` AS `created_by`,`user_address_details`.`updated_by` AS `updated_by`,`user_address_details`.`deleted_at` AS `deleted_at`,`user_address_details`.`created_at` AS `created_at`,`user_address_details`.`updated_at` AS `updated_at` from `user_address_details` order by `user_address_details`.`users_id` limit 1) `address` on(`users`.`id` = `address`.`users_id`)) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`aumresearch`@`%` SQL SECURITY DEFINER VIEW `view_users`  AS  select `users`.`id` AS `id`,`users`.`mst_companies_id` AS `mst_companies_id`,`users`.`is_approved` AS `is_approved`,`users`.`first_name` AS `first_name`,`users`.`middle_name` AS `middle_name`,`users`.`last_name` AS `last_name`,`users`.`username` AS `username`,`users`.`machine_code` AS `machine_code`,`users`.`mobile` AS `mobile`,`users`.`phone` AS `phone`,`users`.`attendance` AS `attendance`,`users`.`is_resigned` AS `is_resigned`,`users`.`is_active` AS `is_active`,`user_company_info`.`mst_companies_id` AS `company`,`user_company_info`.`mst_positions_id` AS `mst_positions_id`,`user_company_info`.`mst_departments_id` AS `mst_departments_id`,`user_company_info`.`reporting_authority_id` AS `reporting_authority_id`,`address`.`email` AS `email`,`address`.`street1` AS `street1`,`address`.`street2` AS `street2`,`address`.`area` AS `area`,`address`.`city` AS `city`,`positions`.`position_title` AS `position_title`,`department`.`department_name` AS `department_name`,concat(`rpAuth`.`first_name`,' ',`rpAuth`.`middle_name`,' ',`rpAuth`.`last_name`) AS `reporting_authority`,`company_name`.`company_name` AS `company_name` from ((((((`users` left join `user_company_info` on(`users`.`id` = `user_company_info`.`users_id`)) left join (select `mst_positions`.`id` AS `id`,`mst_positions`.`position_title` AS `position_title` from `mst_positions`) `positions` on(`user_company_info`.`mst_positions_id` = `positions`.`id`)) left join (select `mst_departments`.`id` AS `id`,`mst_departments`.`department_name` AS `department_name` from `mst_departments`) `department` on(`user_company_info`.`mst_departments_id` = `department`.`id`)) left join (select `users`.`id` AS `id`,`users`.`first_name` AS `first_name`,`users`.`middle_name` AS `middle_name`,`users`.`last_name` AS `last_name` from `users`) `rpAuth` on(`user_company_info`.`reporting_authority_id` = `rpAuth`.`id`)) left join (select `mst_companies`.`id` AS `id`,`mst_companies`.`company_name` AS `company_name` from `mst_companies`) `company_name` on(`user_company_info`.`mst_companies_id` = `company_name`.`id`)) left join (select `user_address_details`.`id` AS `id`,`user_address_details`.`users_id` AS `users_id`,`user_address_details`.`mst_countries_id` AS `mst_countries_id`,`user_address_details`.`mst_states_id` AS `mst_states_id`,`user_address_details`.`street1` AS `street1`,`user_address_details`.`street2` AS `street2`,`user_address_details`.`area` AS `area`,`user_address_details`.`city` AS `city`,`user_address_details`.`pincode` AS `pincode`,`user_address_details`.`email` AS `email`,`user_address_details`.`emergency_contact_name` AS `emergency_contact_name`,`user_address_details`.`emergency_contact_number` AS `emergency_contact_number`,`user_address_details`.`website` AS `website`,`user_address_details`.`address_type` AS `address_type`,`user_address_details`.`created_by` AS `created_by`,`user_address_details`.`updated_by` AS `updated_by`,`user_address_details`.`deleted_at` AS `deleted_at`,`user_address_details`.`created_at` AS `created_at`,`user_address_details`.`updated_at` AS `updated_at` from `user_address_details` order by `user_address_details`.`users_id` limit 1) `address` on(`users`.`id` = `address`.`users_id`)) ;
 
 --
 -- Indexes for dumped tables
@@ -5788,6 +5803,12 @@ ALTER TABLE `failed_jobs`
 -- Indexes for table `formulas`
 --
 ALTER TABLE `formulas`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `methods`
+--
+ALTER TABLE `methods`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -6035,6 +6056,12 @@ ALTER TABLE `formulas`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Primary Key, Auto Increment', AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT for table `methods`
+--
+ALTER TABLE `methods`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Primary Key, Auto Increment';
+
+--
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
@@ -6068,13 +6095,13 @@ ALTER TABLE `mst_companies`
 -- AUTO_INCREMENT for table `mst_customers`
 --
 ALTER TABLE `mst_customers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `mst_customers_contact_info`
 --
 ALTER TABLE `mst_customers_contact_info`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `mst_customers_contact_person`
@@ -6224,13 +6251,13 @@ ALTER TABLE `user_doc_details`
 -- AUTO_INCREMENT for table `user_edu_details`
 --
 ALTER TABLE `user_edu_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=198;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=200;
 
 --
 -- AUTO_INCREMENT for table `user_emp_details`
 --
 ALTER TABLE `user_emp_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=171;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=173;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

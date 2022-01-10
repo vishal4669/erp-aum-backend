@@ -46,6 +46,11 @@ class EmployeeController extends Controller
     //         $is_chemist = (isset($request->is_chemist) && $request->is_chemist == 1) ? 1 : 0;
     //         $is_resigned  = (isset($request->is_resigned) && $request->is_resigned  == 1) ? 1 : 0;
     //         $is_dashboard_hr  = (isset($request->is_dashboard_hr) && $request->is_dashboard_hr  == 1 || $is_dashboard_hr == 1) ? 1 : 0;
+    //         if($is_dropdown)
+    //         {
+    //             $data = DB::table('view_users')
+    //             ->select('id','first_name','middle_name','last_name',);  
+    //         }
     //         $data = DB::table('view_users')
     //             ->select("*");
     //         if ($is_reporting_authority) {
@@ -996,6 +1001,7 @@ class EmployeeController extends Controller
                 $check_aadhar = $document_data['aadhar_card_photo'] !== NULL;
             }
             if ($check_aadhar) {
+                //if new photo selected in file
                 $aadhar_card_photo_file_name = 'aadhar_card_' . $users_id . "_" . $random_string . "." . $aadhar_card_photo->getClientOriginalExtension();
                 $aadhar_card_photo->move(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH'), $aadhar_card_photo_file_name);
                 $documentArray["aadhar_card_photo"] = $aadhar_card_photo_file_name;
@@ -1006,6 +1012,7 @@ class EmployeeController extends Controller
                     }
                 }
             } else {
+                //if no new file selected
                 $documentArray["aadhar_card_photo"] = $document_data['aadhar_card_photo'];
             }
         }

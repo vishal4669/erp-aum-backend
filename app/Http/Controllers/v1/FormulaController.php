@@ -28,16 +28,16 @@ class FormulaController extends Controller
             $loggedInUserData = Helper::getUserData();
             $is_dropdown = (isset($request->is_dropdown) && $request->is_dropdown == 1 ? 1 : 0);
             if ($is_dropdown) {
-                $data = Formula::where('mst_companies_id', $loggedInUserData['company_id'])
-                    ->where('is_active', 1)
-                    ->orderBy('id', 'desc')
-                    ->get();
+                $data = DB::table('view_formulas')
+                ->select('id','formula_name','formula_type','deleted_at');
             } else {
-                $data = Formula::where('mst_companies_id', $loggedInUserData['company_id'])
+                $data = DB::table('view_formulas')->select('*');
+            }
+            $data = $data->where('mst_companies_id', $loggedInUserData['company_id'])
+                    ->where('deleted_at',null)
                     ->where('is_active', 1)
                     ->orderBy('id', 'desc')
                     ->get();
-            }
             Log::info("Formula list details : " . json_encode($request->all()));
             return Helper::response("Formula List Shown Successfully", Response::HTTP_OK, True, $data);
         } catch (Exception $e) {
