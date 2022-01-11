@@ -141,27 +141,27 @@ class TestController extends Controller
             }
 
             $loggedInUserData = Helper::getUserData();
-
             $input = $request->all();
-            $input_data['id'] = auth()->id();
-            $input_data['procedure_name'] = $input['procedure_name'];
-            $input_data['price'] = $input['price'];
-            $input_data['test_code'] = $input['test_code'];
-            $input_data['test_category'] = $input['test_category'];
-            $input_data['test_procedure'] = $input['test_procedure'];
-            $input_data['parent_id'] = (isset($input['parent_id']) && $input['parent_id'] != '' && $input['parent_id'] != null) ? $input['parent_id'] : 0;
-            $input_data['selected_year'] = $loggedInUserData['selected_year'];
-            $input_data['mst_companies_id'] = $loggedInUserData['company_id'];
-            $input_data['is_active'] = 1;
-            $input_data['created_by'] = $loggedInUserData['logged_in_user_id'];
+            $data = Test::create([
+                'mst_companies_id' => $loggedInUserData['company_id'],
+                'procedure_name' => $input['procedure_name'],
+                'price' => $input['price'],
+                'test_code' => $input['test_code'],
+                'test_category' => $input['test_category'],
+                'test_procedure' => $input['test_procedure'],
+                'parent_id' => (isset($input['parent_id']) && $input['parent_id'] != '' && $input['parent_id'] != null) ? $input['parent_id'] : 0,
+                'selected_year' => $loggedInUserData['selected_year'],
+                'is_active' => 1,
+                'created_by' => $loggedInUserData['logged_in_user_id'],
+                'updated_at' => NULL
+            ]);
 
             if (isset($request->test_parameter)) {
-                $this->testParameter($request->test_parameter, $input_data['id']);
+                $this->testParameter($request->test_parameter,$data->id);
             }
             DB::commit();
-            Log::info("Test Created with details : " . json_encode($input_data));
+            Log::info("Test Created with details : " . json_encode($data));
 
-            $data = Test::create($input_data);
             return Helper::response("Test Added Successfully", Response::HTTP_OK, true, $data);
         } catch (Exception $e) {
             DB::rollback();
@@ -179,16 +179,18 @@ class TestController extends Controller
 
     public function testParameter($testParams_data, $test_id = "")
     {
+        // dd($testParams_data);
         $loggedInUserData = Helper::getUserData();
         if (!empty($testParams_data)) {
-            $delete_exist_test = MstTestParameter::where("test_id", $test_id);
-            if ($delete_exist_test != null || !empty($delete_exist_test)) {
+            $delete_exist_test = MstTestParameter::where('mst_test_id',$test_id);
+            if ($delete_exist_test != null) {
                 $delete_exist_test->delete();
             }
+            
             foreach ($testParams_data as $key => $item) {
                 $testParams_arr = array(
                     'mst_companies_id' => $loggedInUserData['company_id'],
-                    "test_id" => $test_id,
+                    "mst_test_id" => $test_id,
                     "test_by_pass" => (isset($item['test_by_pass'])) ? $item['test_by_pass'] : null,
                     "test_parameter_name"   => (isset($item['test_parameter_name'])) ? $item['test_parameter_name'] : '',
                     "test_alpha"    => (isset($item['test_alpha'])) ? $item['test_alpha'] : '',
@@ -312,6 +314,7 @@ class TestController extends Controller
 
             if (!empty($test)) {
                 $test->delete();
+                
                 return Helper::response("Test deleted successfully", Response::HTTP_OK, true, $data);
             }
 

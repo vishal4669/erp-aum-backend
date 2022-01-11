@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: sdb-e.hosting.stackcp.net
--- Generation Time: Jan 10, 2022 at 02:11 PM
+-- Generation Time: Jan 11, 2022 at 01:54 PM
 -- Server version: 10.4.18-MariaDB-log
 -- PHP Version: 7.1.33
 
@@ -274,8 +274,9 @@ INSERT INTO `formulas` (`id`, `mst_companies_id`, `formula_name`, `formula_type`
 
 CREATE TABLE `methods` (
   `id` int(11) NOT NULL COMMENT 'Primary Key, Auto Increment',
+  `mst_companies_id` int(11) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
-  `type` varchar(155) DEFAULT NULL,
+  `type` int(11) DEFAULT NULL COMMENT 'pharmacopeia name',
   `date` date DEFAULT NULL,
   `file_1` text DEFAULT NULL,
   `file_2` text DEFAULT NULL,
@@ -291,6 +292,34 @@ CREATE TABLE `methods` (
   `is_active` tinyint(4) DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `methods`
+--
+
+INSERT INTO `methods` (`id`, `mst_companies_id`, `name`, `type`, `date`, `file_1`, `file_2`, `file_3`, `file_4`, `description`, `created_by`, `updated_by`, `created_at`, `updated_at`, `selected_year`, `copied_from_year`, `is_active`, `deleted_at`) VALUES
+(1, 0, 'method1', 0, '1999-10-08', 'file_1', 'file_2', 'file_3', 'file_4', 'desciption', 1, NULL, '2022-01-10 12:44:24', '2022-01-10 15:45:56', '2019-20', NULL, 1, '2022-01-10 15:45:56'),
+(2, 0, 'method1', 0, '1999-10-08', 'file_1', 'file_2', 'file_3', 'file_4', 'desciption', 1, NULL, '2022-01-10 12:44:46', NULL, '2019-20', NULL, 1, NULL),
+(3, 0, 'method1', 0, '1999-10-08', 'file_1_To5ir.jpeg', NULL, NULL, NULL, 'desciption', 1, NULL, '2022-01-10 13:12:32', NULL, '2019-20', NULL, 1, NULL),
+(4, 0, 'method1', 0, '1999-10-08', 'file_1_hTrBj.jpeg', NULL, NULL, NULL, 'desciption', 1, NULL, '2022-01-10 13:16:47', NULL, '2019-20', NULL, 1, NULL),
+(5, 0, 'method1', 0, '1999-10-08', '', NULL, NULL, NULL, 'desciption', 1, NULL, '2022-01-10 13:17:00', NULL, '2019-20', NULL, 1, NULL),
+(6, 0, 'method1', 0, '1999-10-08', NULL, NULL, NULL, NULL, 'desciption', 1, NULL, '2022-01-10 13:17:29', NULL, '2019-20', NULL, 1, NULL),
+(7, 0, 'method1', 0, '1999-10-08', 'file_1_JWJ3L.jpeg', 'file_2_nnXLJ.jpeg', 'file_3_HiBKL.jpeg', 'file_4_q2xrS.jpeg', 'desciption', 1, NULL, '2022-01-10 13:26:59', NULL, '2019-20', NULL, 1, NULL),
+(8, 0, 'method1', 0, '1999-10-08', 'file_1_IZj6h.jpeg', 'file_2_VK94D.jpeg', 'file_3_220cA.jpeg', 'file_4_v11iR.jpeg', 'desciption', 1, NULL, '2022-01-10 13:27:23', NULL, '2019-20', NULL, 1, NULL),
+(9, 0, 'method1', 0, '1999-10-08', NULL, NULL, NULL, NULL, 'desciption', 1, NULL, '2022-01-10 13:28:20', NULL, '2019-20', NULL, 1, NULL),
+(10, 0, 'method1', 0, '1999-10-08', 'file_1_p0qqJ.jpeg', NULL, NULL, NULL, 'desciption', 1, NULL, '2022-01-10 14:59:08', NULL, '2019-20', NULL, 1, NULL),
+(11, 0, 'method1', 0, '1999-10-08', 'file_1_BWRQW.jpeg', NULL, NULL, NULL, 'desciption', 1, NULL, '2022-01-10 15:08:24', '2022-01-10 15:08:34', '2019-20', NULL, 1, NULL),
+(12, 0, 'method1', 0, '1999-10-08', 'file_1_Ccfrh.jpeg', NULL, NULL, NULL, 'desciption', 1, NULL, '2022-01-10 15:08:58', NULL, '2019-20', NULL, 1, NULL),
+(13, 0, 'method7', 0, '1998-10-08', 'file_1_dJfUi.jpeg', 'file_2_IAbj8.jpeg', 'file_3_slQVN.jpeg', 'file_4_cM1Sw.jpeg', 'desciption7', 1, 1, '2022-01-10 15:18:09', '2022-01-10 15:22:32', '2020-20', NULL, 1, NULL),
+(14, 2, 'method1', 0, '1999-10-08', 'file_1_uiOW6.jpeg', 'file_2_8FhQF.jpeg', 'file_3_yHUi6.jpeg', 'file_4_PaD4I.jpeg', 'desciption', 1, NULL, '2022-01-10 15:38:14', NULL, '2020-21', NULL, 1, NULL),
+(15, 4, 'method1', 1, '1999-10-08', 'file_1_FpcIs.jpeg', 'file_2_YklnX.jpeg', 'file_3_4kpVS.jpeg', 'file_4_QU9hU.jpeg', 'desciption', 1, NULL, '2022-01-10 16:13:49', NULL, '2019-20', NULL, 1, NULL),
+(16, 4, 'method1', 1, '1999-10-08', 'file_1_OMdUU.jpeg', 'file_2_uAnvj.jpeg', 'file_3_bbm3E.jpeg', 'file_4_bEWm2.jpeg', 'desciption', 1, NULL, '2022-01-10 16:13:50', NULL, '2019-20', NULL, 1, NULL),
+(17, 4, 'method1', 5, '1999-10-08', 'file_1_wQlGO.jpeg', 'file_2_ZdNu2.jpeg', 'file_3_oUyHe.jpeg', 'file_4_yD8CN.jpeg', 'desciption', 1, NULL, '2022-01-11 10:54:36', '2022-01-11 19:11:50', '2019-20', NULL, 1, '2022-01-11 19:11:50'),
+(18, 4, 'method1', 1, '1999-10-08', 'file_1_Ihp93.jpeg', 'file_2_dMf3o.jpeg', 'file_3_1NmR0.jpeg', 'file_4_BmSbs.jpeg', 'desciption', 1, NULL, '2022-01-11 15:05:37', '2022-01-11 15:06:59', '2019-20', NULL, 1, '2022-01-11 15:06:59'),
+(19, 4, 'method1', 1, '1999-10-08', NULL, NULL, NULL, NULL, 'desciption', 1, NULL, '2022-01-11 19:01:34', '2022-01-11 19:12:00', '2019-20', NULL, 1, '2022-01-11 19:12:00'),
+(20, 4, 'method2', 2, '1999-10-08', NULL, NULL, NULL, NULL, 'desciption', 1, NULL, '2022-01-11 19:02:30', NULL, '2019-20', NULL, 1, NULL),
+(21, 4, 'method1', 1, '1999-10-08', 'file_1_364gr.jpeg', NULL, NULL, NULL, 'desciption', 1, NULL, '2022-01-11 19:03:19', NULL, '2019-20', NULL, 1, NULL),
+(22, 4, 'method2', 2, '1999-10-08', 'file_1_s1wtn.png', NULL, NULL, NULL, 'desciption', 1, NULL, '2022-01-11 19:03:26', NULL, '2019-20', NULL, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -769,8 +798,8 @@ INSERT INTO `mst_customers_contact_info` (`id`, `mst_customer_id`, `street_1`, `
 (8, 8, 'undefined', '', '', '', '', 287, 15, NULL, '', '', NULL, NULL, 2, '', NULL, '', 1, 1, '2022-01-07 18:45:39', '2022-01-10 17:56:12', NULL),
 (9, 9, '', '', '', '', '', 160, 0, '', NULL, NULL, '', NULL, 1, '', '', '', 1, 1, '2022-01-10 17:14:00', '2022-01-10 17:14:41', '2022-01-10 17:14:41'),
 (10, 9, '', '', '', '', '', 0, 0, NULL, '', '', NULL, NULL, 2, '', NULL, '', 1, 1, '2022-01-10 17:14:00', '2022-01-10 17:14:41', '2022-01-10 17:14:41'),
-(11, 10, '', '', '', '', '', 95, 1, '', NULL, NULL, '', NULL, 1, '', '', '', 1, 1, '2022-01-10 17:43:47', '2022-01-10 17:56:57', NULL),
-(12, 10, 'undefined', '', '', '', '', 3, 1, NULL, '', '', NULL, '20220110175013.pdf', 2, '', NULL, '', 1, 1, '2022-01-10 17:43:47', '2022-01-10 17:56:57', NULL);
+(11, 10, '', '', '', '', '', 12, 1, '', NULL, NULL, '', NULL, 1, '1234567890', '', '', 1, 1, '2022-01-10 17:43:47', '2022-01-11 11:41:19', NULL),
+(12, 10, 'undefined', '', '', '', '', 0, 0, NULL, '', '', NULL, '20220111111910.jpg', 2, '1234567855', NULL, '', 1, 1, '2022-01-10 17:43:47', '2022-01-11 11:41:19', NULL);
 
 -- --------------------------------------------------------
 
@@ -1002,7 +1031,8 @@ CREATE TABLE `mst_pharmacopeia` (
 --
 
 INSERT INTO `mst_pharmacopeia` (`id`, `mst_companies_id`, `pharmacopeia_name`, `vol_no`, `pharmacopeia_year`, `pharmacopeia_edition`, `selected_year`, `copied_from_year`, `is_active`, `created_by`, `updated_by`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 4, 'IP', 1, 2019, '1', '2019-20', NULL, 1, 3, NULL, NULL, '2021-12-15 11:10:12', '2021-12-15 11:10:12');
+(1, 4, 'IP', 1, 2019, '1', '2019-20', NULL, 1, 3, NULL, NULL, '2021-12-15 11:10:12', '2021-12-15 11:10:12'),
+(2, 4, 'IHS', 1, 1111, 'test', '2019-20', NULL, 1, 1, NULL, NULL, '2022-01-11 18:44:51', '2022-01-11 13:16:27');
 
 -- --------------------------------------------------------
 
@@ -5723,6 +5753,77 @@ INSERT INTO `user_emp_details` (`id`, `users_id`, `organisation`, `designation`,
 -- --------------------------------------------------------
 
 --
+-- Stand-in structure for view `view_formulas`
+-- (See below for the actual view)
+--
+CREATE TABLE `view_formulas` (
+`id` int(11)
+,`mst_companies_id` int(11)
+,`formula_name` text
+,`formula_type` varchar(155)
+,`created_by` int(11)
+,`updated_by` int(11)
+,`created_at` datetime
+,`updated_at` datetime
+,`selected_year` varchar(25)
+,`copied_from_year` int(4)
+,`is_active` tinyint(1)
+,`deleted_at` time
+);
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `view_methods`
+-- (See below for the actual view)
+--
+CREATE TABLE `view_methods` (
+`id` int(11)
+,`mst_companies_id` int(11)
+,`name` varchar(255)
+,`type` int(11)
+,`date` date
+,`file_1` text
+,`file_2` text
+,`file_3` text
+,`file_4` text
+,`description` text
+,`created_by` int(11)
+,`updated_by` int(11)
+,`created_at` datetime
+,`updated_at` datetime
+,`selected_year` varchar(50)
+,`copied_from_year` varchar(50)
+,`is_active` tinyint(4)
+,`deleted_at` datetime
+);
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `view_pharmacopeia`
+-- (See below for the actual view)
+--
+CREATE TABLE `view_pharmacopeia` (
+`id` int(11)
+,`mst_companies_id` int(11)
+,`pharmacopeia_name` varchar(255)
+,`vol_no` int(11)
+,`pharmacopeia_year` int(4)
+,`pharmacopeia_edition` varchar(255)
+,`selected_year` varchar(50)
+,`copied_from_year` int(11)
+,`is_active` tinyint(1)
+,`created_by` int(11)
+,`updated_by` int(11)
+,`deleted_at` datetime
+,`created_at` datetime
+,`updated_at` datetime
+);
+
+-- --------------------------------------------------------
+
+--
 -- Stand-in structure for view `view_users`
 -- (See below for the actual view)
 --
@@ -5754,6 +5855,33 @@ CREATE TABLE `view_users` (
 ,`reporting_authority` text
 ,`company_name` varchar(255)
 );
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `view_formulas`
+--
+DROP TABLE IF EXISTS `view_formulas`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`aumresearch`@`%` SQL SECURITY DEFINER VIEW `view_formulas`  AS  select `formulas`.`id` AS `id`,`formulas`.`mst_companies_id` AS `mst_companies_id`,`formulas`.`formula_name` AS `formula_name`,`formulas`.`formula_type` AS `formula_type`,`formulas`.`created_by` AS `created_by`,`formulas`.`updated_by` AS `updated_by`,`formulas`.`created_at` AS `created_at`,`formulas`.`updated_at` AS `updated_at`,`formulas`.`selected_year` AS `selected_year`,`formulas`.`copied_from_year` AS `copied_from_year`,`formulas`.`is_active` AS `is_active`,`formulas`.`deleted_at` AS `deleted_at` from `formulas` ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `view_methods`
+--
+DROP TABLE IF EXISTS `view_methods`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`aumresearch`@`%` SQL SECURITY DEFINER VIEW `view_methods`  AS  select `methods`.`id` AS `id`,`methods`.`mst_companies_id` AS `mst_companies_id`,`methods`.`name` AS `name`,`methods`.`type` AS `type`,`methods`.`date` AS `date`,`methods`.`file_1` AS `file_1`,`methods`.`file_2` AS `file_2`,`methods`.`file_3` AS `file_3`,`methods`.`file_4` AS `file_4`,`methods`.`description` AS `description`,`methods`.`created_by` AS `created_by`,`methods`.`updated_by` AS `updated_by`,`methods`.`created_at` AS `created_at`,`methods`.`updated_at` AS `updated_at`,`methods`.`selected_year` AS `selected_year`,`methods`.`copied_from_year` AS `copied_from_year`,`methods`.`is_active` AS `is_active`,`methods`.`deleted_at` AS `deleted_at` from `methods` ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `view_pharmacopeia`
+--
+DROP TABLE IF EXISTS `view_pharmacopeia`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`aumresearch`@`%` SQL SECURITY DEFINER VIEW `view_pharmacopeia`  AS  select `mst_pharmacopeia`.`id` AS `id`,`mst_pharmacopeia`.`mst_companies_id` AS `mst_companies_id`,`mst_pharmacopeia`.`pharmacopeia_name` AS `pharmacopeia_name`,`mst_pharmacopeia`.`vol_no` AS `vol_no`,`mst_pharmacopeia`.`pharmacopeia_year` AS `pharmacopeia_year`,`mst_pharmacopeia`.`pharmacopeia_edition` AS `pharmacopeia_edition`,`mst_pharmacopeia`.`selected_year` AS `selected_year`,`mst_pharmacopeia`.`copied_from_year` AS `copied_from_year`,`mst_pharmacopeia`.`is_active` AS `is_active`,`mst_pharmacopeia`.`created_by` AS `created_by`,`mst_pharmacopeia`.`updated_by` AS `updated_by`,`mst_pharmacopeia`.`deleted_at` AS `deleted_at`,`mst_pharmacopeia`.`created_at` AS `created_at`,`mst_pharmacopeia`.`updated_at` AS `updated_at` from `mst_pharmacopeia` ;
 
 -- --------------------------------------------------------
 
@@ -6059,7 +6187,7 @@ ALTER TABLE `formulas`
 -- AUTO_INCREMENT for table `methods`
 --
 ALTER TABLE `methods`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Primary Key, Auto Increment';
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Primary Key, Auto Increment', AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -6155,7 +6283,7 @@ ALTER TABLE `mst_materials`
 -- AUTO_INCREMENT for table `mst_pharmacopeia`
 --
 ALTER TABLE `mst_pharmacopeia`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `mst_positions`

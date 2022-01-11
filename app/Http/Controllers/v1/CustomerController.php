@@ -512,7 +512,7 @@ class CustomerController extends Controller
             $customer_id = $id;
             $all_req = $request->all();
             // //add customer contact-information
-            return $this->addupdateCustomerContactInfo($all_req, $request->get('customer_contact_info'), $customer_id);
+            $this->addupdateCustomerContactInfo($all_req, $request->get('customer_contact_info'), $customer_id);
             $this->addupdateCustomerContactPerson($req['contact_person_data'], $customer_id);
 
             Log::info("Customer updated with details : " . json_encode(array('data' => $input_data, 'id' => $customer_id)));
@@ -544,6 +544,7 @@ class CustomerController extends Controller
      */
     public function addupdateCustomerContactInfo($all_req, $contact_data, $customer_id)
     {
+      //  return $contact_data;
         $home_contact_infos = $contact_data['home_contact_info'][0];
         $other_contact_infos = $contact_data['other_contact_info'][0];
         $files = $all_req['customer_contact_info']['other_contact_info'][0]['other_pan_card_copy'];
@@ -584,7 +585,7 @@ class CustomerController extends Controller
                             'pin' => (isset($home_contact_infos['pin'])) ? $home_contact_infos['pin'] : '',
                             'city' => (isset($home_contact_infos['city'])) ? $home_contact_infos['city'] : '',
                             'state' => (isset($home_contact_infos['state'])) ? $h_state : 0,
-                            'country' => (isset($home_contact_infos['country'])) ? $o_country : 0,
+                            'country' => (isset($home_contact_infos['country'])) ? $h_country : 0,
                             'home_landline' => (isset($home_contact_infos['home_landline'])) ? $home_contact_infos['home_landline'] : '',
                             'home_pan_card' => (isset($home_contact_infos['home_pan_card'])) ? $home_contact_infos['home_pan_card'] : '',
                             'contact_info_type' => (isset($home_contact_infos['contact_info_type'])) ? $home_contact_infos['contact_info_type'] : '',
@@ -618,7 +619,7 @@ class CustomerController extends Controller
                     $apipan = CustomerContactInfo::where('mst_customer_id', $customer_id)->where('contact_info_type', 2)->value('other_pan_card_copy');
 
 
-                    if ($apipan != $files) {
+                    if ($apipan != $files && $files !== "null") {
                         if (array_key_exists("other_pan_card_copy", $all_req['customer_contact_info']['other_contact_info'][0])) {
                             if ($files !== null  && $files !== "undefined") {
                                 $imageName = date('YmdHis') . "." . $files->getClientOriginalExtension();
@@ -631,10 +632,15 @@ class CustomerController extends Controller
                             }
                         }
                     } else {
-                        $imageName = $apipan;
+                        if($files !== "null"){
+                          $imageName = $apipan;
+                        }
+                        else{
+                          $imageName = NULL;
+                        }
                     }
 
-                    if ($files == null || $files == "undefined") {
+                    if ($files == "null" || $files == "undefined" || $files == null) {
                         if (isset($apipan) && $apipan != '' && File::exists(public_path('images/customers/pancard_copy/' . $apipan))) {
                             File::delete(public_path('images/customers/pancard_copy/' . $apipan));
                         }

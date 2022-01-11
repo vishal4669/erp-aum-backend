@@ -127,4 +127,22 @@ class CommonController extends Controller
             }
         }
     }
+
+    /**
+     * dynamic_dropdown
+     *
+     * @return \Illuminate\Http\Response
+     */
+
+    public function dynamic_dropdown()
+    {
+        try {
+            $data = Helper::yearsList();
+            // dd($data);
+            return Helper::response("Years List Shown Successfully", Response::HTTP_OK, true, $data);
+        } catch (Exception $e) {
+            $data = array();
+            return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);
+        }
+    }
 }

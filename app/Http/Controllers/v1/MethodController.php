@@ -7,6 +7,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 use App\Helpers\Helper;
 use App\Models\Method;
+use App\Models\ViewMethod;
 use Auth;
 use Log;
 use DB;
@@ -30,7 +31,7 @@ class MethodController extends Controller
                 $data = DB::table('view_methods')
                     ->select('id', 'name', 'type', 'date', 'deleted_at');
             } else {
-                $data = DB::table('view_methods')->select('*');
+                $data = ViewMethod::select('id', 'mst_companies_id', 'name', 'type', 'date', 'description');
             }
             $data = $data->where('mst_companies_id', $loggedInUserData['company_id'])
                 ->where('deleted_at', null)
@@ -71,6 +72,10 @@ class MethodController extends Controller
                 'name' => 'required',
                 'type' => 'required',
                 'description' => 'required',
+                'file_1' => 'nullable|mimes:jpeg,jpg,png,pdf',
+                'file_2' => 'nullable|mimes:jpeg,jpg,png,pdf',
+                'file_3' => 'nullable|mimes:jpeg,jpg,png,pdf',
+                'file_4' => 'nullable|mimes:jpeg,jpg,png,pdf'
             ];
 
             $messages = [];
@@ -122,8 +127,8 @@ class MethodController extends Controller
         $countfilesData = $files->count();
 
         $files = $files->toarray();
-        $file_1 = $request['file_1'];
-        if (!empty($file_1)) {
+        if (!empty($request['file_1'])) {
+            $file_1 = $request['file_1'];
             if (empty($files)) {
                 $check_file_1 = $file_1 !== NULL;
                 //wanna add file
@@ -147,8 +152,8 @@ class MethodController extends Controller
         } else {
             $request['file_1'] = NULL;
         }
-        $file_2 = $request['file_2'];
         if (!empty($request['file_2'])) {
+            $file_2 = $request['file_2'];
             if (empty($files)) {
                 $check_file_2 = $file_2 !== NULL;
                 //wanna add file
@@ -171,8 +176,8 @@ class MethodController extends Controller
         } else {
             $request['file_2'] = NULL;
         }
-        $file_3 = $request['file_3'];
         if (!empty($request['file_3'])) {
+            $file_3 = $request['file_3'];
             if (empty($files)) {
                 $check_file_3 = $file_3 !== NULL;
                 //wanna add file
@@ -195,8 +200,8 @@ class MethodController extends Controller
         } else {
             $request['file_3'] = NULL;
         }
-        $file_4 = $request['file_4'];
-        if (!empty($file_4)) {
+        if (!empty($request['file_4'])) {
+            $file_4 = $request['file_4'];
             if (empty($files)) {
                 $check_file_4 = $file_4 !== NULL;
                 //wanna add file
@@ -234,7 +239,11 @@ class MethodController extends Controller
         try {
 
             $loggedInUserData = Helper::getUserData();
-            $data = DB::table("view_methods")->where('id', $id)->get();
+            $data = ViewMethod::where('id', $id)
+                ->get()
+                ->each(function ($item) {
+                    $item->append('pharmacopeia_dropdown');
+                });
 
             return Helper::response("Methods List Shown Successfully", Response::HTTP_OK, true, $data);
         } catch (Exception $e) {
@@ -271,6 +280,10 @@ class MethodController extends Controller
                 'name' => 'required',
                 'type' => 'required',
                 'description' => 'required',
+                'file_1' => 'nullable|mimes:jpeg,jpg,png,pdf',
+                'file_2' => 'nullable|mimes:jpeg,jpg,png,pdf',
+                'file_3' => 'nullable|mimes:jpeg,jpg,png,pdf',
+                'file_4' => 'nullable|mimes:jpeg,jpg,png,pdf'
             ];
 
             $messages = [];
@@ -327,6 +340,12 @@ class MethodController extends Controller
 
             $loggedInUserData = Helper::getUserData();
             $data = Method::find($id);
+            $files_to_remove = [$data->file_1, $data->file_2, $data->file_3, $data->file_4];
+            foreach ($files_to_remove as $key => $file) {
+                if (isset($file) && $file != '' && File::exists(public_path('images/methods/documents/' . $file))) {
+                    File::delete(public_path('images/methods/documents/' . $file));
+                }
+            }
             $data->delete();
 
             return Helper::response("Methods Deleted Successfully", Response::HTTP_OK, true, $data);
