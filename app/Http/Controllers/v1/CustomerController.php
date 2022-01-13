@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\Helpers\Helper;
+use App\Models\ViewCustomer;
 use Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -31,22 +32,44 @@ class CustomerController extends Controller
         try {
             $loggedInUserData = Helper::getUserData();
             $is_dropdown = (isset($request->is_dropdown) && $request->is_dropdown == 1) ? 1 : 0;
+
             if (!$is_dropdown) {
-                $data = Customer::leftJoin('mst_customers_contact_info as c_info', 'c_info.mst_customer_id', '=', 'mst_customers.id')
-                    ->where('c_info.contact_info_type', '1')
-                    ->select('mst_customers.id', 'company_name', 'contact_person_name', 'contact_type', 'tally_alias_name', 'c_info.contact_no', 'is_active')
-                    // ->where('mst_customers.selected_year', $loggedInUserData['selected_year'])
-                    ->where('mst_customers.mst_companies_id', $loggedInUserData['company_id'])
-                    ->orderBy('mst_customers.id', 'desc')
-                    ->get();
-            } elseif ($is_dropdown) {
-                $data = Customer::leftJoin('mst_customers_contact_info as c_info', 'c_info.mst_customer_id', '=', 'mst_customers.id')
-                    ->where('c_info.contact_info_type', '1')
-                    ->select('mst_customers.id', 'company_name', 'contact_person_name', 'contact_type', 'tally_alias_name', 'c_info.contact_no', 'is_active')
-                    ->where('is_active', 1)
-                    ->orderBy('mst_customers.id', 'desc')
-                    ->get();
+                $data = ViewCustomer::select(
+                    'id',
+                    'mst_companies_id',
+                    'company_name',
+                    'gst_number',
+                    'contact_person_name',
+                    'tally_alias_name',
+                    'is_active',
+                    'home_contact_no',
+                    'other_contact_no',
+                    'home_qc_contact_no',
+                    'home_landline',
+                    'home_email',
+                    'other_email',
+                    'other_qc_email',
+                    'home_street_1',
+                    'home_street_2',
+                    'other_street_1',
+                    'other_street_2',
+                    'home_city',
+                    'other_city',
+                    'home_country',
+                    'other_country',
+                    'home_state',
+                    'other_state',
+                    'home_area',
+                    'other_area'
+                );
+            } else {
+                $data = ViewCustomer::select('id', 'company_name', 'contact_person_name', 'contact_type', 'tally_alias_name', 'home_contact_no', 'is_active');
             }
+            $data = $data->where('mst_companies_id', $loggedInUserData['company_id'])
+                ->where('is_active', 1)
+                ->orderBy('view_customers.id', 'desc')
+
+                ->get();
 
             $data_arr = $data->isEmpty();
 
@@ -347,9 +370,7 @@ class CustomerController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //return Helper::response("customer data", Response::HTTP_OK, true, $request->all());
         $req = $request->all();
-        // return $req;
         $someArray = json_decode($req['contact_person_data'], true);
         $req['contact_person_data'] = $someArray;
         $apipass = Customer::where('id', $id)->value('password');
@@ -517,16 +538,8 @@ class CustomerController extends Controller
 
             Log::info("Customer updated with details : " . json_encode(array('data' => $input_data, 'id' => $customer_id)));
 
-            $old_logo = Customer::find($id);
-
-            // if ($old_logo->logo != null || $old_logo->logo != '') {
-            //     unlink("images\customers\logo\\" . $old_logo->logo);
-            // }
-
             $customer = Customer::find($customer_id);
             $customer->update($input_data);
-
-
 
             return Helper::response("Customer updated successfully", Response::HTTP_OK, true, $customer);
         } catch (Exception $e) {
@@ -544,7 +557,7 @@ class CustomerController extends Controller
      */
     public function addupdateCustomerContactInfo($all_req, $contact_data, $customer_id)
     {
-      //  return $contact_data;
+        //  return $contact_data;
         $home_contact_infos = $contact_data['home_contact_info'][0];
         $other_contact_infos = $contact_data['other_contact_info'][0];
         $files = $all_req['customer_contact_info']['other_contact_info'][0]['other_pan_card_copy'];
@@ -632,11 +645,10 @@ class CustomerController extends Controller
                             }
                         }
                     } else {
-                        if($files !== "null"){
-                          $imageName = $apipan;
-                        }
-                        else{
-                          $imageName = NULL;
+                        if ($files !== "null") {
+                            $imageName = $apipan;
+                        } else {
+                            $imageName = NULL;
                         }
                     }
 
@@ -752,8 +764,22 @@ class CustomerController extends Controller
         try {
             $data = array();
             $customer = Customer::find($id);
+
             $CustomerContactInfo = CustomerContactInfo::where("mst_customer_id", $id);
             $CustomerContactPerson = CustomerContactPerson::where("mst_customer_id", $id);
+            if ($customer->logo != null &&  $customer->logo != "") {
+                $logo = $customer->logo;
+                if (isset($logo) && $logo != '' && File::exists(public_path('images/customers/logo/' . $logo))) {
+                    File::delete(public_path('images/customers/logo/' . $logo));
+                }
+            }
+            $pan_card = CustomerContactInfo::where("mst_customer_id", $id)->select('other_pan_card_copy')->latest('id')->first();
+            if ($pan_card->other_pan_card_copy != null &&  $pan_card->other_pan_card_copy != "") {
+                $pan_card = $pan_card->other_pan_card_copy;
+                if (isset($pan_card) && $pan_card != '' && File::exists(public_path('images/customers/pancard_copy/' . $pan_card))) {
+                    File::delete(public_path('images/customers/pancard_copy/' . $pan_card));
+                }
+            }
 
             Log::info("Customer deleted with : " . json_encode(array('id' => $id)));
 

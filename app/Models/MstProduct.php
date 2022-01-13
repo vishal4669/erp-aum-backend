@@ -17,7 +17,7 @@ class MstProduct extends Model
         'product_generic',
         'marker_specification',
         'pharmacopeia_id',
-        'generic_product_id',
+        'generic_product_name',
         'packing_detail',
         'sample_description',
         'hsn_code',

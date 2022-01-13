@@ -16,6 +16,7 @@ use App\Models\MstProductSample;
 use App\Models\MstProductParent;
 use App\Models\Pharmacopeia;
 use App\Models\Test;
+use App\Models\ViewProduct;
 use Illuminate\Support\Arr;
 use JWTAuth;
 
@@ -34,89 +35,65 @@ class MstProductController extends Controller
             $is_dropdown = (isset($request->is_dropdown) && $request->is_dropdown == 1) ? 1 : 0;
             $is_generic = (isset($request->is_generic) && $request->is_generic == 1) ? 1 : 0;
 
-            if (!$is_dropdown && !$is_generic) {
-
-                $data = MstProduct::select(
+            if ($is_dropdown) {
+                $data = ViewProduct::select(
                     'id',
+                    'product_name'
+                )->where('is_active', 1)
+                    ->where('deleted_at', NULL)
+                    ->orderBy('id', 'desc')
+                    ->get();
+            } elseif ($is_generic) {
+
+                $data = ViewProduct::select(
+                    'id',
+                    'generic_product_name',
+                    'is_active'
+                )->groupby('generic_product_name')
+                    ->where('is_active', 1)
+                    ->where('deleted_at', NULL)
+                    ->orderBy('id', 'desc')
+                    ->get();
+            } else {
+                $data = ViewProduct::select(
+                    'id',
+                    'pharmacopeia_id',
                     'product_name',
                     'product_generic',
+                    'generic_product_name',
+                    'sample_description',
+                    'packing_detail',
                     'marker_specification',
-                    'is_generic',
-                    'is_active',
-                    'pharmacopeia_id',
-                    'generic_product_id'
+                    'created_by',
+                    'created_at',
+                    'updated_by',
+                    'updated_at'
                 )
-                    ->with('pharmacopeia:id,pharmacopeia_name', 'generic:id,product_name')
                     ->where('is_active', 1)
-                    // ->where('selected_year', $loggedInUserData['selected_year'])
+                    ->where('deleted_at', NULL)
                     ->where('mst_companies_id', $loggedInUserData['company_id'])
                     ->orderBy('id', 'desc')
-                    ->get();
-                // ->paginate(10);
-            } elseif ($is_dropdown) {
-
-                $data = MstProduct::select(
-                    'id',
-                    'product_name',
-                    'product_generic',
-                    'marker_specification',
-                    'is_generic',
-                    'is_active',
-                    'pharmacopeia_id',
-                    'generic_product_id'
-                )->with('pharmacopeia:id,pharmacopeia_name', 'generic:id,product_name')
-                    ->where('is_active', 1)
-                    ->where('mst_companies_id', $loggedInUserData['company_id'])
-                    ->orderBy('id', 'desc')
-                    ->get();
-            }
-            if ($is_generic) {
-
-                $data = MstProduct::select(
-                    'id',
-                    'product_name',
-                    'product_generic',
-                    'marker_specification',
-                    'is_generic',
-                    'is_active',
-                    'pharmacopeia_id',
-                    'generic_product_id'
-                )->with('pharmacopeia:id,pharmacopeia_name', 'generic:id,product_name')
-                    ->where('is_generic', 1)
-                    ->where('is_active', 1)
-                    ->where('mst_companies_id', $loggedInUserData['company_id'])
-                    ->orderBy('id', 'desc')
-                    ->get();
+                    ->get()
+                    ->each(function ($item) {
+                        $item->append('pharmacopeia_name');
+                    });
             }
 
             $data_empty = $data->isEmpty();
-            $data_arr = $data->toarray();
-            foreach ($data_arr as $key => $item) {
-                if ($item['pharmacopeia'] == null || $item['pharmacopeia'] == '' || !isset($item['pharmacopeia'])) {
-                    $data_arr[$key]['pharmacopeia'] = array(
-                        "id" => "",
-                        "pharmacopeia_name" => ""
-                    );
-                }
-                if ($item['generic'] == null || $item['generic'] == '' || !isset($item['generic'])) {
-                    $data_arr[$key]['generic'] = array(
-                        "id" => "",
-                        "product_name" => ""
-                    );
-                }
-            }
+
             if ($data_empty) {
 
-                return Helper::response("Product List is Empty", Response::HTTP_OK, true, $data_arr);
+                return Helper::response("Product List is Empty", Response::HTTP_OK, true, $data);
             } else {
 
-                return Helper::response("Product List Shown Successfully", Response::HTTP_OK, true, $data_arr);
+                return Helper::response("Product List Shown Successfully", Response::HTTP_OK, true, $data);
             }
         } catch (Exception $e) {
             $data = array();
             return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);
         }
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -248,6 +225,7 @@ class MstProductController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->generic_product_name);
         DB::beginTransaction();
         try {
             $loggedInUserData = Helper::getUserData();
@@ -262,37 +240,17 @@ class MstProductController extends Controller
                 $data = array();
                 return Helper::response($validator->errors()->all(), Response::HTTP_OK, false, $data);
             }
-            $generic_product = $request->get('generic_product_id');
-            $generic_product_id = 0;
-            if ($generic_product != null) {
-                $is_exist = MstProduct::where('product_name', $generic_product)->get()->toarray();
-                if (empty($is_exist)) {
-                    $new_product_from_generic = MstProduct::create([
-                        "mst_companies_id" => $loggedInUserData['company_id'],
-                        "product_name" => ($generic_product) ? $generic_product : '',
-                        "is_generic" => ($request->get('is_generic')) ? $request->get('is_generic') : 0,
-                        "is_active" => ($request->get('is_active')) ? $request->get('is_active') : 1,
-                        "selected_year" => $loggedInUserData['selected_year'],
-                        'created_by' => $loggedInUserData['logged_in_user_id'],
-                        'updated_at' => NULL
-                    ]);
-                    $generic_product_id = $new_product_from_generic->id;
-                } else {
-                    $generic_product_id = $is_exist[0]['id'];
-                }
-            }
 
             $data = MstProduct::create([
                 "mst_companies_id" => $loggedInUserData['company_id'],
-                "product_name" => ($request->get('product_name')) ? $request->get('product_name') : '',
-                "product_generic" => ($request->get('product_generic')) ? $request->get('product_generic') : '',
-                "marker_specification" => ($request->get('marker_specification')) ? $request->get('marker_specification') : '',
-                "pharmacopeia_id" => ($request->get('pharmacopeia_id')) ? $request->get('pharmacopeia_id') : 0,
-                "generic_product_id" => ($generic_product_id) ? $generic_product_id : 0,
-                "packing_detail" => ($request->get('packing_detail')) ? $request->get('packing_detail') : '',
-                "sample_description" => ($request->get('sample_description')) ? $request->get('sample_description') : '',
-                "hsn_code" => ($request->get('hsn_code')) ? $request->get('hsn_code') : '',
-                "is_generic" => ($request->get('is_generic')) ? $request->get('is_generic') : 0,
+                "product_name" => ($request->get('product_name')) ? $request->get('product_name') : NULL,
+                "product_generic" => ($request->get('product_generic')) ? $request->get('product_generic') : NULL,
+                "marker_specification" => ($request->get('marker_specification')) ? $request->get('marker_specification') : NULL,
+                "pharmacopeia_id" => ($request->get('pharmacopeia_id')) ? $request->get('pharmacopeia_id') : NULL,
+                "generic_product_name" => ($request->get('generic_product_name')) ? $request->get('generic_product_name') : NULL,
+                "packing_detail" => ($request->get('packing_detail')) ? $request->get('packing_detail') : NULL,
+                "sample_description" => ($request->get('sample_description')) ? $request->get('sample_description') : NULL,
+                "hsn_code" => ($request->get('hsn_code')) ? $request->get('hsn_code') : NULL,
                 "is_active" => ($request->get('is_active')) ? $request->get('is_active') : 1,
                 "selected_year" => $loggedInUserData['selected_year'],
                 'created_by' => $loggedInUserData['logged_in_user_id'],
@@ -383,6 +341,20 @@ class MstProductController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
+    {
+        try {
+            $loggedInUserData = Helper::getUserData();
+            $data = ViewProduct::with('samples')->where('id', $id)->where('deleted_at', NULL)->get()->each(function ($item) {
+                $item->append('pharmacopeia_name');
+            });
+            return Helper::response("This Product Shown Successfully", Response::HTTP_OK, true, $data);
+        } catch (Exception $e) {
+            DB::rollback();
+            $data = array();
+            return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);
+        }
+    }
+    public function show1($id)
     {
         $loggedInUserData = Helper::getUserData();
         $data = MstProduct::with('pharmacopeia:id,pharmacopeia_name', 'generic_product_id:id,product_name as generic_product_name,deleted_at', 'samples', 'samples.parameter', 'samples.parent:id,machine_name as parent_name')->find($id);
@@ -551,11 +523,10 @@ class MstProductController extends Controller
                 "product_generic" => ($request->get('product_generic')) ? $request->get('product_generic') : '',
                 "marker_specification" => ($request->get('marker_specification')) ? $request->get('marker_specification') : '',
                 "pharmacopeia_id" => ($request->get('pharmacopeia_id')) ? $request->get('pharmacopeia_id') : 0,
-                "generic_product_id" => ($request->get('generic_product_id')) ? $request->get('generic_product_id') : 0,
+                "generic_product_name" => ($request->get('generic_product_name')) ? $request->get('generic_product_name') : '',
                 "packing_detail" => ($request->get('packing_detail')) ? $request->get('packing_detail') : '',
                 "sample_description" => ($request->get('sample_description')) ? $request->get('sample_description') : '',
                 "hsn_code" => ($request->get('hsn_code')) ? $request->get('hsn_code') : '',
-                "is_generic" => ($request->get('is_generic')) ? $request->get('is_generic') : 0,
                 "is_active" => ($request->get('is_active')) ? $request->get('is_active') : 1,
                 "selected_year" => $loggedInUserData['selected_year'],
                 'updated_by' => $loggedInUserData['logged_in_user_id']
@@ -563,7 +534,6 @@ class MstProductController extends Controller
 
             $product_id = $id;
             $this->addupdateProductSample($request->sample_details, $product_id);
-
 
             Log::info("Product updated with details : " . json_encode(array('data' => $input_data, 'id' => $id)));
 

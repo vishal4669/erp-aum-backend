@@ -720,8 +720,54 @@ class EmployeeController extends Controller
             $user_EduDetail = UserEduDetail::where("users_id", $id);
             $user_EmpDetail = UserEmpDetail::where("users_id", $id);
 
-            // dd($users);
             if (!empty($users)) {
+                if ($users->photo != null &&  $users->photo != "") {
+                    $photo = $users->photo;
+                    $photo = explode('/', $photo, 5);
+                    if (isset($photo[4]) && $photo[4] != '' && File::exists(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH') .'/'. $photo[4])) {
+                        File::delete(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH') .'/'. $photo[4]);
+                    }
+                }
+                if ($users->signature != null &&  $users->signature != "") {
+                    $signature = $users->signature;
+                    $signature = explode('/', $signature, 5);
+                    if (isset($signature[4]) && $signature[4]!= '' && File::exists(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH') .'/'. $signature[4])) {     
+                        File::delete(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH') .'/'. $signature[4]);
+                    }
+                }
+                
+                $documents = UserDocDetail::where("users_id", $id)->get();
+                
+                if ($documents[0]->aadhar_card_photo != null &&  $documents[0]->aadhar_card_photo != "") {
+                    $aadhar_card_photo = $documents[0]->aadhar_card_photo;
+                    if (isset($aadhar_card_photo) && $aadhar_card_photo != '' && File::exists(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH') .'/'. $aadhar_card_photo)) {
+                        File::delete(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH') .'/'. $aadhar_card_photo);
+                    }
+                }
+                if ($documents[0]->election_card_photo != null &&  $documents[0]->election_card_photo!= "") {
+                    $election_card_photo = $documents[0]->election_card_photo;
+                    if (isset($election_card_photo) && $election_card_photo != '' && File::exists(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH') .'/'. $election_card_photo)) {
+                        File::delete(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH') .'/'. $election_card_photo);
+                    }
+                }
+                if ($documents[0]->pan_card_photo != null &&  $documents[0]->pan_card_photo!= "") {
+                    $pan_card_photo = $documents[0]->pan_card_photo;
+                    if (isset($pan_card_photo) && $pan_card_photo != '' && File::exists(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH') .'/'. $pan_card_photo)) {
+                        File::delete(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH') .'/'. $pan_card_photo);
+                    }
+                }
+                if ($documents[0]->passport_photo != null &&  $documents[0]->passport_photo != "") {
+                    $passport_photo = $documents[0]->passport_photo;
+                    if (isset($passport_photo) && $passport_photo != '' && File::exists(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH') .'/'. $passport_photo)) {
+                        File::delete(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH') .'/'. $passport_photo);
+                    }
+                }
+                if ($documents[0]->driving_license_photo != null &&  $documents[0]->driving_license_photo != "") {
+                    $driving_license_photo = $documents[0]->driving_license_photo;
+                    if (isset($driving_license_photo) && $driving_license_photo != '' && File::exists(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH') .'/'. $driving_license_photo)) {
+                        File::delete(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH') .'/'. $driving_license_photo);
+                    }
+                }
                 $users->delete();
                 if (!empty($user_AddressDetail)) {
                     $user_AddressDetail->delete();
@@ -742,9 +788,9 @@ class EmployeeController extends Controller
                     $user_EmpDetail->delete();
                 }
                 Log::info("Users deleted with : " . json_encode(array('id' => $id)));
-                return Helper::response("Employee deleted successfully", Response::HTTP_OK, true, $data);
+                return Helper::response("Employee deleted successfully", Response::HTTP_OK, true);
             }
-            return Helper::response("Employee not exists", Response::HTTP_NOT_FOUND, false, $data);
+            return Helper::response("Employee not exists", Response::HTTP_NOT_FOUND, false);
         } catch (Exception $e) {
             $data = array();
             return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);

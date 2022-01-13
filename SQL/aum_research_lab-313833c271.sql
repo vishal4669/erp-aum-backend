@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: sdb-e.hosting.stackcp.net
--- Generation Time: Jan 11, 2022 at 01:54 PM
+-- Generation Time: Jan 13, 2022 at 01:52 PM
 -- Server version: 10.4.18-MariaDB-log
 -- PHP Version: 7.1.33
 
@@ -282,7 +282,7 @@ CREATE TABLE `methods` (
   `file_2` text DEFAULT NULL,
   `file_3` text DEFAULT NULL,
   `file_4` text DEFAULT NULL,
-  `description` text DEFAULT NULL,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
   `created_by` int(11) DEFAULT NULL,
   `updated_by` int(11) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
@@ -319,7 +319,8 @@ INSERT INTO `methods` (`id`, `mst_companies_id`, `name`, `type`, `date`, `file_1
 (19, 4, 'method1', 1, '1999-10-08', NULL, NULL, NULL, NULL, 'desciption', 1, NULL, '2022-01-11 19:01:34', '2022-01-11 19:12:00', '2019-20', NULL, 1, '2022-01-11 19:12:00'),
 (20, 4, 'method2', 2, '1999-10-08', NULL, NULL, NULL, NULL, 'desciption', 1, NULL, '2022-01-11 19:02:30', NULL, '2019-20', NULL, 1, NULL),
 (21, 4, 'method1', 1, '1999-10-08', 'file_1_364gr.jpeg', NULL, NULL, NULL, 'desciption', 1, NULL, '2022-01-11 19:03:19', NULL, '2019-20', NULL, 1, NULL),
-(22, 4, 'method2', 2, '1999-10-08', 'file_1_s1wtn.png', NULL, NULL, NULL, 'desciption', 1, NULL, '2022-01-11 19:03:26', NULL, '2019-20', NULL, 1, NULL);
+(22, 4, 'method2', 2, '1999-10-08', 'file_1_s1wtn.png', NULL, NULL, NULL, 'desciption', 1, NULL, '2022-01-11 19:03:26', NULL, '2019-20', NULL, 1, NULL),
+(23, 4, 'Assay Method', 1, '2022-01-12', NULL, NULL, NULL, NULL, '<p><span class=\"ql-formula\" data-value=\"e=pi/2\">﻿<span contenteditable=\"false\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><mi>e</mi><mo>=</mo><mi>p</mi><mi>i</mi><mi mathvariant=\"normal\">/</mi><mn>2</mn></mrow><annotation encoding=\"application/x-tex\">e=pi/2</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height: 0.4306em;\"></span><span class=\"mord mathnormal\">e</span><span class=\"mspace\" style=\"margin-right: 0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right: 0.2778em;\"></span></span><span class=\"base\"><span class=\"strut\" style=\"height: 1em; vertical-align: -0.25em;\"></span><span class=\"mord mathnormal\">p</span><span class=\"mord mathnormal\">i</span><span class=\"mord\">/2</span></span></span></span></span>﻿</span>﻿e=pi/2</p><p>e=pi/2﻿e=pi/2</p><p>e=pi/2﻿e=pi/2</p><p>e=pi/2﻿e=pi/2</p><p>e=pi/2﻿e=pi/2</p><p>e=pi/2﻿e=pi/2</p><p>e=pi/2﻿e=pi/2</p><p>e=pi/2﻿e=pi/2</p><p>e=pi/2﻿e=pi/2</p><p>e=pi/2﻿e=pi/2</p><p>e=pi/2﻿e=pi/2</p><p>e=pi/2</p>', 1, 1, '2022-01-12 18:47:39', '2022-01-13 17:38:49', '2019-20', NULL, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -1083,11 +1084,10 @@ CREATE TABLE `mst_products` (
   `product_generic` varchar(55) DEFAULT NULL,
   `marker_specification` varchar(255) DEFAULT NULL,
   `pharmacopeia_id` int(5) DEFAULT NULL,
-  `generic_product_id` int(23) DEFAULT NULL,
+  `generic_product_name` varchar(255) DEFAULT NULL,
   `packing_detail` varchar(255) DEFAULT NULL,
   `sample_description` text DEFAULT NULL,
   `hsn_Code` varchar(55) DEFAULT NULL,
-  `is_generic` tinyint(1) DEFAULT NULL COMMENT 'Default 0',
   `selected_year` varchar(25) DEFAULT NULL,
   `copied_from_year` int(4) DEFAULT NULL,
   `is_active` tinyint(1) DEFAULT NULL COMMENT 'Default 1',
@@ -1102,12 +1102,12 @@ CREATE TABLE `mst_products` (
 -- Dumping data for table `mst_products`
 --
 
-INSERT INTO `mst_products` (`id`, `mst_companies_id`, `product_name`, `product_generic`, `marker_specification`, `pharmacopeia_id`, `generic_product_id`, `packing_detail`, `sample_description`, `hsn_Code`, `is_generic`, `selected_year`, `copied_from_year`, `is_active`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 4, 'Acenol Tablet', 'Finished Product', 'IHS', 1, 0, '', 'White to almost white tablet', '', 0, '2019-20', NULL, 1, 3, 3, '2021-12-15 11:00:05', '2021-12-16 13:01:32', NULL),
-(2, 4, 'Paracitamol Tablet', 'Finished Product', '', 1, 0, '', 'sample description for paracitamol tablet', '', 1, '2019-20', NULL, 1, 3, 3, '2021-12-16 14:41:01', '2021-12-16 18:36:26', NULL),
-(3, 4, 'NEW PRODUCT1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2019-20', NULL, 1, 1, NULL, '2021-12-16 15:00:50', NULL, NULL),
-(4, 4, 'Viksss', 'Raw Metriall', 'motion sicknesss', 5, 3, 'Shipped', 'motion sickness', '342356', 1, '2019-20', NULL, 1, 1, NULL, '2021-12-16 15:00:50', NULL, NULL),
-(5, 4, 'Viksss', 'Raw Metriall', 'motion sicknesss', 5, 3, 'Shipped', 'motion sickness', '342356', 1, '2019-20', NULL, 1, 1, NULL, '2021-12-16 15:01:04', NULL, NULL);
+INSERT INTO `mst_products` (`id`, `mst_companies_id`, `product_name`, `product_generic`, `marker_specification`, `pharmacopeia_id`, `generic_product_name`, `packing_detail`, `sample_description`, `hsn_Code`, `selected_year`, `copied_from_year`, `is_active`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 4, 'Acenol Tablet', 'Finished Product', 'IHS', 1, '0', '', 'White to almost white tablet', '', '2019-20', NULL, 1, 3, 3, '2021-12-15 11:00:05', '2021-12-16 13:01:32', NULL),
+(2, 4, 'Paracitamol Tablet', 'Finished Product', '', 1, '0', '', 'sample description for paracitamol tablet', '', '2019-20', NULL, 1, 3, 3, '2021-12-16 14:41:01', '2021-12-16 18:36:26', NULL),
+(3, 4, 'NEW PRODUCT1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-20', NULL, 1, 1, NULL, '2021-12-16 15:00:50', NULL, NULL),
+(4, 4, 'Viksss', 'Raw Metriall', 'motion sicknesss', 5, '3', 'Shipped', 'motion sickness', '342356', '2019-20', NULL, 1, 1, NULL, '2021-12-16 15:00:50', NULL, NULL),
+(5, 4, 'Viksss', 'Raw Metriall', 'motion sicknesss', 5, '3', 'Shipped', 'motion sickness', '342356', '2019-20', NULL, 1, 1, NULL, '2021-12-16 15:01:04', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -5347,7 +5347,7 @@ INSERT INTO `users` (`id`, `mst_companies_id`, `title`, `first_name`, `middle_na
 (190, 4, 'Mr.', 'Mihir', 'Ajit', 'Aahuja', NULL, NULL, 'mihir21', 'YjF4bGMwcTNwM3I=', NULL, 'None', 'M', '2021-12-16', 'Single', NULL, NULL, NULL, '1234567890', NULL, 1, NULL, 0, 0, 0, 1, 0, NULL, NULL, NULL, 0, 0, 0, 1, NULL, '2019-20', NULL, 'Pending', 0, 0, '2021-12-28 11:00:58', '2021-12-28 11:00:44', '2022-01-07 05:35:42'),
 (204, 4, 'Mr.', 'Siya', 'Jay', 'Aahuja', NULL, NULL, 'test', 'eWNlbzhjYWxlMQ==', NULL, 'None', 'M', '2021-12-17', 'Single', NULL, NULL, NULL, '1234567890', 'null', 1, NULL, 0, 0, 0, 0, 0, NULL, NULL, NULL, 0, 0, 0, 1, 1, '2019-20', NULL, 'Pending', 0, 0, NULL, '2021-12-28 11:26:57', '2021-12-28 11:27:22'),
 (210, 4, 'Miss', 'Jiya', 'S', 'M', NULL, NULL, 'jiya91', 'aDY3c3Q3eXd1Yw==', NULL, 'None', 'M', '1991-12-31', 'Single', '/images/employee/documents/photo_210_zsugJ.png', NULL, NULL, '1234567890', NULL, 1, '/images/employee/documents/signature_210_zsugJ.jpg', 0, 0, 0, 0, 0, NULL, NULL, NULL, 0, 0, 0, 1, 1, '2019-20', NULL, 'Approved', 1, 0, NULL, '2022-01-06 17:04:33', '2022-01-07 12:43:34'),
-(211, 4, 'Mr.', 'Pragnesh7', 'A', 'Chauhan7', NULL, NULL, 'pragnesh22', 'dno2Mzd6eXN3cTk=', NULL, 'B+', 'M', '2022-01-08', 'Married', NULL, 'M077', '9408072557', '9408072557', 'Notes Notes Notes7', 0, NULL, 0, 0, 0, 0, 0, 'Indian7', 'Hindu7', 'Hindu7', 1, 0, 0, 1, 1, '2019-20', NULL, 'Pending', 0, 0, NULL, '2022-01-07 18:47:36', '2022-01-07 19:00:45');
+(211, 4, 'Mr.', 'Pragnesh7', 'A', 'Chauhan7', NULL, NULL, 'pragnesh22', 'dno2Mzd6eXN3cTk=', NULL, 'B+', 'M', '2022-01-08', 'Married', '/images/employee/documents/photo_211_2udHq.png', 'M077', '9408072557', '9408072557', 'Notes Notes Notes7', 0, NULL, 0, 0, 0, 0, 0, 'Indian7', 'Hindu7', 'Hindu7', 1, 0, 0, 1, 1, '2019-20', NULL, 'Pending', 0, 0, NULL, '2022-01-07 18:47:36', '2022-01-13 16:15:40');
 
 -- --------------------------------------------------------
 
@@ -5462,8 +5462,8 @@ INSERT INTO `user_address_details` (`id`, `users_id`, `mst_countries_id`, `mst_s
 (241, 204, 0, 0, '', '', '', '', '', '', '', '1234567890', '', 2, 1, 1, NULL, '2021-12-28 11:26:57', '2021-12-28 11:27:22'),
 (244, 210, 4, 95, 'test', 'test 12', '', '', '', '', 'test 12', '', '', 1, 1, 1, NULL, '2022-01-06 17:04:33', '2022-01-07 12:43:34'),
 (245, 210, 89, 1212, 'ret', 'rewf', '', '', '', '', '', '1234567890', '', 2, 1, 1, NULL, '2022-01-06 17:04:33', '2022-01-07 12:43:34'),
-(246, 211, 88, 1187, 'White Oak Ave7', 'White Oak Ave7', 'Langley7', 'Los Angles7', '917307', 'jane@doe.com7', 'Jane Doe7', '', '', 1, 1, 1, NULL, '2022-01-07 18:47:36', '2022-01-10 17:58:11'),
-(247, 211, 87, 1159, 'White Oak Ave7', 'White Oak Ave7', 'Motera7', 'Los Angles7', '917307', '', '', '9408072557', 'https://www.matthewrufh.com7/', 2, 1, 1, NULL, '2022-01-07 18:47:36', '2022-01-10 17:58:11');
+(246, 211, 88, 1187, 'White Oak Ave7', 'White Oak Ave7', 'Langley7', 'Los Angles7', '917307', 'jane@doe.com7', 'Jane Doe7', '', '', 1, 1, 1, NULL, '2022-01-07 18:47:36', '2022-01-13 16:15:40'),
+(247, 211, 87, 1159, 'White Oak Ave7', 'White Oak Ave7', 'Motera7', 'Los Angles7', '917307', '', '', '9408072557', 'https://www.matthewrufh.com7/', 2, 1, 1, NULL, '2022-01-07 18:47:36', '2022-01-13 16:15:40');
 
 -- --------------------------------------------------------
 
@@ -5565,7 +5565,7 @@ INSERT INTO `user_company_info` (`id`, `mst_companies_id`, `users_id`, `reportin
 (32, 4, 151, NULL, 1, 4, NULL, NULL, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 1, 1, 1, NULL, '2021-12-28 11:03:52', '2021-12-28 11:06:59'),
 (33, 4, 204, NULL, 2, 4, NULL, NULL, '', '', '', '', 'test', 'eWNlbzhjYWxlMQ==', '', '', '', '', 'IMAP', '', '', '', '', 1, 1, 1, NULL, '2021-12-28 11:26:57', '2021-12-28 11:27:22'),
 (34, 4, 210, NULL, 1, 8, NULL, NULL, '', '', '', '', 'jiya91', 'aDY3c3Q3eXd1Yw==', '', '', '', '', 'IMAP', '', '', '', '', 1, 1, 1, NULL, '2022-01-06 17:04:33', '2022-01-07 12:43:34'),
-(35, 4, 211, 211, 1, 8, '2022-01-09', NULL, 'Bank Name Ltd7', 'Vijay Nagar7', '50007', '454545554545', 'pragnesh22', 'dno2Mzd6eXN3cTk=', '18:46', '18:46', 'jane7@doe.com', 'jane@doe.com', 'POP', 'server7', '33067', 'server7', '33077', 1, 1, 1, NULL, '2022-01-07 18:47:36', '2022-01-10 17:58:11');
+(35, 4, 211, 211, 1, 8, '2022-01-09', NULL, 'Bank Name Ltd7', 'Vijay Nagar7', '50007', '454545554545', 'pragnesh22', 'dno2Mzd6eXN3cTk=', '18:46', '18:46', 'jane7@doe.com', 'jane@doe.com', 'POP', 'server7', '33067', 'server7', '33077', 1, 1, 1, NULL, '2022-01-07 18:47:36', '2022-01-13 16:15:40');
 
 -- --------------------------------------------------------
 
@@ -5622,7 +5622,7 @@ INSERT INTO `user_doc_details` (`id`, `users_id`, `aadhar_card_photo`, `aadhar_n
 (21, 190, NULL, '', NULL, '', NULL, '', NULL, '', NULL, '', 1, 1, NULL, '2021-12-28 11:00:58', '2021-12-28 11:00:44', '2021-12-28 11:00:58'),
 (22, 204, NULL, '', NULL, '', NULL, '', NULL, '', NULL, '', 1, 1, 1, NULL, '2021-12-28 11:26:57', '2021-12-28 11:27:22'),
 (23, 210, 'aadhar_card_210_ZmahL.jpg', '', 'election_card_210_ZmahL.png', '', 'pan_card_210_ZmahL.pdf', '', 'passport_210_ZmahL.pdf', '', 'driving_license_210_ZmahL.png', '', 1, 1, 1, NULL, '2022-01-06 17:04:33', '2022-01-07 12:43:34'),
-(24, 211, NULL, '', NULL, '', NULL, '', NULL, '', NULL, 'MP05855555557', 1, 1, 1, NULL, '2022-01-07 18:47:36', '2022-01-10 17:58:11');
+(24, 211, NULL, '', NULL, '', NULL, '', NULL, '', NULL, 'MP05855555557', 1, 1, 1, NULL, '2022-01-07 18:47:36', '2022-01-13 16:15:40');
 
 -- --------------------------------------------------------
 
@@ -5693,8 +5693,8 @@ INSERT INTO `user_edu_details` (`id`, `users_id`, `degree`, `university`, `from_
 (188, 150, 'BE', 'GU', 2008, 2012, '60', 'Instrumentation', 1, 1, NULL, '2021-12-27 10:55:40', '2021-12-27 10:55:40', NULL),
 (189, 150, 'ME', 'GTU', 2012, 2016, '80', 'Instrumentation 1', 1, 1, NULL, '2021-12-27 10:55:40', '2021-12-27 10:55:40', NULL),
 (193, 204, 'test', '', 1204, NULL, '', '', 1, 1, NULL, '2021-12-28 11:27:22', '2021-12-28 11:27:22', NULL),
-(198, 211, 'B Tech7', 'Ganpat University7', 2007, 2017, '97', 'B.Ed (Running)7', 1, 1, NULL, '2022-01-10 17:58:11', '2022-01-10 17:58:11', NULL),
-(199, 211, 'MBA7', 'Ganpat University7', 2007, 2017, '97', 'B.Ed (Running)7', 1, 1, NULL, '2022-01-10 17:58:11', '2022-01-10 17:58:11', NULL);
+(206, 211, 'B Tech7', 'Ganpat University7', 2007, 2017, '97', 'B.Ed (Running)7', 1, 1, NULL, '2022-01-13 16:15:40', '2022-01-13 16:15:40', NULL),
+(207, 211, 'MBA7', 'Ganpat University7', 2007, 2017, '97', 'B.Ed (Running)7', 1, 1, NULL, '2022-01-13 16:15:40', '2022-01-13 16:15:40', NULL);
 
 -- --------------------------------------------------------
 
@@ -5747,8 +5747,8 @@ INSERT INTO `user_emp_details` (`id`, `users_id`, `organisation`, `designation`,
 (151, 146, 'Om Deltas', 'Marketing Manager', 2014, 2020, '6000000', 1, 1, NULL, NULL, '2021-12-24 19:16:07', '2021-12-24 19:16:07'),
 (164, 150, 'Research Lab 1', 'Junior Traniee', 2017, 2019, '5000000', 1, 1, NULL, NULL, '2021-12-27 10:55:40', '2021-12-27 10:55:40'),
 (165, 150, 'Research Lab 2', 'Junior Traniee 1', 2019, 2021, '6000000', 1, 1, NULL, NULL, '2021-12-27 10:55:40', '2021-12-27 10:55:40'),
-(171, 211, 'Business services7', 'Director7', 2017, 2027, '25007', 1, 1, NULL, NULL, '2022-01-10 17:58:11', '2022-01-10 17:58:11'),
-(172, 211, 'Business services7', 'Director7', 2027, 2027, '25007', 1, 1, NULL, NULL, '2022-01-10 17:58:11', '2022-01-10 17:58:11');
+(179, 211, 'Business services7', 'Director7', 2017, 2027, '25007', 1, 1, NULL, NULL, '2022-01-13 16:15:40', '2022-01-13 16:15:40'),
+(180, 211, 'Business services7', 'Director7', 2027, 2027, '25007', 1, 1, NULL, NULL, '2022-01-13 16:15:40', '2022-01-13 16:15:40');
 
 -- --------------------------------------------------------
 
@@ -5824,6 +5824,58 @@ CREATE TABLE `view_pharmacopeia` (
 -- --------------------------------------------------------
 
 --
+-- Stand-in structure for view `view_products`
+-- (See below for the actual view)
+--
+CREATE TABLE `view_products` (
+`id` int(23)
+,`mst_companies_id` int(11)
+,`product_name` varchar(255)
+,`product_generic` varchar(55)
+,`marker_specification` varchar(255)
+,`pharmacopeia_id` int(5)
+,`generic_product_name` varchar(255)
+,`packing_detail` varchar(255)
+,`sample_description` text
+,`hsn_Code` varchar(55)
+,`selected_year` varchar(25)
+,`copied_from_year` int(4)
+,`is_active` tinyint(1)
+,`created_by` int(11)
+,`updated_by` int(11)
+,`created_at` datetime
+,`updated_at` datetime
+,`deleted_at` datetime
+);
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `view_tests`
+-- (See below for the actual view)
+--
+CREATE TABLE `view_tests` (
+`id` int(11)
+,`mst_companies_id` int(11)
+,`procedure_name` varchar(255)
+,`price` varchar(50)
+,`test_code` varchar(50)
+,`test_category` varchar(255)
+,`test_procedure` text
+,`parent_id` int(11)
+,`created_by` int(11)
+,`updated_by` int(11)
+,`created_at` datetime
+,`updated_at` datetime
+,`selected_year` varchar(25)
+,`copied_from_year` int(4)
+,`is_active` tinyint(1)
+,`deleted_at` datetime
+);
+
+-- --------------------------------------------------------
+
+--
 -- Stand-in structure for view `view_users`
 -- (See below for the actual view)
 --
@@ -5882,6 +5934,24 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`aumresearch`@`%` SQL SECURITY DEFINER VIEW `
 DROP TABLE IF EXISTS `view_pharmacopeia`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`aumresearch`@`%` SQL SECURITY DEFINER VIEW `view_pharmacopeia`  AS  select `mst_pharmacopeia`.`id` AS `id`,`mst_pharmacopeia`.`mst_companies_id` AS `mst_companies_id`,`mst_pharmacopeia`.`pharmacopeia_name` AS `pharmacopeia_name`,`mst_pharmacopeia`.`vol_no` AS `vol_no`,`mst_pharmacopeia`.`pharmacopeia_year` AS `pharmacopeia_year`,`mst_pharmacopeia`.`pharmacopeia_edition` AS `pharmacopeia_edition`,`mst_pharmacopeia`.`selected_year` AS `selected_year`,`mst_pharmacopeia`.`copied_from_year` AS `copied_from_year`,`mst_pharmacopeia`.`is_active` AS `is_active`,`mst_pharmacopeia`.`created_by` AS `created_by`,`mst_pharmacopeia`.`updated_by` AS `updated_by`,`mst_pharmacopeia`.`deleted_at` AS `deleted_at`,`mst_pharmacopeia`.`created_at` AS `created_at`,`mst_pharmacopeia`.`updated_at` AS `updated_at` from `mst_pharmacopeia` ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `view_products`
+--
+DROP TABLE IF EXISTS `view_products`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`aumresearch`@`%` SQL SECURITY DEFINER VIEW `view_products`  AS  select `mst_products`.`id` AS `id`,`mst_products`.`mst_companies_id` AS `mst_companies_id`,`mst_products`.`product_name` AS `product_name`,`mst_products`.`product_generic` AS `product_generic`,`mst_products`.`marker_specification` AS `marker_specification`,`mst_products`.`pharmacopeia_id` AS `pharmacopeia_id`,`mst_products`.`generic_product_name` AS `generic_product_name`,`mst_products`.`packing_detail` AS `packing_detail`,`mst_products`.`sample_description` AS `sample_description`,`mst_products`.`hsn_Code` AS `hsn_Code`,`mst_products`.`selected_year` AS `selected_year`,`mst_products`.`copied_from_year` AS `copied_from_year`,`mst_products`.`is_active` AS `is_active`,`mst_products`.`created_by` AS `created_by`,`mst_products`.`updated_by` AS `updated_by`,`mst_products`.`created_at` AS `created_at`,`mst_products`.`updated_at` AS `updated_at`,`mst_products`.`deleted_at` AS `deleted_at` from `mst_products` ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `view_tests`
+--
+DROP TABLE IF EXISTS `view_tests`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`aumresearch`@`%` SQL SECURITY DEFINER VIEW `view_tests`  AS  select `mst_tests`.`id` AS `id`,`mst_tests`.`mst_companies_id` AS `mst_companies_id`,`mst_tests`.`procedure_name` AS `procedure_name`,`mst_tests`.`price` AS `price`,`mst_tests`.`test_code` AS `test_code`,`mst_tests`.`test_category` AS `test_category`,`mst_tests`.`test_procedure` AS `test_procedure`,`mst_tests`.`parent_id` AS `parent_id`,`mst_tests`.`created_by` AS `created_by`,`mst_tests`.`updated_by` AS `updated_by`,`mst_tests`.`created_at` AS `created_at`,`mst_tests`.`updated_at` AS `updated_at`,`mst_tests`.`selected_year` AS `selected_year`,`mst_tests`.`copied_from_year` AS `copied_from_year`,`mst_tests`.`is_active` AS `is_active`,`mst_tests`.`deleted_at` AS `deleted_at` from `mst_tests` ;
 
 -- --------------------------------------------------------
 
@@ -6187,7 +6257,7 @@ ALTER TABLE `formulas`
 -- AUTO_INCREMENT for table `methods`
 --
 ALTER TABLE `methods`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Primary Key, Auto Increment', AUTO_INCREMENT=23;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Primary Key, Auto Increment', AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -6379,13 +6449,13 @@ ALTER TABLE `user_doc_details`
 -- AUTO_INCREMENT for table `user_edu_details`
 --
 ALTER TABLE `user_edu_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=200;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=208;
 
 --
 -- AUTO_INCREMENT for table `user_emp_details`
 --
 ALTER TABLE `user_emp_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=173;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=181;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

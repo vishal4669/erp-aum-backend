@@ -48,12 +48,48 @@ class Customer extends Model
     // Customer Contact Info
     public function contact_info()
     {
-        return $this->hasMany('App\Models\CustomerContactInfo', 'mst_customer_id');
+        return $this->hasMany(CustomerContactInfo::class, 'mst_customer_id','id');
+        // ->withDefault([
+        //     'id' => "",
+        //     'mst_customer_id' => "",
+        //     'street_1' => "",
+        //     'street_2' => "",
+        //     'area' => "",
+        //     'pin' => "",
+        //     'city' => "",
+        //     'state' => "",
+        //     'country' => "",
+        //     'home_landline' => "",
+        //     'other_website' => "",
+        //     'other_qc_email' => "",
+        //     'home_pan_card' => "",
+        //     'other_pan_card_copy' => "",
+        //     'contact_info_type' => "",
+        //     'contact_no' => "",
+        //     'home_qc_contact_no' => "",
+        //     'other_contact_no' => "",
+        //     'email' => "",
+        //     'created_by' => "",
+        //     'updated_by' => "",
+        // ]);
     }
     // Customer Contact Info
     public function contact_person()
     {
-        return $this->hasMany('App\Models\CustomerContactPerson', 'mst_customer_id');
+        return $this->hasMany(CustomerContactPerson::class, 'mst_customer_id','id');
+            // ->withDefault([
+                
+            //     'id'=> "",
+            //     'mst_customer_id'=> "",
+            //     'name'=> "",
+            //     'mobile'=> "",
+            //     'email'=> "",
+            //     'department'=> "",
+            //     'position'=> "",
+            //     'created_by'=> "",
+            //     'updated_by'=> ""
+                
+            // ]);
     }
 
     // Customer Contact Info

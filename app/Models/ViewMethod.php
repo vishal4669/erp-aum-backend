@@ -36,6 +36,7 @@ class ViewMethod extends Model
         $ph_data = DB::table('view_pharmacopeia')
             ->where('id', $this->type)
             ->select('id', 'pharmacopeia_name', 'deleted_at')->get()->toarray();
+            // dd($ph_data);
         $default_array = array(
             "id" => "",
             "pharmacopeia_name" => "",

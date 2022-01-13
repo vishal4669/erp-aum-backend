@@ -151,6 +151,11 @@ class MethodController extends Controller
             }
         } else {
             $request['file_1'] = NULL;
+            if ($countfilesData > 0) {
+                if (isset($files[0]['file_1']) && $files[0]['file_1'] != '' && File::exists(public_path('images/methods/documents/' . $files[0]['file_1']))) {
+                    File::delete(public_path('images/methods/documents/' . $files[0]['file_1']));
+                }
+            }
         }
         if (!empty($request['file_2'])) {
             $file_2 = $request['file_2'];
@@ -175,6 +180,11 @@ class MethodController extends Controller
             }
         } else {
             $request['file_2'] = NULL;
+            if ($countfilesData > 0) {
+                if (isset($files[0]['file_2']) && $files[0]['file_2'] != '' && File::exists(public_path('images/methods/documents/' . $files[0]['file_2']))) {
+                    File::delete(public_path('images/methods/documents/' . $files[0]['file_2']));
+                }
+            }
         }
         if (!empty($request['file_3'])) {
             $file_3 = $request['file_3'];
@@ -199,6 +209,11 @@ class MethodController extends Controller
             }
         } else {
             $request['file_3'] = NULL;
+            if ($countfilesData > 0) {
+                if (isset($files[0]['file_3']) && $files[0]['file_3'] != '' && File::exists(public_path('images/methods/documents/' . $files[0]['file_3']))) {
+                    File::delete(public_path('images/methods/documents/' . $files[0]['file_3']));
+                }
+            }
         }
         if (!empty($request['file_4'])) {
             $file_4 = $request['file_4'];
@@ -223,6 +238,11 @@ class MethodController extends Controller
             }
         } else {
             $request['file_4'] = NULL;
+            if ($countfilesData > 0) {
+                if (isset($files[0]['file_4']) && $files[0]['file_4'] != '' && File::exists(public_path('images/methods/documents/' . $files[0]['file_4']))) {
+                    File::delete(public_path('images/methods/documents/' . $files[0]['file_4']));
+                }
+            }
         }
 
         return $request;
@@ -244,6 +264,7 @@ class MethodController extends Controller
                 ->each(function ($item) {
                     $item->append('pharmacopeia_dropdown');
                 });
+
 
             return Helper::response("Methods List Shown Successfully", Response::HTTP_OK, true, $data);
         } catch (Exception $e) {
@@ -273,17 +294,44 @@ class MethodController extends Controller
     public function update(Request $request, $id)
     {
         //
+        
         try {
             $loggedInUserData = Helper::getUserData();
+            $method = Method::find($id);
+            if ($method->file_1 == $request->file_1 || $request->file_1 == null) {
+                $file_1_rule = '';
+            } else {
+                $file_1_rule = 'nullable|mimes:jpeg,jpg,png,pdf';
+            }
+            if ($method->file_2 == $request->file_2 || $request->file_2 == null) {
+                $file_2_rule = '';
+            } else {
+                $file_2_rule = 'nullable|mimes:jpeg,jpg,png,pdf';
+            }
+            if ($method->file_3 == $request->file_3 || $request->file_3 == null) {
+                $file_3_rule = '';
+            } else {
+                $file_3_rule = 'nullable|mimes:jpeg,jpg,png,pdf';
+            }
+            if ($method->file_4 == $request->file_4 || $request->file_4 == null) {
+                $file_4_rule = '';
+            } else {
+                $file_4_rule = 'nullable|mimes:jpeg,jpg,png,pdf';
+            }
+            if ($method->file_5 == $request->file_5 || $request->file_5 == null) {
+                $file_5_rule = '';
+            } else {
+                $file_5_rule = 'nullable|mimes:jpeg,jpg,png,pdf';
+            }
 
             $rules = [
                 'name' => 'required',
                 'type' => 'required',
                 'description' => 'required',
-                'file_1' => 'nullable|mimes:jpeg,jpg,png,pdf',
-                'file_2' => 'nullable|mimes:jpeg,jpg,png,pdf',
-                'file_3' => 'nullable|mimes:jpeg,jpg,png,pdf',
-                'file_4' => 'nullable|mimes:jpeg,jpg,png,pdf'
+                'file_1' => $file_1_rule,
+                'file_2' => $file_2_rule,
+                'file_3' => $file_3_rule,
+                'file_4' => $file_4_rule
             ];
 
             $messages = [];
