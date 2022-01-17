@@ -38,6 +38,7 @@ class CustomerController extends Controller
                     'id',
                     'mst_companies_id',
                     'company_name',
+                    'contact_type',
                     'gst_number',
                     'contact_person_name',
                     'tally_alias_name',

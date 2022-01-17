@@ -51,6 +51,7 @@ class MstProductController extends Controller
                     'is_active'
                 )->groupby('generic_product_name')
                     ->where('is_active', 1)
+                    ->wherenotnull('generic_product_name')
                     ->where('deleted_at', NULL)
                     ->orderBy('id', 'desc')
                     ->get();
@@ -64,19 +65,20 @@ class MstProductController extends Controller
                     'sample_description',
                     'packing_detail',
                     'marker_specification',
-                    'created_by',
                     'created_at',
-                    'updated_by',
-                    'updated_at'
+                    'updated_at',
+                    'pharmacopeia_name',
+                    'entered_by',
+                    'modified_by'
                 )
                     ->where('is_active', 1)
                     ->where('deleted_at', NULL)
                     ->where('mst_companies_id', $loggedInUserData['company_id'])
                     ->orderBy('id', 'desc')
-                    ->get()
-                    ->each(function ($item) {
-                        $item->append('pharmacopeia_name');
-                    });
+                    ->get();
+                // ->each(function ($item) {
+                //     $item->append('pharmacopeia_name');
+                // });
             }
 
             $data_empty = $data->isEmpty();
@@ -225,7 +227,6 @@ class MstProductController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->generic_product_name);
         DB::beginTransaction();
         try {
             $loggedInUserData = Helper::getUserData();
@@ -344,9 +345,37 @@ class MstProductController extends Controller
     {
         try {
             $loggedInUserData = Helper::getUserData();
-            $data = ViewProduct::with('samples')->where('id', $id)->where('deleted_at', NULL)->get()->each(function ($item) {
-                $item->append('pharmacopeia_name');
-            });
+            $data = ViewProduct::with('samples')->where('id', $id)
+                ->where('deleted_at', NULL)->get()
+                ->each(function ($item) {
+                    $item->append('parent_dropdown');
+                })->toArray();
+
+            // if($data[0]->samples[0]->parent_deleted_at)
+            if (!empty($data[0]['samples'])) {
+
+                //if samples array not empty
+
+                $samples = $data[0]['samples'];
+                foreach ($samples as $kay => $item) {
+
+                    if ($item['parent_deleted_at'] == "" || $item['parent_deleted_at'] == NULL) {
+                        //if parent(test data) is not deleted
+                        $data[0]['parent_dropdown'] = $data[0]['parent_dropdown'];
+                    } else {
+                        //if parent(test data) is deleted
+                        $deleted_parent_arr = [
+                            "id" => $item['parent'],
+                            "procedure_name" => $item['parent_name'],
+                            "deleted_at" => $item['parent_deleted_at']
+                        ];
+                        array_push($data[0]['parent_dropdown'], $deleted_parent_arr);
+                    }
+                }
+            } else {
+                //else samples array is empty
+                $data[0]['samples'] = [];
+            }
             return Helper::response("This Product Shown Successfully", Response::HTTP_OK, true, $data);
         } catch (Exception $e) {
             DB::rollback();
@@ -444,7 +473,30 @@ class MstProductController extends Controller
         }
         return Helper::response("This Product Shown Successfully", Response::HTTP_OK, true, $data_Arr);
     }
+    /** 
+     * Copy From Generic
+     * Get Samples Details From 'mst_products_samples' For Entered "generic_product_name" 
+     * Where "generic_product_name" is lastly used in mstproducts
+     */
+    public function copy_fromGeneric(Request $request)
+    {
+        try {
+            $validation = Validator::make($request->all(), [
+                'generic_product_name' => 'required'
+            ]);
+            if ($validation->fails()) {
+                $data = array();
+                return Helper::response($validation->errors()->all(), Response::HTTP_OK, false, $data);
+            }
+            $product_id = ViewProduct::select('id')->where('generic_product_name', $request->generic_product_name)->where('deleted_at', Null)->orderBy('id', 'DESC')->first();
+            $product_id = $product_id->id;
 
+            return Helper::response("Samples Shown Successfully", Response::HTTP_OK, true, $data);
+        } catch (Exception $e) {
+            $data = array();
+            return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);
+        }
+    }
     /**
      * Show the form for editing the specified resource.
      *

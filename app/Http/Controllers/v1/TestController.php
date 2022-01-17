@@ -33,6 +33,7 @@ class TestController extends Controller
             $is_dropdown = (isset($request->is_dropdown)) ? $request->is_dropdown : false;
 
             if (!$is_dropdown) {
+              // Can Use this for Export,Listing
                 $data = ViewTest::select('id', 'procedure_name', 'price', 'test_procedure', 'parent_id')
                     ->where('mst_companies_id', $loggedInUserData['company_id'])
                     ->where('is_active', 1)
@@ -42,6 +43,7 @@ class TestController extends Controller
                         $item->append('parent_name', 'parent_dropdown');
                     })->toarray();
             } else {
+              // Can Use this for Dropdown
                 $data = ViewTest::select('id', 'procedure_name')
                     ->whereNotNull('price')
                     ->where('price', '!=', 0)
@@ -72,18 +74,18 @@ class TestController extends Controller
 
             $rules = [
                 'procedure_name' => 'required|max:255',
-                'test_code' => 'required|max:50',
-                'test_category' => 'required|max:255',
+                //'test_code' => 'required|max:50',
+                //'test_category' => 'required|max:255',
                 'test_procedure' => 'required'
             ];
 
             $messages = [
                 'procedure_name.required' => 'The Procedure Name field is required',
                 'procedure_name.max' => 'The Test Procedure Name must be less than or equal to 255 characters',
-                'test_code.required' => 'The Test Code field is required',
-                'test_code.max' => 'The Test Code must be less than or equal to 50 characters',
-                'test_category.required' => 'The Test Category field is required',
-                'test_category.max' => 'The Test Category must be less than or equal to 255 characters',
+                //'test_code.required' => 'The Test Code field is required',
+              //  'test_code.max' => 'The Test Code must be less than or equal to 50 characters',
+                //'test_category.required' => 'The Test Category field is required',
+              //  'test_category.max' => 'The Test Category must be less than or equal to 255 characters',
                 'test_procedure.required' => 'The Test Procedure field is required'
             ];
 
@@ -129,7 +131,7 @@ class TestController extends Controller
      *Call Back Function For Tests Parameters.
      *
      * @param  $testParams_Data
-     * @return 
+     * @return
      */
 
     public function testParameter($testParams_data, $test_id = "")
@@ -202,18 +204,18 @@ class TestController extends Controller
 
             $rules = [
                 'procedure_name' => 'required|max:255',
-                'test_code' => 'required|max:50',
-                'test_category' => 'required|max:255',
+                //'test_code' => 'required|max:50',
+                //'test_category' => 'required|max:255',
                 'test_procedure' => 'required'
             ];
 
             $messages = [
                 'procedure_name.required' => 'The Procedure Name field is required',
                 'procedure_name.max' => 'The Test Procedure Name must be less than or equal to 255 characters',
-                'test_code.required' => 'The Test Code field is required',
-                'test_code.max' => 'The Test Code must be less than or equal to 50 characters',
-                'test_category.required' => 'The Test Category field is required',
-                'test_category.max' => 'The Test Category must be less than or equal to 255 characters',
+                //'test_code.required' => 'The Test Code field is required',
+              //  'test_code.max' => 'The Test Code must be less than or equal to 50 characters',
+                //'test_category.required' => 'The Test Category field is required',
+              //  'test_category.max' => 'The Test Category must be less than or equal to 255 characters',
                 'test_procedure.required' => 'The Test Procedure field is required'
             ];
 
