@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use DB;
+use App\Helpers\Helper;
 
 class ViewProduct extends Model
 {
@@ -29,6 +30,7 @@ class ViewProduct extends Model
         'created_at',
         'updated_at',
         'pharmacopeia_name',
+        'pharmacopeia_deleted_at,',
         'entered_by',
         'modified_by'
     ];
@@ -36,59 +38,32 @@ class ViewProduct extends Model
     {
         return $this->hasMany(ViewProductSamples::class, 'mst_product_id', 'id');
     }
-    public function getParentDropdownAttribute()
+    public function getPharmacopeiaDropdownAttribute()
     {
-        $data = ViewTest::select('id', 'procedure_name', 'deleted_at')
-            ->whereNotNull('price')
-            ->where('deleted_at', NULL)
+        $data = DB::table('view_pharmacopeia')
+            ->select('id', 'pharmacopeia_name', 'deleted_at')
+            ->where('is_active', 1)
+            ->where('deleted_at',null)
+            ->orderBy('id', 'desc')
             ->get()->toarray();
 
+        $is_deleted = $this->pharmacopeia_deleted_at;
+        if ($is_deleted != NULL || $is_deleted != '') {
+            $deleted_pharmacopeia = [
+                "id" => $this->pharmacopeia_id,
+                "pharmacopeia_name" => $this->pharmacopeia_name,
+                "deleted_at" => $this->pharmacopeia_deleted_at
+            ];
+            array_push($data, $deleted_pharmacopeia);
+        }
         $default_arr = [
             "id" => "",
-            "procedure_name" => "",
+            "pharmacopeia_name" => "",
             "deleted_at" => ""
         ];
-        return (isset($data)) ? $data : $default_arr;
+        return (isset($data[0])) ? $data : $default_arr;
     }
-    // public function getPharmacopeiaNameAttribute()
-    // {
-    //     $data = DB::table('view_pharmacopeia')
-    //         ->select('id', 'pharmacopeia_name', 'deleted_at')
-    //         ->where('id', $this->pharmacopeia_id)->get();
-    //     $default_arr = [
-    //         "id" => "",
-    //         "pharmacopeia_name" => "",
-    //         "deleted_at" => ""
-    //     ];
-    //     return (isset($data[0])) ? $data : $default_arr;
-    // }
 
-    // public function getEnteredByAttribute()
-    // {
-    //     $data = ViewUser::select('id', 'first_name', 'middle_name', 'last_name')
-    //         ->where('id', $this->created_by)->get();
-    //     if (isset($data[0])) {
-    //         return $entered_by = $data[0]->first_name . ' ' . $data[0]->middle_name . ' ' . $data[0]->last_name;
-    //     } else {
-    //         return '';
-    //     }
-    // }
-
-    // public function getModifiedByAttribute()
-    // {
-    //     $data = ViewUser::select('id', 'first_name', 'middle_name', 'last_name')
-    //         ->where('id', $this->updated_by)->get();
-    //     if (isset($data[0])) {
-    //         return $entered_by = $data[0]->first_name . ' ' . $data[0]->middle_name . ' ' . $data[0]->last_name;
-    //     } else {
-    //         return '';
-    //     }
-    // }
-
-    // /**
-    //  * Get all of the comments for the ViewProduct
-    //  *
-    //  * @return \Illuminate\Database\Eloquent\Relations\HasMany
-    //  */
     
+
 }

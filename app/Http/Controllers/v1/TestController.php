@@ -31,28 +31,41 @@ class TestController extends Controller
             $loggedInUserData = Helper::getUserData();
 
             $is_dropdown = (isset($request->is_dropdown)) ? $request->is_dropdown : false;
+            $is_parent = (isset($request->is_parent)) ? $request->is_parent : false;
+            $is_parameter = (isset($request->is_parameter)) ? $request->is_parameter : false;
 
-            if (!$is_dropdown) {
-              // Can Use this for Export,Listing
+            if ($is_dropdown) {
+                // Can Use this for Export,Listing
+                $data = ViewTest::select('id', 'procedure_name')
+                    ->where('is_active', 1)
+                    ->where('deleted_at', NULL)
+                    ->get()->toarray();
+            } elseif ($is_parent) {
+                // Can Use this for ParentDropdown 
+                $data = ViewTest::select('id', 'procedure_name')
+                    ->whereIn('procedure_name', ['Related', 'Assay'])
+                    ->orwhere('procedure_name', 'like', 'by%')
+                    ->where('is_active', 1)
+                    ->where('deleted_at', NULL)
+                    ->get()->toarray();
+            } elseif ($is_parameter) {
+                // Can Use this for ParameterDropdown
+                $data = ViewTest::select('id', 'procedure_name')
+                    ->where('is_active', 1)
+                    ->where('deleted_at', NULL)
+                    ->get()->toarray();
+            } else {
                 $data = ViewTest::select('id', 'procedure_name', 'price', 'test_procedure', 'parent_id')
                     ->where('mst_companies_id', $loggedInUserData['company_id'])
                     ->where('is_active', 1)
+                    ->where('procedure_name', 'not like', 'Related')
+                    ->where('procedure_name', 'not like', 'Assay')
                     ->where('deleted_at', NULL)
                     ->orderBy('id', 'desc')
                     ->get()->each(function ($item) {
                         $item->append('parent_name', 'parent_dropdown');
                     })->toarray();
-            } else {
-              // Can Use this for Dropdown
-                $data = ViewTest::select('id', 'procedure_name')
-                    ->whereNotNull('price')
-                    ->where('price', '!=', 0)
-                    ->where('is_active', 1)
-                    ->where('deleted_at', NULL)
-                    ->orderBy('id', 'desc')
-                    ->get()->toarray();
             }
-
             return Helper::response("Test List Shown Successfully", Response::HTTP_OK, true, $data);
         } catch (Exception $e) {
             $data = array();
@@ -83,9 +96,9 @@ class TestController extends Controller
                 'procedure_name.required' => 'The Procedure Name field is required',
                 'procedure_name.max' => 'The Test Procedure Name must be less than or equal to 255 characters',
                 //'test_code.required' => 'The Test Code field is required',
-              //  'test_code.max' => 'The Test Code must be less than or equal to 50 characters',
+                //  'test_code.max' => 'The Test Code must be less than or equal to 50 characters',
                 //'test_category.required' => 'The Test Category field is required',
-              //  'test_category.max' => 'The Test Category must be less than or equal to 255 characters',
+                //  'test_category.max' => 'The Test Category must be less than or equal to 255 characters',
                 'test_procedure.required' => 'The Test Procedure field is required'
             ];
 
@@ -213,9 +226,9 @@ class TestController extends Controller
                 'procedure_name.required' => 'The Procedure Name field is required',
                 'procedure_name.max' => 'The Test Procedure Name must be less than or equal to 255 characters',
                 //'test_code.required' => 'The Test Code field is required',
-              //  'test_code.max' => 'The Test Code must be less than or equal to 50 characters',
+                //  'test_code.max' => 'The Test Code must be less than or equal to 50 characters',
                 //'test_category.required' => 'The Test Category field is required',
-              //  'test_category.max' => 'The Test Category must be less than or equal to 255 characters',
+                //  'test_category.max' => 'The Test Category must be less than or equal to 255 characters',
                 'test_procedure.required' => 'The Test Procedure field is required'
             ];
 
@@ -273,7 +286,6 @@ class TestController extends Controller
 
             if (!empty($test)) {
                 $test->delete();
-
                 return Helper::response("Test deleted successfully", Response::HTTP_OK, true, $data);
             }
 

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: sdb-e.hosting.stackcp.net
--- Generation Time: Jan 13, 2022 at 01:52 PM
+-- Generation Time: Jan 18, 2022 at 01:51 PM
 -- Server version: 10.4.18-MariaDB-log
 -- PHP Version: 7.1.33
 
@@ -320,7 +320,7 @@ INSERT INTO `methods` (`id`, `mst_companies_id`, `name`, `type`, `date`, `file_1
 (20, 4, 'method2', 2, '1999-10-08', NULL, NULL, NULL, NULL, 'desciption', 1, NULL, '2022-01-11 19:02:30', NULL, '2019-20', NULL, 1, NULL),
 (21, 4, 'method1', 1, '1999-10-08', 'file_1_364gr.jpeg', NULL, NULL, NULL, 'desciption', 1, NULL, '2022-01-11 19:03:19', NULL, '2019-20', NULL, 1, NULL),
 (22, 4, 'method2', 2, '1999-10-08', 'file_1_s1wtn.png', NULL, NULL, NULL, 'desciption', 1, NULL, '2022-01-11 19:03:26', NULL, '2019-20', NULL, 1, NULL),
-(23, 4, 'Assay Method', 1, '2022-01-12', NULL, NULL, NULL, NULL, '<p><span class=\"ql-formula\" data-value=\"e=pi/2\">﻿<span contenteditable=\"false\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><mi>e</mi><mo>=</mo><mi>p</mi><mi>i</mi><mi mathvariant=\"normal\">/</mi><mn>2</mn></mrow><annotation encoding=\"application/x-tex\">e=pi/2</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height: 0.4306em;\"></span><span class=\"mord mathnormal\">e</span><span class=\"mspace\" style=\"margin-right: 0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right: 0.2778em;\"></span></span><span class=\"base\"><span class=\"strut\" style=\"height: 1em; vertical-align: -0.25em;\"></span><span class=\"mord mathnormal\">p</span><span class=\"mord mathnormal\">i</span><span class=\"mord\">/2</span></span></span></span></span>﻿</span>﻿e=pi/2</p><p>e=pi/2﻿e=pi/2</p><p>e=pi/2﻿e=pi/2</p><p>e=pi/2﻿e=pi/2</p><p>e=pi/2﻿e=pi/2</p><p>e=pi/2﻿e=pi/2</p><p>e=pi/2﻿e=pi/2</p><p>e=pi/2﻿e=pi/2</p><p>e=pi/2﻿e=pi/2</p><p>e=pi/2﻿e=pi/2</p><p>e=pi/2﻿e=pi/2</p><p>e=pi/2</p>', 1, 1, '2022-01-12 18:47:39', '2022-01-13 17:38:49', '2019-20', NULL, 1, NULL);
+(23, 4, 'Assay Method', 1, '2022-01-12', NULL, NULL, NULL, NULL, '<p class=\"ql-align-justify\">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris massa risus, vehicula at leo eu, facilisis commodo tortor. Curabitur in elementum leo. Aenean eget augue euismod, tristique dolor eget, gravida urna. Donec dignissim nec risus non tempor. Donec accumsan justo nibh, sit amet rutrum lectus varius ut. Aliquam ex tortor, dictum at venenatis pharetra, aliquet ut ante. Ut a neque id neque volutpat semper at nec lectus. Maecenas pharetra est purus, ac rutrum justo fringilla non. Nunc a posuere justo. Curabitur molestie lacus eu mi accumsan cursus. Phasellus nulla odio, tristique a faucibus et, iaculis mollis eros. Duis pellentesque mi sed mattis malesuada. Sed eget ultricies sapien. Nunc commodo pretium arcu, nec tristique magna congue et. Proin non fringilla augue. Aliquam maximus bibendum iaculis.</p><p class=\"ql-align-justify\"><br></p><p class=\"ql-align-justify\">Nam a urna tempor, pretium lacus quis, porta diam. Suspendisse vel pellentesque nibh. Etiam eget tempor neque. Curabitur pharetra aliquet nunc et viverra. Sed venenatis, diam non fermentum aliquet, purus neque consectetur metus, et scelerisque elit lectus a libero. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In placerat tristique risus, nec dictum nibh tristique eget. Cras nec euismod tellus. Curabitur fermentum dui quis arcu tincidunt egestas. Maecenas ac accumsan risus. Mauris consequat finibus sapien, sit amet euismod ante fermentum at. Sed sodales ut ligula fringilla gravida. Nullam pretium ullamcorper dolor, id vehicula urna iaculis molestie.</p><p class=\"ql-align-justify\"><br></p><p class=\"ql-align-justify\">Pellentesque consequat vitae lectus vitae tempus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nulla accumsan lobortis nisl eget dictum. Cras volutpat velit sed augue venenatis efficitur. Donec vitae risus et odio condimentum pellentesque. Nullam tempor eget elit non finibus. Vestibulum sed enim sem. Proin dictum mi at dui interdum, sit amet bibendum nisl egestas. Integer at mauris lectus. Nullam gravida, orci nec aliquam commodo, magna ipsum maximus velit, pharetra pellentesque libero est nec nulla. Duis aliquet dictum mauris et eleifend.</p><p><br></p>', 1, 1, '2022-01-12 18:47:39', '2022-01-17 11:03:58', '2019-20', NULL, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -745,8 +745,6 @@ INSERT INTO `mst_customers` (`id`, `mst_companies_id`, `company_name`, `gst_numb
 (2, 4, 'Reliance', NULL, NULL, NULL, NULL, NULL, NULL, 'Manufacturer', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, NULL, '2021-12-15 11:12:12', NULL, '2019-20', NULL, 1, NULL),
 (3, 4, 'Reliance', NULL, NULL, NULL, NULL, NULL, NULL, 'Supplier', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, NULL, '2021-12-15 11:12:12', NULL, '2019-20', NULL, 1, NULL),
 (4, 4, 'Divine Infosys', NULL, 'Vishal Kotak', 'Bhavesh Gajjar', 'wordpress.divine@gmail.com', '$2y$10$bTDQSZW2my.A7NDThk7NaONMebSIUOKPrJWFj67oKAeJ4NdUq8Ap2', '2016-09-14', 'Service Provider', 'High', 'We believe design is the essence of any website that showcases the core strength of the business and reaches out to innumerable people.', '20211215154052.png', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s.', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s.', '900700000', '1234567890', '5', NULL, NULL, 3, NULL, '2021-12-15 15:40:52', NULL, '2019-20', NULL, 1, NULL),
-(5, 4, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Manufacturer', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, NULL, '2021-12-16 14:29:26', NULL, '2019-20', NULL, 1, NULL),
-(6, 4, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Supplier', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, NULL, '2021-12-16 14:29:26', NULL, '2019-20', NULL, 1, NULL),
 (7, 4, 'Test Company', '18AABCU9603R1ZM', 'test company name', 'test@test', 'testcompany123', 'VGVzdCFAIzEyMzQ=', NULL, 'Customer', 'High', NULL, NULL, NULL, NULL, NULL, 'dfgfd', '6', 'QWET1234', '1234568', 1, 1, '2022-01-07 16:14:44', '2022-01-10 17:44:31', '2019-20', NULL, 1, NULL),
 (8, 4, 'test', '10AABCU9603R1Z2', NULL, NULL, 'test123', 'VGVzdCFAIzEyMzQ1Ng==', NULL, 'Customer', 'High', NULL, 'null', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, '2022-01-07 18:45:39', '2022-01-10 17:56:12', '2019-20', NULL, 1, NULL),
 (9, 4, 'test123', '18AABCU9603R1ZM', NULL, NULL, 'jayshah123', 'VGVzdEAxMjM0', NULL, 'Customer', 'High', NULL, '20220110172357.png', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2022-01-10 17:14:00', '2022-01-10 17:14:41', '2019-20', NULL, 1, '2022-01-10 17:14:41'),
@@ -1105,9 +1103,12 @@ CREATE TABLE `mst_products` (
 INSERT INTO `mst_products` (`id`, `mst_companies_id`, `product_name`, `product_generic`, `marker_specification`, `pharmacopeia_id`, `generic_product_name`, `packing_detail`, `sample_description`, `hsn_Code`, `selected_year`, `copied_from_year`, `is_active`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (1, 4, 'Acenol Tablet', 'Finished Product', 'IHS', 1, '0', '', 'White to almost white tablet', '', '2019-20', NULL, 1, 3, 3, '2021-12-15 11:00:05', '2021-12-16 13:01:32', NULL),
 (2, 4, 'Paracitamol Tablet', 'Finished Product', '', 1, '0', '', 'sample description for paracitamol tablet', '', '2019-20', NULL, 1, 3, 3, '2021-12-16 14:41:01', '2021-12-16 18:36:26', NULL),
-(3, 4, 'NEW PRODUCT1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-20', NULL, 1, 1, NULL, '2021-12-16 15:00:50', NULL, NULL),
+(3, 4, 'NEW PRODUCT1', NULL, NULL, NULL, 'NEW PRODU', NULL, 'sample description for paracitamol tablet', NULL, '2019-20', NULL, 1, 1, NULL, '2021-12-16 15:00:50', NULL, NULL),
 (4, 4, 'Viksss', 'Raw Metriall', 'motion sicknesss', 5, '3', 'Shipped', 'motion sickness', '342356', '2019-20', NULL, 1, 1, NULL, '2021-12-16 15:00:50', NULL, NULL),
-(5, 4, 'Viksss', 'Raw Metriall', 'motion sicknesss', 5, '3', 'Shipped', 'motion sickness', '342356', '2019-20', NULL, 1, 1, NULL, '2021-12-16 15:01:04', NULL, NULL);
+(5, 4, 'Viksss', 'Raw Metriall', 'motion sicknesss', 5, '3', 'Shipped', 'motion sickness', '342356', '2019-20', NULL, 1, 1, NULL, '2021-12-16 15:01:04', NULL, NULL),
+(6, 4, 'L1', 'Raw Metriall', 'Cold', 2, 'L2', 'Shipped', 'L3', '342356', '2019-20', NULL, 1, 1, NULL, '2022-01-18 18:58:23', NULL, NULL),
+(7, 4, 'L1', 'Raw Metriall', 'Cold', 2, 'L2', 'Shipped', 'L3', '342356', '2019-20', NULL, 1, 1, NULL, '2022-01-18 18:58:28', NULL, NULL),
+(8, 4, 'L1', 'Raw Metriall', 'Cold', 2, 'L2', 'Shipped', 'L3', '342356', '2019-20', NULL, 1, 1, NULL, '2022-01-18 18:58:57', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1149,8 +1150,14 @@ INSERT INTO `mst_product_samples` (`id`, `mst_product_id`, `by_pass`, `parent`, 
 (25, 4, 1, 13, 69, 'label claim1', '20', '200', '700.00', 'method1', 'description1', 'A1', 'nabl1', 'formula1', 1, 1, '2021-12-16 15:00:50', '2021-12-16 15:00:50', NULL),
 (26, 5, 1, 22, 0, 'label claim', '10', '100', '500.00', 'method', 'description', 'A', 'nabl', 'formula', 1, 1, '2021-12-16 15:01:04', '2021-12-16 15:01:04', NULL),
 (27, 5, 1, 13, 69, 'label claim1', '20', '200', '700.00', 'method1', 'description1', 'A1', 'nabl1', 'formula1', 1, 1, '2021-12-16 15:01:04', '2021-12-16 15:01:04', NULL),
-(32, 2, 2, 0, 5, '200 mg', '25', '60', '0.00', 'test', '', '', '', '', 3, 3, '2021-12-16 18:36:26', '2021-12-16 18:36:26', NULL),
-(33, 2, 2, 0, 0, '', 'NLT 90.0 %to', 'NMT 110.0 %', '0.00', '', '', '', '', '', 3, 3, '2021-12-16 18:36:26', '2021-12-16 18:36:26', NULL);
+(32, 3, 2, 0, 5, '200 mg', '25', '60', '0.00', 'test', '', '', '', '', 3, 3, '2021-12-16 18:36:26', '2021-12-16 18:36:26', NULL),
+(33, 3, 2, 0, 0, '', 'NLT 90.0 %to', 'NMT 110.0 %', '0.00', '', '', '', '', '', 3, 3, '2021-12-16 18:36:26', '2021-12-16 18:36:26', NULL),
+(34, 6, 1, 1, 0, 'label claim', 'NLT 1', 'NMT 100.1', '500.00', 'method', 'description', 'A', 'nabl', 'formula', 1, 1, '2022-01-18 18:58:23', '2022-01-18 18:58:23', NULL),
+(35, 6, 1, 13, 69, 'label claim1', 'NLT 2.00', 'NMT 0.30 %', '700.00', 'method1', 'description1', 'A1', 'nabl1', 'formula1', 1, 1, '2022-01-18 18:58:23', '2022-01-18 18:58:23', NULL),
+(36, 7, 1, 1, 0, 'label claim', 'NLT 1 %', 'NMT 100.1', '500.00', 'method', 'description', 'A', 'nabl', 'formula', 1, 1, '2022-01-18 18:58:28', '2022-01-18 18:58:28', NULL),
+(37, 7, 1, 13, 69, 'label claim1', 'NLT 2.00', 'NMT 0.30 %', '700.00', 'method1', 'description1', 'A1', 'nabl1', 'formula1', 1, 1, '2022-01-18 18:58:28', '2022-01-18 18:58:28', NULL),
+(38, 8, 1, 1, 0, 'label claim', 'nlt 1 %', 'nmt 100.1', '500.00', 'method', 'description', 'A', 'nabl', 'formula', 1, 1, '2022-01-18 18:58:57', '2022-01-18 18:58:57', NULL),
+(39, 8, 1, 13, 69, 'label claim1', 'NLT 2.00', 'NMT 0.30 %', '700.00', 'method1', 'description1', 'A1', 'nabl1', 'formula1', 1, 1, '2022-01-18 18:58:57', '2022-01-18 18:58:57', NULL);
 
 -- --------------------------------------------------------
 
@@ -4944,10 +4951,10 @@ CREATE TABLE `mst_tests` (
 --
 
 INSERT INTO `mst_tests` (`id`, `mst_companies_id`, `procedure_name`, `price`, `test_code`, `test_category`, `test_procedure`, `parent_id`, `created_by`, `updated_by`, `created_at`, `updated_at`, `selected_year`, `copied_from_year`, `is_active`, `deleted_at`) VALUES
-(1, 1, 'Test 01', '10.20', 'TEST01', 'Cate 01', 'Test 01', 0, 1, 1, '2021-11-09 12:26:27', '2021-11-09 12:27:16', '2019-20', NULL, 1, '2021-11-09 12:27:16'),
-(2, 1, 'Test 02', '10', 'TEST01', 'Cate 1', 'Test', 0, 1, NULL, '2021-11-09 12:27:22', '2021-11-09 12:27:22', '2019-20', NULL, 1, '2021-11-09 12:27:16'),
-(3, 1, 'Test 03', '10.50', 'TEST02', 'Cate 1', 'Test', 0, 1, NULL, '2021-11-09 12:27:31', '2021-11-09 12:27:31', '2019-20', NULL, 1, NULL),
-(4, 1, 'Test 04', '10.50', 'TEST020', 'Cate 1', 'Test', 0, 1, NULL, '2021-11-09 12:27:31', '2021-11-09 12:27:31', '2019-20', NULL, 1, '2021-11-09 12:27:16'),
+(1, 4, 'Related', '10.20', 'Related', 'Related', 'Related', 0, 1, 1, '2021-11-09 12:26:27', '2021-11-09 12:27:16', '2019-20', NULL, 1, NULL),
+(2, 4, 'Assay', '10', 'Assay', 'Assay', 'Assay', 0, 1, NULL, '2021-11-09 12:27:22', '2021-11-09 12:27:22', '2019-20', NULL, 1, NULL),
+(3, 4, 'BY TEST02', '10.50', 'BY TEST02', 'Cate 1', 'Test', 0, 1, NULL, '2021-11-09 12:27:31', '2021-11-09 12:27:31', '2019-20', NULL, 1, NULL),
+(4, 4, 'by Test 04', '10.50', 'by TEST020', 'Cate 1', 'Test', 1, 1, NULL, '2021-11-09 12:27:31', '2021-11-09 12:27:31', '2019-20', NULL, 1, NULL),
 (5, 4, 'Description', 'price', 'test_code', 'test_category', 'test_procedure', 1, 1, NULL, '2021-12-16 13:01:11', '2021-12-16 13:01:11', '2019-20', NULL, 1, NULL);
 
 -- --------------------------------------------------------
@@ -5753,6 +5760,62 @@ INSERT INTO `user_emp_details` (`id`, `users_id`, `organisation`, `designation`,
 -- --------------------------------------------------------
 
 --
+-- Stand-in structure for view `view_customers`
+-- (See below for the actual view)
+--
+CREATE TABLE `view_customers` (
+`id` int(11)
+,`mst_companies_id` int(11)
+,`company_name` varchar(512)
+,`gst_number` varchar(15)
+,`contact_person_name` varchar(100)
+,`tally_alias_name` varchar(100)
+,`user_name` varchar(40)
+,`password` varchar(255)
+,`birth_date` date
+,`contact_type` varchar(20)
+,`priority` varchar(10)
+,`notes` text
+,`logo` varchar(255)
+,`education_details` text
+,`prev_details` text
+,`company_tin_no` varchar(155)
+,`company_service_tax_no` varchar(155)
+,`company_cust_discount` varchar(55)
+,`company_cst_no` varchar(100)
+,`company_vat_no` varchar(100)
+,`created_by` int(11)
+,`updated_by` int(11)
+,`created_at` datetime
+,`updated_at` datetime
+,`selected_year` varchar(25)
+,`copied_from_year` int(4)
+,`is_active` int(1)
+,`deleted_at` datetime
+,`home_contact_no` varchar(15)
+,`other_contact_no` varchar(15)
+,`home_qc_contact_no` varchar(55)
+,`home_landline` varchar(55)
+,`home_email` varchar(255)
+,`other_email` varchar(255)
+,`other_qc_email` varchar(255)
+,`home_street_1` varchar(100)
+,`home_street_2` varchar(100)
+,`other_street_1` varchar(100)
+,`other_street_2` varchar(100)
+,`home_city` varchar(60)
+,`other_city` varchar(60)
+,`home_country` varchar(29)
+,`other_country` varchar(29)
+,`home_state` varchar(51)
+,`other_state` varchar(51)
+,`home_area` varchar(40)
+,`other_area` varchar(40)
+);
+
+-- --------------------------------------------------------
+
+--
 -- Stand-in structure for view `view_formulas`
 -- (See below for the actual view)
 --
@@ -5846,6 +5909,42 @@ CREATE TABLE `view_products` (
 ,`created_at` datetime
 ,`updated_at` datetime
 ,`deleted_at` datetime
+,`pharmacopeia_name` varchar(255)
+,`pharmacopeia_deleted_at` datetime
+,`entered_by` text
+,`modified_by` text
+);
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `view_product_samples`
+-- (See below for the actual view)
+--
+CREATE TABLE `view_product_samples` (
+`id` int(11)
+,`mst_product_id` int(11)
+,`by_pass` tinyint(1)
+,`parent` int(11)
+,`mst_sample_parameter_id` int(11)
+,`label_claim` varchar(155)
+,`min_limit` varchar(155)
+,`max_limit` varchar(155)
+,`amount` decimal(15,2)
+,`method` varchar(155)
+,`description` varchar(255)
+,`division` varchar(155)
+,`nabl` varchar(155)
+,`formula` varchar(155)
+,`created_by` int(11)
+,`updated_by` int(11)
+,`created_at` datetime
+,`updated_at` datetime
+,`deleted_at` datetime
+,`parent_name` varchar(255)
+,`parent_deleted_at` datetime
+,`parameter_name` varchar(255)
+,`parameter_deleted_at` datetime
 );
 
 -- --------------------------------------------------------
@@ -5911,6 +6010,15 @@ CREATE TABLE `view_users` (
 -- --------------------------------------------------------
 
 --
+-- Structure for view `view_customers`
+--
+DROP TABLE IF EXISTS `view_customers`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`aumresearch`@`%` SQL SECURITY DEFINER VIEW `view_customers`  AS  select `customers`.`id` AS `id`,`customers`.`mst_companies_id` AS `mst_companies_id`,`customers`.`company_name` AS `company_name`,`customers`.`gst_number` AS `gst_number`,`customers`.`contact_person_name` AS `contact_person_name`,`customers`.`tally_alias_name` AS `tally_alias_name`,`customers`.`user_name` AS `user_name`,`customers`.`password` AS `password`,`customers`.`birth_date` AS `birth_date`,`customers`.`contact_type` AS `contact_type`,`customers`.`priority` AS `priority`,`customers`.`notes` AS `notes`,`customers`.`logo` AS `logo`,`customers`.`education_details` AS `education_details`,`customers`.`prev_details` AS `prev_details`,`customers`.`company_tin_no` AS `company_tin_no`,`customers`.`company_service_tax_no` AS `company_service_tax_no`,`customers`.`company_cust_discount` AS `company_cust_discount`,`customers`.`company_cst_no` AS `company_cst_no`,`customers`.`company_vat_no` AS `company_vat_no`,`customers`.`created_by` AS `created_by`,`customers`.`updated_by` AS `updated_by`,`customers`.`created_at` AS `created_at`,`customers`.`updated_at` AS `updated_at`,`customers`.`selected_year` AS `selected_year`,`customers`.`copied_from_year` AS `copied_from_year`,`customers`.`is_active` AS `is_active`,`customers`.`deleted_at` AS `deleted_at`,`contact_info_home`.`contact_no` AS `home_contact_no`,`contact_info_other`.`contact_no` AS `other_contact_no`,`contact_info_home`.`home_qc_contact_no` AS `home_qc_contact_no`,`contact_info_home`.`home_landline` AS `home_landline`,`contact_info_home`.`email` AS `home_email`,`contact_info_other`.`email` AS `other_email`,`contact_info_other`.`other_qc_email` AS `other_qc_email`,`contact_info_home`.`street_1` AS `home_street_1`,`contact_info_home`.`street_2` AS `home_street_2`,`contact_info_other`.`street_1` AS `other_street_1`,`contact_info_other`.`street_2` AS `other_street_2`,`contact_info_home`.`city` AS `home_city`,`contact_info_other`.`city` AS `other_city`,`home_country`.`country_name` AS `home_country`,`other_country`.`country_name` AS `other_country`,`home_state`.`state_name` AS `home_state`,`other_state`.`state_name` AS `other_state`,`contact_info_home`.`area` AS `home_area`,`contact_info_other`.`area` AS `other_area` from ((((((`mst_customers` `customers` left join (select `mst_customers_contact_info`.`id` AS `id`,`mst_customers_contact_info`.`mst_customer_id` AS `mst_customer_id`,`mst_customers_contact_info`.`street_1` AS `street_1`,`mst_customers_contact_info`.`street_2` AS `street_2`,`mst_customers_contact_info`.`area` AS `area`,`mst_customers_contact_info`.`pin` AS `pin`,`mst_customers_contact_info`.`city` AS `city`,`mst_customers_contact_info`.`state` AS `state`,`mst_customers_contact_info`.`country` AS `country`,`mst_customers_contact_info`.`home_landline` AS `home_landline`,`mst_customers_contact_info`.`other_website` AS `other_website`,`mst_customers_contact_info`.`other_qc_email` AS `other_qc_email`,`mst_customers_contact_info`.`home_pan_card` AS `home_pan_card`,`mst_customers_contact_info`.`other_pan_card_copy` AS `other_pan_card_copy`,`mst_customers_contact_info`.`contact_info_type` AS `contact_info_type`,`mst_customers_contact_info`.`contact_no` AS `contact_no`,`mst_customers_contact_info`.`home_qc_contact_no` AS `home_qc_contact_no`,`mst_customers_contact_info`.`email` AS `email`,`mst_customers_contact_info`.`created_by` AS `created_by`,`mst_customers_contact_info`.`updated_by` AS `updated_by`,`mst_customers_contact_info`.`created_at` AS `created_at`,`mst_customers_contact_info`.`updated_at` AS `updated_at`,`mst_customers_contact_info`.`deleted_at` AS `deleted_at` from `mst_customers_contact_info` where `mst_customers_contact_info`.`contact_info_type` = 1) `contact_info_home` on(`contact_info_home`.`mst_customer_id` = `customers`.`id`)) left join (select `mst_customers_contact_info`.`id` AS `id`,`mst_customers_contact_info`.`mst_customer_id` AS `mst_customer_id`,`mst_customers_contact_info`.`street_1` AS `street_1`,`mst_customers_contact_info`.`street_2` AS `street_2`,`mst_customers_contact_info`.`area` AS `area`,`mst_customers_contact_info`.`pin` AS `pin`,`mst_customers_contact_info`.`city` AS `city`,`mst_customers_contact_info`.`state` AS `state`,`mst_customers_contact_info`.`country` AS `country`,`mst_customers_contact_info`.`home_landline` AS `home_landline`,`mst_customers_contact_info`.`other_website` AS `other_website`,`mst_customers_contact_info`.`other_qc_email` AS `other_qc_email`,`mst_customers_contact_info`.`home_pan_card` AS `home_pan_card`,`mst_customers_contact_info`.`other_pan_card_copy` AS `other_pan_card_copy`,`mst_customers_contact_info`.`contact_info_type` AS `contact_info_type`,`mst_customers_contact_info`.`contact_no` AS `contact_no`,`mst_customers_contact_info`.`home_qc_contact_no` AS `home_qc_contact_no`,`mst_customers_contact_info`.`email` AS `email`,`mst_customers_contact_info`.`created_by` AS `created_by`,`mst_customers_contact_info`.`updated_by` AS `updated_by`,`mst_customers_contact_info`.`created_at` AS `created_at`,`mst_customers_contact_info`.`updated_at` AS `updated_at`,`mst_customers_contact_info`.`deleted_at` AS `deleted_at` from `mst_customers_contact_info` where `mst_customers_contact_info`.`contact_info_type` = 2) `contact_info_other` on(`contact_info_other`.`mst_customer_id` = `customers`.`id`)) left join (select `mst_countries`.`id` AS `id`,`mst_countries`.`country_name` AS `country_name` from `mst_countries`) `home_country` on(`contact_info_home`.`country` = `home_country`.`id`)) left join (select `mst_countries`.`id` AS `id`,`mst_countries`.`country_name` AS `country_name` from `mst_countries`) `other_country` on(`contact_info_other`.`country` = `other_country`.`id`)) left join (select `mst_states`.`id` AS `id`,`mst_states`.`mst_countries_id` AS `mst_countries_id`,`mst_states`.`state_name` AS `state_name` from `mst_states`) `home_state` on(`contact_info_home`.`state` = `home_state`.`id`)) left join (select `mst_states`.`id` AS `id`,`mst_states`.`mst_countries_id` AS `mst_countries_id`,`mst_states`.`state_name` AS `state_name` from `mst_states`) `other_state` on(`contact_info_other`.`state` = `other_state`.`id`)) ;
+
+-- --------------------------------------------------------
+
+--
 -- Structure for view `view_formulas`
 --
 DROP TABLE IF EXISTS `view_formulas`;
@@ -5942,7 +6050,16 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`aumresearch`@`%` SQL SECURITY DEFINER VIEW `
 --
 DROP TABLE IF EXISTS `view_products`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`aumresearch`@`%` SQL SECURITY DEFINER VIEW `view_products`  AS  select `mst_products`.`id` AS `id`,`mst_products`.`mst_companies_id` AS `mst_companies_id`,`mst_products`.`product_name` AS `product_name`,`mst_products`.`product_generic` AS `product_generic`,`mst_products`.`marker_specification` AS `marker_specification`,`mst_products`.`pharmacopeia_id` AS `pharmacopeia_id`,`mst_products`.`generic_product_name` AS `generic_product_name`,`mst_products`.`packing_detail` AS `packing_detail`,`mst_products`.`sample_description` AS `sample_description`,`mst_products`.`hsn_Code` AS `hsn_Code`,`mst_products`.`selected_year` AS `selected_year`,`mst_products`.`copied_from_year` AS `copied_from_year`,`mst_products`.`is_active` AS `is_active`,`mst_products`.`created_by` AS `created_by`,`mst_products`.`updated_by` AS `updated_by`,`mst_products`.`created_at` AS `created_at`,`mst_products`.`updated_at` AS `updated_at`,`mst_products`.`deleted_at` AS `deleted_at` from `mst_products` ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`aumresearch`@`%` SQL SECURITY DEFINER VIEW `view_products`  AS  select `product`.`id` AS `id`,`product`.`mst_companies_id` AS `mst_companies_id`,`product`.`product_name` AS `product_name`,`product`.`product_generic` AS `product_generic`,`product`.`marker_specification` AS `marker_specification`,`product`.`pharmacopeia_id` AS `pharmacopeia_id`,`product`.`generic_product_name` AS `generic_product_name`,`product`.`packing_detail` AS `packing_detail`,`product`.`sample_description` AS `sample_description`,`product`.`hsn_Code` AS `hsn_Code`,`product`.`selected_year` AS `selected_year`,`product`.`copied_from_year` AS `copied_from_year`,`product`.`is_active` AS `is_active`,`product`.`created_by` AS `created_by`,`product`.`updated_by` AS `updated_by`,`product`.`created_at` AS `created_at`,`product`.`updated_at` AS `updated_at`,`product`.`deleted_at` AS `deleted_at`,`pharmacopeia`.`pharmacopeia_name` AS `pharmacopeia_name`,`pharmacopeia`.`deleted_at` AS `pharmacopeia_deleted_at`,concat(`user1`.`first_name`,'',`user1`.`middle_name`,'',`user1`.`last_name`) AS `entered_by`,concat(`user2`.`first_name`,'',`user2`.`middle_name`,'',`user2`.`last_name`) AS `modified_by` from (((`mst_products` `product` left join (select `mst_pharmacopeia`.`id` AS `id`,`mst_pharmacopeia`.`pharmacopeia_name` AS `pharmacopeia_name`,`mst_pharmacopeia`.`deleted_at` AS `deleted_at` from `mst_pharmacopeia`) `pharmacopeia` on(`product`.`pharmacopeia_id` = `pharmacopeia`.`id`)) left join (select `view_users`.`id` AS `id`,`view_users`.`first_name` AS `first_name`,`view_users`.`middle_name` AS `middle_name`,`view_users`.`last_name` AS `last_name` from `view_users`) `user1` on(`product`.`created_by` = `user1`.`id`)) left join (select `view_users`.`id` AS `id`,`view_users`.`first_name` AS `first_name`,`view_users`.`middle_name` AS `middle_name`,`view_users`.`last_name` AS `last_name` from `view_users`) `user2` on(`product`.`updated_by` = `user2`.`id`)) ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `view_product_samples`
+--
+DROP TABLE IF EXISTS `view_product_samples`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`aumresearch`@`%` SQL SECURITY DEFINER VIEW `view_product_samples`  AS  select `samples`.`id` AS `id`,`samples`.`mst_product_id` AS `mst_product_id`,`samples`.`by_pass` AS `by_pass`,`samples`.`parent` AS `parent`,`samples`.`mst_sample_parameter_id` AS `mst_sample_parameter_id`,`samples`.`label_claim` AS `label_claim`,`samples`.`min_limit` AS `min_limit`,`samples`.`max_limit` AS `max_limit`,`samples`.`amount` AS `amount`,`samples`.`method` AS `method`,`samples`.`description` AS `description`,`samples`.`division` AS `division`,`samples`.`nabl` AS `nabl`,`samples`.`formula` AS `formula`,`samples`.`created_by` AS `created_by`,`samples`.`updated_by` AS `updated_by`,`samples`.`created_at` AS `created_at`,`samples`.`updated_at` AS `updated_at`,`samples`.`deleted_at` AS `deleted_at`,`parent`.`procedure_name` AS `parent_name`,`parent`.`deleted_at` AS `parent_deleted_at`,`parameter`.`procedure_name` AS `parameter_name`,`parameter`.`deleted_at` AS `parameter_deleted_at` from ((`mst_product_samples` `samples` left join `view_tests` `parent` on(`samples`.`parent` = `parent`.`id`)) left join `view_tests` `parameter` on(`samples`.`mst_sample_parameter_id` = `parameter`.`id`)) ;
 
 -- --------------------------------------------------------
 
@@ -6365,13 +6482,13 @@ ALTER TABLE `mst_positions`
 -- AUTO_INCREMENT for table `mst_products`
 --
 ALTER TABLE `mst_products`
-  MODIFY `id` int(23) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(23) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `mst_product_samples`
 --
 ALTER TABLE `mst_product_samples`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT for table `mst_tests`

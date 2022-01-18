@@ -155,6 +155,7 @@ Route::group(['middleware' => ['jwt.verify'], 'prefix' => 'v1'], function () {
     Route::post('deleteProduct/{id}', 'App\Http\Controllers\v1\MstProductController@destroy');
     Route::get('exportproductlist', 'App\Http\Controllers\v1\MstProductController@exportlist');
     Route::get('copyfromGeneric', 'App\Http\Controllers\v1\MstProductController@copy_fromGeneric');
+    Route::get('methodDropdown', 'App\Http\Controllers\v1\MstProductController@method_dropdown');
 
     // Instruments master
     Route::post('addInstrument', 'App\Http\Controllers\v1\InstrumentController@store');

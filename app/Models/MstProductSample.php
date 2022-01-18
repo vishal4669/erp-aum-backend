@@ -10,7 +10,6 @@ class MstProductSample extends Model
 {
     use HasFactory;
     use SoftDeletes;
-    // protected $appends = ['parent_name'];
     protected $fillable = [
         'mst_companies_id',
         'mst_product_id',

@@ -16,7 +16,9 @@ use App\Models\MstProductSample;
 use App\Models\MstProductParent;
 use App\Models\Pharmacopeia;
 use App\Models\Test;
+use App\Models\ViewMethod;
 use App\Models\ViewProduct;
+use App\Models\ViewProductSamples;
 use Illuminate\Support\Arr;
 use JWTAuth;
 
@@ -230,12 +232,21 @@ class MstProductController extends Controller
         DB::beginTransaction();
         try {
             $loggedInUserData = Helper::getUserData();
-            $validator = Validator::make($request->all(), [
+            $rules = [
                 "product_name" => 'required|string|max:255',
                 "product_generic" => 'required|string|max:255',
                 "pharmacopeia_id" => 'required|integer',
                 "sample_details.*.amount" => 'nullable|numeric|between:0,999999999999999999999999999.99',
-            ]);
+                "sample_details.*.min_limit" => 'regex:/^NLT\s[0-9](?:.%)?/i',
+                "sample_details.*.max_limit" => 'regex:/^NMT\s[0-9](?:.%)?/i'
+            ];
+
+            $messages = [
+                "sample_details.*.min_limit.regex" => "Please Enter Valid Min Limit As 'NLT 1.00%'",
+                "sample_details.*.max_limit.regex" => "Please Enter Valid Max Limit As 'NMT 1.00%'"
+            ];
+
+            $validator = Validator::make($request->all(), $rules, $messages);
 
             if ($validator->fails()) {
                 $data = array();
@@ -293,7 +304,6 @@ class MstProductController extends Controller
                     ) {
                         if (
                             !empty($sample['parent']) or
-                            //  !empty($sample['mst_sample_parameter_id']) or
                             !empty($sample['parameter_name']) or
                             !empty($sample['label_claim']) or
                             !empty($sample['min_limit']) or
@@ -346,36 +356,8 @@ class MstProductController extends Controller
         try {
             $loggedInUserData = Helper::getUserData();
             $data = ViewProduct::with('samples')->where('id', $id)
-                ->where('deleted_at', NULL)->get()
-                ->each(function ($item) {
-                    $item->append('parent_dropdown');
-                })->toArray();
+                ->where('deleted_at', NULL)->get();
 
-            // if($data[0]->samples[0]->parent_deleted_at)
-            if (!empty($data[0]['samples'])) {
-
-                //if samples array not empty
-
-                $samples = $data[0]['samples'];
-                foreach ($samples as $kay => $item) {
-
-                    if ($item['parent_deleted_at'] == "" || $item['parent_deleted_at'] == NULL) {
-                        //if parent(test data) is not deleted
-                        $data[0]['parent_dropdown'] = $data[0]['parent_dropdown'];
-                    } else {
-                        //if parent(test data) is deleted
-                        $deleted_parent_arr = [
-                            "id" => $item['parent'],
-                            "procedure_name" => $item['parent_name'],
-                            "deleted_at" => $item['parent_deleted_at']
-                        ];
-                        array_push($data[0]['parent_dropdown'], $deleted_parent_arr);
-                    }
-                }
-            } else {
-                //else samples array is empty
-                $data[0]['samples'] = [];
-            }
             return Helper::response("This Product Shown Successfully", Response::HTTP_OK, true, $data);
         } catch (Exception $e) {
             DB::rollback();
@@ -383,96 +365,7 @@ class MstProductController extends Controller
             return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);
         }
     }
-    public function show1($id)
-    {
-        $loggedInUserData = Helper::getUserData();
-        $data = MstProduct::with('pharmacopeia:id,pharmacopeia_name', 'generic_product_id:id,product_name as generic_product_name,deleted_at', 'samples', 'samples.parameter', 'samples.parent:id,machine_name as parent_name')->find($id);
-        $data_Arr = $data->toArray();
-        $len = count($data_Arr['samples']);
-        $i = 0;
-        if ($data_Arr['pharmacopeia'] == null or $data_Arr['pharmacopeia'] == 0) {
 
-            $data_Arr['pharmacopeia'] = array(
-                'id' => '',
-                'pharmacopeia_name' => ''
-            );
-        } else {
-            $data_Arr['pharmacopeia'] = $data_Arr['pharmacopeia'];
-        }
-        if ($data_Arr['generic_product_id'] == null or $data_Arr['generic_product_id'] == 0) {
-
-            $data_Arr['generic_product_id'] = array(
-                'id' => '',
-                'generic_product_name' => '',
-                'deleted_at' => ''
-            );
-        } else {
-
-            $data_Arr['generic_product_id'] = $data_Arr['generic_product_id'];
-        }
-        for ($i = 0; $i < $len; $i++) {
-
-            if ($data_Arr['samples'][$i]['parent'] == null) {
-
-                $data_Arr['samples'][$i]['parent'] = array(
-                    'id' => '',
-                    'parent_name' => ''
-                );
-            } else {
-
-                $data_Arr['samples'][$i]['parent'] = $data_Arr['samples'][$i]['parent'];
-            }
-
-            if ($data_Arr['samples'][$i]['mst_sample_parameter_id'] == null || $data_Arr['samples'][$i]['mst_sample_parameter_id'] == 0) {
-
-                $data_Arr['samples'][$i]['parameter'] = array(
-                    "id" => "",
-                    "mst_companies_id" => "",
-                    "procedure_name" => "",
-                    "price" => "",
-                    "test_code" => "",
-                    "test_category" => "",
-                    "test_procedure" => "",
-                    "parent_id" => "",
-                    "created_by" => "",
-                    "updated_by" => "",
-                    "created_at" => "",
-                    "updated_at" => "",
-                    "selected_year" => "",
-                    "copied_from_year" => "",
-                    "is_active" => "",
-                    "deleted_at" => ""
-                );
-            } else {
-
-                $data_Arr['samples'][$i]['parameter'] = $data_Arr['samples'][$i]['parameter'];
-            }
-        }
-        $data_Arr = $this->parameter_dropdown($data_Arr, $id);
-
-        $generic_data = MstProduct::select(
-            'id',
-            'product_name',
-            'deleted_at'
-        )->where('is_generic', 1)
-            ->where('is_active', 1)
-            ->where('mst_companies_id', $loggedInUserData['company_id'])
-            ->orderBy('id', 'desc')
-            ->get()->toarray();
-
-        if ($data_Arr['generic_product_id']['deleted_at'] == null || $data_Arr['generic_product_id']['deleted_at'] == '') {
-            $data_Arr['generic_dropdown'] = $generic_data;
-        } else {
-            $deleted_generic_product_merge = array(
-                'id' => $data_Arr['generic_product_id']['id'],
-                'product_name' => $data_Arr['generic_product_id']['generic_product_name'],
-                'deleted_at' => $data_Arr['generic_product_id']['deleted_at']
-            );
-            array_push($generic_data, $deleted_generic_product_merge);
-            $data_Arr['generic_dropdown'] = $generic_data;
-        }
-        return Helper::response("This Product Shown Successfully", Response::HTTP_OK, true, $data_Arr);
-    }
     /** 
      * Copy From Generic
      * Get Samples Details From 'mst_products_samples' For Entered "generic_product_name" 
@@ -488,9 +381,41 @@ class MstProductController extends Controller
                 $data = array();
                 return Helper::response($validation->errors()->all(), Response::HTTP_OK, false, $data);
             }
-            $product_id = ViewProduct::select('id')->where('generic_product_name', $request->generic_product_name)->where('deleted_at', Null)->orderBy('id', 'DESC')->first();
-            $product_id = $product_id->id;
-
+            $product_id = ViewProduct::select('id', 'sample_description')->where('generic_product_name', $request->generic_product_name)->where('deleted_at', Null)->orderBy('id', 'DESC')->first();
+            $pro_id = $product_id->id;
+            $sample_description = $product_id->sample_description;
+            $data = ViewProductSamples::where('mst_product_id', $pro_id)->get()->toarray();
+            $product_detail = array(
+                'sample_description' => $sample_description
+            );
+            array_push($data, $product_detail);
+            return Helper::response("Samples Shown Successfully", Response::HTTP_OK, true, $data);
+        } catch (Exception $e) {
+            $data = array();
+            return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);
+        }
+    }
+    /** 
+     * Fetch methods where products pharmacopeia & methods pharmacopeia type are equal.
+     * request => pharmacopiea_id.
+     * response => method dropdown.
+     */
+    public function method_dropdown(Request $request)
+    {
+        try {
+            $validation = Validator::make($request->all(), [
+                'pharmacopiea_id' => 'required'
+            ]);
+            if ($validation->fails()) {
+                $data = array();
+                return Helper::response($validation->errors()->all(), Response::HTTP_OK, false, $data);
+            }
+            $data = ViewMethod::select('id', 'name', 'type', 'date', 'deleted_at')
+                ->where('type', $request->pharmacopiea_id)
+                ->where('deleted_at', null)
+                ->where('is_active', 1)
+                ->orderBy('id', 'desc')
+                ->get();
             return Helper::response("Samples Shown Successfully", Response::HTTP_OK, true, $data);
         } catch (Exception $e) {
             $data = array();

@@ -29,15 +29,15 @@ class FormulaController extends Controller
             $is_dropdown = (isset($request->is_dropdown) && $request->is_dropdown == 1 ? 1 : 0);
             if ($is_dropdown) {
                 $data = DB::table('view_formulas')
-                ->select('id','formula_name','formula_type','deleted_at');
+                    ->select('id', 'formula_name', 'formula_type', 'deleted_at');
             } else {
-                $data = DB::table('view_formulas')->select('*');
+                $data = DB::table('view_formulas')->select('*')
+                    ->where('mst_companies_id', $loggedInUserData['company_id']);
             }
-            $data = $data->where('mst_companies_id', $loggedInUserData['company_id'])
-                    ->where('deleted_at',null)
-                    ->where('is_active', 1)
-                    ->orderBy('id', 'desc')
-                    ->get();
+            $data = $data->where('deleted_at', null)
+                ->where('is_active', 1)
+                ->orderBy('id', 'desc')
+                ->get();
             Log::info("Formula list details : " . json_encode($request->all()));
             return Helper::response("Formula List Shown Successfully", Response::HTTP_OK, True, $data);
         } catch (Exception $e) {
@@ -86,11 +86,9 @@ class FormulaController extends Controller
                 //if username already exist in employee or customer table
                 return true;
             }
-        }
-        else
-        {
-            $check_employee = Employee::whereNotIn('id',$id)->where("username", $username)->get();
-            $check_customer = Customer::whereNotIn('id',$id)->where("user_name", $username)->get();
+        } else {
+            $check_employee = Employee::whereNotIn('id', $id)->where("username", $username)->get();
+            $check_customer = Customer::whereNotIn('id', $id)->where("user_name", $username)->get();
             if ($check_employee->isEmpty() == false || $check_customer->isEmpty() == false) {
                 //if username already exist in employee or customer table
                 return true;
@@ -98,7 +96,7 @@ class FormulaController extends Controller
         }
     }
 
-    
+
 
     /**
      * Store a newly created resource in storage.

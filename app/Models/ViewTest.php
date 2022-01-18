@@ -47,6 +47,7 @@ class ViewTest extends Model
             ->select('id', 'procedure_name', 'deleted_at')
             ->whereNotNull('price')
             ->where('deleted_at', NULL)
+            ->where('is_active', 1)
             ->get()->toarray();
 
         if (isset($this->parent_name->deleted_at)) {
