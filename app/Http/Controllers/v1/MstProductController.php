@@ -103,23 +103,6 @@ class MstProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function parent_list()
-    {
-        try {
-            $parentData = Machine::select('id', 'machine_name as parent_name')->orderBy('id', 'desc')->get();
-
-            return Helper::response("Parent Data Shown Successfully", Response::HTTP_OK, true, $parentData);
-        } catch (Exception $e) {
-            $parentData = array();
-            return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $parentData);
-        }
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function exportlist()
     {
         try {
@@ -422,43 +405,7 @@ class MstProductController extends Controller
             return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);
         }
     }
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\MstProduct  $mstProduct
-     * @return \Illuminate\Http\Response
-     */
-    public function parameter_dropdown($data, $id = '')
-    {
-        $loggedInUserData = Helper::getUserData();
-        $data_Arr = Test::select('mst_tests.*', 't.procedure_name as parent_name')
-            ->leftjoin('mst_tests as t', 't.id', '=', 'mst_tests.parent_id')
-            ->where('mst_tests.is_active', 1)
-            ->where('mst_tests.mst_companies_id', $loggedInUserData['company_id'])
-            ->orderBy('mst_tests.id', 'desc')
-            ->get();
-        $data_Arr = $data_Arr->toarray();
-        if (!empty($data['samples'])) {
-            foreach ($data['samples'] as $key => $item) {
-                // print_r($item['parameter']['deleted_at']);
-                if (!empty($item['parameter'])) {
-                    if ($item['parameter']['deleted_at'] != null || $item['parameter']['deleted_at']  != '') {
-                        //if test selected & also deleted then merge with data_arr(tests list)
-                        if (!in_array($item['parameter'], $data_Arr)) {
-                            array_push($data_Arr, $item['parameter']);
-                        }
-                        $data['parameter_dropdown'] = $data_Arr;
-                    } else {
-                        //if selected test not deleted or test mst_sample_parameter_id "0 or null" then list simple tests
-                        $data['parameter_dropdown'] = $data_Arr;
-                    }
-                }
-            }
-        }
 
-
-        return $data;
-    }
     /**
      * Show the form for editing the specified resource.
      *

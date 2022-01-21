@@ -27,6 +27,11 @@ class ViewTest extends Model
         'updated_at',
     ];
 
+    public function parameters()
+    {
+        return $this->hasMany(ViewTestParameters::class, 'mst_test_id', 'id');
+    }
+
     public function getParentNameAttribute()
     {
         $data = DB::table('view_tests')
@@ -46,8 +51,11 @@ class ViewTest extends Model
         $data = DB::table('view_tests')
             ->select('id', 'procedure_name', 'deleted_at')
             ->whereNotNull('price')
+            ->where('procedure_name', 'not like', 'Related')
+            ->where('procedure_name', 'not like', 'Assay')
             ->where('deleted_at', NULL)
             ->where('is_active', 1)
+            ->orderBy('id', 'desc')
             ->get()->toarray();
 
         if (isset($this->parent_name->deleted_at)) {

@@ -281,9 +281,24 @@ class CustomerController extends Controller
         Log::info("Fetch customer details : " . json_encode(array('id' => $id)));
         try {
 
+            $data = ViewCustomer::with('contact_person')->where('is_active',1)->get();
+           
+            return Helper::response("Customer Data Shown Successfully", Response::HTTP_OK, true, $data);
+        } catch (Exception $e) {
+            $data = array();
+            return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);
+        }
+    }
+    public function show1($id)
+    {
+        //
+        Log::info("Fetch customer details : " . json_encode(array('id' => $id)));
+        try {
+
             $customerData = Customer::with(['contact_info', 'contact_person'])->find($id);
             $contact_info = $customerData->toArray();
             $contact_info = $contact_info['contact_info'];
+            
             if (empty($contact_info) != true) {
                 //homecustom arr key
                 $customerData['contact_info'][0]['homestreet'] = $customerData['contact_info'][0]['street_1'];
@@ -309,8 +324,8 @@ class CustomerController extends Controller
                 $customerData['contact_info'][1]['corr_state_id'] = $customerData['contact_info'][1]['state'];
                 $customerData['contact_info'][1]['website'] = $customerData['contact_info'][1]['other_website'];
                 $customerData['contact_info'][1]['qc_email'] = $customerData['contact_info'][1]['other_qc_email'];
-
-
+                dd($customerData['contact_info'][1]['street_1']);
+                
                 unset(
                     $customerData['contact_info'][0]['street_1'],
                     $customerData['contact_info'][0]['pin'],
@@ -355,7 +370,7 @@ class CustomerController extends Controller
                     );
                 }
             }
-
+           
             return Helper::response("Customer Data Shown Successfully", Response::HTTP_OK, true, $customerData);
         } catch (Exception $e) {
             $data = array();
@@ -371,6 +386,7 @@ class CustomerController extends Controller
      */
     public function update(Request $request, $id)
     {
+      //  return Helper::response("data", Response::HTTP_OK, false, $request->all());
         $req = $request->all();
         $someArray = json_decode($req['contact_person_data'], true);
         $req['contact_person_data'] = $someArray;

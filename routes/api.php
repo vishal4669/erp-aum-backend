@@ -148,7 +148,6 @@ Route::group(['middleware' => ['jwt.verify'], 'prefix' => 'v1'], function () {
     // Product Masters
     Route::post('addProduct', 'App\Http\Controllers\v1\MstProductController@store');
     Route::get('listproduct', 'App\Http\Controllers\v1\MstProductController@index');
-    // Route::get('paramsList', 'App\Http\Controllers\v1\MstProductController@param_list'); deleted
     Route::get('parentList', 'App\Http\Controllers\v1\MstProductController@parent_list');
     Route::get('getproduct/{id}', 'App\Http\Controllers\v1\MstProductController@show');
     Route::post('editProduct/{id}', 'App\Http\Controllers\v1\MstProductController@update');

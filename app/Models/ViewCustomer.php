@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ViewCustomer extends Model
 {
-  
+
     use HasFactory;
     protected $fillable = [
         'id',
@@ -40,6 +40,7 @@ class ViewCustomer extends Model
         'other_contact_no',
         'home_qc_contact_no',
         'home_landline',
+        'home_pan_card',
         'home_email',
         'other_email',
         'other_qc_email',
@@ -49,11 +50,29 @@ class ViewCustomer extends Model
         'other_street_2',
         'home_city',
         'other_city',
+        'home_country_id',
+        'other_country_id',
         'home_country',
         'other_country',
+        'home_state_id',
+        'other_state_id',
         'home_state',
         'other_state',
         'home_area',
-        'other_area'
+        'other_area',
+        'home_pin',
+        'other_pin',
+        'other_website',
+        'other_pan_card_copy'
     ];
+
+    /**
+     * Get all of the comments for the ViewCustomer
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function contact_person()
+    {
+        return $this->hasMany(ViewCustomersContactPerson::class, 'mst_customer_id', 'id');
+    }
 }
