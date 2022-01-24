@@ -137,8 +137,8 @@ class CustomerController extends Controller
     {
 
         $req = $request->all();
-        $someArray = json_decode($req['contact_person_data'], true);
-        $req['contact_person_data'] = $someArray;
+        // $someArray = json_decode($req['contact_person_data'], true);
+        // $req['contact_person_data'] = $someArray;
         DB::beginTransaction();
         try {
             $rules = [
@@ -281,8 +281,10 @@ class CustomerController extends Controller
         Log::info("Fetch customer details : " . json_encode(array('id' => $id)));
         try {
 
-            $data = ViewCustomer::with('contact_person')->where('is_active',1)->get();
-           
+            $data = ViewCustomer::with('contact_person')
+                ->where('id', $id)
+                ->where('is_active', 1)->get();
+
             return Helper::response("Customer Data Shown Successfully", Response::HTTP_OK, true, $data);
         } catch (Exception $e) {
             $data = array();
@@ -298,7 +300,7 @@ class CustomerController extends Controller
             $customerData = Customer::with(['contact_info', 'contact_person'])->find($id);
             $contact_info = $customerData->toArray();
             $contact_info = $contact_info['contact_info'];
-            
+
             if (empty($contact_info) != true) {
                 //homecustom arr key
                 $customerData['contact_info'][0]['homestreet'] = $customerData['contact_info'][0]['street_1'];
@@ -325,7 +327,7 @@ class CustomerController extends Controller
                 $customerData['contact_info'][1]['website'] = $customerData['contact_info'][1]['other_website'];
                 $customerData['contact_info'][1]['qc_email'] = $customerData['contact_info'][1]['other_qc_email'];
                 dd($customerData['contact_info'][1]['street_1']);
-                
+
                 unset(
                     $customerData['contact_info'][0]['street_1'],
                     $customerData['contact_info'][0]['pin'],
@@ -370,7 +372,7 @@ class CustomerController extends Controller
                     );
                 }
             }
-           
+
             return Helper::response("Customer Data Shown Successfully", Response::HTTP_OK, true, $customerData);
         } catch (Exception $e) {
             $data = array();
@@ -386,10 +388,10 @@ class CustomerController extends Controller
      */
     public function update(Request $request, $id)
     {
-      //  return Helper::response("data", Response::HTTP_OK, false, $request->all());
+        //  return Helper::response("data", Response::HTTP_OK, false, $request->all());
         $req = $request->all();
-        $someArray = json_decode($req['contact_person_data'], true);
-        $req['contact_person_data'] = $someArray;
+        // $someArray = json_decode($req['contact_person_data'], true);
+        // $req['contact_person_data'] = $someArray;
         $apipass = Customer::where('id', $id)->value('password');
         $apilogo = Customer::where('id', $id)->value('logo');
         $apipan = CustomerContactInfo::where('mst_customer_id', $id)->where('contact_info_type', 2)->value('other_pan_card_copy');
@@ -542,6 +544,8 @@ class CustomerController extends Controller
                 'company_tin_no' => $request->get('company_tin_no'),
                 'company_service_tax_no' => $request->get('company_service_tax_no'),
                 'company_cust_discount' => $request->get('company_cust_discount'),
+                'company_cst_no' => $request->get('company_cst_no'),
+                'company_vat_no' => $request->get('company_vat_no'),
                 'selected_year' => $loggedInUserData['selected_year'],
                 'is_active' => (int)$request->get('is_active'),
                 'updated_by' => $loggedInUserData['logged_in_user_id']

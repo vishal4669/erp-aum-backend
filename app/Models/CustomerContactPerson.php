@@ -11,6 +11,7 @@ class CustomerContactPerson extends Model
     use SoftDeletes;
     use HasFactory;
     protected $table = "mst_customers_contact_person";
+    
     protected $fillable = [
         'mst_customer_id',
         'name',
@@ -19,6 +20,8 @@ class CustomerContactPerson extends Model
         'department',
         'position',
         'created_by',
-        'updated_by',
+        'updated_by'
     ];
+
+ 
 }

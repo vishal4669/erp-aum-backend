@@ -25,6 +25,8 @@ use DB;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\v1\CommonController;
 use Illuminate\Support\Facades\DB as FacadesDB;
+use App\Mail\WelcomeUserMail;
+use Illuminate\Support\Facades\Mail;
 
 class EmployeeController extends Controller
 {
@@ -172,11 +174,11 @@ class EmployeeController extends Controller
 
         $req = $request->all();
         // need to uncomment when add employee with frontend using form instead of postman
-        $education = json_decode($req['education'], true);
-        $employment = json_decode($req['employment'], true);
+        // $education = json_decode($req['education'], true);
+        // $employment = json_decode($req['employment'], true);
 
-        // $education  = $request->education;
-        // $employment = $request->employment; 
+        $education  = $request->education;
+        $employment = $request->employment; 
         $req['education'] = $education;
         $req['employment'] = $employment;
         DB::beginTransaction();
@@ -304,10 +306,10 @@ class EmployeeController extends Controller
 
             $validator = Validator::make($req, $rules, $messages);
 
-            if ($validator->fails()) {
-                $data = array();
-                return Helper::response($validator->errors()->all(), Response::HTTP_OK, false, $data);
-            }
+            // if ($validator->fails()) {
+            //     $data = array();
+            //     return Helper::response($validator->errors()->all(), Response::HTTP_OK, false, $data);
+            // }
 
             $loggedInUserData = Helper::getUserData();
             $username = '';
@@ -399,6 +401,15 @@ class EmployeeController extends Controller
                 $this->addUpdateUserDocumentDetails($request->document, $users_id);
             }
             DB::commit();
+            $id = $users_id;
+            $is_mail_data = True;
+            if(!empty($request->address) && $request->address[0]['address_type'] == 1 && $request->address[0]['email'] != null && $request->address[0]['email'] != '')
+            {
+                $send_email_to = $request->address[0]['email'];
+                Mail::to(users: $send_email_to)->send(new WelcomeUserMail($req));
+            }
+            
+            
             Log::info("Employee Created with details : " . json_encode($request->all()));
 
             return Helper::response("Employee added Successfully", Response::HTTP_CREATED, true, $userData);
@@ -724,48 +735,48 @@ class EmployeeController extends Controller
                 if ($users->photo != null &&  $users->photo != "") {
                     $photo = $users->photo;
                     $photo = explode('/', $photo, 5);
-                    if (isset($photo[4]) && $photo[4] != '' && File::exists(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH') .'/'. $photo[4])) {
-                        File::delete(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH') .'/'. $photo[4]);
+                    if (isset($photo[4]) && $photo[4] != '' && File::exists(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH') . '/' . $photo[4])) {
+                        File::delete(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH') . '/' . $photo[4]);
                     }
                 }
                 if ($users->signature != null &&  $users->signature != "") {
                     $signature = $users->signature;
                     $signature = explode('/', $signature, 5);
-                    if (isset($signature[4]) && $signature[4]!= '' && File::exists(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH') .'/'. $signature[4])) {     
-                        File::delete(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH') .'/'. $signature[4]);
+                    if (isset($signature[4]) && $signature[4] != '' && File::exists(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH') . '/' . $signature[4])) {
+                        File::delete(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH') . '/' . $signature[4]);
                     }
                 }
-                
+
                 $documents = UserDocDetail::where("users_id", $id)->get();
-                
+
                 if ($documents[0]->aadhar_card_photo != null &&  $documents[0]->aadhar_card_photo != "") {
                     $aadhar_card_photo = $documents[0]->aadhar_card_photo;
-                    if (isset($aadhar_card_photo) && $aadhar_card_photo != '' && File::exists(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH') .'/'. $aadhar_card_photo)) {
-                        File::delete(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH') .'/'. $aadhar_card_photo);
+                    if (isset($aadhar_card_photo) && $aadhar_card_photo != '' && File::exists(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH') . '/' . $aadhar_card_photo)) {
+                        File::delete(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH') . '/' . $aadhar_card_photo);
                     }
                 }
-                if ($documents[0]->election_card_photo != null &&  $documents[0]->election_card_photo!= "") {
+                if ($documents[0]->election_card_photo != null &&  $documents[0]->election_card_photo != "") {
                     $election_card_photo = $documents[0]->election_card_photo;
-                    if (isset($election_card_photo) && $election_card_photo != '' && File::exists(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH') .'/'. $election_card_photo)) {
-                        File::delete(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH') .'/'. $election_card_photo);
+                    if (isset($election_card_photo) && $election_card_photo != '' && File::exists(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH') . '/' . $election_card_photo)) {
+                        File::delete(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH') . '/' . $election_card_photo);
                     }
                 }
-                if ($documents[0]->pan_card_photo != null &&  $documents[0]->pan_card_photo!= "") {
+                if ($documents[0]->pan_card_photo != null &&  $documents[0]->pan_card_photo != "") {
                     $pan_card_photo = $documents[0]->pan_card_photo;
-                    if (isset($pan_card_photo) && $pan_card_photo != '' && File::exists(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH') .'/'. $pan_card_photo)) {
-                        File::delete(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH') .'/'. $pan_card_photo);
+                    if (isset($pan_card_photo) && $pan_card_photo != '' && File::exists(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH') . '/' . $pan_card_photo)) {
+                        File::delete(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH') . '/' . $pan_card_photo);
                     }
                 }
                 if ($documents[0]->passport_photo != null &&  $documents[0]->passport_photo != "") {
                     $passport_photo = $documents[0]->passport_photo;
-                    if (isset($passport_photo) && $passport_photo != '' && File::exists(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH') .'/'. $passport_photo)) {
-                        File::delete(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH') .'/'. $passport_photo);
+                    if (isset($passport_photo) && $passport_photo != '' && File::exists(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH') . '/' . $passport_photo)) {
+                        File::delete(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH') . '/' . $passport_photo);
                     }
                 }
                 if ($documents[0]->driving_license_photo != null &&  $documents[0]->driving_license_photo != "") {
                     $driving_license_photo = $documents[0]->driving_license_photo;
-                    if (isset($driving_license_photo) && $driving_license_photo != '' && File::exists(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH') .'/'. $driving_license_photo)) {
-                        File::delete(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH') .'/'. $driving_license_photo);
+                    if (isset($driving_license_photo) && $driving_license_photo != '' && File::exists(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH') . '/' . $driving_license_photo)) {
+                        File::delete(config('constants.EMPLOYEE_DOCUMENTS_BASEPATH') . '/' . $driving_license_photo);
                     }
                 }
                 $users->delete();

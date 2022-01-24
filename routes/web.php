@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('mail.welcome-user');
 });
 // Route::get('clear_cache', function () {
 //     \Artisan::call('cache:clear');

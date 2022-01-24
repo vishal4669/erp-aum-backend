@@ -100,7 +100,7 @@ class CommonController extends Controller
      * check username is uniq or not from employee or customer for their username
      * 
      */
-    public function uniq_username($username = 'manojp.divine@gmail.com', $id = '', $role = 'Employee')
+    public function uniq_username($username = '', $id = '', $role = '')
     {
         if ($id == '' || $id == null) {
             // dd("hii");

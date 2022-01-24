@@ -58,15 +58,15 @@ class TestController extends Controller
             } elseif ($is_test_parent) {
                 // Can Use this for Parent Dropdown in Procedure add
                 $data = ViewTest::select('id', 'procedure_name')
-                ->whereNotNull('price')
-                ->where('procedure_name', 'not like', 'Related')
-                ->where('procedure_name', 'not like', 'Assay')
-                ->where('deleted_at', NULL)
-                ->where('is_active', 1)
-                ->orderBy('procedure_name', 'asc')
-                ->get()->toarray();
+                    ->whereNotNull('price')
+                    ->where('procedure_name', 'not like', 'Related')
+                    ->where('procedure_name', 'not like', 'Assay')
+                    ->where('deleted_at', NULL)
+                    ->where('is_active', 1)
+                    ->orderBy('procedure_name', 'asc')
+                    ->get()->toarray();
             } else {
-                $data = ViewTest::select('id', 'procedure_name', 'price', 'test_procedure', 'test_code','parent_id')
+                $data = ViewTest::select('id', 'procedure_name', 'price', 'test_procedure', 'test_code', 'parent_id')
                     ->where('mst_companies_id', $loggedInUserData['company_id'])
                     ->where('is_active', 1)
                     ->where('procedure_name', 'not like', 'Related')
@@ -77,7 +77,7 @@ class TestController extends Controller
                         $item->append('parent_name');
                     })->toarray();
 
-                  /*  ->get()->each(function ($item) {
+                /*  ->get()->each(function ($item) {
                         $item->append('parent_name', 'parent_dropdown');
                     })->toarray();*/
             }
@@ -168,44 +168,42 @@ class TestController extends Controller
 
     public function testParameter($testParams_data, $test_id = "")
     {
-      //return $testParams_data;
-        // dd($testParams_data);
         $loggedInUserData = Helper::getUserData();
         if (!empty($testParams_data)) {
             $delete_exist_test = MstTestParameter::where('mst_test_id', $test_id);
-              if ($delete_exist_test != null) {
+            if ($delete_exist_test != null) {
                 $delete_exist_test->delete();
-              }
+            }
 
             foreach ($testParams_data as $key => $item) {
 
-              if (
-                  !empty($item['test_parameter_name']) or
-                  !empty($item['test_alpha']) or
-                  !empty($item['formula']) or
-                  !empty($item['type']) or
-                  !empty($item['unit']) or
-                  !empty($item['sort'])
-              )  {
-                $testParams_arr = array(
-                    'mst_companies_id' => $loggedInUserData['company_id'],
-                    "mst_test_id" => $test_id,
-                    "test_by_pass" => (isset($item['test_by_pass'])) ? $item['test_by_pass'] : null,
-                    "test_parameter_name"   => (isset($item['test_parameter_name'])) ? $item['test_parameter_name'] : '',
-                    "test_alpha"    => (isset($item['test_alpha'])) ? $item['test_alpha'] : '',
-                    "formula"   => (isset($item['formula'])) ? $item['formula'] : null,
-                    "type"  => (isset($item['type'])) ? $item['type'] : '',
-                    "unit"  => (isset($item['unit'])) ? $item['unit'] : null,
-                    "value" => (isset($item['value'])) ? $item['value'] : '',
-                    "sort"  => (isset($item['sort'])) ? $item['sort'] : '',
-                    'is_active' => 1,
-                    "created_by" => $loggedInUserData['logged_in_user_id'],
-                    "updated_by" => $loggedInUserData['logged_in_user_id'],
-                    "selected_year" => $loggedInUserData['selected_year'],
-                );
+                if (
+                    !empty($item['test_parameter_name']) or
+                    !empty($item['test_alpha']) or
+                    !empty($item['formula']) or
+                    !empty($item['type']) or
+                    !empty($item['unit']) or
+                    !empty($item['sort'])
+                ) {
+                    $testParams_arr = array(
+                        'mst_companies_id' => $loggedInUserData['company_id'],
+                        "mst_test_id" => $test_id,
+                        "test_by_pass" => (isset($item['test_by_pass'])) ? $item['test_by_pass'] : null,
+                        "test_parameter_name"   => (isset($item['test_parameter_name'])) ? $item['test_parameter_name'] : '',
+                        "test_alpha"    => (isset($item['test_alpha'])) ? $item['test_alpha'] : '',
+                        "formula"   => (isset($item['formula'])) ? $item['formula'] : null,
+                        "type"  => (isset($item['type'])) ? $item['type'] : '',
+                        "unit"  => (isset($item['unit'])) ? $item['unit'] : null,
+                        "value" => (isset($item['value'])) ? $item['value'] : '',
+                        "sort"  => (isset($item['sort'])) ? $item['sort'] : '',
+                        'is_active' => 1,
+                        "created_by" => $loggedInUserData['logged_in_user_id'],
+                        "updated_by" => $loggedInUserData['logged_in_user_id'],
+                        "selected_year" => $loggedInUserData['selected_year'],
+                    );
 
-                MstTestParameter::create($testParams_arr);
-              }
+                    MstTestParameter::create($testParams_arr);
+                }
             }
         }
     }
@@ -222,17 +220,11 @@ class TestController extends Controller
         Log::info("Fetch Test details : " . json_encode(array('id' => $id)));
         try {
 
-           $testData = ViewTest::with('parameters')->where('id', $id)
-              ->get()
-              ->each(function ($item) {
-                  $item->append('parent_name', 'parent_dropdown');
-              });
-
-          /*  $testData = ViewTest::where('id', $id)
+            $testData = ViewTest::with('parameters')->where('id', $id)
                 ->get()
                 ->each(function ($item) {
                     $item->append('parent_name', 'parent_dropdown');
-                });*/
+                });
             return Helper::response("Test Data Shown Successfully", Response::HTTP_OK, true, $testData);
         } catch (Exception $e) {
             $data = array();
@@ -252,25 +244,25 @@ class TestController extends Controller
     {
         try {
 
-          $rules = [
-              'procedure_name' => 'required|max:255',
-              'price' => 'nullable|numeric|between:0,9999999999999999999999.99',
-              //'test_code' => 'required|max:50',
-              //'test_category' => 'required|max:255',
-              'test_procedure' => 'required'
-          ];
+            $rules = [
+                'procedure_name' => 'required|max:255',
+                'price' => 'nullable|numeric|between:0,9999999999999999999999.99',
+                //'test_code' => 'required|max:50',
+                //'test_category' => 'required|max:255',
+                'test_procedure' => 'required'
+            ];
 
-          $messages = [
-              'procedure_name.required' => 'The Procedure Name field is required',
-              'procedure_name.max' => 'The Test Procedure Name must be less than or equal to 255 characters',
-              'price.numeric' => 'The Test Price must be number',
-              'price.between' => 'The Test Price must be number "120 OR 120.10"',
-              //'test_code.required' => 'The Test Code field is required',
-              //  'test_code.max' => 'The Test Code must be less than or equal to 50 characters',
-              //'test_category.required' => 'The Test Category field is required',
-              //  'test_category.max' => 'The Test Category must be less than or equal to 255 characters',
-              'test_procedure.required' => 'The Test Procedure field is required'
-          ];
+            $messages = [
+                'procedure_name.required' => 'The Procedure Name field is required',
+                'procedure_name.max' => 'The Test Procedure Name must be less than or equal to 255 characters',
+                'price.numeric' => 'The Test Price must be number',
+                'price.between' => 'The Test Price must be number "120 OR 120.10"',
+                //'test_code.required' => 'The Test Code field is required',
+                //  'test_code.max' => 'The Test Code must be less than or equal to 50 characters',
+                //'test_category.required' => 'The Test Category field is required',
+                //  'test_category.max' => 'The Test Category must be less than or equal to 255 characters',
+                'test_procedure.required' => 'The Test Procedure field is required'
+            ];
 
             $validator = Validator::make($request->all(), $rules, $messages);
 
@@ -321,12 +313,14 @@ class TestController extends Controller
         try {
             $data = array();
             $test = Test::find($id);
-
+            $test_params = MstTestParameter::where('mst_test_id', $id);
             Log::info("Test deleted with : " . json_encode(array('id' => $id)));
 
             if (!empty($test)) {
                 $test->delete();
-
+                if (!empty($test_params)) {
+                    $test_params->delete();
+                }
                 return Helper::response("Test deleted successfully", Response::HTTP_OK, true, $data);
             }
 

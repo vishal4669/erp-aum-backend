@@ -119,7 +119,7 @@ class UserController extends Controller
             $token = JWTAuth::fromUser($user);
 
             Log::info("User Registration -> Token created" . json_encode(array('token' => $token)));
-
+            
             $data = array('token' => $token, 'user' => $user);
             $res = Helper::response(trans('auth.logged_in'), 201, true, $data);
             return $res;
