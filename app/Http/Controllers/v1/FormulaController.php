@@ -11,7 +11,6 @@ use App\Models\Employee;
 use DB;
 use Log;
 use Illuminate\Support\Facades\Validator;
-
 use function PHPUnit\Framework\isEmpty;
 
 class FormulaController extends Controller

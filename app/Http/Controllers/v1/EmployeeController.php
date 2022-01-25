@@ -178,7 +178,7 @@ class EmployeeController extends Controller
         // $employment = json_decode($req['employment'], true);
 
         $education  = $request->education;
-        $employment = $request->employment; 
+        $employment = $request->employment;
         $req['education'] = $education;
         $req['employment'] = $employment;
         DB::beginTransaction();
@@ -403,13 +403,12 @@ class EmployeeController extends Controller
             DB::commit();
             $id = $users_id;
             $is_mail_data = True;
-            if(!empty($request->address) && $request->address[0]['address_type'] == 1 && $request->address[0]['email'] != null && $request->address[0]['email'] != '')
-            {
+            if (!empty($request->address) && $request->address[0]['address_type'] == 1 && $request->address[0]['email'] != null && $request->address[0]['email'] != '') {
                 $send_email_to = $request->address[0]['email'];
                 Mail::to(users: $send_email_to)->send(new WelcomeUserMail($req));
             }
-            
-            
+
+
             Log::info("Employee Created with details : " . json_encode($request->all()));
 
             return Helper::response("Employee added Successfully", Response::HTTP_CREATED, true, $userData);

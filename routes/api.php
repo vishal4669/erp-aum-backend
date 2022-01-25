@@ -219,6 +219,13 @@ Route::group(['middleware' => ['jwt.verify'], 'prefix' => 'v1'], function () {
     Route::post('updateMethod/{id}', 'App\Http\Controllers\v1\MethodController@update');
     Route::get('getMethod/{id}', 'App\Http\Controllers\v1\MethodController@show');
     Route::get('deleteMethod/{id}', 'App\Http\Controllers\v1\MethodController@destroy');
+
+    //Quotation
+    Route::get('listQuotation', 'App\Http\Controllers\v1\QuotationController@index');
+    Route::post('addQuotation', 'App\Http\Controllers\v1\QuotationController@store');
+    Route::post('updateQuotation/{id}', 'App\Http\Controllers\v1\QuotationController@update');
+    Route::get('getQuotation/{id}', 'App\Http\Controllers\v1\QuotationController@show');
+    Route::get('deleteQuotation/{id}', 'App\Http\Controllers\v1\QuotationController@destroy');
 });
 
 Route::group(['prefix' => 'v1'], function () {
