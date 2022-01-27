@@ -41,6 +41,7 @@ class ViewQuotationProductInfo extends Model
         "method_deleted_at"
     ];
 
+
     public function getProductDropdownAttribute()
     {
         $data = DB::table('view_products')
@@ -51,6 +52,7 @@ class ViewQuotationProductInfo extends Model
             )
             ->where('is_active', 1)
             ->where('deleted_at', NULL)
+            ->orderBy('id', 'desc')
             ->get()->toarray();
 
         $is_deleted = $this->product_deleted_at;
@@ -98,6 +100,7 @@ class ViewQuotationProductInfo extends Model
             ->where('type', $this->pharmacopeia_id)
             ->where('is_active', 1)
             ->where('deleted_at', NULL)
+            ->orderBy('id', 'desc')
             ->get()->toarray();
 
         $is_deleted = $this->method_deleted_at;

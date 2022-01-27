@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class ViewMethod extends Model
 {
     use HasFactory;
-    protected $appends = ['pharmacopeia'];
+    protected $appends = [];
     protected $fillable = [
         'mst_companies_id',
         'name',

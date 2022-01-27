@@ -9,7 +9,7 @@ use DB;
 class ViewProductSamples extends Model
 {
     use HasFactory;
-    protected $appends = ['parent_dropdown','parameter_dropdown'];
+    protected $appends = ['parent_dropdown', 'parameter_dropdown', 'method_dropdown'];
     protected $fillable = [
         'mst_companies_id',
         'mst_product_id',
@@ -33,6 +33,9 @@ class ViewProductSamples extends Model
         'parameter_name',
         'parent_deleted_at',
         'parameter_deleted_at',
+        'pharmacopeia_id',
+        'method_name',
+        'method_deleted_at'
     ];
 
     public function getParentDropdownAttribute()
@@ -41,6 +44,7 @@ class ViewProductSamples extends Model
             ->whereIn('procedure_name', ['Related', 'Assay'])
             ->Orwhere('procedure_name', 'like', 'by%')
             ->where('deleted_at', NULL)
+            ->orderBy('id', 'desc')
             ->get()->toarray();
 
         $is_deleted = $this->parent_deleted_at;
@@ -61,9 +65,10 @@ class ViewProductSamples extends Model
     }
     public function getParameterDropdownAttribute()
     {
-        $data = ViewTest::select('id', 'procedure_name','price', 'deleted_at')
+        $data = ViewTest::select('id', 'procedure_name', 'price', 'deleted_at')
             ->where('deleted_at', NULL)
             ->where('is_active', 1)
+            ->orderBy('id', 'desc')
             ->get()->toarray();
 
         $is_deleted = $this->parameter_deleted_at;
@@ -79,6 +84,38 @@ class ViewProductSamples extends Model
             "id" => "",
             "procedure_name" => "",
             "deleted_at" => ""
+        ];
+        return (isset($data)) ? $data : $default_arr;
+    }
+
+
+    /** 
+     * Fetch methods where products pharmacopeia & methods pharmacopeia type are equal.
+     * request => pharmacopiea_id.
+     * response => method dropdown.
+     */
+    public function getMethodDropdownAttribute()
+    {
+        $data = ViewMethod::select('id', 'name as method_name', 'deleted_at', 'type')
+            ->where('type', $this->pharmacopeia_id)
+            ->where('is_active', 1)
+            ->where('deleted_at', NULL)
+            ->orderBy('id', 'desc')
+            ->get()->toarray();
+            
+        $is_deleted = $this->method_deleted_at;
+        if ($is_deleted != NULL || $is_deleted != '') {
+            $deleted_method = [
+                "id" => $this->method,
+                "method_name" => $this->method_name,
+                "deleted_at" => $this->method_deleted_at
+            ];
+            array_push($data, $deleted_method);
+        }
+        $default_arr = [
+            "id" => "",
+            "method_name" => "",
+            "deleted_at" => "",
         ];
         return (isset($data)) ? $data : $default_arr;
     }

@@ -37,7 +37,10 @@ class MethodController extends Controller
                 ->where('deleted_at', null)
                 ->where('is_active', 1)
                 ->orderBy('id', 'desc')
-                ->get();
+                ->get()
+                ->each(function ($item) {
+                    $item->append('pharmacopeia');
+                });
 
             return Helper::response("Methods List Shown Successfully", Response::HTTP_OK, true, $data);
         } catch (Exception $e) {
@@ -262,7 +265,7 @@ class MethodController extends Controller
             $data = ViewMethod::where('id', $id)
                 ->get()
                 ->each(function ($item) {
-                    $item->append('pharmacopeia_dropdown');
+                    $item->append('pharmacopeia','pharmacopeia_dropdown');
                 });
 
 

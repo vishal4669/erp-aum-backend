@@ -9,7 +9,7 @@ use DB;
 class ViewQuotation extends Model
 {
     use HasFactory;
-    protected $appends = ['customer_dropdown'];
+    protected $appends = [];
     protected $fillable = [
         "id",
         "mst_companies_id",
@@ -26,6 +26,7 @@ class ViewQuotation extends Model
         "currency_type",
         "grand_total",
         "payment_terms",
+        "product_info_grand_total",
         "created_by",
         "updated_by",
         "created_at",
@@ -40,6 +41,7 @@ class ViewQuotation extends Model
         "home_country",
         "customer_deleted_at"
     ];
+
     /**
      * Get all of the comments for the ViewQuotation
      *
@@ -47,7 +49,7 @@ class ViewQuotation extends Model
      */
     public function quotationProductInfo()
     {
-        return $this->hasMany(ViewQuotationProductInfo::class, 'quotation_id',$this->id);
+        return $this->hasMany(ViewQuotationProductInfo::class, 'quotation_id', $this->id);
     }
     public function getCustomerDropdownAttribute()
     {

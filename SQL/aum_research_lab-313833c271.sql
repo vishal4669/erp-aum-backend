@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: sdb-e.hosting.stackcp.net
--- Generation Time: Jan 21, 2022 at 02:03 PM
+-- Generation Time: Jan 27, 2022 at 02:06 PM
 -- Server version: 10.4.18-MariaDB-log
 -- PHP Version: 7.1.33
 
@@ -20,8 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `aum_research_lab-313833c271`
 --
-CREATE DATABASE IF NOT EXISTS `aum_research_lab-313833c271` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
-USE `aum_research_lab-313833c271`;
 
 -- --------------------------------------------------------
 
@@ -266,7 +264,8 @@ CREATE TABLE `formulas` (
 
 INSERT INTO `formulas` (`id`, `mst_companies_id`, `formula_name`, `formula_type`, `created_by`, `updated_by`, `created_at`, `updated_at`, `selected_year`, `copied_from_year`, `is_active`, `deleted_at`) VALUES
 (1, 4, '[AAI×Φ]÷[Φ- W]=100± [EAAI+EW]', 'Assay', 1, NULL, '2021-12-28 15:57:26', NULL, '2019-20', NULL, 1, NULL),
-(2, 4, '(CI)=(t×SD)÷ (n)1/2', 'Assay Chemical', 1, 1, '2021-12-28 15:58:06', '2021-12-28 16:26:40', '2019-20', NULL, 1, NULL);
+(2, 4, '(CI)=(t×SD)÷ (n)1/2', 'Assay Chemical', 1, 1, '2021-12-28 15:58:06', '2021-12-28 16:26:40', '2019-20', NULL, 1, NULL),
+(4, 4, 'a+b', 'a+b = a2 + 2ab + b2', 1, NULL, '2022-01-24 15:59:59', '2022-01-24 16:09:12', '2019-20', NULL, 1, '16:09:12');
 
 -- --------------------------------------------------------
 
@@ -468,7 +467,7 @@ INSERT INTO `mst_companies` (`id`, `company_name`, `created_by`, `updated_by`, `
 --
 
 CREATE TABLE `mst_countries` (
-  `id` varchar(3) DEFAULT NULL,
+  `id` varchar(3) NOT NULL,
   `phone_code` varchar(10) DEFAULT NULL,
   `country_name` varchar(29) DEFAULT NULL,
   `iso` varchar(3) DEFAULT NULL,
@@ -480,105 +479,8 @@ CREATE TABLE `mst_countries` (
 --
 
 INSERT INTO `mst_countries` (`id`, `phone_code`, `country_name`, `iso`, `is_active`) VALUES
-('1', '+93', 'Afghanistan', 'AF', 1),
-('2', '+355', 'Albania', 'AL', 1),
-('3', '+213', 'Algeria', 'DZ', 1),
-('4', '+1684', 'American Samoa', 'AS', 1),
-('5', '+376', 'Andorra', 'AD', 1),
-('6', '+244', 'Angola', 'AO', 1),
-('7', '+1264', 'Anguilla', 'AI', 1),
-('8', '+1268', 'Antigua and Barbuda', 'AG', 1),
-('9', '+54', 'Argentina', 'AR', 1),
+('1', '+91', 'India', 'IN', 1),
 ('10', '+374', 'Armenia', 'AM', 1),
-('11', '+61', 'Australia', 'AU', 1),
-('12', '+43', 'Austria', 'AT', 1),
-('13', '+994', 'Azerbaijan', 'AZ', 1),
-('14', '+1242', 'Bahamas', 'BS', 1),
-('15', '+973', 'Bahrain', 'BH', 1),
-('16', '+880', 'Bangladesh', 'BD', 1),
-('17', '+1246', 'Barbados', 'BB', 1),
-('18', '+375', 'Belarus', 'BY', 1),
-('19', '+32', 'Belgium', 'BE', 1),
-('20', '+501', 'Belize', 'BZ', 1),
-('21', '+1441', 'Bermuda', 'BM', 1),
-('22', '+975', 'Bhutan', 'BT', 1),
-('23', '+591', 'Bolivia', 'BO', 1),
-('24', '+387', 'Bosnia and Herzegovina', 'BA', 1),
-('25', '+267', 'Botswana', 'BW', 1),
-('26', '+55', 'Brazil', 'BR', 1),
-('27', '+673', 'Brunei Darussalam', 'BN', 1),
-('28', '+359', 'Bulgaria', 'BG', 1),
-('29', '+226', 'Burkina Faso', 'BF', 1),
-('30', '+257', 'Burundi', 'BI', 1),
-('31', '+855', 'Cambodia', 'KH', 1),
-('32', '+237', 'Cameroon', 'CM', 1),
-('33', '+1', 'Canada', 'CA', 1),
-('34', '+238', 'Cape Verde', 'CV', 1),
-('35', '+1345', 'Cayman Islands', 'KY', 1),
-('36', '+236', 'Central African Republic', 'CF', 1),
-('37', '+235', 'Chad', 'TD', 1),
-('38', '+56', 'Chile', 'CL', 1),
-('39', '+86', 'China', 'CN', 1),
-('40', '+57', 'Colombia', 'CO', 1),
-('41', '+269', 'Comoros', 'KM', 1),
-('42', '+242', 'Congo (DRC)', 'CD', 1),
-('43', '+242', 'Congo', 'CG', 1),
-('44', '+682', 'Cook Islands', 'CK', 1),
-('45', '+506', 'Costa Rica', 'CR', 1),
-('46', '+225', 'Cote D\'Ivoire', 'CI', 1),
-('47', '+385', 'Croatia', 'HR', 1),
-('48', '+53', 'Cuba', 'CU', 1),
-('49', '+357', 'Cyprus', 'CY', 1),
-('50', '+420', 'Czech Republic', 'CZ', 1),
-('51', '+45', 'Denmark', 'DK', 1),
-('52', '+253', 'Djibouti', 'DJ', 1),
-('53', '+1767', 'Dominica', 'DM', 1),
-('54', '+1809', 'Dominican Republic', 'DO', 1),
-('55', '+670', 'East Timor', 'TL', 1),
-('56', '+593', 'Ecuador', 'EC', 1),
-('57', '+20', 'Egypt', 'EG', 1),
-('58', '+503', 'El Salvador', 'SV', 1),
-('59', '+240', 'Equatorial Guinea', 'GQ', 1),
-('60', '+291', 'Eritrea', 'ER', 1),
-('61', '+372', 'Estonia', 'EE', 1),
-('62', '+251', 'Ethiopia', 'ET', 1),
-('63', '+500', 'Falkland Islands (Malvinas)', 'FK', 1),
-('64', '+298', 'Faroe Islands', 'FO', 1),
-('65', '+679', 'Fiji', 'FJ', 1),
-('66', '+358', 'Finland', 'FI', 1),
-('67', '+33', 'France', 'FR', 1),
-('68', '+241', 'Gabon', 'GA', 1),
-('69', '+220', 'Gambia', 'GM', 1),
-('70', '+995', 'Georgia', 'GE', 1),
-('71', '+49', 'Germany', 'DE', 1),
-('72', '+233', 'Ghana', 'GH', 1),
-('73', '+350', 'Gibraltar', 'GI', 1),
-('74', '+30', 'Greece', 'GR', 1),
-('75', '+299', 'Greenland', 'GL', 1),
-('76', '+1473', 'Grenada', 'GD', 1),
-('77', '+590', 'Guadeloupe', 'GP', 1),
-('78', '+1671', 'Guam', 'GU', 1),
-('79', '+502', 'Guatemala', 'GT', 1),
-('80', '+224', 'Guinea', 'GN', 1),
-('81', '+245', 'Guinea-Bissau', 'GW', 1),
-('82', '+592', 'Guyana', 'GY', 1),
-('83', '+509', 'Haiti', 'HT', 1),
-('84', '+39', 'Holy See (Vatican City State)', 'VA', 1),
-('85', '+504', 'Honduras', 'HN', 1),
-('86', '+852', 'Hong Kong', 'HK', 1),
-('87', '+36', 'Hungary', 'HU', 1),
-('88', '+354', 'Iceland', 'IS', 1),
-('89', '+91', 'India', 'IN', 1),
-('90', '+62', 'Indonesia', 'ID', 1),
-('91', '+98', 'Iran', 'IR', 1),
-('92', '+964', 'Iraq', 'IQ', 1),
-('93', '+353', 'Ireland', 'IE', 1),
-('94', '+972', 'Israel', 'IL', 1),
-('95', '+39', 'Italy', 'IT', 1),
-('96', '+1876', 'Jamaica', 'JM', 1),
-('97', '+81', 'Japan', 'JP', 1),
-('98', '+962', 'Jordan', 'JO', 1),
-('99', '+7', 'Kazakhstan', 'KZ', 1),
 ('100', '+254', 'Kenya', 'KE', 1),
 ('101', '+686', 'Kiribati', 'KI', 1),
 ('102', '+850', 'North Korea', 'KP', 1),
@@ -589,6 +491,7 @@ INSERT INTO `mst_countries` (`id`, `phone_code`, `country_name`, `iso`, `is_acti
 ('107', '+371', 'Latvia', 'LV', 1),
 ('108', '+961', 'Lebanon', 'LB', 1),
 ('109', '+266', 'Lesotho', 'LS', 1),
+('11', '+61', 'Australia', 'AU', 1),
 ('110', '+231', 'Liberia', 'LR', 1),
 ('111', '+218', 'Libyan', 'LY', 1),
 ('112', '+423', 'Liechtenstein', 'LI', 1),
@@ -599,6 +502,7 @@ INSERT INTO `mst_countries` (`id`, `phone_code`, `country_name`, `iso`, `is_acti
 ('117', '+261', 'Madagascar', 'MG', 1),
 ('118', '+265', 'Malawi', 'MW', 1),
 ('119', '+60', 'Malaysia', 'MY', 1),
+('12', '+43', 'Austria', 'AT', 1),
 ('120', '+960', 'Maldives', 'MV', 1),
 ('121', '+223', 'Mali', 'ML', 1),
 ('122', '+356', 'Malta', 'MT', 1),
@@ -609,6 +513,7 @@ INSERT INTO `mst_countries` (`id`, `phone_code`, `country_name`, `iso`, `is_acti
 ('127', '+52', 'Mexico', 'MX', 1),
 ('128', '+691', 'Micronesia', 'FM', 1),
 ('129', '+373', 'Moldova', 'MD', 1),
+('13', '+994', 'Azerbaijan', 'AZ', 1),
 ('130', '+377', 'Monaco', 'MC', 1),
 ('131', '+976', 'Mongolia', 'MN', 1),
 ('132', '+1664', 'Montserrat', 'MS', 1),
@@ -619,6 +524,7 @@ INSERT INTO `mst_countries` (`id`, `phone_code`, `country_name`, `iso`, `is_acti
 ('137', '+674', 'Nauru', 'NR', 1),
 ('138', '+977', 'Nepal', 'NP', 1),
 ('139', '+31', 'Netherlands', 'NL', 1),
+('14', '+1242', 'Bahamas', 'BS', 1),
 ('140', '+599', 'Netherlands Antilles', 'AN', 1),
 ('141', '+687', 'New Caledonia', 'NC', 1),
 ('142', '+64', 'New Zealand', 'NZ', 1),
@@ -629,6 +535,7 @@ INSERT INTO `mst_countries` (`id`, `phone_code`, `country_name`, `iso`, `is_acti
 ('147', '+672', 'Norfolk Island', 'NF', 1),
 ('148', '+47', 'Norway', 'NO', 1),
 ('149', '+968', 'Oman', 'OM', 1),
+('15', '+973', 'Bahrain', 'BH', 1),
 ('150', '+92', 'Pakistan', 'PK', 1),
 ('151', '+507', 'Panama', 'PA', 1),
 ('152', '+675', 'Papua New Guinea', 'PG', 1),
@@ -639,6 +546,7 @@ INSERT INTO `mst_countries` (`id`, `phone_code`, `country_name`, `iso`, `is_acti
 ('157', '+48', 'Poland', 'PL', 1),
 ('158', '+351', 'Portugal', 'PT', 1),
 ('159', '+1787', 'Puerto Rico', 'PR', 1),
+('16', '+880', 'Bangladesh', 'BD', 1),
 ('160', '+974', 'Qatar', 'QA', 1),
 ('161', '+262', 'Reunion', 'RE', 1),
 ('162', '+40', 'Romania', 'RO', 1),
@@ -649,6 +557,7 @@ INSERT INTO `mst_countries` (`id`, `phone_code`, `country_name`, `iso`, `is_acti
 ('167', '+239', 'Sao Tome and Principe', 'ST', 1),
 ('168', '+966', 'Saudi Arabia', 'SA', 1),
 ('169', '+221', 'Senegal', 'SN', 1),
+('17', '+1246', 'Barbados', 'BB', 1),
 ('170', '+381', 'Serbia and Montenegro', 'CS', 1),
 ('171', '+248', 'Seychelles', 'SC', 1),
 ('172', '+232', 'Sierra Leone', 'SL', 1),
@@ -659,6 +568,7 @@ INSERT INTO `mst_countries` (`id`, `phone_code`, `country_name`, `iso`, `is_acti
 ('177', '+252', 'Somalia', 'SO', 1),
 ('178', '+27', 'South Africa', 'ZA', 1),
 ('179', '+34', 'Spain', 'ES', 1),
+('18', '+375', 'Belarus', 'BY', 1),
 ('180', '+94', 'Sri Lanka', 'LK', 1),
 ('181', '+290', 'St. Helena', 'SH', 1),
 ('182', '+1869', 'St. Kitts & Nevis', 'KN', 1),
@@ -669,6 +579,7 @@ INSERT INTO `mst_countries` (`id`, `phone_code`, `country_name`, `iso`, `is_acti
 ('187', '+597', 'Suriname', 'SR', 1),
 ('188', '+268', 'Swaziland', 'SZ', 1),
 ('189', '+46', 'Sweden', 'SE', 1),
+('19', '+32', 'Belgium', 'BE', 1),
 ('190', '+41', 'Switzerland', 'CH', 1),
 ('191', '+963', 'Syria', 'SY', 1),
 ('192', '+886', 'Taiwan', 'TW', 1),
@@ -679,6 +590,8 @@ INSERT INTO `mst_countries` (`id`, `phone_code`, `country_name`, `iso`, `is_acti
 ('197', '+690', 'Tokelau', 'TK', 1),
 ('198', '+676', 'Tonga', 'TO', 1),
 ('199', '+1868', 'Trinidad and Tobago', 'TT', 1),
+('2', '+355', 'Albania', 'AL', 1),
+('20', '+501', 'Belize', 'BZ', 1),
 ('200', '+216', 'Tunisia', 'TN', 1),
 ('201', '+90', 'Turkey', 'TR', 1),
 ('202', '+7370', 'Turkmenistan', 'TM', 1),
@@ -689,6 +602,7 @@ INSERT INTO `mst_countries` (`id`, `phone_code`, `country_name`, `iso`, `is_acti
 ('207', '+971', 'United Arab Emirates', 'AE', 1),
 ('208', '+44', 'United Kingdom', 'GB', 1),
 ('209', '+1', 'United States', 'US', 1),
+('21', '+1441', 'Bermuda', 'BM', 1),
 ('210', '+598', 'Uruguay', 'UY', 1),
 ('211', '+998', 'Uzbekistan', 'UZ', 1),
 ('212', '+678', 'Vanuatu', 'VU', 1),
@@ -699,7 +613,92 @@ INSERT INTO `mst_countries` (`id`, `phone_code`, `country_name`, `iso`, `is_acti
 ('217', '+681', 'Wallis and Futuna', 'WF', 1),
 ('218', '+967', 'Yemen', 'YE', 1),
 ('219', '+260', 'Zambia', 'ZM', 1),
-('220', '+263', 'Zimbabwe', 'ZW', 1);
+('22', '+975', 'Bhutan', 'BT', 1),
+('220', '+263', 'Zimbabwe', 'ZW', 1),
+('23', '+591', 'Bolivia', 'BO', 1),
+('24', '+387', 'Bosnia and Herzegovina', 'BA', 1),
+('25', '+267', 'Botswana', 'BW', 1),
+('26', '+55', 'Brazil', 'BR', 1),
+('27', '+673', 'Brunei Darussalam', 'BN', 1),
+('28', '+359', 'Bulgaria', 'BG', 1),
+('29', '+226', 'Burkina Faso', 'BF', 1),
+('3', '+213', 'Algeria', 'DZ', 1),
+('30', '+257', 'Burundi', 'BI', 1),
+('31', '+855', 'Cambodia', 'KH', 1),
+('32', '+237', 'Cameroon', 'CM', 1),
+('33', '+1', 'Canada', 'CA', 1),
+('34', '+238', 'Cape Verde', 'CV', 1),
+('35', '+1345', 'Cayman Islands', 'KY', 1),
+('36', '+236', 'Central African Republic', 'CF', 1),
+('37', '+235', 'Chad', 'TD', 1),
+('38', '+56', 'Chile', 'CL', 1),
+('39', '+86', 'China', 'CN', 1),
+('4', '+1684', 'American Samoa', 'AS', 1),
+('40', '+57', 'Colombia', 'CO', 1),
+('41', '+269', 'Comoros', 'KM', 1),
+('42', '+242', 'Congo (DRC)', 'CD', 1),
+('43', '+242', 'Congo', 'CG', 1),
+('44', '+682', 'Cook Islands', 'CK', 1),
+('45', '+506', 'Costa Rica', 'CR', 1),
+('46', '+225', 'Cote D\'Ivoire', 'CI', 1),
+('47', '+385', 'Croatia', 'HR', 1),
+('48', '+53', 'Cuba', 'CU', 1),
+('49', '+357', 'Cyprus', 'CY', 1),
+('5', '+376', 'Andorra', 'AD', 1),
+('50', '+420', 'Czech Republic', 'CZ', 1),
+('51', '+45', 'Denmark', 'DK', 1),
+('52', '+253', 'Djibouti', 'DJ', 1),
+('53', '+1767', 'Dominica', 'DM', 1),
+('54', '+1809', 'Dominican Republic', 'DO', 1),
+('55', '+670', 'East Timor', 'TL', 1),
+('56', '+593', 'Ecuador', 'EC', 1),
+('57', '+20', 'Egypt', 'EG', 1),
+('58', '+503', 'El Salvador', 'SV', 1),
+('59', '+240', 'Equatorial Guinea', 'GQ', 1),
+('6', '+244', 'Angola', 'AO', 1),
+('60', '+291', 'Eritrea', 'ER', 1),
+('61', '+372', 'Estonia', 'EE', 1),
+('62', '+251', 'Ethiopia', 'ET', 1),
+('63', '+500', 'Falkland Islands (Malvinas)', 'FK', 1),
+('64', '+298', 'Faroe Islands', 'FO', 1),
+('65', '+679', 'Fiji', 'FJ', 1),
+('66', '+358', 'Finland', 'FI', 1),
+('67', '+33', 'France', 'FR', 1),
+('68', '+241', 'Gabon', 'GA', 1),
+('69', '+220', 'Gambia', 'GM', 1),
+('7', '+1264', 'Anguilla', 'AI', 1),
+('70', '+995', 'Georgia', 'GE', 1),
+('71', '+49', 'Germany', 'DE', 1),
+('72', '+233', 'Ghana', 'GH', 1),
+('73', '+350', 'Gibraltar', 'GI', 1),
+('74', '+30', 'Greece', 'GR', 1),
+('75', '+299', 'Greenland', 'GL', 1),
+('76', '+1473', 'Grenada', 'GD', 1),
+('77', '+590', 'Guadeloupe', 'GP', 1),
+('78', '+1671', 'Guam', 'GU', 1),
+('79', '+502', 'Guatemala', 'GT', 1),
+('8', '+1268', 'Antigua and Barbuda', 'AG', 1),
+('80', '+224', 'Guinea', 'GN', 1),
+('81', '+245', 'Guinea-Bissau', 'GW', 1),
+('82', '+592', 'Guyana', 'GY', 1),
+('83', '+509', 'Haiti', 'HT', 1),
+('84', '+39', 'Holy See (Vatican City State)', 'VA', 1),
+('85', '+504', 'Honduras', 'HN', 1),
+('86', '+852', 'Hong Kong', 'HK', 1),
+('87', '+36', 'Hungary', 'HU', 1),
+('88', '+354', 'Iceland', 'IS', 1),
+('89', '+93', 'Afghanistan', 'AF', 1),
+('9', '+54', 'Argentina', 'AR', 1),
+('90', '+62', 'Indonesia', 'ID', 1),
+('91', '+98', 'Iran', 'IR', 1),
+('92', '+964', 'Iraq', 'IQ', 1),
+('93', '+353', 'Ireland', 'IE', 1),
+('94', '+972', 'Israel', 'IL', 1),
+('95', '+39', 'Italy', 'IT', 1),
+('96', '+1876', 'Jamaica', 'JM', 1),
+('97', '+81', 'Japan', 'JP', 1),
+('98', '+962', 'Jordan', 'JO', 1),
+('99', '+7', 'Kazakhstan', 'KZ', 1);
 
 -- --------------------------------------------------------
 
@@ -750,7 +749,8 @@ INSERT INTO `mst_customers` (`id`, `mst_companies_id`, `company_name`, `gst_numb
 (7, 4, 'Test Company', '18AABCU9603R1ZM', 'test company name', 'test@test', 'testcompany123', 'VGVzdCFAIzEyMzQ=', NULL, 'Customer', 'High', NULL, NULL, NULL, NULL, NULL, 'dfgfd', '6', 'QWET1234', '1234568', 1, 1, '2022-01-07 16:14:44', '2022-01-10 17:44:31', '2019-20', NULL, 1, NULL),
 (8, 4, 'test', '10AABCU9603R1Z2', NULL, NULL, 'test123', 'VGVzdCFAIzEyMzQ1Ng==', NULL, 'Customer', 'High', NULL, 'null', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, '2022-01-07 18:45:39', '2022-01-10 17:56:12', '2019-20', NULL, 1, NULL),
 (9, 4, 'test123', '18AABCU9603R1ZM', NULL, NULL, 'jayshah123', 'VGVzdEAxMjM0', NULL, 'Customer', 'High', NULL, '20220110172357.png', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2022-01-10 17:14:00', '2022-01-10 17:14:41', '2019-20', NULL, 1, '2022-01-10 17:14:41'),
-(10, 4, 'Test Company', '18AABCU9603R1ZM', NULL, NULL, 'abc@xyz', 'VGVzdEAxMjM0NQ==', NULL, 'Customer', 'High', NULL, '20220110175657.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, '2022-01-10 17:43:47', '2022-01-10 17:56:57', '2019-20', NULL, 1, NULL);
+(10, 4, 'Test Company', '18AABCU9603R1ZM', NULL, NULL, 'abc@xyz', 'VGVzdEAxMjM0NQ==', NULL, 'Customer', 'High', NULL, '20220110175657.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, '2022-01-10 17:43:47', '2022-01-10 17:56:57', '2019-20', NULL, 1, NULL),
+(11, 4, 'Aum Research7', '06BZAHM6385P6Z7', 'Pragnesh7', 'Karan7', 'pragnesh77', 'dHNUZnRAJCEjMTIzNDU3', '1999-10-07', 'customer7', 'High7', 'my notes7', '20220124125322.jpeg', 'my education_details7', 'prev_details7', '900700077', '900700007', '107', '900700007', '90070007', 1, 1, '2022-01-24 12:45:20', '2022-01-24 12:53:22', '2019-20', NULL, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -800,7 +800,9 @@ INSERT INTO `mst_customers_contact_info` (`id`, `mst_customer_id`, `street_1`, `
 (9, 9, '', '', '', '', '', 160, 0, '', NULL, NULL, '', NULL, 1, '', '', '', 1, 1, '2022-01-10 17:14:00', '2022-01-10 17:14:41', '2022-01-10 17:14:41'),
 (10, 9, '', '', '', '', '', 0, 0, NULL, '', '', NULL, NULL, 2, '', NULL, '', 1, 1, '2022-01-10 17:14:00', '2022-01-10 17:14:41', '2022-01-10 17:14:41'),
 (11, 10, 'test1', 'fsdfdsfsdf', 'dgdgdf', '123456', 'gdfgdfhgf', 159, 10, '079-27507178', NULL, NULL, '', NULL, 1, '1234567890', '1234567891', 'test@gmail.com', 1, 1, '2022-01-10 17:43:47', '2022-01-20 19:18:03', NULL),
-(12, 10, 'undefined', 'Weybridge Brooklands Business Park, Wellington Way', 'undefined', '380015', 'Warwickshire', 159, 10, NULL, 'test3@gmail.com', 'test123@gmail.com', NULL, '20220111111910.jpg', 2, '1234567855', NULL, 'shaguncatering01@gmail.com', 1, 1, '2022-01-10 17:43:47', '2022-01-20 19:18:03', NULL);
+(12, 10, 'undefined', 'Weybridge Brooklands Business Park, Wellington Way', 'undefined', '380015', 'Warwickshire', 159, 10, NULL, 'test3@gmail.com', 'test123@gmail.com', NULL, '20220111111910.jpg', 2, '1234567855', NULL, 'shaguncatering01@gmail.com', 1, 1, '2022-01-10 17:43:47', '2022-01-20 19:18:03', NULL),
+(13, 11, 'Visat7', 'Motera7', 'Avni Bhavan7', '380017', 'Ahmedabad7', 7, 7, '079-27507177', NULL, NULL, 'BNZAA2317J', NULL, 1, '9408072557', '0987654327', 'MS7@gmail.com', 1, 1, '2022-01-24 12:45:20', '2022-01-24 12:53:22', NULL),
+(14, 11, 'Tapovan7', 'gandhinagar7', 'sabermati7', '380017', 'Ahmedabad7', 7, 7, NULL, 'google7.com', 'p7@gmail.com', NULL, '20220124125322.jpg', 2, '9408072557', NULL, 'p7@gmail.com', 1, 1, '2022-01-24 12:45:20', '2022-01-24 12:53:22', NULL);
 
 -- --------------------------------------------------------
 
@@ -828,7 +830,9 @@ CREATE TABLE `mst_customers_contact_person` (
 --
 
 INSERT INTO `mst_customers_contact_person` (`id`, `mst_customer_id`, `name`, `mobile`, `email`, `department`, `position`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 4, 'Vishal Kotak', '4474439308', 'wordpress.divine@gmail.com', 0, 8, 3, 3, '2021-12-15 15:40:52', '2021-12-15 15:40:52', NULL);
+(1, 4, 'Vishal Kotak', '4474439308', 'wordpress.divine@gmail.com', 0, 8, 3, 3, '2021-12-15 15:40:52', '2021-12-15 15:40:52', NULL),
+(4, 11, 'Pragnesh7', '9408072557', 'p7@gmail.com', 7, 7, 1, 1, '2022-01-24 12:53:22', '2022-01-24 12:53:22', NULL),
+(5, 11, 'pragnesh7', '9408072557', 'p7@gmail.com', 7, 7, 1, 1, '2022-01-24 12:53:22', '2022-01-24 12:53:22', NULL);
 
 -- --------------------------------------------------------
 
@@ -4961,7 +4965,7 @@ INSERT INTO `mst_tests` (`id`, `mst_companies_id`, `procedure_name`, `price`, `t
 (23, 4, 'test', '12', '123', 'test', '<p>ProcedureProcedureProcedureProcedureProcedureProcedureProcedureProcedureProcedureProcedureProcedureProcedureProcedureProcedureProcedureProcedureProcedureProcedureProcedureProcedureProcedureProcedureProcedureProcedureProcedureProcedureProcedureProcedureProcedureProcedureProcedureProcedureProcedureProcedureProcedureProcedureProcedureProcedureProcedureProcedureProcedureProcedureProcedureProcedureProcedureProcedureProcedureProcedureProcedureProcedureProcedureProcedureProcedureProcedure</p>', 2, 1, NULL, '2022-01-19 19:11:53', NULL, '2019-20', NULL, 1, NULL),
 (25, 4, 'test123', NULL, NULL, NULL, '<p>lora ipsum</p>', 0, 1, NULL, '2022-01-19 19:25:55', NULL, '2019-20', NULL, 1, NULL),
 (26, 4, '% Assay (Clobetasol Propionate)', NULL, NULL, 'Finished product', '<p><strong style=\"color: rgb(0, 0, 0);\">Lorem Ipsum</strong><span style=\"color: rgb(0, 0, 0);\">&nbsp;is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</span></p>', 0, 1, NULL, '2022-01-20 11:12:42', NULL, '2019-20', NULL, 1, NULL),
-(27, 4, '---- min. to ----seconds', '0', NULL, NULL, '<p><span style=\"color: rgb(0, 0, 0);\">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.</span></p>', 4, 1, NULL, '2022-01-20 11:16:10', NULL, '2019-20', NULL, 1, NULL);
+(27, 4, '---- min. to ----seconds', '0', 'test code', 'test category', '<p><span style=\"color: rgb(0, 0, 0);\">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.</span></p><p><br></p><p><span style=\"color: rgb(0, 0, 0);\">﻿There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.</span></p>', 4, 1, 1, '2022-01-20 11:16:10', '2022-01-24 16:16:12', '2019-20', NULL, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -5001,13 +5005,13 @@ INSERT INTO `mst_test_parameters` (`id`, `mst_companies_id`, `mst_test_id`, `tes
 (3, 4, 23, 2, 'Parameter Name', 'Alfa', 2, 'Type', 2, 'V', '1', 1, 1, '2022-01-19 19:11:53', '2022-01-19 19:11:53', '2019-20', NULL, 1, NULL),
 (4, 4, 23, 1, 'Parameter Name1', 'Alfa1', 1, 'Type1', 1, 'F', '2', 1, 1, '2022-01-19 19:11:53', '2022-01-19 19:11:53', '2019-20', NULL, 1, NULL),
 (5, 4, 25, 2, '', '', NULL, '', NULL, 'V', '', 1, 1, '2022-01-19 19:25:55', '2022-01-19 19:25:55', '2019-20', NULL, 1, NULL),
-(6, 4, 27, 2, 'Test values       ____     _____     _____    _____    ______', '', NULL, '', NULL, 'V', '', 1, 1, '2022-01-20 11:16:10', '2022-01-20 11:16:10', '2019-20', NULL, 1, NULL),
-(7, 4, 27, 2, 'Water content  ____     _____     _____    _____    ______', '', NULL, '', NULL, 'V', '', 1, 1, '2022-01-20 11:16:10', '2022-01-20 11:16:10', '2019-20', NULL, 1, NULL),
-(8, 4, 27, 2, 'Dilutions ___________', '', NULL, '', NULL, 'V', '', 1, 1, '2022-01-20 11:16:10', '2022-01-20 11:16:10', '2019-20', NULL, 1, NULL),
-(9, 4, 27, 2, 'Weight of container _____gm', '', NULL, '', NULL, 'V', '', 1, 1, '2022-01-20 11:16:10', '2022-01-20 11:16:10', '2019-20', NULL, 1, NULL),
-(10, 4, 27, 2, 'Weight of container + sample ______gm', '', NULL, '', NULL, 'V', '', 1, 1, '2022-01-20 11:16:10', '2022-01-20 11:16:10', '2019-20', NULL, 1, NULL),
-(11, 4, 27, 2, 'Weight/volume  Y/N', '', NULL, '', NULL, 'V', '', 1, 1, '2022-01-20 11:16:10', '2022-01-20 11:16:10', '2019-20', NULL, 1, NULL),
-(12, 4, 27, 2, 'RESULT [        ]', '', NULL, '', NULL, 'V', '', 1, 1, '2022-01-20 11:16:10', '2022-01-20 11:16:10', '2019-20', NULL, 1, NULL);
+(48, 4, 27, 1, 'Test values       ____     _____     _____    _____    ______', 'Alfa 1', 4, 'Type 1', 1, 'V', '1', 1, 1, '2022-01-24 16:17:09', '2022-01-24 16:17:09', '2019-20', NULL, 1, NULL),
+(49, 4, 27, 2, 'Water content  ____     _____     _____    _____    ______', 'Alfa 2', 2, '', 3, 'F', '2', 1, 1, '2022-01-24 16:17:09', '2022-01-24 16:17:09', '2019-20', NULL, 1, NULL),
+(50, 4, 27, 1, 'Dilutions ___________', '', 1, 'Type 3', 2, 'V', '3', 1, 1, '2022-01-24 16:17:09', '2022-01-24 16:17:09', '2019-20', NULL, 1, NULL),
+(51, 4, 27, 2, 'Weight of container _____gm', 'Alfa 4', 4, '', 3, 'F', '4', 1, 1, '2022-01-24 16:17:09', '2022-01-24 16:17:09', '2019-20', NULL, 1, NULL),
+(52, 4, 27, 2, 'Weight of container + sample ______gm', '', NULL, 'Type 5', NULL, 'F', '5', 1, 1, '2022-01-24 16:17:09', '2022-01-24 16:17:09', '2019-20', NULL, 1, NULL),
+(53, 4, 27, 1, 'Weight/volume  Y/N', '', NULL, '', NULL, 'V', '6', 1, 1, '2022-01-24 16:17:09', '2022-01-24 16:17:09', '2019-20', NULL, 1, NULL),
+(54, 4, 27, 2, 'RESULT [        ]', '', NULL, '', NULL, 'V', '7', 1, 1, '2022-01-24 16:17:09', '2022-01-24 16:17:09', '2019-20', NULL, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -5035,7 +5039,8 @@ CREATE TABLE `mst_units` (
 
 INSERT INTO `mst_units` (`id`, `mst_companies_id`, `unit_name`, `created_by`, `updated_by`, `created_at`, `updated_at`, `selected_year`, `copied_from_year`, `is_active`, `deleted_at`) VALUES
 (1, 4, 'mg', 3, NULL, '2021-12-15 11:51:18', '2021-12-15 11:51:18', '2019-20', NULL, 1, NULL),
-(2, 4, '%w/w', 3, NULL, '2021-12-15 11:56:58', '2021-12-15 11:56:58', '2019-20', NULL, 1, NULL);
+(2, 4, '%w/w', 3, NULL, '2021-12-15 11:56:58', '2021-12-15 11:56:58', '2019-20', NULL, 1, NULL),
+(3, 4, 'ml', 1, NULL, '2022-01-24 16:00:13', '2022-01-24 16:08:38', '2019-20', NULL, 1, '2022-01-24 16:08:38');
 
 -- --------------------------------------------------------
 
@@ -5057,19 +5062,21 @@ CREATE TABLE `password_resets` (
 
 CREATE TABLE `quotations` (
   `id` int(11) NOT NULL COMMENT 'Primary Key, Auto Increment',
-  `quotation_no` varchar(155) NOT NULL,
+  `mst_companies_id` int(11) NOT NULL,
+  `quotation_no` varchar(255) NOT NULL,
   `type` varchar(15) DEFAULT NULL,
   `customer_id` int(11) DEFAULT NULL,
   `subject` varchar(255) DEFAULT NULL,
-  `quotation_date` date DEFAULT NULL,
-  `valid_until` date DEFAULT NULL,
+  `quotation_date` varchar(255) DEFAULT NULL,
+  `valid_until` varchar(255) DEFAULT NULL,
   `status` varchar(55) DEFAULT NULL,
   `kind_attention` varchar(155) DEFAULT NULL,
-  `turn_around_time` varchar(30) DEFAULT NULL,
+  `turn_around_time` varchar(155) DEFAULT NULL,
   `remarks` text DEFAULT NULL,
-  `currency_type` varchar(5) DEFAULT NULL,
+  `currency_type` varchar(25) DEFAULT NULL,
   `grand_total` tinyint(1) DEFAULT NULL COMMENT 'default 1 and 1= yes, 0=No',
-  `payment_terms` varchar(155) DEFAULT NULL,
+  `payment_terms` varchar(255) DEFAULT NULL,
+  `product_info_grand_total` decimal(15,2) DEFAULT NULL,
   `created_by` int(11) DEFAULT NULL COMMENT 'created user id',
   `updated_by` int(11) DEFAULT NULL COMMENT 'updated user id',
   `created_at` datetime DEFAULT NULL,
@@ -5080,23 +5087,32 @@ CREATE TABLE `quotations` (
   `deleted_at` datetime DEFAULT NULL COMMENT 'default NULL'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `quotations`
+--
+
+INSERT INTO `quotations` (`id`, `mst_companies_id`, `quotation_no`, `type`, `customer_id`, `subject`, `quotation_date`, `valid_until`, `status`, `kind_attention`, `turn_around_time`, `remarks`, `currency_type`, `grand_total`, `payment_terms`, `product_info_grand_total`, `created_by`, `updated_by`, `created_at`, `updated_at`, `selected_year`, `copied_from_year`, `is_active`, `deleted_at`) VALUES
+(1, 4, 'SAL/JAN/22/1', 'Sample', 16, 'my subject', '1999-10-08 10:30', '1999-10-18 10:30', 'open', 'kind_attention', 'Turn Around Time', 'remarks', 'RS', 1, 'payment_terms', NULL, 1, NULL, '2022-01-27 18:51:10', '2022-01-27 19:30:27', '2019-20', NULL, 1, '2022-01-27 19:30:27'),
+(2, 4, 'SAL/JAN/22/7', 'Sample7', 16, 'my subject7', '1999-10-07 10:30', '1999-10-17 10:30', 'open7', 'kind_attention7', 'Turn Around Time7', 'remarks7', 'RS7', 1, 'payment_terms7', '500000.00', 1, 1, '2022-01-27 18:57:18', '2022-01-27 19:31:06', '2019-20', NULL, 1, NULL);
+
 -- --------------------------------------------------------
 
 --
--- Table structure for table `quotation_product_info`
+-- Table structure for table `quotation_product_infos`
 --
 
-CREATE TABLE `quotation_product_info` (
+CREATE TABLE `quotation_product_infos` (
   `id` int(11) NOT NULL COMMENT 'Primary Key, Auto Increment',
+  `mst_companies_id` int(11) NOT NULL,
   `quotation_id` int(11) NOT NULL COMMENT 'foreign key for quotation table',
-  `sample_name` varchar(255) DEFAULT NULL,
-  `test_required` varchar(255) DEFAULT NULL,
-  `method_technique` varchar(255) DEFAULT NULL,
-  `sample_qty` int(11) DEFAULT NULL,
-  `first_sample` int(11) DEFAULT NULL,
-  `sample_in_row` int(11) DEFAULT NULL,
-  `sample_preperation` int(11) DEFAULT NULL,
-  `total` int(11) DEFAULT NULL,
+  `sample_name` int(11) DEFAULT NULL COMMENT 'foreign key for product table',
+  `test_required` int(11) DEFAULT NULL COMMENT 'foreign key for test parameter_name',
+  `method_technique` int(11) DEFAULT NULL COMMENT 'foreign key for method table',
+  `sample_qty` decimal(15,2) DEFAULT NULL,
+  `first_sample` decimal(15,2) DEFAULT NULL,
+  `sample_in_row` decimal(15,2) DEFAULT NULL,
+  `sample_preperation` decimal(15,2) DEFAULT NULL,
+  `total` decimal(15,2) DEFAULT NULL,
   `remark` text DEFAULT NULL,
   `created_by` int(11) DEFAULT NULL,
   `updated_by` int(11) DEFAULT NULL,
@@ -5107,6 +5123,16 @@ CREATE TABLE `quotation_product_info` (
   `is_active` tinyint(1) DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `quotation_product_infos`
+--
+
+INSERT INTO `quotation_product_infos` (`id`, `mst_companies_id`, `quotation_id`, `sample_name`, `test_required`, `method_technique`, `sample_qty`, `first_sample`, `sample_in_row`, `sample_preperation`, `total`, `remark`, `created_by`, `updated_by`, `created_at`, `updated_at`, `selected_year`, `copied_from_year`, `is_active`, `deleted_at`) VALUES
+(1, 4, 1, 8, 8, 8, '178.00', '178.00', '178.00', '178.00', '178.00', 'remarks8', 1, 1, '2022-01-27 18:51:10', '2022-01-27 19:30:27', '2019-20', NULL, 1, '2022-01-27 19:30:27'),
+(2, 4, 1, 8, 8, 8, '178.00', '178.00', '178.00', '178.00', '178.00', 'remarks8', 1, 1, '2022-01-27 18:51:10', '2022-01-27 19:30:27', '2019-20', NULL, 1, '2022-01-27 19:30:27'),
+(7, 4, 2, 7, 7, 7, '177.00', '177.00', '177.00', '177.00', '177.00', 'remarks7', 1, 1, '2022-01-27 19:31:06', '2022-01-27 19:31:06', '2019-20', NULL, 1, NULL),
+(8, 4, 2, 7, 7, 7, '177.00', '177.00', '177.00', '177.00', '177.00', 'remarks7', 1, 1, '2022-01-27 19:31:06', '2022-01-27 19:31:06', '2019-20', NULL, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -5858,6 +5884,31 @@ CREATE TABLE `view_customers_contact_persons` (
 ,`created_at` datetime
 ,`updated_at` datetime
 ,`deleted_at` datetime
+,`department_name` varchar(255)
+,`department_deleted_at` datetime
+,`position_title` varchar(255)
+,`position_deleted_at` datetime
+);
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `view_departments`
+-- (See below for the actual view)
+--
+CREATE TABLE `view_departments` (
+`id` int(11)
+,`mst_companies_id` int(11)
+,`mst_branches_id` int(11)
+,`department_name` varchar(255)
+,`created_by` int(11)
+,`updated_by` int(11)
+,`selected_year` varchar(50)
+,`copied_from_year` varchar(50)
+,`is_active` tinyint(1)
+,`deleted_at` datetime
+,`created_at` datetime
+,`updated_at` timestamp
 );
 
 -- --------------------------------------------------------
@@ -5934,6 +5985,27 @@ CREATE TABLE `view_pharmacopeia` (
 -- --------------------------------------------------------
 
 --
+-- Stand-in structure for view `view_positions`
+-- (See below for the actual view)
+--
+CREATE TABLE `view_positions` (
+`id` int(11)
+,`mst_departments_id` int(11)
+,`mst_companies_id` int(11)
+,`position_title` varchar(255)
+,`created_by` int(11)
+,`updated_by` int(11)
+,`selected_year` varchar(50)
+,`copied_from_year` varchar(50)
+,`is_active` tinyint(1)
+,`deleted_at` datetime
+,`created_at` datetime
+,`updated_at` timestamp
+);
+
+-- --------------------------------------------------------
+
+--
 -- Stand-in structure for view `view_products`
 -- (See below for the actual view)
 --
@@ -5992,6 +6064,83 @@ CREATE TABLE `view_product_samples` (
 ,`parent_deleted_at` datetime
 ,`parameter_name` varchar(255)
 ,`parameter_deleted_at` datetime
+,`pharmacopeia_id` int(5)
+,`method_name` varchar(255)
+,`method_deleted_at` datetime
+);
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `view_quotations`
+-- (See below for the actual view)
+--
+CREATE TABLE `view_quotations` (
+`id` int(11)
+,`mst_companies_id` int(11)
+,`quotation_no` varchar(255)
+,`type` varchar(15)
+,`customer_id` int(11)
+,`subject` varchar(255)
+,`quotation_date` varchar(255)
+,`valid_until` varchar(255)
+,`status` varchar(55)
+,`kind_attention` varchar(155)
+,`turn_around_time` varchar(155)
+,`remarks` text
+,`currency_type` varchar(25)
+,`grand_total` tinyint(1)
+,`payment_terms` varchar(255)
+,`product_info_grand_total` decimal(15,2)
+,`created_by` int(11)
+,`updated_by` int(11)
+,`created_at` datetime
+,`updated_at` datetime
+,`selected_year` varchar(25)
+,`copied_from_year` int(4)
+,`is_active` tinyint(1)
+,`deleted_at` datetime
+,`company_name` varchar(512)
+,`company_cust_discount` varchar(55)
+,`home_country_id` int(11)
+,`home_country` varchar(29)
+,`customer_deleted_at` datetime
+);
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `view_quotation_product_inofs`
+-- (See below for the actual view)
+--
+CREATE TABLE `view_quotation_product_inofs` (
+`id` int(11)
+,`mst_companies_id` int(11)
+,`quotation_id` int(11)
+,`sample_name` int(11)
+,`test_required` int(11)
+,`method_technique` int(11)
+,`sample_qty` decimal(15,2)
+,`first_sample` decimal(15,2)
+,`sample_in_row` decimal(15,2)
+,`sample_preperation` decimal(15,2)
+,`total` decimal(15,2)
+,`remark` text
+,`created_by` int(11)
+,`updated_by` int(11)
+,`created_at` datetime
+,`updated_at` datetime
+,`selected_year` varchar(25)
+,`copied_from_year` int(11)
+,`is_active` tinyint(1)
+,`deleted_at` datetime
+,`product_name` varchar(255)
+,`pharmacopeia_id` int(5)
+,`product_deleted_at` datetime
+,`procedure_name` varchar(255)
+,`test_deleted_at` datetime
+,`method_name` varchar(255)
+,`method_deleted_at` datetime
 );
 
 -- --------------------------------------------------------
@@ -6122,7 +6271,16 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`aumresearch`@`%` SQL SECURITY DEFINER VIEW `
 --
 DROP TABLE IF EXISTS `view_customers_contact_persons`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`aumresearch`@`%` SQL SECURITY DEFINER VIEW `view_customers_contact_persons`  AS  select `mst_customers_contact_person`.`id` AS `id`,`mst_customers_contact_person`.`mst_customer_id` AS `mst_customer_id`,`mst_customers_contact_person`.`name` AS `name`,`mst_customers_contact_person`.`mobile` AS `mobile`,`mst_customers_contact_person`.`email` AS `email`,`mst_customers_contact_person`.`department` AS `department`,`mst_customers_contact_person`.`position` AS `position`,`mst_customers_contact_person`.`created_by` AS `created_by`,`mst_customers_contact_person`.`updated_by` AS `updated_by`,`mst_customers_contact_person`.`created_at` AS `created_at`,`mst_customers_contact_person`.`updated_at` AS `updated_at`,`mst_customers_contact_person`.`deleted_at` AS `deleted_at` from `mst_customers_contact_person` ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`aumresearch`@`%` SQL SECURITY DEFINER VIEW `view_customers_contact_persons`  AS  select `contact_person`.`id` AS `id`,`contact_person`.`mst_customer_id` AS `mst_customer_id`,`contact_person`.`name` AS `name`,`contact_person`.`mobile` AS `mobile`,`contact_person`.`email` AS `email`,`contact_person`.`department` AS `department`,`contact_person`.`position` AS `position`,`contact_person`.`created_by` AS `created_by`,`contact_person`.`updated_by` AS `updated_by`,`contact_person`.`created_at` AS `created_at`,`contact_person`.`updated_at` AS `updated_at`,`contact_person`.`deleted_at` AS `deleted_at`,`department`.`department_name` AS `department_name`,`department`.`deleted_at` AS `department_deleted_at`,`position`.`position_title` AS `position_title`,`position`.`deleted_at` AS `position_deleted_at` from ((`mst_customers_contact_person` `contact_person` left join `view_departments` `department` on(`department`.`id` = `contact_person`.`department`)) left join `view_positions` `position` on(`position`.`id` = `contact_person`.`position`)) ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `view_departments`
+--
+DROP TABLE IF EXISTS `view_departments`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`aumresearch`@`%` SQL SECURITY DEFINER VIEW `view_departments`  AS  select `mst_departments`.`id` AS `id`,`mst_departments`.`mst_companies_id` AS `mst_companies_id`,`mst_departments`.`mst_branches_id` AS `mst_branches_id`,`mst_departments`.`department_name` AS `department_name`,`mst_departments`.`created_by` AS `created_by`,`mst_departments`.`updated_by` AS `updated_by`,`mst_departments`.`selected_year` AS `selected_year`,`mst_departments`.`copied_from_year` AS `copied_from_year`,`mst_departments`.`is_active` AS `is_active`,`mst_departments`.`deleted_at` AS `deleted_at`,`mst_departments`.`created_at` AS `created_at`,`mst_departments`.`updated_at` AS `updated_at` from `mst_departments` ;
 
 -- --------------------------------------------------------
 
@@ -6154,6 +6312,15 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`aumresearch`@`%` SQL SECURITY DEFINER VIEW `
 -- --------------------------------------------------------
 
 --
+-- Structure for view `view_positions`
+--
+DROP TABLE IF EXISTS `view_positions`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`aumresearch`@`%` SQL SECURITY DEFINER VIEW `view_positions`  AS  select `mst_positions`.`id` AS `id`,`mst_positions`.`mst_departments_id` AS `mst_departments_id`,`mst_positions`.`mst_companies_id` AS `mst_companies_id`,`mst_positions`.`position_title` AS `position_title`,`mst_positions`.`created_by` AS `created_by`,`mst_positions`.`updated_by` AS `updated_by`,`mst_positions`.`selected_year` AS `selected_year`,`mst_positions`.`copied_from_year` AS `copied_from_year`,`mst_positions`.`is_active` AS `is_active`,`mst_positions`.`deleted_at` AS `deleted_at`,`mst_positions`.`created_at` AS `created_at`,`mst_positions`.`updated_at` AS `updated_at` from `mst_positions` ;
+
+-- --------------------------------------------------------
+
+--
 -- Structure for view `view_products`
 --
 DROP TABLE IF EXISTS `view_products`;
@@ -6167,7 +6334,25 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`aumresearch`@`%` SQL SECURITY DEFINER VIEW `
 --
 DROP TABLE IF EXISTS `view_product_samples`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`aumresearch`@`%` SQL SECURITY DEFINER VIEW `view_product_samples`  AS  select `samples`.`id` AS `id`,`samples`.`mst_product_id` AS `mst_product_id`,`samples`.`by_pass` AS `by_pass`,`samples`.`parent` AS `parent`,`samples`.`mst_sample_parameter_id` AS `mst_sample_parameter_id`,`samples`.`label_claim` AS `label_claim`,`samples`.`min_limit` AS `min_limit`,`samples`.`max_limit` AS `max_limit`,`samples`.`amount` AS `amount`,`samples`.`method` AS `method`,`samples`.`description` AS `description`,`samples`.`division` AS `division`,`samples`.`nabl` AS `nabl`,`samples`.`formula` AS `formula`,`samples`.`created_by` AS `created_by`,`samples`.`updated_by` AS `updated_by`,`samples`.`created_at` AS `created_at`,`samples`.`updated_at` AS `updated_at`,`samples`.`deleted_at` AS `deleted_at`,`parent`.`procedure_name` AS `parent_name`,`parent`.`deleted_at` AS `parent_deleted_at`,`parameter`.`procedure_name` AS `parameter_name`,`parameter`.`deleted_at` AS `parameter_deleted_at` from ((`mst_product_samples` `samples` left join `view_tests` `parent` on(`samples`.`parent` = `parent`.`id`)) left join `view_tests` `parameter` on(`samples`.`mst_sample_parameter_id` = `parameter`.`id`)) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`aumresearch`@`%` SQL SECURITY DEFINER VIEW `view_product_samples`  AS  select `samples`.`id` AS `id`,`samples`.`mst_product_id` AS `mst_product_id`,`samples`.`by_pass` AS `by_pass`,`samples`.`parent` AS `parent`,`samples`.`mst_sample_parameter_id` AS `mst_sample_parameter_id`,`samples`.`label_claim` AS `label_claim`,`samples`.`min_limit` AS `min_limit`,`samples`.`max_limit` AS `max_limit`,`samples`.`amount` AS `amount`,`samples`.`method` AS `method`,`samples`.`description` AS `description`,`samples`.`division` AS `division`,`samples`.`nabl` AS `nabl`,`samples`.`formula` AS `formula`,`samples`.`created_by` AS `created_by`,`samples`.`updated_by` AS `updated_by`,`samples`.`created_at` AS `created_at`,`samples`.`updated_at` AS `updated_at`,`samples`.`deleted_at` AS `deleted_at`,`parent`.`procedure_name` AS `parent_name`,`parent`.`deleted_at` AS `parent_deleted_at`,`parameter`.`procedure_name` AS `parameter_name`,`parameter`.`deleted_at` AS `parameter_deleted_at`,`product`.`pharmacopeia_id` AS `pharmacopeia_id`,`method`.`name` AS `method_name`,`method`.`deleted_at` AS `method_deleted_at` from ((((`mst_product_samples` `samples` left join `view_tests` `parent` on(`samples`.`parent` = `parent`.`id`)) left join `view_tests` `parameter` on(`samples`.`mst_sample_parameter_id` = `parameter`.`id`)) left join (select `view_products`.`id` AS `id`,`view_products`.`pharmacopeia_id` AS `pharmacopeia_id` from `view_products`) `product` on(`samples`.`mst_product_id` = `product`.`id`)) left join (select `view_methods`.`id` AS `id`,`view_methods`.`name` AS `name`,`view_methods`.`deleted_at` AS `deleted_at` from `view_methods`) `method` on(`samples`.`method` = `method`.`id`)) ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `view_quotations`
+--
+DROP TABLE IF EXISTS `view_quotations`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`aumresearch`@`%` SQL SECURITY DEFINER VIEW `view_quotations`  AS  select `quotations`.`id` AS `id`,`quotations`.`mst_companies_id` AS `mst_companies_id`,`quotations`.`quotation_no` AS `quotation_no`,`quotations`.`type` AS `type`,`quotations`.`customer_id` AS `customer_id`,`quotations`.`subject` AS `subject`,`quotations`.`quotation_date` AS `quotation_date`,`quotations`.`valid_until` AS `valid_until`,`quotations`.`status` AS `status`,`quotations`.`kind_attention` AS `kind_attention`,`quotations`.`turn_around_time` AS `turn_around_time`,`quotations`.`remarks` AS `remarks`,`quotations`.`currency_type` AS `currency_type`,`quotations`.`grand_total` AS `grand_total`,`quotations`.`payment_terms` AS `payment_terms`,`quotations`.`product_info_grand_total` AS `product_info_grand_total`,`quotations`.`created_by` AS `created_by`,`quotations`.`updated_by` AS `updated_by`,`quotations`.`created_at` AS `created_at`,`quotations`.`updated_at` AS `updated_at`,`quotations`.`selected_year` AS `selected_year`,`quotations`.`copied_from_year` AS `copied_from_year`,`quotations`.`is_active` AS `is_active`,`quotations`.`deleted_at` AS `deleted_at`,`customer`.`company_name` AS `company_name`,`customer`.`company_cust_discount` AS `company_cust_discount`,`customer`.`home_country_id` AS `home_country_id`,`customer`.`home_country` AS `home_country`,`customer`.`deleted_at` AS `customer_deleted_at` from (`quotations` left join (select `view_customers`.`id` AS `id`,`view_customers`.`company_name` AS `company_name`,`view_customers`.`company_cust_discount` AS `company_cust_discount`,`view_customers`.`deleted_at` AS `deleted_at`,`view_customers`.`home_country_id` AS `home_country_id`,`view_customers`.`home_country` AS `home_country` from `view_customers`) `customer` on(`quotations`.`customer_id` = `customer`.`id`)) ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `view_quotation_product_inofs`
+--
+DROP TABLE IF EXISTS `view_quotation_product_inofs`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`aumresearch`@`%` SQL SECURITY DEFINER VIEW `view_quotation_product_inofs`  AS  select `product_info`.`id` AS `id`,`product_info`.`mst_companies_id` AS `mst_companies_id`,`product_info`.`quotation_id` AS `quotation_id`,`product_info`.`sample_name` AS `sample_name`,`product_info`.`test_required` AS `test_required`,`product_info`.`method_technique` AS `method_technique`,`product_info`.`sample_qty` AS `sample_qty`,`product_info`.`first_sample` AS `first_sample`,`product_info`.`sample_in_row` AS `sample_in_row`,`product_info`.`sample_preperation` AS `sample_preperation`,`product_info`.`total` AS `total`,`product_info`.`remark` AS `remark`,`product_info`.`created_by` AS `created_by`,`product_info`.`updated_by` AS `updated_by`,`product_info`.`created_at` AS `created_at`,`product_info`.`updated_at` AS `updated_at`,`product_info`.`selected_year` AS `selected_year`,`product_info`.`copied_from_year` AS `copied_from_year`,`product_info`.`is_active` AS `is_active`,`product_info`.`deleted_at` AS `deleted_at`,`product`.`product_name` AS `product_name`,`product`.`pharmacopeia_id` AS `pharmacopeia_id`,`product`.`deleted_at` AS `product_deleted_at`,`test`.`procedure_name` AS `procedure_name`,`test`.`deleted_at` AS `test_deleted_at`,`method`.`name` AS `method_name`,`method`.`deleted_at` AS `method_deleted_at` from (((`quotation_product_infos` `product_info` left join (select `view_products`.`id` AS `id`,`view_products`.`product_name` AS `product_name`,`view_products`.`deleted_at` AS `deleted_at`,`view_products`.`pharmacopeia_id` AS `pharmacopeia_id` from `view_products`) `product` on(`product_info`.`sample_name` = `product`.`id`)) left join (select `view_tests`.`id` AS `id`,`view_tests`.`procedure_name` AS `procedure_name`,`view_tests`.`deleted_at` AS `deleted_at` from `view_tests`) `test` on(`product_info`.`test_required` = `test`.`id`)) left join (select `view_methods`.`id` AS `id`,`view_methods`.`name` AS `name`,`view_methods`.`deleted_at` AS `deleted_at` from `view_methods`) `method` on(`product_info`.`method_technique` = `method`.`id`)) ;
 
 -- --------------------------------------------------------
 
@@ -6280,6 +6465,12 @@ ALTER TABLE `mst_categories`
 -- Indexes for table `mst_companies`
 --
 ALTER TABLE `mst_companies`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `mst_countries`
+--
+ALTER TABLE `mst_countries`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -6397,9 +6588,9 @@ ALTER TABLE `quotations`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `quotation_product_info`
+-- Indexes for table `quotation_product_infos`
 --
-ALTER TABLE `quotation_product_info`
+ALTER TABLE `quotation_product_infos`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -6494,7 +6685,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `formulas`
 --
 ALTER TABLE `formulas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Primary Key, Auto Increment', AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Primary Key, Auto Increment', AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `methods`
@@ -6536,19 +6727,19 @@ ALTER TABLE `mst_companies`
 -- AUTO_INCREMENT for table `mst_customers`
 --
 ALTER TABLE `mst_customers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `mst_customers_contact_info`
 --
 ALTER TABLE `mst_customers_contact_info`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `mst_customers_contact_person`
 --
 ALTER TABLE `mst_customers_contact_person`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `mst_departments`
@@ -6626,25 +6817,25 @@ ALTER TABLE `mst_tests`
 -- AUTO_INCREMENT for table `mst_test_parameters`
 --
 ALTER TABLE `mst_test_parameters`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
 
 --
 -- AUTO_INCREMENT for table `mst_units`
 --
 ALTER TABLE `mst_units`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `quotations`
 --
 ALTER TABLE `quotations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Primary Key, Auto Increment';
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Primary Key, Auto Increment', AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `quotation_product_info`
+-- AUTO_INCREMENT for table `quotation_product_infos`
 --
-ALTER TABLE `quotation_product_info`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Primary Key, Auto Increment';
+ALTER TABLE `quotation_product_infos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Primary Key, Auto Increment', AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `role_rights`

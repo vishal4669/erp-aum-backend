@@ -379,7 +379,7 @@ class MstProductController extends Controller
         }
     }
     /** 
-     * Fetch methods where products pharmacopeia & methods pharmacopeia type are equal.
+     * Add Form => Fetch methods where products pharmacopeia & methods pharmacopeia type are equal.
      * request => pharmacopiea_id.
      * response => method dropdown.
      */

@@ -10,8 +10,10 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 use App\Helpers\Helper;
+use App\Models\ViewProductSamples;
 use DB;
 use Log;
+use Carbon\Carbon;
 
 
 class QuotationController extends Controller
@@ -21,9 +23,57 @@ class QuotationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         //
+        try {
+            $loggedInUserData = Helper::getUserData();
+            $is_dropdown = (isset($request->is_dropdown) && $request->is_dropdown == 1) ? 1 : 0;
+            if ($is_dropdown) {
+                $data = ViewQuotation::select(
+                    'id',
+                    'quotation_no',
+                    "company_name",
+                    "is_active",
+                    "deleted_at"
+                )->where('is_active', 1)
+                    ->where('deleted_at', NULL)
+                    ->orderBy('id', 'desc')
+                    ->get();
+            } else {
+                $data = ViewQuotation::select(
+                    "id",
+                    "mst_companies_id",
+                    "quotation_no",
+                    "type",
+                    "customer_id",
+                    "company_name",
+                    "subject",
+                    "quotation_date",
+                    "valid_until",
+                    "payment_terms",
+                    "product_info_grand_total",
+                    "is_active",
+                    "deleted_at"
+                )
+                    ->where('is_active', 1)
+                    ->where('deleted_at', NULL)
+                    ->where('mst_companies_id', $loggedInUserData['company_id'])
+                    ->orderBy('id', 'desc')
+                    ->get();
+            }
+
+            if ($data->isEmpty()) {
+
+                return Helper::response("Quotation List is Empty", Response::HTTP_OK, true, $data);
+            } else {
+
+                return Helper::response("Quotation List Shown Successfully", Response::HTTP_OK, true, $data);
+            }
+        } catch (Exception $e) {
+            $data = array();
+            return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);
+        }
     }
 
     /**
@@ -69,7 +119,6 @@ class QuotationController extends Controller
                 $data = array();
                 return Helper::response($validator->errors()->all(), Response::HTTP_OK, false, $data);
             }
-
             $data = Quotation::create([
                 'mst_companies_id' => $loggedInUserData['company_id'],
                 'quotation_no' => (isset($request->quotation_no) ? $request->quotation_no : NULL),
@@ -85,6 +134,7 @@ class QuotationController extends Controller
                 'currency_type' => (isset($request->currency_type) ? $request->currency_type : NULL),
                 'grand_total' => (isset($request->grand_total) ? $request->grand_total : NULL),
                 'payment_terms' => (isset($request->payment_terms) ? $request->payment_terms : NULL),
+                'product_info_grand_total' => (isset($request->product_info_grand_total) ? $request->product_info_grand_total : NULL),
                 'created_by' => $loggedInUserData['logged_in_user_id'],
                 'selected_year' => $loggedInUserData['selected_year'],
                 'is_active' => 1,
@@ -161,12 +211,72 @@ class QuotationController extends Controller
      * @param  \App\Models\Quotation  $quotation
      * @return \Illuminate\Http\Response
      */
-    public function show(Quotation $quotation,$id)
+    public function show(Quotation $quotation, $id)
     {
         //
         try {
-                $data = ViewQuotation::with('quotationProductInfo')->where('id',$id)->get();
+            $data = ViewQuotation::with('quotationProductInfo')->where('id', $id)
+                ->get()->each(function ($item) {
+                    $item->append('customer_dropdown');
+                })->toarray();
             return Helper::response("Quotation List Shown Successfully", Response::HTTP_OK, true, $data);
+        } catch (Exception $e) {
+            $data = array();
+            return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);
+        }
+    }
+
+    /**
+     * Generating New Quotation Number.
+     *
+     * @param  \App\Models\Quotation  $quotation
+     * @return \Illuminate\Http\Response
+     */
+    public function generateQuotationNo()
+    {
+        //
+        try {
+            $getLastQuotationNo = ViewQuotation::select('id', 'quotation_no')
+                ->orderBy('id', 'desc')
+                ->limit(1)->get();
+            $current_month = Carbon::now()->format('M');
+            $current_year = Carbon::now()->format('y');
+
+            if ($getLastQuotationNo->isNotempty()) {
+                //if min one quotation no already exist then we need to increment number by 1
+                $quotation_no = $getLastQuotationNo[0]->quotation_no;
+                $old_number_partition = explode('/', $quotation_no);
+
+                if ($old_number_partition[1] != strtoupper($current_month)  || $old_number_partition[2] != $current_year || $quotation_no == "" || $quotation_no == null) {
+                    //On newyear and on new month starts then quotation number should start with 1 
+                    $quotation_no = "SAL/" . strtoupper($current_month) . "/" . $current_year . "/1";
+                } else {
+                    //if last inserted quotation no had same month & year as current month and year then number should incremnt by 1
+                    $new_number = intval($old_number_partition[3]) + 1;
+                    $quotation_no = "SAL/" . strtoupper($current_month) . "/" . $current_year . "/" . $new_number;
+                }
+            } else {
+                //if this is a first entry in quotation table then number set to 1
+                $quotation_no = "SAL/" . strtoupper($current_month) . "/" . $current_year . "/1";
+            }
+            return Helper::response("Quotation No. Generated Successfully", Response::HTTP_OK, true, $quotation_no);
+        } catch (Exception $e) {
+            $data = array();
+            return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);
+        }
+    }
+    /**
+     * Fetching Product-Samples Of Selected (Quotation Product-Infos Sample Name(Product)).
+     *
+     * @param  \App\Models\Quotation  $quotation
+     * @return \Illuminate\Http\Response
+     */
+    public function getProductSamples($id)
+    {
+        //
+        try {
+            $data = ViewProductSamples::select('id', 'mst_product_id', 'mst_sample_parameter_id', 'parameter_name', 'amount', 'method', 'method_name')->where('mst_product_id', $id)->get();
+            return Helper::response("Product Samples Shown Successfully", Response::HTTP_OK, true, $data);
         } catch (Exception $e) {
             $data = array();
             return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);
@@ -191,7 +301,7 @@ class QuotationController extends Controller
      * @param  \App\Models\Quotation  $quotation
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,$id)
+    public function update(Request $request, $id)
     {
         //
         DB::beginTransaction();
@@ -263,8 +373,27 @@ class QuotationController extends Controller
      * @param  \App\Models\Quotation  $quotation
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Quotation $quotation)
+    public function destroy(Quotation $quotation,$id)
     {
         //
+        try {
+            $data = array();
+            $quotation = Quotation::find($id);
+            $quotationProductInfo = QuotationProductInfo::where('quotation_id', $id);
+            Log::info("Quotation deleted with : " . json_encode(array('id' => $id)));
+
+            if (!empty($quotation)) {
+                $quotation->delete();
+                if (!empty($quotationProductInfo)) {
+                    $quotationProductInfo->delete();
+                }
+                return Helper::response("Quotation deleted successfully", Response::HTTP_OK, true, $data);
+            }
+
+            return Helper::response("Quotation not exists", Response::HTTP_NOT_FOUND, true, $data);
+        } catch (Exception $e) {
+            $data = array();
+            return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);
+        }
     }
 }
