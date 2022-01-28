@@ -73,7 +73,6 @@ class BookingController extends Controller
                         ]
                     )
                     ->where('bookings.is_active', 1)
-                    ->where('bookings.mst_companies_id', $loggedInUserData['company_id'])
                     ->orderBy('id', 'desc')
                     ->get();
             }

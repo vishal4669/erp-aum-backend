@@ -27,8 +27,7 @@ class CommonController extends Controller
         // \Artisan::call('key:generate');
         \Artisan::call('route:cache');
         \Artisan::call('config:clear');
-        \Artisan::call('view:clear');
-        // \Artisan::call('composer update vendor/package');
+        // \Artisan::call('view:clear');
         return Helper::response("Cache is cleared", Response::HTTP_OK, true);
     }
     /**

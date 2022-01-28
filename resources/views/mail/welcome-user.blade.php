@@ -130,16 +130,9 @@
                                 <tr>
                                     <td align="left"
                                         style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding-top: 10px;">
-                                        {{-- <center> --}}
-                                            {{-- <p
-                                                style="font-size: 16px; font-weight: 400; line-height: 24px; color: #000000;">
-                                                Hi []</p>
-                                                <p
-                                                style="font-size: 16px; font-weight: 400; line-height: 24px; color: #000000;">
-                                                Welcome to  [{{{$mail_data['first_name'] }}} {{{$mail_data['middle_name'] }}} {{{$mail_data['last_name'] }}}]</p> --}}
-                                        {{-- </center> --}}
+
                                      
-                                        <p style="font-weight:600;color: #333333;">Hello ,</p>
+                                        <p style="font-weight:600;color: #333333;">Hello {{{$mail_data['first_name'] }}} {{{$mail_data['middle_name'] }}} {{{$mail_data['last_name'] }}},</p>
                                         
                                         <p style="color: #333333;">Thanks for joining. We're really exited to have you on board.</p>
                                     </td>

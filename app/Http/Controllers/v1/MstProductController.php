@@ -339,7 +339,10 @@ class MstProductController extends Controller
         try {
             $loggedInUserData = Helper::getUserData();
             $data = ViewProduct::with('samples')->where('id', $id)
-                ->where('deleted_at', NULL)->get();
+                ->where('deleted_at', NULL)->get()
+                ->each(function ($item) {
+                        $item->append('pharmacopeia_dropdown');
+                    });
 
             return Helper::response("This Product Shown Successfully", Response::HTTP_OK, true, $data);
         } catch (Exception $e) {

@@ -228,6 +228,9 @@ Route::group(['middleware' => ['jwt.verify'], 'prefix' => 'v1'], function () {
     Route::get('deleteQuotation/{id}', 'App\Http\Controllers\v1\QuotationController@destroy');
     Route::get('generateQuotationNo', 'App\Http\Controllers\v1\QuotationController@generateQuotationNo');
     Route::get('getProductSamples/{id}', 'App\Http\Controllers\v1\QuotationController@getProductSamples');
+    Route::get('quotationDropdown', function () {
+        return config('global.quotation_dropdown');
+    });
 });
 
 Route::group(['prefix' => 'v1'], function () {

@@ -31,10 +31,10 @@ class MethodController extends Controller
                 $data = DB::table('view_methods')
                     ->select('id', 'name', 'type', 'date', 'deleted_at');
             } else {
-                $data = ViewMethod::select('id', 'mst_companies_id', 'name', 'type', 'date', 'description');
+                $data = ViewMethod::select('id', 'mst_companies_id', 'name', 'type', 'date', 'description')
+                ->where('mst_companies_id', $loggedInUserData['company_id']);
             }
-            $data = $data->where('mst_companies_id', $loggedInUserData['company_id'])
-                ->where('deleted_at', null)
+            $data = $data->where('deleted_at', null)
                 ->where('is_active', 1)
                 ->orderBy('id', 'desc')
                 ->get()

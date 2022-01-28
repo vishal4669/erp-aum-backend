@@ -62,14 +62,12 @@ class CustomerController extends Controller
                     'other_state',
                     'home_area',
                     'other_area'
-                );
+                )->where('mst_companies_id', $loggedInUserData['company_id']);
             } else {
                 $data = ViewCustomer::select('id', 'company_name', 'contact_person_name', 'contact_type', 'tally_alias_name', 'home_contact_no', 'is_active');
             }
-            $data = $data->where('mst_companies_id', $loggedInUserData['company_id'])
-                ->where('is_active', 1)
+            $data = $data->where('is_active', 1)
                 ->orderBy('view_customers.id', 'desc')
-
                 ->get();
 
             $data_arr = $data->isEmpty();

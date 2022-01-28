@@ -12,6 +12,7 @@ class ViewProduct extends Model
     use HasFactory;
     protected $appends = [];
     protected $fillable = [
+        'id',
         'mst_companies_id',
         'product_name',
         'product_generic',

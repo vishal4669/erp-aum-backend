@@ -51,7 +51,7 @@ class TestController extends Controller
                     ->get()->toarray();
             } elseif ($is_parameter) {
                 // Can Use this for ParameterDropdown
-                $data = ViewTest::select('id', 'procedure_name')
+                $data = ViewTest::select('id', 'procedure_name','price')
                     ->where('is_active', 1)
                     ->where('deleted_at', NULL)
                     ->get()->toarray();

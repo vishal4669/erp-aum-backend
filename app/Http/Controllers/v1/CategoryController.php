@@ -40,7 +40,6 @@ class CategoryController extends Controller
                 $data = Category::select('mst_categories.*', 'c.category_name as parent_name')
                     ->leftjoin('mst_categories as c', 'c.id', '=', 'mst_categories.parent_category_id')
                     ->where('mst_categories.is_active', 1)
-                    ->where('mst_categories.mst_companies_id', $loggedInUserData['company_id'])
                     ->orderBy('mst_categories.id', 'desc')
                     ->get();
             }

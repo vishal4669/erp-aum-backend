@@ -40,7 +40,6 @@ class BranchController extends Controller
                 $data = Branch::select('mst_branches.*', 'c.company_name')
                     ->leftjoin('mst_companies as c', 'c.id', '=', 'mst_branches.mst_companies_id')
                     ->where('mst_branches.is_active', 1)
-                    ->where('mst_branches.mst_companies_id', $loggedInUserData['company_id'])
                     ->orderBy('mst_branches.id', 'desc')
                     ->get();
             }
