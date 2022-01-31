@@ -220,8 +220,8 @@ class MstProductController extends Controller
                 "product_generic" => 'required|string|max:255',
                 "pharmacopeia_id" => 'required|integer',
                 "sample_details.*.amount" => 'nullable|numeric|between:0,999999999999999999999999999.99',
-                "sample_details.*.min_limit" => 'regex:/^NLT\s[0-9](?:.%)?/i',
-                "sample_details.*.max_limit" => 'regex:/^NMT\s[0-9](?:.%)?/i'
+                "sample_details.*.min_limit" => 'nullable|regex:/^NLT\s[0-9](?:.%)?/i',
+                "sample_details.*.max_limit" => 'nullable|regex:/^NMT\s[0-9](?:.%)?/i'
             ];
 
             $messages = [
@@ -287,7 +287,7 @@ class MstProductController extends Controller
                     ) {
                         if (
                             !empty($sample['parent']) or
-                            !empty($sample['parameter_name']) or
+                            !empty($sample['mst_sample_parameter_id']) or
                             !empty($sample['label_claim']) or
                             !empty($sample['min_limit']) or
                             !empty($sample['max_limit']) or
@@ -303,7 +303,7 @@ class MstProductController extends Controller
                                 'mst_product_id' => $product_id,
                                 'by_pass' => (isset($sample['by_pass'])) ? $sample['by_pass'] : 2,
                                 'parent' => (isset($sample['parent'])) ? $sample['parent'] : 0,
-                                'mst_sample_parameter_id' => (isset($sample['parameter_name'])) ? $sample['parameter_name'] : 0,
+                                'mst_sample_parameter_id' => (isset($sample['mst_sample_parameter_id'])) ? $sample['mst_sample_parameter_id'] : 0,
                                 'label_claim' => (isset($sample['label_claim'])) ? $sample['label_claim'] : '',
                                 'min_limit' => (isset($sample['min_limit'])) ? $sample['min_limit'] : '',
                                 'max_limit' => (isset($sample['max_limit'])) ? $sample['max_limit'] : '',
@@ -341,8 +341,8 @@ class MstProductController extends Controller
             $data = ViewProduct::with('samples')->where('id', $id)
                 ->where('deleted_at', NULL)->get()
                 ->each(function ($item) {
-                        $item->append('pharmacopeia_dropdown');
-                    });
+                    $item->append('pharmacopeia_dropdown');
+                });
 
             return Helper::response("This Product Shown Successfully", Response::HTTP_OK, true, $data);
         } catch (Exception $e) {
@@ -370,12 +370,12 @@ class MstProductController extends Controller
             $product_id = ViewProduct::select('id', 'sample_description')->where('generic_product_name', $request->generic_product_name)->where('deleted_at', Null)->orderBy('id', 'DESC')->first();
             $pro_id = $product_id->id;
             $sample_description = $product_id->sample_description;
-            $data = ViewProductSamples::where('mst_product_id', $pro_id)->get()->toarray();
-            $product_detail = array(
+            $data = ViewProductSamples::where('mst_product_id', $pro_id)->get();
+            $data_arr = array(
+                'samples' => $data,
                 'sample_description' => $sample_description
             );
-            array_push($data, $product_detail);
-            return Helper::response("Samples Shown Successfully", Response::HTTP_OK, true, $data);
+            return Helper::response("Samples Shown Successfully", Response::HTTP_OK, true, $data_arr);
         } catch (Exception $e) {
             $data = array();
             return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);
@@ -431,16 +431,25 @@ class MstProductController extends Controller
     {
         try {
 
-            $validator1 = Validator::make($request->all(), [
+            $rules = [
                 "product_name" => 'required|string|max:255',
                 "product_generic" => 'required|string|max:255',
                 "pharmacopeia_id" => 'required|integer',
                 "sample_details.*.amount" => 'nullable|numeric|between:0,999999999999999999999999999.99',
-            ]);
+                "sample_details.*.min_limit" => 'nullable|regex:/^NLT\s[0-9](?:.%)?/i',
+                "sample_details.*.max_limit" => 'nullable|regex:/^NMT\s[0-9](?:.%)?/i'
+            ];
 
-            if ($validator1->fails()) {
-                $data1 = array();
-                return Helper::response($validator1->errors()->all(), Response::HTTP_OK, false, $data1);
+            $messages = [
+                "sample_details.*.min_limit.regex" => "Please Enter Valid Min Limit As 'NLT 1.00%'",
+                "sample_details.*.max_limit.regex" => "Please Enter Valid Max Limit As 'NMT 1.00%'"
+            ];
+
+            $validator = Validator::make($request->all(), $rules, $messages);
+
+            if ($validator->fails()) {
+                $data = array();
+                return Helper::response($validator->errors()->all(), Response::HTTP_OK, false, $data);
             }
 
             $loggedInUserData = Helper::getUserData();

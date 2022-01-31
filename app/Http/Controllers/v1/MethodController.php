@@ -28,11 +28,10 @@ class MethodController extends Controller
             $loggedInUserData = Helper::getUserData();
             $is_dropdown = (isset($request->is_dropdown) && $request->is_dropdown == 1) ? 1 : 0;
             if ($is_dropdown) {
-                $data = DB::table('view_methods')
-                    ->select('id', 'name', 'type', 'date', 'deleted_at');
+                $data = ViewMethod::select('id', 'name', 'type', 'date', 'deleted_at');
             } else {
                 $data = ViewMethod::select('id', 'mst_companies_id', 'name', 'type', 'date', 'description')
-                ->where('mst_companies_id', $loggedInUserData['company_id']);
+                    ->where('mst_companies_id', $loggedInUserData['company_id']);
             }
             $data = $data->where('deleted_at', null)
                 ->where('is_active', 1)
@@ -265,7 +264,7 @@ class MethodController extends Controller
             $data = ViewMethod::where('id', $id)
                 ->get()
                 ->each(function ($item) {
-                    $item->append('pharmacopeia','pharmacopeia_dropdown');
+                    $item->append('pharmacopeia', 'pharmacopeia_dropdown');
                 });
 
 
@@ -297,7 +296,7 @@ class MethodController extends Controller
     public function update(Request $request, $id)
     {
         //
-        
+
         try {
             $loggedInUserData = Helper::getUserData();
             $method = Method::find($id);

@@ -9,7 +9,7 @@ use DB;
 class ViewProductSamples extends Model
 {
     use HasFactory;
-    protected $appends = ['parent_dropdown', 'parameter_dropdown', 'method_dropdown'];
+    protected $appends = [];
     protected $fillable = [
         'mst_companies_id',
         'mst_product_id',
@@ -66,6 +66,8 @@ class ViewProductSamples extends Model
     public function getParameterDropdownAttribute()
     {
         $data = ViewTest::select('id', 'procedure_name', 'price', 'deleted_at')
+            ->where('procedure_name', '!=', 'Related')
+            ->where('procedure_name', '!=', 'Assay')
             ->where('deleted_at', NULL)
             ->where('is_active', 1)
             ->orderBy('id', 'desc')
@@ -102,7 +104,7 @@ class ViewProductSamples extends Model
             ->where('deleted_at', NULL)
             ->orderBy('id', 'desc')
             ->get()->toarray();
-            
+
         $is_deleted = $this->method_deleted_at;
         if ($is_deleted != NULL || $is_deleted != '') {
             $deleted_method = [

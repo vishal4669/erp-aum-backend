@@ -32,8 +32,9 @@ class CustomerController extends Controller
         try {
             $loggedInUserData = Helper::getUserData();
             $is_dropdown = (isset($request->is_dropdown) && $request->is_dropdown == 1) ? 1 : 0;
-
-            if (!$is_dropdown) {
+            $contact_type_customer = (isset($request->contact_type_customer) && $request->contact_type_customer == 1) ? 1 : 0;
+            
+            if (!$is_dropdown && !$contact_type_customer) {
                 $data = ViewCustomer::select(
                     'id',
                     'mst_companies_id',
@@ -63,10 +64,14 @@ class CustomerController extends Controller
                     'home_area',
                     'other_area'
                 )->where('mst_companies_id', $loggedInUserData['company_id']);
+            } elseif ($contact_type_customer) {
+                $data = ViewCustomer::select('id', 'company_name', 'contact_type', 'is_active')
+                    ->where('contact_type', 'Customer');
             } else {
                 $data = ViewCustomer::select('id', 'company_name', 'contact_person_name', 'contact_type', 'tally_alias_name', 'home_contact_no', 'is_active');
             }
             $data = $data->where('is_active', 1)
+                ->where('deleted_at',null)
                 ->orderBy('view_customers.id', 'desc')
                 ->get();
 

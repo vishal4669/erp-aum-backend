@@ -231,6 +231,13 @@ Route::group(['middleware' => ['jwt.verify'], 'prefix' => 'v1'], function () {
     Route::get('quotationDropdown', function () {
         return config('global.quotation_dropdown');
     });
+
+    //Customer Price List
+    Route::get('listCustomerPriceList', 'App\Http\Controllers\v1\CustomerPriceListController@index');
+    Route::post('addCustomerPriceList', 'App\Http\Controllers\v1\CustomerPriceListController@store');
+    Route::post('updateCustomerPriceList/{id}', 'App\Http\Controllers\v1\CustomerPriceListController@update');
+    Route::get('getCustomerPriceList/{id}', 'App\Http\Controllers\v1\CustomerPriceListController@show');
+    Route::get('deleteCustomerPriceList/{id}', 'App\Http\Controllers\v1\CustomerPriceListController@destroy');
 });
 
 Route::group(['prefix' => 'v1'], function () {
