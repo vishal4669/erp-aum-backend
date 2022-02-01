@@ -225,6 +225,9 @@ class MstProductController extends Controller
             ];
 
             $messages = [
+                "product_name.required" => 'The Product Name Field is Required.',
+                "product_generic.required" => 'The Product Generic Field is Required.',
+                "pharmacopeia_id.required" => 'The Pharmacopeia Field is Required.',
                 "sample_details.*.min_limit.regex" => "Please Enter Valid Min Limit As 'NLT 1.00%'",
                 "sample_details.*.max_limit.regex" => "Please Enter Valid Max Limit As 'NMT 1.00%'"
             ];
@@ -342,6 +345,10 @@ class MstProductController extends Controller
                 ->where('deleted_at', NULL)->get()
                 ->each(function ($item) {
                     $item->append('pharmacopeia_dropdown');
+                    $item['samples']->append('parent_dropdown');
+                    $item['samples']->append('parameter_dropdown');
+                    $item['samples']->append('method_dropdown');
+                    $item['samples']->append('formula_dropdown');
                 });
 
             return Helper::response("This Product Shown Successfully", Response::HTTP_OK, true, $data);
@@ -441,9 +448,12 @@ class MstProductController extends Controller
             ];
 
             $messages = [
+                "product_name.required" => 'The Product Name Field is Required.',
+                "product_generic.required" => 'The Product Generic Field is Required.',
+                "pharmacopeia_id.required" => 'The Pharmacopeia Field is Required.',
                 "sample_details.*.min_limit.regex" => "Please Enter Valid Min Limit As 'NLT 1.00%'",
                 "sample_details.*.max_limit.regex" => "Please Enter Valid Max Limit As 'NMT 1.00%'"
-            ];
+              ];
 
             $validator = Validator::make($request->all(), $rules, $messages);
 

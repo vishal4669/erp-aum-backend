@@ -35,7 +35,9 @@ class ViewProductSamples extends Model
         'parameter_deleted_at',
         'pharmacopeia_id',
         'method_name',
-        'method_deleted_at'
+        'method_deleted_at',
+        'formula_name',
+        'formula_deleted_at'
     ];
 
     public function getParentDropdownAttribute()
@@ -121,4 +123,28 @@ class ViewProductSamples extends Model
         ];
         return (isset($data)) ? $data : $default_arr;
     }
+
+    public function getFormulaDropdownAttribute()
+  {
+    $data = DB::table('view_formulas')
+      ->select('id', 'formula_name', 'deleted_at')
+      ->where('deleted_at', NULL)
+      ->get()->toarray();
+
+    $is_deleted = $this->formula_deleted_at;
+    if ($is_deleted != NULL || $is_deleted != '') {
+      $deleted_formula = [
+        "id" => $this->formula,
+        "formula_name" => $this->formula_name,
+        "deleted_at" => $this->formula_deleted_at
+      ];
+      array_push($data, $deleted_formula);
+    }
+    $default_arr = [
+      "id" => "",
+      "formula_name" => "",
+      "deleted_at" => ""
+    ];
+    return (isset($data)) ? $data : $default_arr;
+  }
 }

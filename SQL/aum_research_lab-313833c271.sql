@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: sdb-e.hosting.stackcp.net
--- Generation Time: Jan 31, 2022 at 02:03 PM
+-- Generation Time: Feb 01, 2022 at 01:54 PM
 -- Server version: 10.4.18-MariaDB-log
 -- PHP Version: 7.1.33
 
@@ -311,7 +311,7 @@ CREATE TABLE `formulas` (
 INSERT INTO `formulas` (`id`, `mst_companies_id`, `formula_name`, `formula_type`, `created_by`, `updated_by`, `created_at`, `updated_at`, `selected_year`, `copied_from_year`, `is_active`, `deleted_at`) VALUES
 (1, 4, '[AAI×Φ]÷[Φ- W]=100± [EAAI+EW]π', 'Assay', 1, 1, '2021-12-28 15:57:26', '2022-01-28 15:36:13', '2019-20', NULL, 1, NULL),
 (2, 4, '(CI)=(t×SD)÷ (n)1/2', 'Assay Chemical', 1, 1, '2021-12-28 15:58:06', '2021-12-28 16:26:40', '2019-20', NULL, 1, NULL),
-(4, 4, 'a+b', 'a+b = a2 + 2ab + b2', 1, NULL, '2022-01-24 15:59:59', '2022-01-24 16:09:12', '2019-20', NULL, 1, '16:09:12');
+(4, 4, 'a+b', 'a+b = a2 + 2ab + b2', 1, NULL, '2022-01-24 15:59:59', '2022-01-24 16:09:12', '2019-20', NULL, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -1164,7 +1164,14 @@ INSERT INTO `mst_products` (`id`, `mst_companies_id`, `product_name`, `product_g
 (8, 4, 'L1', 'Raw Metriall', 'Cold', 2, 'L2', 'Shipped', 'L3', '342356', '2019-20', NULL, 1, 1, NULL, '2022-01-18 18:58:57', NULL, NULL),
 (9, 4, 'L1', 'Raw Metriall', 'Cold', 2, 'L2', 'Shipped', 'L3', '342356', '2019-20', NULL, 1, 1, NULL, '2022-01-28 14:40:08', NULL, NULL),
 (10, 4, 'L1', 'Raw Metriall', 'Cold', 2, 'L2', 'Shipped', 'L3', '342356', '2019-20', NULL, 1, 1, NULL, '2022-01-28 14:41:18', NULL, NULL),
-(12, 4, 'L3', 'Raw Metriall', 'Cold', 3, 'L2', 'Shipped', 'sample description for paracitamol tablet lora ipseum', '342356', '2019-20', NULL, 1, 1, 1, '2022-01-28 14:45:43', '2022-01-28 14:46:53', NULL);
+(12, 4, 'L3', 'Raw Metriall', 'Cold', 3, 'L2', 'Shipped', 'sample description for paracitamol tablet lora ipseum', '342356', '2019-20', NULL, 1, 1, 1, '2022-01-28 14:45:43', '2022-01-28 14:46:53', NULL),
+(15, 4, 'Linzoking-600 Tablets', 'Finished Product', NULL, 1, 'L2', 'White coloured powder.White coloured powder.', 'White coloured powder.White coloured powder.White coloured powder.White coloured powder.White coloured powder.', '123456', '2019-20', NULL, 1, 1, NULL, '2022-02-01 11:01:14', NULL, NULL),
+(17, 4, 'fsfs', 'Raw Metriall', 'Cold', 2, 'L2', 'Shipped', 'L3', '342356', '2019-20', NULL, 1, 1, NULL, '2022-02-01 18:57:58', NULL, NULL),
+(18, 4, 'fsfs', 'Raw Metriall', 'Cold', 2, 'L2', 'Shipped', 'L3', '342356', '2019-20', NULL, 1, 1, NULL, '2022-02-01 18:59:07', NULL, NULL),
+(19, 4, 'fsfs', 'Raw Metriall', 'Cold', 2, 'L2', 'Shipped', 'L3', '342356', '2019-20', NULL, 1, 1, NULL, '2022-02-01 18:59:13', NULL, NULL),
+(20, 4, 'fsfs', 'Raw Metriall', 'Cold', 2, 'L2', 'Shipped', 'L3', '342356', '2019-20', NULL, 1, 1, NULL, '2022-02-01 18:59:21', NULL, NULL),
+(21, 4, 'fsfs', 'Raw Metriall', 'Cold', 2, 'L2', 'Shipped', 'L3', '342356', '2019-20', NULL, 1, 1, NULL, '2022-02-01 18:59:28', NULL, NULL),
+(22, 4, 'fsfs', 'Raw Metriall', 'Cold', 2, 'L2', 'Shipped', 'L3', '342356', '2019-20', NULL, 1, 1, NULL, '2022-02-01 18:59:40', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1199,9 +1206,9 @@ CREATE TABLE `mst_product_samples` (
 --
 
 INSERT INTO `mst_product_samples` (`id`, `mst_product_id`, `by_pass`, `parent`, `mst_sample_parameter_id`, `label_claim`, `min_limit`, `max_limit`, `amount`, `method`, `description`, `division`, `nabl`, `formula`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(15, 1, 2, 0, 5, '', 'NLT 90.0 %to', 'NMT 110.0 %', '0.00', 0, '', '', '', 0, 3, 3, '2021-12-16 13:01:32', '2021-12-16 13:01:32', NULL),
+(15, 1, 2, 0, 5, '', 'NLT 90.0 %to', 'NMT 110.0 %', '0.00', 0, '', '', '', 1, 3, 3, '2021-12-16 13:01:32', '2021-12-16 13:01:32', NULL),
 (16, 1, 2, 0, 0, '10.0 mg', 'NLT 90.0 %to', 'NMT 110.0 %', '0.00', 0, '', '', '', 0, 3, 3, '2021-12-16 13:01:32', '2021-12-16 13:01:32', NULL),
-(17, 1, 2, 0, 0, '', '', '', '0.00', 0, '', '', '', 0, 3, 3, '2021-12-16 13:01:32', '2021-12-16 13:01:32', NULL),
+(17, 1, 2, 0, 0, '', '', '', '0.00', 0, '', '', '', 3, 3, 3, '2021-12-16 13:01:32', '2021-12-16 13:01:32', NULL),
 (24, 4, 1, 22, 0, 'label claim', '10', '100', '500.00', 0, 'description', 'A', 'nabl', 0, 1, 1, '2021-12-16 15:00:50', '2021-12-16 15:00:50', NULL),
 (25, 4, 1, 13, 69, 'label claim1', '20', '200', '700.00', 0, 'description1', 'A1', 'nabl1', 0, 1, 1, '2021-12-16 15:00:50', '2021-12-16 15:00:50', NULL),
 (26, 5, 1, 22, 0, 'label claim', '10', '100', '500.00', 0, 'description', 'A', 'nabl', 0, 1, 1, '2021-12-16 15:01:04', '2021-12-16 15:01:04', NULL),
@@ -1219,7 +1226,21 @@ INSERT INTO `mst_product_samples` (`id`, `mst_product_id`, `by_pass`, `parent`, 
 (42, 10, 1, 1, 0, 'label claim', 'nlt 1 %', 'nmt 100.1', '500.00', 0, 'description', 'A', 'nabl', 0, 1, 1, '2022-01-28 14:41:18', '2022-01-28 14:41:18', NULL),
 (43, 10, 1, 13, 69, 'label claim1', 'NLT 2.00', 'NMT 0.30 %', '700.00', 0, 'description1', 'A1', 'nabl1', 0, 1, 1, '2022-01-28 14:41:18', '2022-01-28 14:41:18', NULL),
 (46, 12, 1, 1, 70, 'label claim', '8', '108', '508.00', 3, 'description', 'A', 'nabl', 0, 1, 1, '2022-01-28 14:46:53', '2022-01-28 14:46:53', NULL),
-(47, 12, 1, 13, 69, 'label claim1', '28', '208', '708.00', 7, 'description1', 'A1', 'nabl1', 0, 1, 1, '2022-01-28 14:46:53', '2022-01-28 14:46:53', NULL);
+(47, 12, 1, 13, 69, 'label claim1', '28', '208', '708.00', 7, 'description1', 'A1', 'nabl1', 0, 1, 1, '2022-01-28 14:46:53', '2022-01-28 14:46:53', NULL),
+(48, 15, 2, 1, 70, 'label claim', 'NLT 20.0', 'NMT 108', '508.00', 16, 'sample description for paracitamol tablet lora ipseum', 'A', 'Y', 2, 1, 1, '2022-02-01 11:01:14', '2022-02-01 11:01:14', NULL),
+(49, 15, 1, 3, 69, 'label claim1', 'NLT 5.0', 'NMT 208', '708.00', 23, 'description1', 'A1', 'N', 1, 1, 1, '2022-02-01 11:01:14', '2022-02-01 11:01:14', NULL),
+(50, 17, 1, 1, 0, 'label claim', 'nlt 1 % abcd', 'nmt 100.1 abcd', '500.00', 7, 'description', 'A', 'nabl', 7, 1, 1, '2022-02-01 18:57:58', '2022-02-01 18:57:58', NULL),
+(51, 17, 1, 13, 0, 'label claim1', 'NLT 2.00', 'NMT 0.30 %', '700.00', 8, 'description1', 'A1', 'nabl1', 8, 1, 1, '2022-02-01 18:57:58', '2022-02-01 18:57:58', NULL),
+(52, 18, 1, 1, 0, 'label claim', 'nlt 1  abcd', 'nmt 100.1 abcd', '500.00', 7, 'description', 'A', 'nabl', 7, 1, 1, '2022-02-01 18:59:07', '2022-02-01 18:59:07', NULL),
+(53, 18, 1, 13, 0, 'label claim1', 'NLT 2.00', 'NMT 0.30 %', '700.00', 8, 'description1', 'A1', 'nabl1', 8, 1, 1, '2022-02-01 18:59:07', '2022-02-01 18:59:07', NULL),
+(54, 19, 1, 1, 0, 'label% claim', 'nlt 1  abcd', 'nmt 100.1 abcd', '500.00', 7, 'description', 'A', 'nabl', 7, 1, 1, '2022-02-01 18:59:13', '2022-02-01 18:59:13', NULL),
+(55, 19, 1, 13, 0, 'label claim1', 'NLT 2.00', 'NMT 0.30 %', '700.00', 8, 'description1', 'A1', 'nabl1', 8, 1, 1, '2022-02-01 18:59:13', '2022-02-01 18:59:13', NULL),
+(56, 20, 1, 1, 0, 'label% claim', 'nlt 1% abcd', 'nmt 100.1 abcd', '500.00', 7, 'description', 'A', 'nabl', 7, 1, 1, '2022-02-01 18:59:21', '2022-02-01 18:59:21', NULL),
+(57, 20, 1, 13, 0, 'label claim1', 'NLT 2.00', 'NMT 0.30 %', '700.00', 8, 'description1', 'A1', 'nabl1', 8, 1, 1, '2022-02-01 18:59:21', '2022-02-01 18:59:21', NULL),
+(58, 21, 1, 1, 0, 'label% claim', 'nlt 1%abcd', 'nmt 100.1 abcd', '500.00', 7, 'description', 'A', 'nabl', 7, 1, 1, '2022-02-01 18:59:28', '2022-02-01 18:59:28', NULL),
+(59, 21, 1, 13, 0, 'label claim1', 'NLT 2.00', 'NMT 0.30 %', '700.00', 8, 'description1', 'A1', 'nabl1', 8, 1, 1, '2022-02-01 18:59:28', '2022-02-01 18:59:28', NULL),
+(60, 22, 1, 1, 0, 'label% claim', 'nlt 1%abcd', 'nmt 100.1 abcd', '500.00', 7, 'description', 'A', 'nabl', 7, 1, 1, '2022-02-01 18:59:40', '2022-02-01 18:59:40', NULL),
+(61, 22, 1, 13, 0, 'label claim1', 'NLT 2.00', 'NMT 0.30 %', '700.00', 8, 'description1', 'A1', 'nabl1', 8, 1, 1, '2022-02-01 18:59:40', '2022-02-01 18:59:40', NULL);
 
 -- --------------------------------------------------------
 
@@ -5022,7 +5043,7 @@ INSERT INTO `mst_tests` (`id`, `mst_companies_id`, `procedure_name`, `price`, `t
 (25, 4, 'test123', NULL, NULL, NULL, '<p>lora ipsum</p>', 0, 1, NULL, '2022-01-19 19:25:55', NULL, '2019-20', NULL, 1, NULL),
 (26, 4, '% Assay (Clobetasol Propionate)', NULL, NULL, 'Finished product', '<p><strong style=\"color: rgb(0, 0, 0);\">Lorem Ipsum</strong><span style=\"color: rgb(0, 0, 0);\">&nbsp;is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</span></p>', 0, 1, NULL, '2022-01-20 11:12:42', NULL, '2019-20', NULL, 1, NULL),
 (27, 4, '---- min. to ----seconds', '0', 'test code', 'test category', '<p><span style=\"color: rgb(0, 0, 0);\">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.</span></p><p><br></p><p><span style=\"color: rgb(0, 0, 0);\">﻿There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.</span></p>', 4, 1, 1, '2022-01-20 11:16:10', '2022-01-24 16:16:12', '2019-20', NULL, 1, NULL),
-(69, 4, 'test procedure', NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, 1, NULL),
+(69, 4, 'test procedure', NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, '2022-02-01 11:26:15', NULL, NULL, 1, '2022-02-01 11:26:15'),
 (70, 4, 'Description', NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, 1, NULL);
 
 -- --------------------------------------------------------
@@ -6125,6 +6146,8 @@ CREATE TABLE `view_product_samples` (
 ,`pharmacopeia_id` int(5)
 ,`method_name` varchar(255)
 ,`method_deleted_at` datetime
+,`formula_name` text
+,`formula_deleted_at` time
 );
 
 -- --------------------------------------------------------
@@ -6392,7 +6415,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`aumresearch`@`%` SQL SECURITY DEFINER VIEW `
 --
 DROP TABLE IF EXISTS `view_product_samples`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`aumresearch`@`%` SQL SECURITY DEFINER VIEW `view_product_samples`  AS  select `samples`.`id` AS `id`,`samples`.`mst_product_id` AS `mst_product_id`,`samples`.`by_pass` AS `by_pass`,`samples`.`parent` AS `parent`,`samples`.`mst_sample_parameter_id` AS `mst_sample_parameter_id`,`samples`.`label_claim` AS `label_claim`,`samples`.`min_limit` AS `min_limit`,`samples`.`max_limit` AS `max_limit`,`samples`.`amount` AS `amount`,`samples`.`method` AS `method`,`samples`.`description` AS `description`,`samples`.`division` AS `division`,`samples`.`nabl` AS `nabl`,`samples`.`formula` AS `formula`,`samples`.`created_by` AS `created_by`,`samples`.`updated_by` AS `updated_by`,`samples`.`created_at` AS `created_at`,`samples`.`updated_at` AS `updated_at`,`samples`.`deleted_at` AS `deleted_at`,`parent`.`procedure_name` AS `parent_name`,`parent`.`deleted_at` AS `parent_deleted_at`,`parameter`.`procedure_name` AS `parameter_name`,`parameter`.`deleted_at` AS `parameter_deleted_at`,`product`.`pharmacopeia_id` AS `pharmacopeia_id`,`method`.`name` AS `method_name`,`method`.`deleted_at` AS `method_deleted_at` from ((((`mst_product_samples` `samples` left join `view_tests` `parent` on(`samples`.`parent` = `parent`.`id`)) left join `view_tests` `parameter` on(`samples`.`mst_sample_parameter_id` = `parameter`.`id`)) left join (select `view_products`.`id` AS `id`,`view_products`.`pharmacopeia_id` AS `pharmacopeia_id` from `view_products`) `product` on(`samples`.`mst_product_id` = `product`.`id`)) left join (select `view_methods`.`id` AS `id`,`view_methods`.`name` AS `name`,`view_methods`.`deleted_at` AS `deleted_at` from `view_methods`) `method` on(`samples`.`method` = `method`.`id`)) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`aumresearch`@`%` SQL SECURITY DEFINER VIEW `view_product_samples`  AS  select `samples`.`id` AS `id`,`samples`.`mst_product_id` AS `mst_product_id`,`samples`.`by_pass` AS `by_pass`,`samples`.`parent` AS `parent`,`samples`.`mst_sample_parameter_id` AS `mst_sample_parameter_id`,`samples`.`label_claim` AS `label_claim`,`samples`.`min_limit` AS `min_limit`,`samples`.`max_limit` AS `max_limit`,`samples`.`amount` AS `amount`,`samples`.`method` AS `method`,`samples`.`description` AS `description`,`samples`.`division` AS `division`,`samples`.`nabl` AS `nabl`,`samples`.`formula` AS `formula`,`samples`.`created_by` AS `created_by`,`samples`.`updated_by` AS `updated_by`,`samples`.`created_at` AS `created_at`,`samples`.`updated_at` AS `updated_at`,`samples`.`deleted_at` AS `deleted_at`,`parent`.`procedure_name` AS `parent_name`,`parent`.`deleted_at` AS `parent_deleted_at`,`parameter`.`procedure_name` AS `parameter_name`,`parameter`.`deleted_at` AS `parameter_deleted_at`,`product`.`pharmacopeia_id` AS `pharmacopeia_id`,`method`.`name` AS `method_name`,`method`.`deleted_at` AS `method_deleted_at`,`formula`.`formula_name` AS `formula_name`,`formula`.`deleted_at` AS `formula_deleted_at` from (((((`mst_product_samples` `samples` left join `view_tests` `parent` on(`samples`.`parent` = `parent`.`id`)) left join `view_tests` `parameter` on(`samples`.`mst_sample_parameter_id` = `parameter`.`id`)) left join (select `view_products`.`id` AS `id`,`view_products`.`pharmacopeia_id` AS `pharmacopeia_id` from `view_products`) `product` on(`samples`.`mst_product_id` = `product`.`id`)) left join (select `view_methods`.`id` AS `id`,`view_methods`.`name` AS `name`,`view_methods`.`deleted_at` AS `deleted_at` from `view_methods`) `method` on(`samples`.`method` = `method`.`id`)) left join (select `view_formulas`.`id` AS `id`,`view_formulas`.`formula_name` AS `formula_name`,`view_formulas`.`deleted_at` AS `deleted_at` from `view_formulas`) `formula` on(`samples`.`formula` = `formula`.`id`)) ;
 
 -- --------------------------------------------------------
 
@@ -6869,13 +6892,13 @@ ALTER TABLE `mst_positions`
 -- AUTO_INCREMENT for table `mst_products`
 --
 ALTER TABLE `mst_products`
-  MODIFY `id` int(23) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(23) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `mst_product_samples`
 --
 ALTER TABLE `mst_product_samples`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT for table `mst_tests`

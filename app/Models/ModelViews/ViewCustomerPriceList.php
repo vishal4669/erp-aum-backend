@@ -56,4 +56,14 @@ class ViewCustomerPriceList extends Model
         ];
         return (isset($data)) ? $data : $default_arr;
     }
+
+    /**
+     * Get all of the comments for the ViewCustomerPriceList
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'foreign_key', 'local_key');
+    }
 }
