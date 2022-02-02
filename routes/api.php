@@ -229,7 +229,7 @@ Route::group(['middleware' => ['jwt.verify'], 'prefix' => 'v1'], function () {
     Route::get('generateQuotationNo', 'App\Http\Controllers\v1\QuotationController@generateQuotationNo');
     Route::get('getProductSamples/{id}', 'App\Http\Controllers\v1\QuotationController@getProductSamples');
     Route::get('quotationDropdown', function () {
-        return config('global.quotation_dropdown');
+        return config('global.booking_dropdown');
     });
 
     //Customer Price List

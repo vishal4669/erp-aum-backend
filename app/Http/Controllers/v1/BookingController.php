@@ -455,169 +455,91 @@ class BookingController extends Controller
      */
     public function store(Request $request)
     {
-
         DB::beginTransaction();
-        if (!isset(Booking::where('booking_no', $request->booking_no)->latest()->first()->booking_no)) {
-            $last_booking_id = 1;
-            $str_pad_booking_id = str_pad($last_booking_id, 3, '0', STR_PAD_LEFT);
-            $receipte_date = date('ymd', strtotime($request->receipte_date));
-            $booking_no = ("ARL/COA/" . $request->report_type . '/' . $receipte_date . '/' . $str_pad_booking_id);
-        } else {
-            if (isset(Booking::where('receipte_date', $request->receipte_date)->where('report_type', $request->report_type)->latest()->first()->booking_no)) {
-                $latest_booking_no = Booking::where('receipte_date', $request->receipte_date)->where('report_type', $request->report_type)->latest()->first()->booking_no; //is_receipte_date_exist
-                $latest_data = $latest_booking_no;
-                $findlaststr = explode("/", $latest_data);
-                $last_booking_id = end($findlaststr) + 1;
-                $str_pad_booking_id = str_pad($last_booking_id, 3, '0', STR_PAD_LEFT);
-                $formate_receipte_date = date('ymd', strtotime($request->receipte_date));
-                $booking_no = ("ARL/COA/" . $request->report_type . '/' . $formate_receipte_date . '/' . $str_pad_booking_id);
-            } else {
-                $last_booking_id = 1;
-                $str_pad_booking_id = str_pad($last_booking_id, 3, '0', STR_PAD_LEFT);
-                $formate_receipte_date = date('ymd', strtotime($request->receipte_date));
-                $booking_no = ("ARL/COA/" . $request->report_type . '/' . $formate_receipte_date . '/' . $str_pad_booking_id);
-            }
-        }
-
-        if (isset(Booking::where('aum_serial_no', $request->aum_serial_no)->latest()->first()->aum_serial_no)) {
-            $serial_no = Booking::latest()->first()->aum_serial_no;
-            $request->aum_serial_no = $serial_no + 1;
-        } else {
-            $request->aum_serial_no = $request->aum_serial_no;
-        }
-
         try {
-            $rules = [
-                "report_type" => "required|max:55",
-                "booking_type" => "required|max:55",
-                "receipte_date" => "required",
-                "customer_id" => "required",
-                'invoice_date' => 'required_if:booking_type,Invoice',
-                'invoice_no' => 'required_if:booking_type,Invoice|max:55',
-                'booking_no'  => 'max:255',
-                'reference_no'  => 'max:55',
-                'aum_serial_no'  => 'max:55',
-                'd_format'  => 'max:255',
-                'project_name'  => 'max:255',
-                'mfg_lic_no'  => 'max:155',
-                // 'aum_serial_no'  => 'unique:bookings',
-                'dispatch_date_time' => 'required_if:is_report_dispacthed,1|max:100',
-                'dispatch_mode' => 'required_if:is_report_dispacthed,1|max:155',
-                'dispatch_details' => 'required_if:is_report_dispacthed,1|max:255',
-                'mfg_date'  => 'required|date',
-                'exp_date'    => 'required|date_format:Y-m-d|after:mfg_date',
-                'booking_sample_details.*.product_id'  => 'required|Integer',
-                'booking_sample_details.*.sampling_date_from'  => 'nullable|date',
-                'booking_sample_details.*.sampling_date_to'    => 'nullable|date_format:Y-m-d|after:booking_sample_details.*.sampling_date_from',
-                'booking_tests.*.amount'    => 'nullable|numeric|between:0,999999999999999999999999999.99',
-                'booking_sample_details.*.batch_no'  => 'nullable|unique:booking_sample_details',
-                'booking_sample_details.*.packsize'  => 'max:55',
-                'booking_sample_details.*.request_quantity'  => 'nullable',
-                'booking_sample_details.*.sample_code'  => 'max:100',
-                'booking_sample_details.*.sample_location'  => 'max:150',
-                'booking_sample_details.*.sample_packaging'  => 'max:255',
-                'booking_sample_details.*.sample_type'  => 'max:60',
-                'booking_sample_details.*.sample_drawn_by'  => 'max:255',
-                'booking_sample_details.*.sample_quantity'  => 'nullable',
-                'booking_sample_details.*.batch_size_qty_rec'  => 'nullable',
-                'booking_tests.*.p_sr_no'  => 'max:10',
-                'booking_tests.*.label_claim'  => 'max:155',
-                'booking_tests.*.percentage_of_label_claim'  => 'nullable|numeric|between:0,999999999999999999999999999.99',
-                'booking_tests.*.label_claim_result'  => 'max:255',
-                'booking_tests.*.label_claim_unit'  => 'max:60',
-                'booking_tests.*.mean'  => 'max:150',
-                'booking_tests.*.unit'  => 'max:60',
-                'booking_tests.*.amount'  => 'nullable|numeric|between:0,999999999999999999999999999.99',
-                'booking_tests.*.division'  => 'max:255',
-                'booking_tests.*.method'  => 'max:255',
-                'booking_tests.*.approved'  => 'max:20',
-
-            ];
-            $massage = [
-                "report_type.required" => "The Report Type Field Is Required.",
-                "booking_type.required" => "The Booking Type Field Is Required.",
-                "receipte_date.required" => "The Receipte Date Field Is Required.",
-                "customer_id.required" => "The Customer Name Field Is Required.",
-                'invoice_date.required_if' => 'The Invoice Date Field Is Required.',
-                'invoice_no.required_if' => 'The Invoice No Field Is Required.',
-                'dispatch_date_time.required_if' => 'The Dispatch Date Time Field Is Required.',
-                'dispatch_mode.required_if' => 'The Dispatch Mode Field Is Required.',
-                'dispatch_details.required_if' => 'The Dispatch Details Field Is Required.',
-                "booking_no.unique" => "The Booking No Field Must Be Unique.",
-                "mfg_date.required" => "The Mfg Date Field Is Required.",
-                "exp_date.required" => "The Exp Date Field Is Required.",
-                'booking_sample_details.*.batch_no.unique'  => 'booking sample details of batch_no has already been taken.',
-                'booking_sample_details.*.product_id.required'  => 'The Product Name Field Is Required.',
-                'booking_sample_details.*.sampling_date_to.after'    => 'Sampling Date To Must Be A Date After Sampling Date From.',
-                'booking_tests.*.amount.numeric'  => 'booking tests details of amount must be numeric value.',
-            ];
-
-            $validator = Validator::make($request->all(), $rules, $massage);
-            if ($validator->fails()) {
-                $data = array();
-                return Helper::response($validator->errors()->all(), Response::HTTP_OK, false, $data);
-            }
-            $uniqcustomer_arr = $this->uniqcustomer($request);
             $loggedInUserData = Helper::getUserData();
+            //static dropdown
+            $static_dropdown = config('global.booking_dropdown');
             $booking_data = Booking::create([
-                "mst_companies_id"  => $loggedInUserData['company_id'],
-                "booking_type"  => (isset($request->booking_type) ? $request->booking_type : ''),
-                "report_type"   => (isset($request->report_type) ? $request->report_type : ''),
-                "dispatch_date_time" => (isset($request->dispatch_date_time) ? $request->dispatch_date_time : NULL),
-                "dispatch_mode"    => (isset($request->dispatch_mode) ? $request->dispatch_mode : NULL),
-                "dispatch_details"    => (isset($request->dispatch_details) ? $request->dispatch_details : NULL),
+                "mst_companies_id" => $loggedInUserData['company_id'],
+
+                "booking_type" => (isset($request->booking_type) && isset($static_dropdown['booking_type'][$request->booking_type]) ? $static_dropdown['booking_type'][$request->booking_type] : NULL),
+
+                "report_type" => (isset($request->report_type) && isset($static_dropdown['report_type'][$request->report_type]) ? $request->report_type : NULL),
+
                 "receipte_date" => (isset($request->receipte_date) ? date('Y-m-d', strtotime($request->receipte_date)) : NULL),
-                "booking_no"    => (isset($request->booking_no) ? $request->booking_no : ''),
-                "customer_id"   => (isset($request->customer_id) ? $request->customer_id : 0),
-                "reference_no"  => (isset($request->reference_no) ? $request->reference_no : ''),
-                "remarks"   => (isset($request->remarks) ? $request->remarks : ''),
-                "manufacturer_id"   => (isset($uniqcustomer_arr['manufacturer_id']) ? $uniqcustomer_arr['manufacturer_id'] : 0),
-                "supplier_id"   => (isset($uniqcustomer_arr['supplier_id']) ? $uniqcustomer_arr['supplier_id'] : 0),
-                "mfg_date"  => (isset($request->mfg_date) ? date('Y-m-d', strtotime($request->mfg_date)) : NULL),
-                "mfg_options"   => (isset($request->mfg_options) ? $request->mfg_options : NULL),
-                "exp_date"  => (isset($request->exp_date) ? date('Y-m-d', strtotime($request->exp_date)) : NULL),
-                "exp_options"   => (isset($request->exp_options) ? $request->exp_options : ''),
-                "analysis_date" => (isset($request->analysis_date) ? date('Y-m-d', strtotime($request->analysis_date)) : NULL),
-                "aum_serial_no"    => (isset($request->aum_serial_no) ? $request->aum_serial_no : 0),
-                "d_format"  => (isset($request->d_format) ? $request->d_format : ''),
-                "d_format_options"  => (isset($request->d_format_options) ? $request->d_format_options : ''),
+
+                "booking_no" => (isset($request->booking_no) ? $request->booking_no : ''),
+
+                "customer_id" => (isset($request->customer_id) ? $request->customer_id : ''),
+
+                "reference_no" => (isset($request->reference_no) ? $request->reference_no : ''),
+
+                "remarks" => (isset($request->remarks) ? $request->remarks : ''),
+
+                "manufacturer_id" => (isset($request->manufacturer_id) ? $request->manufacturer_id : ''),
+
+                "supplier_id" => (isset($request->supplier_id) ? $request->supplier_id : ''),
+
+                "mfg_date" => (isset($request->mfg_date) ? date('Y-m-d', strtotime($request->mfg_date)) : NULL),
+
+                "mfg_options" => (isset($request->mfg_options) && isset($static_dropdown['common_options'][$request->mfg_options]) ? $static_dropdown['common_options'][$request->mfg_options] : NULL),
+
+                "exp_date" => (isset($request->exp_date) ? date('Y-m-d', strtotime($request->exp_date))  : NULL),
+
+                "exp_options" => (isset($request->exp_options) && isset($static_dropdown['common_options'][$request->exp_options]) ? $static_dropdown['common_options'][$request->exp_options] : NULL),
+
+                "analysis_date" => (isset($request->analysis_date) ? date('Y-m-d', strtotime($request->analysis_date))  : NULL),
+
+                "aum_serial_no" => (isset($request->aum_serial_no) ? $request->aum_serial_no : ''),
+
+                "d_format" => (isset($request->d_format) ? $request->d_format : ''),
+
+                "d_format_options" => (isset($request->d_format_options) && isset($static_dropdown['common_options'][$request->d_format_options]) ? $static_dropdown['common_options'][$request->d_format_options] : NULL),
+
                 "grade" => (isset($request->grade) ? $request->grade : ''),
-                "grade_options" => (isset($request->grade_options) ? $request->grade_options : ''),
-                "project_name"  => (isset($request->project_name) ? $request->project_name : ''),
-                "project_options"   => (isset($request->project_options) ? $request->project_options : ''),
-                "mfg_lic_no"    => (isset($request->mfg_lic_no) ? $request->mfg_lic_no : ''),
-                "is_report_dispacthed"  => (isset($request->is_report_dispacthed) ? $request->is_report_dispacthed : 0),
-                "signature" => (isset($request->signature) ? $request->signature : 0),
-                "verified_by"   => (isset($request->verified_by) ? $request->verified_by : ''),
-                "nabl_scope"    => (isset($request->nabl_scope) ? $request->nabl_scope : 0),
-                "cancel"    => (isset($request->cancel) ? $request->cancel : ''),
-                "cancel_remarks"    => (isset($request->cancel_remarks) ? $request->cancel_remarks : ''),
-                "priority"  => (isset($request->priority) ? $request->priority : ''),
-                "discipline"    => (isset($request->discipline) ? $request->discipline : ''),
-                "booking_group" => (isset($request->booking_group) ? $request->booking_group : ''),
-                "statement_ofconformity"    => (isset($request->statement_ofconformity) ? $request->statement_ofconformity : ''),
-                // "coa_release_date"    => (isset($request->coa_release_date) ? date('Y-m-d', strtotime($request->coa_release_date)) : NULL),
-                // "block"    => (isset($request->block) ? $request->block : NULL),
-                "invoice_date" => (isset($request->invoice_date) ? date('Y-m-d', strtotime($request->invoice_date)) : NULL),
-                "invoice_no" => (isset($request->invoice_no) ? $request->invoice_no : NULL),
+
+                "grade_options" => (isset($request->grade_options) && isset($static_dropdown['common_options'][$request->grade_options]) ? $static_dropdown['common_options'][$request->grade_options] : NULL),
+
+                "project_name" => (isset($request->project_name) ? $request->project_name : ''),
+
+                "project_options" => (isset($request->project_options) && isset($static_dropdown['common_options'][$request->project_options]) ? $static_dropdown['common_options'][$request->project_options] : NULL),
+
+                "mfg_lic_no" => (isset($request->mfg_lic_no) ? $request->mfg_lic_no : ''),
+
+                "is_report_dispacthed" => (isset($request->is_report_dispacthed) && isset($static_dropdown['yes-no'][$request->is_report_dispacthed]) ? $static_dropdown['yes-no'][$request->is_report_dispacthed] : NULL),
+
+                "dispatch_date_time" => (isset($request->dispatch_date_time) ? $request->dispatch_date_time : ''),
+
+                "dispatch_mode" => (isset($request->dispatch_mode) ? $request->dispatch_mode : ''),
+
+                "dispatch_details" => (isset($request->dispatch_details) ? $request->dispatch_details : ''),
+
+                "signature" => (isset($request->signature) && isset($static_dropdown['yes-no'][$request->signature]) ? $static_dropdown['yes-no'][$request->signature] : NULL),
+
+                "verified_by" => (isset($request->verified_by) && isset($static_dropdown['verified_by'][$request->verified_by]) ? $static_dropdown['verified_by'][$request->verified_by] : NULL),
+
+                "nabl_scope" => (isset($request->nabl_scope) && isset($static_dropdown['yes-no'][$request->nabl_scope]) ? $static_dropdown['yes-no'][$request->nabl_scope] : NULL),
+
+                "cancel" => (isset($request->cancel) && isset($static_dropdown['cancel'][$request->cancel]) ? $static_dropdown['cancel'][$request->cancel] : NULL),
+
+                "cancel_remarks" => (isset($request->cancel_remarks) ? $request->cancel_remarks : ''),
+
+                "priority" => (isset($request->priority) && isset($static_dropdown['priority'][$request->priority])  ? $static_dropdown['priority'][$request->priority] : NULL),
+
+                "discipline" => (isset($request->discipline) && isset($static_dropdown['discipline'][$request->discipline]) ? $static_dropdown['discipline'][$request->discipline] : NULL),
+
+                "booking_group" => (isset($request->booking_group) && isset($static_dropdown['booking_group'][$request->booking_group]) ? $static_dropdown['booking_group'][$request->booking_group] : NULL),
+
+                "statement_of_conformity" => (isset($request->statement_of_conformity) && isset($static_dropdown['statement_of_conformity'][$request->statement_of_conformity]) ? $static_dropdown['statement_of_conformity'][$request->statement_of_conformity] : NULL),
+
                 "is_active" => 1,
+                "created_by" => $loggedInUserData['logged_in_user_id'],
                 "selected_year" => $loggedInUserData['selected_year'],
-                "created_by"    => $loggedInUserData['logged_in_user_id'],
-                "updated_at" => NULL
+                "updated_at" => NULL,
             ]);
 
-            $this->addupdateBookingSample($request->booking_sample_details, $booking_data->id);
-            $this->addupdateBookingTests($request->booking_tests, $booking_data->id);
-            if ($request->booking_type == "Report") {
-                $this->addupdateAuditDetails($request->booking_audit_details, $booking_data->id);
-            }
             DB::commit();
-            $id = $booking_data['id'];
-            $is_mail_data = True;
-            $email_data = $this->show($id, $is_mail_data);
-            $send_email_to = $email_data['customer_id']['user_name'];
-            // Mail::to(users: $send_email_to)->send(new BookingSuccessfull($email_data));
-            Log::info("Booking Created with details : " . json_encode($request->all()));
             return Helper::response("Booking added Successfully", Response::HTTP_CREATED, true, $booking_data);
         } catch (Exception $e) {
             DB::rollback();
@@ -625,6 +547,78 @@ class BookingController extends Controller
             return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $booking_data);
         }
     }
+    // public function store(Request $request)
+    // {
+
+    //     DB::beginTransaction();
+
+    //         $loggedInUserData = Helper::getUserData();
+    //         $booking_data = Booking::create([
+    //             "mst_companies_id"  => $loggedInUserData['company_id'],
+    //             "booking_type"  => (isset($request->booking_type) ? $request->booking_type : ''),
+    //             "report_type"   => (isset($request->report_type) ? $request->report_type : ''),
+    //             "dispatch_date_time" => (isset($request->dispatch_date_time) ? $request->dispatch_date_time : NULL),
+    //             "dispatch_mode"    => (isset($request->dispatch_mode) ? $request->dispatch_mode : NULL),
+    //             "dispatch_details"    => (isset($request->dispatch_details) ? $request->dispatch_details : NULL),
+    //             "receipte_date" => (isset($request->receipte_date) ? date('Y-m-d', strtotime($request->receipte_date)) : NULL),
+    //             "booking_no"    => (isset($request->booking_no) ? $request->booking_no : ''),
+    //             "customer_id"   => (isset($request->customer_id) ? $request->customer_id : 0),
+    //             "reference_no"  => (isset($request->reference_no) ? $request->reference_no : ''),
+    //             "remarks"   => (isset($request->remarks) ? $request->remarks : ''),
+    //             "manufacturer_id"   => (isset($uniqcustomer_arr['manufacturer_id']) ? $uniqcustomer_arr['manufacturer_id'] : 0),
+    //             "supplier_id"   => (isset($uniqcustomer_arr['supplier_id']) ? $uniqcustomer_arr['supplier_id'] : 0),
+    //             "mfg_date"  => (isset($request->mfg_date) ? date('Y-m-d', strtotime($request->mfg_date)) : NULL),
+    //             "mfg_options"   => (isset($request->mfg_options) ? $request->mfg_options : NULL),
+    //             "exp_date"  => (isset($request->exp_date) ? date('Y-m-d', strtotime($request->exp_date)) : NULL),
+    //             "exp_options"   => (isset($request->exp_options) ? $request->exp_options : ''),
+    //             "analysis_date" => (isset($request->analysis_date) ? date('Y-m-d', strtotime($request->analysis_date)) : NULL),
+    //             "aum_serial_no"    => (isset($request->aum_serial_no) ? $request->aum_serial_no : 0),
+    //             "d_format"  => (isset($request->d_format) ? $request->d_format : ''),
+    //             "d_format_options"  => (isset($request->d_format_options) ? $request->d_format_options : ''),
+    //             "grade" => (isset($request->grade) ? $request->grade : ''),
+    //             "grade_options" => (isset($request->grade_options) ? $request->grade_options : ''),
+    //             "project_name"  => (isset($request->project_name) ? $request->project_name : ''),
+    //             "project_options"   => (isset($request->project_options) ? $request->project_options : ''),
+    //             "mfg_lic_no"    => (isset($request->mfg_lic_no) ? $request->mfg_lic_no : ''),
+    //             "is_report_dispacthed"  => (isset($request->is_report_dispacthed) ? $request->is_report_dispacthed : 0),
+    //             "signature" => (isset($request->signature) ? $request->signature : 0),
+    //             "verified_by"   => (isset($request->verified_by) ? $request->verified_by : ''),
+    //             "nabl_scope"    => (isset($request->nabl_scope) ? $request->nabl_scope : 0),
+    //             "cancel"    => (isset($request->cancel) ? $request->cancel : ''),
+    //             "cancel_remarks"    => (isset($request->cancel_remarks) ? $request->cancel_remarks : ''),
+    //             "priority"  => (isset($request->priority) ? $request->priority : ''),
+    //             "discipline"    => (isset($request->discipline) ? $request->discipline : ''),
+    //             "booking_group" => (isset($request->booking_group) ? $request->booking_group : ''),
+    //             "statement_ofconformity"    => (isset($request->statement_ofconformity) ? $request->statement_ofconformity : ''),
+    //             "coa_release_date"    => (isset($request->coa_release_date) ? date('Y-m-d', strtotime($request->coa_release_date)) : NULL),
+    //             "block"    => (isset($request->block) ? $request->block : NULL),
+    //             "invoice_date" => (isset($request->invoice_date) ? date('Y-m-d', strtotime($request->invoice_date)) : NULL),
+    //             "invoice_no" => (isset($request->invoice_no) ? $request->invoice_no : NULL),
+    //             "is_active" => 1,
+    //             "selected_year" => $loggedInUserData['selected_year'],
+    //             "created_by"    => $loggedInUserData['logged_in_user_id'],
+    //             "updated_at" => NULL
+    //         ]);
+
+    //         $this->addupdateBookingSample($request->booking_sample_details, $booking_data->id);
+    //         $this->addupdateBookingTests($request->booking_tests, $booking_data->id);
+    //         if ($request->booking_type == "Report") {
+    //             $this->addupdateAuditDetails($request->booking_audit_details, $booking_data->id);
+    //         }
+    //         DB::commit();
+    //         $id = $booking_data['id'];
+    //         $is_mail_data = True;
+    //         $email_data = $this->show($id, $is_mail_data);
+    //         $send_email_to = $email_data['customer_id']['user_name'];
+    //         // Mail::to(users: $send_email_to)->send(new BookingSuccessfull($email_data));
+    //         Log::info("Booking Created with details : " . json_encode($request->all()));
+    //         return Helper::response("Booking added Successfully", Response::HTTP_CREATED, true, $booking_data);
+    //     } catch (Exception $e) {
+    //         DB::rollback();
+    //         $booking_data = array();
+    //         return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $booking_data);
+    //     }
+    // }
 
     public function addupdateBookingSample($booking_samples, $booking_id)
     {

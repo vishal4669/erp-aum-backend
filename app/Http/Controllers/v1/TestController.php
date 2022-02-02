@@ -51,12 +51,12 @@ class TestController extends Controller
                     ->get()->toarray();
             } elseif ($is_parameter) {
                 // Can Use this for ParameterDropdown
-                $data = ViewTest::select('id', 'procedure_name','price')
-                    ->where('procedure_name','!=','Related')
-                    ->where('procedure_name','!=','Assay')
+                $data = ViewTest::select('id', 'procedure_name', 'price')
+                    ->where('procedure_name', '!=', 'Related')
+                    ->where('procedure_name', '!=', 'Assay')
                     ->where('is_active', 1)
                     ->where('deleted_at', NULL)
-                    ->orderBy('procedure_name','asc')
+                    ->orderBy('procedure_name', 'asc')
                     ->get()->toarray();
             } elseif ($is_test_parent) {
                 // Can Use this for Parent Dropdown in Procedure add

@@ -311,11 +311,11 @@ class MstProductController extends Controller
                                 'min_limit' => (isset($sample['min_limit'])) ? $sample['min_limit'] : '',
                                 'max_limit' => (isset($sample['max_limit'])) ? $sample['max_limit'] : '',
                                 'amount' => (isset($sample['amount'])) ? $sample['amount'] : 0,
-                                'method' => (isset($sample['method'])) ? $sample['method'] : '',
+                                'method' => (isset($sample['method'])) ? $sample['method'] : 0,
                                 'description' => (isset($sample['description'])) ? $sample['description'] : '',
                                 'division' => (isset($sample['division'])) ? $sample['division'] : '',
                                 'nabl' => (isset($sample['nabl'])) ? $sample['nabl'] : '',
-                                'formula' => (isset($sample['formula'])) ? $sample['formula'] : '',
+                                'formula' => (isset($sample['formula'])) ? $sample['formula'] : 0,
                                 'created_by' => $loggedInUserData['logged_in_user_id'], //edited
                                 'updated_by' => $loggedInUserData['logged_in_user_id']
                             );

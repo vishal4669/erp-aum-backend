@@ -11,11 +11,12 @@ class BookingSampleDetail extends Model
     use HasFactory;
     use SoftDeletes;
     protected $fillable = [
+        "mst_companies_id",
         "booking_id",
         "product_id",
-        "generic_name",
-        "product_type",
-        "pharmacopiea_id",
+        "generic_product_name",
+        "product_generic",
+        "pharmacopeia_id",
         "batch_no",
         "packsize",
         "request_quantity",
@@ -38,64 +39,11 @@ class BookingSampleDetail extends Model
         "sample_drawn_by",
         "created_by",
         "updated_by",
+        "created_at",
+        "updated_at",
         "selected_year",
         "copied_from_year",
         "is_active",
-        "created_by",
-        "updated_by",
-        "updated_at"
-
+        "deleted_at"
     ];
-
-    /**
-     * Get the product_id,pharmacopiea_id associated with the BookingSampleDetail
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function product_id()
-    {
-        return $this->hasOne(MstProduct::class, 'id', 'product_id');
-    }
-    public function pharmacopiea_id()
-    {
-        return $this->hasOne(Pharmacopeia::class, 'id', 'pharmacopiea_id');
-    }
-    //get product and bind deleted and selected product for frontend
-    public function get_product()
-    {
-        return $this->hasOne(MstProduct::class, 'id', 'product_id')->withTrashed();
-    }
-
-    /**
-     * Get the product detail,pharmacopiea detail associated with the BookingSampleDetail for AssignTests table
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function product_detail()
-    {
-        return $this->hasOne(MstProduct::class, 'id', 'product_id')->withTrashed();
-    }
- 
-
-    //Product data for BookingPrintController
-    public function product_data()
-    {
-        return $this->hasOne(MstProduct::class, 'id', 'product_id')
-        ->withTrashed()
-        ->withDefault([
-            "id" => "",
-                "name_of_sample" => "",
-                "product_generic" => "",
-                "generic_product_id" => "",
-                "generic_product_data" => array(
-                    "id" => "",
-                    "generic_name" => ""
-                ),
-                 "pharmacopiea_data"=>array(
-                    "id" => "",
-                    "pharmacopeia_name" => ""
-                 )
-        ]);
-    }
-
 }

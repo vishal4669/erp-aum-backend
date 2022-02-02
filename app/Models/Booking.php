@@ -14,9 +14,7 @@ class Booking extends Model
     [
         "mst_companies_id",
         "booking_type",
-        "invoice_no",
         "report_type",
-        "invoice_date",
         "receipte_date",
         "booking_no",
         "customer_id",
@@ -49,132 +47,15 @@ class Booking extends Model
         "priority",
         "discipline",
         "booking_group",
-        "statement_ofconformity",
-        "coa_print",
-        "roa_print",
-        "coa_print_count",
-        "roa_print_count",
-        "coa_release_date",
-        "block",
-        "is_active",
-        "selected_year",
+        "statement_of_conformity",
         "created_by",
         "updated_by",
-        "updated_at"
+        "created_at",
+        "updated_at",
+        "selected_year",
+        "copied_from_year",
+        "is_active",
+        "deleted_at"
     ];
-
-    /**
-     * Get all of the comments for the booking
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function samples()
-    {
-        return $this->hasMany(BookingSampleDetail::class);
-    }
-    public function tests()
-    {
-        return $this->hasMany(BookingTest::class);
-    }
-    public function tests_status()
-    {
-        return $this->hasMany(BookingTest::class);
-    }
-    public function audit()
-    {
-        return $this->hasMany(BookingAuditDetail::class);
-    }
-
-    public function customer_id()
-    {
-        return $this->hasOne(Customer::class, 'id', 'customer_id')->withTrashed();
-    }
-    public function manufacturer_id()
-    {
-        return $this->hasOne(Customer::class, 'id', 'manufacturer_id')->withTrashed();
-    }
-    public function supplier_id()
-    {
-        return $this->hasOne(Customer::class, 'id', 'supplier_id')->withTrashed();
-    }
-
-    public function created_by()
-    {
-        return $this->hasOne(User::class, 'id', 'created_by');
-    }
-    public function updated_by()
-    {
-        return $this->hasOne(User::class, 'id', 'updated_by');
-    }
-
-    /**
-     * Get the tests where chemist name is null or blank ''
-     *where condition = return only tests data where chemist_name == NULL for AssignTests table
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function tests_detail()
-    {
-        // return $this->hasMany(BookingTest::class)->where('chemist_name',NULL)->orwhere('chemist_name',0)->withTrashed();
-        return $this->hasMany(BookingTest::class)->where('approved', 'Pending')->withTrashed();
-    }
-
-
-
-    //BookingPrintController "original_manufacturer == manufacturer_id"
-    public function customer_data()
-    {
-        return $this->hasOne(Customer::class, 'id', 'customer_id')
-            ->withTrashed()
-            ->withDefault([
-                "id" => "",
-                "company_name" => "",
-                "user_name" => "",
-                "customer_contact_data" => array(
-                    "id" => "",
-                    "mst_customer_id" => "",
-                    "street_1" => "",
-                    "street_2" => "",
-                    "area" => "",
-                    "pin" => "",
-                    "city" => "",
-                    "state" => 0,
-                    "country" => 0
-                )
-            ]);
-    }
-
-    public function original_manufacturer()
-    {
-        return $this->hasOne(Customer::class, 'id', 'original_manufacturer')
-            ->withTrashed()
-            ->withDefault([
-                "id" => "",
-                "company_name" => ""
-            ]);
-    }
-    public function supplier()
-    {
-        return $this->hasOne(Customer::class, 'id', 'supplier')
-            ->withTrashed()
-            ->withDefault([
-                "id" => "",
-                "company_name" => ""
-            ]);
-    }
-    //booking samples for BookingPrintController here "original_manufacturer == manufacturer_id"
-    public function sample_data()
-    {
-        return $this->hasMany(BookingSampleDetail::class)->withTrashed();;
-    }
-    //booking tests_data for BookingPrintController
-    public function tests_data()
-    {
-        return $this->hasMany(BookingTest::class, 'booking_id', 'id')->withTrashed();
-    }
-    //booking tests_data for BookingPrintController
-    public function latest_test_date_time()
-    {
-        return $this->hasOne(BookingTest::class, 'booking_id', 'id')->orderBy('id', 'desc')->withTrashed();
-    }
-    
 }
+?>
