@@ -42,6 +42,7 @@ class Booking extends Model
         "signature",
         "verified_by",
         "nabl_scope",
+        "ulr_no",
         "cancel",
         "cancel_remarks",
         "priority",
@@ -57,5 +58,6 @@ class Booking extends Model
         "is_active",
         "deleted_at"
     ];
+
 }
 ?>

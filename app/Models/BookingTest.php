@@ -34,6 +34,9 @@ class BookingTest extends Model
         "copied_from_year",
         "is_active",
         "deleted_at"
-
     ];
 }
+?>
+
+        
+

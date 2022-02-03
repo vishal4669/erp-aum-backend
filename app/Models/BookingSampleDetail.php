@@ -14,9 +14,6 @@ class BookingSampleDetail extends Model
         "mst_companies_id",
         "booking_id",
         "product_id",
-        "generic_product_name",
-        "product_generic",
-        "pharmacopeia_id",
         "batch_no",
         "packsize",
         "request_quantity",
@@ -47,3 +44,5 @@ class BookingSampleDetail extends Model
         "deleted_at"
     ];
 }
+
+

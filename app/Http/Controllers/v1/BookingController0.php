@@ -93,33 +93,25 @@ class BookingController extends Controller
         }
     }
 
-    public function booking_numbers($report_type = '', $receipte_date = '')
+    public function last_booking_no($report_type = '', $receipte_date = '')
     {
+        // dd($receipte_date);
         $booking_table = Booking::all();
 
         if ($booking_table->isEmpty()) {
-            //if this is first entry of booking then booking no should be
-            //ARL/COA/$report_type/yy-mm-dd/001
             $aum_serial_no = 1;
             $last_booking_id = 1;
             $str_pad_booking_id = str_pad($last_booking_id, 3, '0', STR_PAD_LEFT);
             $formate_receipte_date = date('ymd', strtotime($receipte_date));
             $booking_no = ("ARL/COA/" . $report_type . '/' . $formate_receipte_date . '/' . $str_pad_booking_id);
-        } else {
+        } {
             if (!isset(Booking::where('report_type', $report_type)->latest()->first()->booking_no)) {
-
-                //check if this $report_type is using first time in the booking then 
-                //booking number starting from 1 
                 $last_booking_id = 1;
                 $str_pad_booking_id = str_pad($last_booking_id, 3, '0', STR_PAD_LEFT);
                 $formate_receipte_date = date('ymd', strtotime($receipte_date));
                 $booking_no = ("ARL/COA/" . $report_type . '/' . $formate_receipte_date . '/' . $str_pad_booking_id);
             } else {
-                //if this $report_type is used in booking before then increment number but before increment check for following condition
-
                 if (isset(Booking::where('receipte_date', $receipte_date)->where('report_type', $report_type)->latest()->first()->booking_no)) {
-                    //check if this $receipte_date and this $report type is already exist then get last matched booking and increment booking no with 1 
-
                     $latest_booking_no = Booking::where('receipte_date', $receipte_date)->where('report_type', $report_type)->latest()->first()->booking_no; //is_receipte_date_exist
                     $latest_data = $latest_booking_no;
                     $findlaststr = explode("/", $latest_data);
@@ -128,42 +120,24 @@ class BookingController extends Controller
                     $formate_receipte_date = date('ymd', strtotime($receipte_date));
                     $booking_no = ("ARL/COA/" . $report_type . '/' . $formate_receipte_date . '/' . $str_pad_booking_id);
                 } else {
-                    //if this $receipte_date and $report_type not insert before then start booking no with 1
-
                     $last_booking_id = 1;
                     $str_pad_booking_id = str_pad($last_booking_id, 3, '0', STR_PAD_LEFT);
                     $formate_receipte_date = date('ymd', strtotime($receipte_date));
                     $booking_no = ("ARL/COA/" . $report_type . '/' . $formate_receipte_date . '/' . $str_pad_booking_id);
                 }
+                // $latest_booking_no = Booking::where('report_type', $report_type)->latest()->first()->booking_no;
+            }
+            if (isset(Booking::latest()->first()->aum_serial_no)) {
+                $serial_no = Booking::latest()->first()->aum_serial_no;
+                $aum_serial_no = $serial_no + 1;
+            } else {
+                $aum_serial_no = 1;
             }
         }
 
-        //Aum serial No
-        if (isset(Booking::latest()->first()->aum_serial_no)) {
-            $serial_no = Booking::latest()->first()->aum_serial_no;
-            $aum_serial_no = $serial_no + 1;
-        } else {
-            $aum_serial_no = 1;
-        }
-
-        //ULR No
-        $year = Carbon::now()->format('y');
-        if ($booking_table->isEmpty()) {
-            $str_pad = str_pad(1, 7, '0', STR_PAD_LEFT);
-            $ulr_no = "TC9192" . $year . "0" . $str_pad . "F";
-        } else {
-            $old_number = Booking::latest()->first()->ulr_no;
-            $new_number = explode(0, $old_number, 2);
-            $new_number = explode("F", $new_number[1]);
-            $new_number = $new_number[0] + 1;
-            $str_pad = str_pad($new_number, 7, '0', STR_PAD_LEFT);
-            $ulr_no = "TC9192" . $year . "0" . $str_pad . "F";
-        }
-        // TC9192(code) 21(year) 0(location) 00000001F(number)
         $number = array(
             'booking_no' => $booking_no,
-            'aum_serial_no' => $aum_serial_no,
-            'ulr_no' => $ulr_no
+            'aum_serial_no' => $aum_serial_no
         );
         return Helper::response("last booking no is generated Successfully", Response::HTTP_CREATED, true, $number);
     }
@@ -546,7 +520,6 @@ class BookingController extends Controller
                 "verified_by" => (isset($request->verified_by) && isset($static_dropdown['verified_by'][$request->verified_by]) ? $static_dropdown['verified_by'][$request->verified_by] : NULL),
 
                 "nabl_scope" => (isset($request->nabl_scope) && isset($static_dropdown['yes-no'][$request->nabl_scope]) ? $static_dropdown['yes-no'][$request->nabl_scope] : NULL),
-                "ulr_no" => (isset($request->ulr_no) ? $request->ulr_no : NULL),
 
                 "cancel" => (isset($request->cancel) && isset($static_dropdown['cancel'][$request->cancel]) ? $static_dropdown['cancel'][$request->cancel] : NULL),
 
@@ -565,14 +538,6 @@ class BookingController extends Controller
                 "selected_year" => $loggedInUserData['selected_year'],
                 "updated_at" => NULL,
             ]);
-            //callback function to add booking samples details
-            if (!empty($request->booking_sample_details)) {
-                $this->addupdateBookingSample($request->booking_sample_details, $booking_data->id, $static_dropdown);
-            }
-            //callback function to add booking tests
-            if (!empty($request->booking_tests)) {
-                $this->addupdateBookingTests($request->booking_tests, $booking_data->id, $static_dropdown);
-            }
 
             DB::commit();
             return Helper::response("Booking added Successfully", Response::HTTP_CREATED, true, $booking_data);
@@ -582,76 +547,129 @@ class BookingController extends Controller
             return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $booking_data);
         }
     }
+    // public function store(Request $request)
+    // {
 
-    public function addupdateBookingSample($booking_samples, $booking_id, $static_dropdown)
+    //     DB::beginTransaction();
+
+    //         $loggedInUserData = Helper::getUserData();
+    //         $booking_data = Booking::create([
+    //             "mst_companies_id"  => $loggedInUserData['company_id'],
+    //             "booking_type"  => (isset($request->booking_type) ? $request->booking_type : ''),
+    //             "report_type"   => (isset($request->report_type) ? $request->report_type : ''),
+    //             "dispatch_date_time" => (isset($request->dispatch_date_time) ? $request->dispatch_date_time : NULL),
+    //             "dispatch_mode"    => (isset($request->dispatch_mode) ? $request->dispatch_mode : NULL),
+    //             "dispatch_details"    => (isset($request->dispatch_details) ? $request->dispatch_details : NULL),
+    //             "receipte_date" => (isset($request->receipte_date) ? date('Y-m-d', strtotime($request->receipte_date)) : NULL),
+    //             "booking_no"    => (isset($request->booking_no) ? $request->booking_no : ''),
+    //             "customer_id"   => (isset($request->customer_id) ? $request->customer_id : 0),
+    //             "reference_no"  => (isset($request->reference_no) ? $request->reference_no : ''),
+    //             "remarks"   => (isset($request->remarks) ? $request->remarks : ''),
+    //             "manufacturer_id"   => (isset($uniqcustomer_arr['manufacturer_id']) ? $uniqcustomer_arr['manufacturer_id'] : 0),
+    //             "supplier_id"   => (isset($uniqcustomer_arr['supplier_id']) ? $uniqcustomer_arr['supplier_id'] : 0),
+    //             "mfg_date"  => (isset($request->mfg_date) ? date('Y-m-d', strtotime($request->mfg_date)) : NULL),
+    //             "mfg_options"   => (isset($request->mfg_options) ? $request->mfg_options : NULL),
+    //             "exp_date"  => (isset($request->exp_date) ? date('Y-m-d', strtotime($request->exp_date)) : NULL),
+    //             "exp_options"   => (isset($request->exp_options) ? $request->exp_options : ''),
+    //             "analysis_date" => (isset($request->analysis_date) ? date('Y-m-d', strtotime($request->analysis_date)) : NULL),
+    //             "aum_serial_no"    => (isset($request->aum_serial_no) ? $request->aum_serial_no : 0),
+    //             "d_format"  => (isset($request->d_format) ? $request->d_format : ''),
+    //             "d_format_options"  => (isset($request->d_format_options) ? $request->d_format_options : ''),
+    //             "grade" => (isset($request->grade) ? $request->grade : ''),
+    //             "grade_options" => (isset($request->grade_options) ? $request->grade_options : ''),
+    //             "project_name"  => (isset($request->project_name) ? $request->project_name : ''),
+    //             "project_options"   => (isset($request->project_options) ? $request->project_options : ''),
+    //             "mfg_lic_no"    => (isset($request->mfg_lic_no) ? $request->mfg_lic_no : ''),
+    //             "is_report_dispacthed"  => (isset($request->is_report_dispacthed) ? $request->is_report_dispacthed : 0),
+    //             "signature" => (isset($request->signature) ? $request->signature : 0),
+    //             "verified_by"   => (isset($request->verified_by) ? $request->verified_by : ''),
+    //             "nabl_scope"    => (isset($request->nabl_scope) ? $request->nabl_scope : 0),
+    //             "cancel"    => (isset($request->cancel) ? $request->cancel : ''),
+    //             "cancel_remarks"    => (isset($request->cancel_remarks) ? $request->cancel_remarks : ''),
+    //             "priority"  => (isset($request->priority) ? $request->priority : ''),
+    //             "discipline"    => (isset($request->discipline) ? $request->discipline : ''),
+    //             "booking_group" => (isset($request->booking_group) ? $request->booking_group : ''),
+    //             "statement_ofconformity"    => (isset($request->statement_ofconformity) ? $request->statement_ofconformity : ''),
+    //             "coa_release_date"    => (isset($request->coa_release_date) ? date('Y-m-d', strtotime($request->coa_release_date)) : NULL),
+    //             "block"    => (isset($request->block) ? $request->block : NULL),
+    //             "invoice_date" => (isset($request->invoice_date) ? date('Y-m-d', strtotime($request->invoice_date)) : NULL),
+    //             "invoice_no" => (isset($request->invoice_no) ? $request->invoice_no : NULL),
+    //             "is_active" => 1,
+    //             "selected_year" => $loggedInUserData['selected_year'],
+    //             "created_by"    => $loggedInUserData['logged_in_user_id'],
+    //             "updated_at" => NULL
+    //         ]);
+
+    //         $this->addupdateBookingSample($request->booking_sample_details, $booking_data->id);
+    //         $this->addupdateBookingTests($request->booking_tests, $booking_data->id);
+    //         if ($request->booking_type == "Report") {
+    //             $this->addupdateAuditDetails($request->booking_audit_details, $booking_data->id);
+    //         }
+    //         DB::commit();
+    //         $id = $booking_data['id'];
+    //         $is_mail_data = True;
+    //         $email_data = $this->show($id, $is_mail_data);
+    //         $send_email_to = $email_data['customer_id']['user_name'];
+    //         // Mail::to(users: $send_email_to)->send(new BookingSuccessfull($email_data));
+    //         Log::info("Booking Created with details : " . json_encode($request->all()));
+    //         return Helper::response("Booking added Successfully", Response::HTTP_CREATED, true, $booking_data);
+    //     } catch (Exception $e) {
+    //         DB::rollback();
+    //         $booking_data = array();
+    //         return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $booking_data);
+    //     }
+    // }
+
+    public function addupdateBookingSample($booking_samples, $booking_id)
     {
-        $loggedInUserData = Helper::getUserData();
 
-        $booking_sample_data = array(
-            "mst_companies_id" => $loggedInUserData['company_id'],
-            "booking_id" => (isset($booking_id) ? $booking_id : 0),
-
-            "product_id"    => (isset($booking_samples['product_id']) ? $booking_samples['product_id'] : 0),
-
-            "batch_no"  => (isset($booking_samples['batch_no']) ? $booking_samples['batch_no'] : ''),
-
-            "packsize"  => (isset($booking_samples['packsize']) ? $booking_samples['packsize'] : ''),
-
-            "request_quantity"  => (isset($booking_samples['request_quantity']) ? $booking_samples['request_quantity'] : ''),
-
-            "sample_code"   => (isset($booking_samples['sample_code']) ? $booking_samples['sample_code'] : ''),
-
-            "sample_description"    => (isset($booking_samples['sample_description']) ? $booking_samples['sample_description'] : ''),
-
-            "sample_quantity"   => (isset($booking_samples['sample_quantity']) ? $booking_samples['sample_quantity'] : ''),
-
-            "sample_location"   => (isset($booking_samples['sample_location']) ? $booking_samples['sample_location'] : ''),
-
-            "sample_packaging"  => (isset($booking_samples['sample_packaging']) ? $booking_samples['sample_packaging'] : ''),
-
-            "sample_type"   => (isset($booking_samples['sample_type']) ? $booking_samples['sample_type'] : ''),
-
-            "sampling_date_from"    => (isset($booking_samples['sampling_date_from']) ? date('Y-m-d', strtotime($booking_samples['sampling_date_from'])) : NULL),
-
-            "sampling_date_from_options"    => (isset($booking_samples['sampling_date_from_options']) && isset($static_dropdown['common_options'][$booking_samples['sampling_date_from_options']]) ? $static_dropdown['common_options'][$booking_samples['sampling_date_from_options']] : NULL),
-
-            "sampling_date_to"  => (isset($booking_samples['sampling_date_to']) ? date('Y-m-d', strtotime($booking_samples['sampling_date_to'])) : NULL),
-
-            "sampling_date_to_options"  => (isset($booking_samples['sampling_date_to_options']) && isset($static_dropdown['common_options'][$booking_samples['sampling_date_to_options']]) ? $static_dropdown['common_options'][$booking_samples['sampling_date_to_options']] : NULL),
-
-            "sample_received_through"   => (isset($booking_samples['sample_received_through']) && isset($static_dropdown['sample_received_through'][$booking_samples['sample_received_through']]) ? $static_dropdown['sample_received_through'][$booking_samples['sample_received_through']] : NULL),
-
-            "chemist"   => (isset($booking_samples['chemist']) && isset($static_dropdown['chemist'][$booking_samples['chemist']]) ? $static_dropdown['chemist'][$booking_samples['chemist']] : NULL),
-
-            "sample_condition"  => (isset($booking_samples['sample_condition']) ? $booking_samples['sample_condition'] : ''),
-
-            "is_sample_condition"   => (isset($booking_samples['is_sample_condition']) && isset($static_dropdown['yes-no'][$booking_samples['is_sample_condition']]) ? $static_dropdown['yes-no'][$booking_samples['is_sample_condition']] : 0),
-
-            "batch_size_qty_rec"    => (isset($booking_samples['batch_size_qty_rec']) ? $booking_samples['batch_size_qty_rec'] : ''),
-
-            "notes" => (isset($booking_samples['notes']) ? $booking_samples['notes'] : ''),
-
-            "sample_drawn_by"   => (isset($booking_samples['sample_drawn_by']) ? $booking_samples['sample_drawn_by'] : ''),
-
-            "is_active" => 1,
-
-            "selected_year" => $loggedInUserData['selected_year'],
-        );
-
-        $sample_detail_exist = BookingSampleDetail::where('booking_id', $booking_id)->get();
-        if (count($sample_detail_exist) > 0) {
-            $booking_sample_data['updated_by'] = $loggedInUserData['logged_in_user_id'];
-            $update_table = BookingSampleDetail::where('booking_id', $booking_id);
-            $update_table->update($booking_sample_data);
-        } else {
-            $booking_sample_data['created_by'] = $loggedInUserData['logged_in_user_id'];
-            $booking_sample_data['updated_at'] = NULL;
-            BookingSampleDetail::create($booking_sample_data);
+        
+        if (!empty($booking_samples)) {
+            
+            $loggedInUserData = Helper::getUserData();
+            $booking_sample_data = array(
+                "booking_id" => (isset($booking_id) ? $booking_id : 0),
+                "product_id"    => (isset($booking_samples[0]['product_id']) ? $booking_samples[0]['product_id'] : 0),
+                "batch_no"  => (isset($booking_samples[0]['batch_no']) ? $booking_samples[0]['batch_no'] : ''),
+                "packsize"  => (isset($booking_samples[0]['packsize']) ? $booking_samples[0]['packsize'] : ''),
+                "request_quantity"  => (isset($booking_samples[0]['request_quantity']) ? $booking_samples[0]['request_quantity'] : ''),
+                "sample_code"   => (isset($booking_samples[0]['sample_code']) ? $booking_samples[0]['sample_code'] : ''),
+                "sample_description"    => (isset($booking_samples[0]['sample_description']) ? $booking_samples[0]['sample_description'] : ''),
+                "sample_quantity"   => (isset($booking_samples[0]['sample_quantity']) ? $booking_samples[0]['sample_quantity'] : ''),
+                "sample_location"   => (isset($booking_samples[0]['sample_location']) ? $booking_samples[0]['sample_location'] : ''),
+                "sample_packaging"  => (isset($booking_samples[0]['sample_packaging']) ? $booking_samples[0]['sample_packaging'] : ''),
+                "sample_type"   => (isset($booking_samples[0]['sample_type']) ? $booking_samples[0]['sample_type'] : ''),
+                "sampling_date_from"    => (isset($booking_samples[0]['sampling_date_from']) ? date('Y-m-d', strtotime($booking_samples[0]['sampling_date_from'])) : NULL),
+                "sampling_date_from_options"    => (isset($booking_samples[0]['sampling_date_from_options']) ? $booking_samples[0]['sampling_date_from_options'] : ''),
+                "sampling_date_to"  => (isset($booking_samples[0]['sampling_date_to']) ? date('Y-m-d', strtotime($booking_samples[0]['sampling_date_to'])) : NULL),
+                "sampling_date_to_options"  => (isset($booking_samples[0]['sampling_date_to_options']) ? $booking_samples[0]['sampling_date_to_options'] : ''),
+                "sample_received_through"   => (isset($booking_samples[0]['sample_received_through']) ? $booking_samples[0]['sample_received_through'] : ''),
+                "chemist"   => (isset($booking_samples[0]['chemist']) ? $booking_samples[0]['chemist'] : 1),
+                "sample_condition"  => (isset($booking_samples[0]['sample_condition']) ? $booking_samples[0]['sample_condition'] : ''),
+                "is_sample_condition"   => (isset($booking_samples[0]['is_sample_condition']) ? $booking_samples[0]['is_sample_condition'] : 0),
+                "batch_size_qty_rec"    => (isset($booking_samples[0]['batch_size_qty_rec']) ? $booking_samples[0]['batch_size_qty_rec'] : ''),
+                "notes" => (isset($booking_samples[0]['notes']) ? $booking_samples[0]['notes'] : ''),
+                "sample_drawn_by"   => (isset($booking_samples[0]['sample_drawn_by']) ? $booking_samples[0]['sample_drawn_by'] : ''),
+                "is_active" => 1,
+                "selected_year" => $loggedInUserData['selected_year'],
+            );
+            
+            $sample_detail_exist = BookingSampleDetail::where('booking_id', $booking_id)->get();
+            if (count($sample_detail_exist) > 0) {
+                $booking_sample_data['updated_by'] = $loggedInUserData['logged_in_user_id'];
+                $update_table = BookingSampleDetail::where('booking_id', $booking_id);
+                $update_table->update($booking_sample_data);
+            } else {
+                $booking_sample_data['created_by'] = $loggedInUserData['logged_in_user_id'];
+                $booking_sample_data['updated_at'] = NULL;
+                BookingSampleDetail::create($booking_sample_data);
+            }
         }
     }
 
-    public function addupdateBookingTests($booking_tests, $booking_id, $static_dropdown)
+    public function addupdateBookingTests($booking_tests, $booking_id)
     {
+
         if (!empty($booking_tests)) {
 
             $loggedInUserData = Helper::getUserData();
@@ -665,36 +683,69 @@ class BookingController extends Controller
 
                 foreach ($booking_tests as $key => $tests) {
 
-                    if (
-                        !empty($tests['parent_id']) or
-                        !empty($tests['product_details']) or
-                        !empty($tests['test_name']) or
-                        !empty($tests['label_claim']) or
-                        !empty($tests['label_claim_percentage']) or
-                        !empty($tests['min_limit']) or
-                        !empty($tests['max_limit']) or
-                        !empty($tests['amount'])
-                    ) {
-                        $tests_data = array(
-                            "mst_companies_id" => $loggedInUserData['company_id'],
-                            "booking_id" => (isset($booking_id) ? $booking_id : 0),
-                            "parent_child" => (isset($tests['parent_child']) && isset($static_dropdown['parent_child'][$tests['parent_child']]) ? $static_dropdown['parent_child'][$tests['parent_child']] : NULL),
-                            "p_sr_no" => (isset($tests['p_sr_no']) ? $tests['p_sr_no'] : ''),
-                            "by_pass" => (isset($tests['by_pass']) && isset($static_dropdown['yes-no'][$tests['by_pass']]) ? $static_dropdown['yes-no'][$tests['by_pass']] : 0),
-                            "parent" => (isset($tests['parent_id']) ? $tests['parent_id'] : 0),
-                            "product_details" => (isset($tests['product_details']) ? $tests['product_details'] : ''),
-                            "test_name" => (isset($tests['test_name']) ? $tests['test_name'] : ''),
-                            "label_claim" => (isset($tests['label_claim']) ? $tests['label_claim'] : ''),
-                            "label_claim_percentage" => (isset($tests['label_claim_percentage']) ? $tests['label_claim_percentage'] : ''),
-                            "min_limit" => (isset($tests['min_limit']) ? $tests['min_limit'] : ''),
-                            "max_limit" => (isset($tests['max_limit']) ? $tests['max_limit'] : ''),
-                            "amount" => (isset($tests['amount']) ? $tests['amount'] : 0),
-                            "selected_year" => $loggedInUserData['selected_year'],
-                            "is_active" => (isset($tests['is_active']) ? $tests['is_active'] : 1),
-                            'created_by' => $loggedInUserData['logged_in_user_id'], //edited
-                            'updated_by' => $loggedInUserData['logged_in_user_id']
-                        );
-                        BookingTest::create($tests_data);
+                    if (!empty($tests['by_pass']) and !empty($tests['parent_child'])) {
+
+                        if (
+                            !empty($tests['p_sr_no']) or
+                            !empty($tests['parent_id']) or
+                            !empty($tests['product_details']) or
+                            !empty($tests['test_name']) or
+                            !empty($tests['label_claim']) or
+                            !empty($tests['min_limit']) or
+                            !empty($tests['max_limit']) or
+                            !empty($tests['result']) or
+                            !empty($tests['label_claim_result']) or
+                            !empty($tests['label_claim_unit']) or
+                            !empty($tests['mean']) or
+                            !empty($tests['na_content']) or
+                            !empty($tests['unit']) or
+                            !empty($tests['amount']) or
+                            !empty($tests['method']) or
+                            !empty($tests['test_date_time']) or
+                            !empty($tests['approval_date_time']) or
+                            !empty($tests['approved']) or
+                            !empty($tests['chemsit_name'])
+                        ) {
+                            $assigned_date = NULL;
+                            if ($tests['approved'] == "Assigned" && $tests['assigned_date'] == null) {
+                                $assigned_date = Carbon::now();
+                            }
+                            if ($tests['assigned_date'] != null || $tests['assigned_date'] != '') {
+                                $assigned_date = $tests['assigned_date'];
+                            }
+                            if ($tests['approved'] == "Rejected") {
+                                $tests['approved'] = "Assigned";
+                            }
+                            $tests_data = array(
+                                "booking_id" => (isset($booking_id) ? $booking_id : 0),
+                                "parent_child" => (isset($tests['parent_child']) ? $tests['parent_child'] : ''),
+                                "p_sr_no" => (isset($tests['p_sr_no']) ? $tests['p_sr_no'] : ''),
+                                "by_pass" => (isset($tests['by_pass']) ? $tests['by_pass'] : 0),
+                                "parent" => (isset($tests['parent_id']) ? $tests['parent_id'] : 0),
+                                "product_details" => (isset($tests['product_details']) ? $tests['product_details'] : ''),
+                                "test_name" => (isset($tests['test_name']) ? $tests['test_name'] : ''),
+                                "label_claim" => (isset($tests['label_claim']) ? $tests['label_claim'] : ''),
+                                "min_limit" => (isset($tests['min_limit']) ? $tests['min_limit'] : ''),
+                                "max_limit" => (isset($tests['max_limit']) ? $tests['max_limit'] : ''),
+                                "result" => (isset($tests['result']) ? $tests['result'] : ''),
+                                "label_claim_result" => (isset($tests['label_claim_result']) ? $tests['label_claim_result'] : ''),
+                                "label_claim_unit" => (isset($tests['label_claim_unit']) ? $tests['label_claim_unit'] : ''),
+                                "mean" => (isset($tests['mean']) ? $tests['mean'] : ''),
+                                "unit" => (isset($tests['unit']) ? $tests['unit'] : NULL),
+                                "amount" => (isset($tests['amount']) ? $tests['amount'] : 0),
+                                "method" => (isset($tests['method']) ? $tests['method'] : ''),
+                                "test_date_time" => (isset($tests['test_date_time']) ? $tests['test_date_time'] : NULL),
+                                "assigned_date" => (isset($assigned_date) ? $assigned_date : NULL),
+                                "approval_date_time" => (isset($tests['approval_date_time']) ? $tests['approval_date_time'] : NULL),
+                                "approved" => (isset($tests['approved']) ? $tests['approved'] : ''),
+                                "chemist_name" => (isset($tests['chemist_name']) ? $tests['chemist_name'] : NULL),
+                                "selected_year" => $loggedInUserData['selected_year'],
+                                "is_active" => (isset($tests['is_active']) ? $tests['is_active'] : 1),
+                                'created_by' => $loggedInUserData['logged_in_user_id'], //edited
+                                'updated_by' => $loggedInUserData['logged_in_user_id']
+                            );
+                            BookingTest::create($tests_data);
+                        }
                     }
                 }
             }
