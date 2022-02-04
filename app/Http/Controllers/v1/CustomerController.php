@@ -33,6 +33,8 @@ class CustomerController extends Controller
             $loggedInUserData = Helper::getUserData();
             $is_dropdown = (isset($request->is_dropdown) && $request->is_dropdown == 1) ? 1 : 0;
             $contact_type_customer = (isset($request->contact_type_customer) && $request->contact_type_customer == 1) ? 1 : 0;
+            $customer_type = (isset($request->customer_type) && $request->contact_type_customer == 1) ? $request->customer_type : '';
+            $booking_customer = (isset($request->booking_customer) && $request->booking_customer == 1) ? 1 : 0;
 
             if (!$is_dropdown && !$contact_type_customer) {
                 $data = ViewCustomer::select(
@@ -65,8 +67,19 @@ class CustomerController extends Controller
                     'other_area'
                 )->where('mst_companies_id', $loggedInUserData['company_id']);
             } elseif ($contact_type_customer) {
-                $data = ViewCustomer::select('id', 'company_name', 'contact_type', 'is_active')
-                    ->where('contact_type', 'Customer');
+                $data = ViewCustomer::select(
+                    'id',
+                    'home_street_1',
+                    'home_street_2',
+                    'other_street_1',
+                    'other_street_2',
+                    'other_area',
+                    'home_area',
+                    'company_name',
+                    'contact_type',
+                    'is_active'
+                )
+                    ->where('contact_type', $customer_type);
             } else {
                 $data = ViewCustomer::select('id', 'company_name', 'contact_person_name', 'contact_type', 'tally_alias_name', 'home_contact_no', 'is_active');
             }

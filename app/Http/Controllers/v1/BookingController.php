@@ -93,7 +93,7 @@ class BookingController extends Controller
         }
     }
 
-    public function booking_numbers($report_type = '', $receipte_date = '')
+    public function booking_numbers($report_type = '', $receipte_date = '', $booking_type = '', $recheck = 0)
     {
         $booking_table = Booking::all();
 
@@ -104,7 +104,13 @@ class BookingController extends Controller
             $last_booking_id = 1;
             $str_pad_booking_id = str_pad($last_booking_id, 3, '0', STR_PAD_LEFT);
             $formate_receipte_date = date('ymd', strtotime($receipte_date));
-            $booking_no = ("ARL/COA/" . $report_type . '/' . $formate_receipte_date . '/' . $str_pad_booking_id);
+            if ($booking_type == 'W') {
+                $booking_no = ("W/" . $report_type . '/' . $formate_receipte_date . '/' . $str_pad_booking_id);
+            } elseif ($booking_type == 'Temp') {
+                $booking_no = ("ARL/COA/T/" . $report_type . '/' . $formate_receipte_date . '/' . $str_pad_booking_id);
+            } else {
+                $booking_no = ("ARL/COA/" . $report_type . '/' . $formate_receipte_date . '/' . $str_pad_booking_id);
+            }
         } else {
             if (!isset(Booking::where('report_type', $report_type)->latest()->first()->booking_no)) {
 
@@ -113,27 +119,45 @@ class BookingController extends Controller
                 $last_booking_id = 1;
                 $str_pad_booking_id = str_pad($last_booking_id, 3, '0', STR_PAD_LEFT);
                 $formate_receipte_date = date('ymd', strtotime($receipte_date));
-                $booking_no = ("ARL/COA/" . $report_type . '/' . $formate_receipte_date . '/' . $str_pad_booking_id);
+                if ($booking_type == 'W') {
+                    $booking_no = ("W/" . $report_type . '/' . $formate_receipte_date . '/' . $str_pad_booking_id);
+                } elseif ($booking_type == 'Temp') {
+                    $booking_no = ("ARL/COA/T/" . $report_type . '/' . $formate_receipte_date . '/' . $str_pad_booking_id);
+                } else {
+                    $booking_no = ("ARL/COA/" . $report_type . '/' . $formate_receipte_date . '/' . $str_pad_booking_id);
+                }
             } else {
-                //if this $report_type is used in booking before then increment number but before increment check for following condition
+                //if this $report_type is used in booking before then increment a number but before increment check for following condition
 
-                if (isset(Booking::where('receipte_date', $receipte_date)->where('report_type', $report_type)->latest()->first()->booking_no)) {
+                if (isset(Booking::where('booking_type', $booking_type)->where('receipte_date', $receipte_date)->where('report_type', $report_type)->latest()->first()->booking_no)) {
                     //check if this $receipte_date and this $report type is already exist then get last matched booking and increment booking no with 1 
 
-                    $latest_booking_no = Booking::where('receipte_date', $receipte_date)->where('report_type', $report_type)->latest()->first()->booking_no; //is_receipte_date_exist
+                    $latest_booking_no = Booking::where('booking_type', $booking_type)->where('receipte_date', $receipte_date)->where('report_type', $report_type)->latest()->first()->booking_no; //is_receipte_date_exist
                     $latest_data = $latest_booking_no;
                     $findlaststr = explode("/", $latest_data);
                     $last_booking_id = end($findlaststr) + 1;
                     $str_pad_booking_id = str_pad($last_booking_id, 3, '0', STR_PAD_LEFT);
                     $formate_receipte_date = date('ymd', strtotime($receipte_date));
-                    $booking_no = ("ARL/COA/" . $report_type . '/' . $formate_receipte_date . '/' . $str_pad_booking_id);
+                    if ($booking_type == 'W') {
+                        $booking_no = ("W/" . $report_type . '/' . $formate_receipte_date . '/' . $str_pad_booking_id);
+                    } elseif ($booking_type == 'Temp') {
+                        $booking_no = ("ARL/COA/T/" . $report_type . '/' . $formate_receipte_date . '/' . $str_pad_booking_id);
+                    } else {
+                        $booking_no = ("ARL/COA/" . $report_type . '/' . $formate_receipte_date . '/' . $str_pad_booking_id);
+                    }
                 } else {
                     //if this $receipte_date and $report_type not insert before then start booking no with 1
 
                     $last_booking_id = 1;
                     $str_pad_booking_id = str_pad($last_booking_id, 3, '0', STR_PAD_LEFT);
                     $formate_receipte_date = date('ymd', strtotime($receipte_date));
-                    $booking_no = ("ARL/COA/" . $report_type . '/' . $formate_receipte_date . '/' . $str_pad_booking_id);
+                    if ($booking_type == 'W') {
+                        $booking_no = ("W/" . $report_type . '/' . $formate_receipte_date . '/' . $str_pad_booking_id);
+                    } elseif ($booking_type == 'Temp') {
+                        $booking_no = ("ARL/COA/T/" . $report_type . '/' . $formate_receipte_date . '/' . $str_pad_booking_id);
+                    } else {
+                        $booking_no = ("ARL/COA/" . $report_type . '/' . $formate_receipte_date . '/' . $str_pad_booking_id);
+                    }
                 }
             }
         }
@@ -165,7 +189,11 @@ class BookingController extends Controller
             'aum_serial_no' => $aum_serial_no,
             'ulr_no' => $ulr_no
         );
-        return Helper::response("last booking no is generated Successfully", Response::HTTP_CREATED, true, $number);
+        if ($recheck == 1) {
+            return $number;
+        } else {
+            return Helper::response("last booking no is generated Successfully", Response::HTTP_CREATED, true, $number);
+        }
     }
 
     public function contact_type($type = '', $data = '', $is_return = '')
@@ -481,6 +509,100 @@ class BookingController extends Controller
      */
     public function store(Request $request)
     {
+        if(isset($request->check_customer_active) && $request->check_customer_active == 0)
+        {
+            //validate if customer is active or not if inactive then throw an error
+            return Helper::response("Customer is Inactive Please Change Customer", Response::HTTP_OK, false);
+        }
+        //recheck booking no 
+        $recheck_number = $this->booking_numbers(
+            $request->report_type,
+            $request->receipte_date,
+            $request->booking_type,
+            $recheck = 1
+        );
+        //recheked numbers
+        $booking_no = $recheck_number['booking_no'];
+        $aum_serial_no = $recheck_number['aum_serial_no'];
+        $ulr_no = $recheck_number['ulr_no'];
+
+        //validations
+        $rules = [
+            "report_type" => "required|max:55",
+            "booking_type" => "required|max:55",
+            "receipte_date" => "required",
+            "customer_id" => "required",
+            // 'invoice_date' => 'required_if:booking_type,Invoice',
+            // 'invoice_no' => 'required_if:booking_type,Invoice|max:55',
+            'booking_no'  => 'max:255',
+            'reference_no'  => 'max:255',
+            'd_format'  => 'max:255',
+            'project_name'  => 'max:255',
+            'mfg_lic_no'  => 'max:155',
+            // 'aum_serial_no'  => 'unique:bookings|max:55',
+            'dispatch_date_time' => 'required_if:is_report_dispacthed,0|max:100',
+            'dispatch_mode' => 'required_if:is_report_dispacthed,1|max:155',
+            'dispatch_details' => 'required_if:is_report_dispacthed,1|max:255',
+            'mfg_date'  => 'required|date',
+            'exp_date'    => 'required|date_format:Y-m-d|after:mfg_date',
+            'booking_sample_details.product_id'  => 'required|Integer',
+            'booking_sample_details.sampling_date_from'  => 'nullable|date',
+            'booking_sample_details.sampling_date_to'    => 'nullable|date_format:Y-m-d|after:booking_sample_details.*.sampling_date_from',
+            'booking_tests.*.amount'    => 'nullable|numeric|between:0,999999999999999999999999999.99',
+            // 'booking_sample_details.batch_no'  => 'nullable|unique:booking_sample_details',
+            'booking_sample_details.packsize'  => 'max:55',
+            // 'booking_sample_details.*.request_quantity'  => 'nullable',
+            'booking_sample_details.sample_code'  => 'max:100',
+            'booking_sample_details.sample_location'  => 'max:150',
+            'booking_sample_details.sample_packaging'  => 'max:255',
+            'booking_sample_details.sample_type'  => 'max:60',
+            'booking_sample_details.sample_drawn_by'  => 'max:255',
+            'booking_sample_details.sample_quantity'  => 'nullable',
+            // 'booking_sample_details.*.batch_size_qty_rec'  => 'nullable',
+            'booking_tests.*.p_sr_no'  => 'max:10',
+            'booking_tests.*.test_name'  => 'max:255',
+            'booking_tests.*.label_claim'  => 'max:155',
+            'booking_tests.*.label_claim_percentage'  => 'nullable|numeric|between:0,999999999999999999999999999.99',
+            // 'booking_tests.*.label_claim_result'  => 'max:255',
+            // 'booking_tests.*.label_claim_unit'  => 'max:60',
+            // 'booking_tests.*.mean'  => 'max:150',
+            // 'booking_tests.*.unit'  => 'max:60',
+            'booking_tests.*.amount'  => 'nullable|numeric|between:0,999999999999999999999999999.99',
+            'booking_tests.*.division'  => 'max:255',
+            "booking_tests.*.min_limit" => 'nullable|regex:/^NLT\s[0-9](?:.%)?/i',
+            "booking_tests.*.max_limit" => 'nullable|regex:/^NMT\s[0-9](?:.%)?/i'
+            // 'booking_tests.*.method'  => 'max:255',
+            // 'booking_tests.*.approved'  => 'max:20',
+
+        ];
+        $massage = [
+            "report_type.required" => "The Report Type Field Is Required.",
+            "booking_type.required" => "The Booking Type Field Is Required.",
+            "receipte_date.required" => "The Receipte Date Field Is Required.",
+            "customer_id.required" => "The Customer Name Field Is Required.",
+            'invoice_date.required_if' => 'The Invoice Date Field Is Required.',
+            'invoice_no.required_if' => 'The Invoice No Field Is Required.',
+            'dispatch_date_time.required_if' => 'The Dispatch Date Time Field Is Required.',
+            'dispatch_mode.required_if' => 'The Dispatch Mode Field Is Required.',
+            'dispatch_details.required_if' => 'The Dispatch Details Field Is Required.',
+            "booking_no.unique" => "The Booking No Field Must Be Unique.",
+            "mfg_date.required" => "The Mfg Date Field Is Required.",
+            "exp_date.required" => "The Exp Date Field Is Required.",
+            'booking_sample_details.batch_no.unique'  => 'booking sample details of batch_no has already been taken.',
+            'booking_sample_details.product_id.required'  => 'The Product Name Field Is Required.',
+            'booking_sample_details.sampling_date_to.after'    => 'Sampling Date To Must Be A Date After Sampling Date From.',
+            'booking_tests.*.amount.numeric'  => 'booking tests details of amount must be numeric value.',
+            "booking_tests.*.min_limit.regex" => "Please Enter Valid Min Limit As 'NLT 1.00%'",
+            "booking_tests.*.max_limit.regex" => "Please Enter Valid Max Limit As 'NMT 1.00%'"
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $massage);
+        if ($validator->fails()) {
+            $data = array();
+            return Helper::response($validator->errors()->all(), Response::HTTP_OK, false, $data);
+        }
+
+        //start db transaction
         DB::beginTransaction();
         try {
             $loggedInUserData = Helper::getUserData();
@@ -495,7 +617,7 @@ class BookingController extends Controller
 
                 "receipte_date" => (isset($request->receipte_date) ? date('Y-m-d', strtotime($request->receipte_date)) : NULL),
 
-                "booking_no" => (isset($request->booking_no) ? $request->booking_no : ''),
+                "booking_no" => (isset($request->booking_no) ? $booking_no : ''),
 
                 "customer_id" => (isset($request->customer_id) ? $request->customer_id : ''),
 
@@ -517,7 +639,7 @@ class BookingController extends Controller
 
                 "analysis_date" => (isset($request->analysis_date) ? date('Y-m-d', strtotime($request->analysis_date))  : NULL),
 
-                "aum_serial_no" => (isset($request->aum_serial_no) ? $request->aum_serial_no : ''),
+                "aum_serial_no" => (isset($request->aum_serial_no) ? $aum_serial_no : ''),
 
                 "d_format" => (isset($request->d_format) ? $request->d_format : ''),
 
@@ -546,7 +668,7 @@ class BookingController extends Controller
                 "verified_by" => (isset($request->verified_by) && isset($static_dropdown['verified_by'][$request->verified_by]) ? $static_dropdown['verified_by'][$request->verified_by] : NULL),
 
                 "nabl_scope" => (isset($request->nabl_scope) && isset($static_dropdown['yes-no'][$request->nabl_scope]) ? $static_dropdown['yes-no'][$request->nabl_scope] : NULL),
-                "ulr_no" => (isset($request->ulr_no) ? $request->ulr_no : NULL),
+                "ulr_no" => (isset($request->ulr_no) ? $ulr_no : NULL),
 
                 "cancel" => (isset($request->cancel) && isset($static_dropdown['cancel'][$request->cancel]) ? $static_dropdown['cancel'][$request->cancel] : NULL),
 
@@ -573,7 +695,7 @@ class BookingController extends Controller
             if (!empty($request->booking_tests)) {
                 $this->addupdateBookingTests($request->booking_tests, $booking_data->id, $static_dropdown);
             }
-
+            
             DB::commit();
             return Helper::response("Booking added Successfully", Response::HTTP_CREATED, true, $booking_data);
         } catch (Exception $e) {
