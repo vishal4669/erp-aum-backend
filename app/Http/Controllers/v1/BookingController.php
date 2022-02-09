@@ -25,6 +25,7 @@ use Carbon\Carbon;
 use Illuminate\Validation\Rule;
 use Mockery\Undefined;
 use App\Mail\BookingSuccessfull;
+use App\Models\ModelViews\ViewBooking;
 use Illuminate\Support\Facades\Mail;
 
 use function PHPUnit\Framework\isEmpty;
@@ -441,11 +442,11 @@ class BookingController extends Controller
     {
         //
         $loggedInUserData = Helper::getUserData();
-
-        $is_manufacturer_exist = Customer::where('company_name', $request->manufacturer_name)
+        // dd($request->manufacturer_id);
+        $is_manufacturer_exist = Customer::where('company_name', $request['manufacturer_id'])
             ->where('contact_type', 'Manufacturer')
             ->get('id')->toarray();
-        $is_supplier_exist = Customer::where('company_name', $request->supplier_name)
+        $is_supplier_exist = Customer::where('company_name', $request['supplier_id'])
             ->where('contact_type', 'Supplier')
             ->get('id')->toarray();
 
@@ -457,7 +458,7 @@ class BookingController extends Controller
             // not exist"
             $manufacturer_data = Customer::create([
                 'mst_companies_id' => $loggedInUserData['company_id'],
-                'company_name' => $request->manufacturer_name,
+                'company_name' => $request['manufacturer_id'],
                 'contact_type' => 'Manufacturer',
                 'selected_year' => $loggedInUserData['selected_year'],
                 'is_active' => 1,
@@ -476,7 +477,7 @@ class BookingController extends Controller
             // not exist
             $supplier_data = Customer::create([
                 'mst_companies_id' => $loggedInUserData['company_id'],
-                'company_name' => $request->supplier_name,
+                'company_name' => $request['supplier_id'],
                 'contact_type' => 'Supplier',
                 'selected_year' => $loggedInUserData['selected_year'],
                 'is_active' => 1,
@@ -509,8 +510,7 @@ class BookingController extends Controller
      */
     public function store(Request $request)
     {
-        if(isset($request->check_customer_active) && $request->check_customer_active == 0)
-        {
+        if (isset($request->check_customer_active) && $request->check_customer_active == 0) {
             //validate if customer is active or not if inactive then throw an error
             return Helper::response("Customer is Inactive Please Change Customer", Response::HTTP_OK, false);
         }
@@ -606,6 +606,8 @@ class BookingController extends Controller
         DB::beginTransaction();
         try {
             $loggedInUserData = Helper::getUserData();
+            //create new customer if manufacturer and suppiler are uniq
+            $newCustomer = $this->uniqcustomer($request->all());
             //static dropdown
             $static_dropdown = config('global.booking_dropdown');
             $booking_data = Booking::create([
@@ -625,9 +627,9 @@ class BookingController extends Controller
 
                 "remarks" => (isset($request->remarks) ? $request->remarks : ''),
 
-                "manufacturer_id" => (isset($request->manufacturer_id) ? $request->manufacturer_id : ''),
+                "manufacturer_id" => (isset($request->manufacturer_id) ? $newCustomer['manufacturer_id'] : ''),
 
-                "supplier_id" => (isset($request->supplier_id) ? $request->supplier_id : ''),
+                "supplier_id" => (isset($request->supplier_id) ? $newCustomer['supplier_id'] : ''),
 
                 "mfg_date" => (isset($request->mfg_date) ? date('Y-m-d', strtotime($request->mfg_date)) : NULL),
 
@@ -695,7 +697,7 @@ class BookingController extends Controller
             if (!empty($request->booking_tests)) {
                 $this->addupdateBookingTests($request->booking_tests, $booking_data->id, $static_dropdown);
             }
-            
+
             DB::commit();
             return Helper::response("Booking added Successfully", Response::HTTP_CREATED, true, $booking_data);
         } catch (Exception $e) {
@@ -805,7 +807,7 @@ class BookingController extends Controller
                             "by_pass" => (isset($tests['by_pass']) && isset($static_dropdown['yes-no'][$tests['by_pass']]) ? $static_dropdown['yes-no'][$tests['by_pass']] : 0),
                             "parent" => (isset($tests['parent_id']) ? $tests['parent_id'] : 0),
                             "product_details" => (isset($tests['product_details']) ? $tests['product_details'] : ''),
-                            "test_name" => (isset($tests['test_name']) ? $tests['test_name'] : ''),
+                            "test_name" => (isset($tests['test_id']) ? $tests['test_id'] : 0),
                             "label_claim" => (isset($tests['label_claim']) ? $tests['label_claim'] : ''),
                             "label_claim_percentage" => (isset($tests['label_claim_percentage']) ? $tests['label_claim_percentage'] : ''),
                             "min_limit" => (isset($tests['min_limit']) ? $tests['min_limit'] : ''),
@@ -918,271 +920,17 @@ class BookingController extends Controller
      * @param  \App\Models\booking  $booking
      * @return \Illuminate\Http\Response
      */
-    public function show($id, $is_mail_data = '')
+    public function show($id)
     {
-        //
-        $loggedInUserData = Helper::getUserData();
-        $data = Booking::with(
-            'customer_id:id,company_name,user_name,deleted_at',
-            'manufacturer_id:id,company_name,deleted_at,company_name as manufacturer_name',
-            'supplier_id:id,company_name,deleted_at,company_name as supplier_name',
-            'samples',
-            'samples.get_product:id,product_name,generic_product_id,product_generic,pharmacopeia_id,deleted_at',
-            // 'samples.pharmacopiea_id:id,pharmacopeia_name',
-            'tests',
-            'tests.unit_data:id,unit_name',
-            'tests.parent:id,machine_name as parent_name',
-            'audit',
-            'created_by:id,first_name,middle_name,last_name',
-            'updated_by:id,first_name,middle_name,last_name'
-        )
-            ->find($id);
-        $data = $data->toArray();
-        if ($data['samples'][0]['get_product'] == null or $data['samples'][0]['get_product'] == 0) {
-            $data['samples'][0]['get_product'] = array(
-                'id' => '',
-                "product_name" => "",
-                "product_generic" => "",
-                'generic_product_id' => '',
-                'generic_product_name' => '',
-                'pharmacopeia_id' => array(
-                    "id" => "",
-                    "pharmacopeia_name" => ""
-                ),
-                'deleted_at' => ""
-            );
-        } else {
-            $generic_id = $data['samples'][0]['get_product']['generic_product_id'];
-            if ($generic_id != 0 || $generic_id != null) {
-                $product_id = $data['samples'][0]['get_product']['id'];
-                $generic_product_name = MstProduct::where('id', '=', $generic_id)->withTrashed()->get(['product_name']);
-
-                if ($generic_product_name->isEmpty() == false) {
-                    $data['samples'][0]['get_product']['generic_product_name'] = $generic_product_name[0]['product_name'];
-                } else {
-                    $data['samples'][0]['get_product']['generic_product_name'] = "";
-                }
-            } else {
-                $data['samples'][0]['get_product']['generic_product_name'] = "";
-            }
-
-            $pharmacopiea_id = $data['samples'][0]['get_product']['pharmacopeia_id'];
-            if ($pharmacopiea_id != null) {
-                $pharmacopiea_id = Pharmacopeia::where('id', $pharmacopiea_id)->withTrashed()->get(['id', 'pharmacopeia_name'])->toArray();
-                if (!empty($pharmacopiea_id)) {
-                    if ($data['samples'][0]['get_product']['pharmacopeia_id'] == null || $data['samples'][0]['get_product']['pharmacopeia_id'] == '') {
-                        $data['samples'][0]['get_product']['pharmacopeia_id'] = array(
-                            "id" => "",
-                            "pharmacopeia_name" => ""
-                        );
-                    } else {
-
-                        $data['samples'][0]['get_product']['pharmacopeia_id'] = array(
-                            'id' => $pharmacopiea_id[0]['id'],
-                            'pharmacopeia_name' => $pharmacopiea_id[0]['pharmacopeia_name'],
-                        );
-                    }
-                } else {
-                    $data['samples'][0]['get_product']['pharmacopeia_id'] = array(
-                        "id" => "",
-                        "pharmacopeia_name" => ""
-                    );
-                }
-            }
-        }
-
-
-        $data['invoice_date'] = \Carbon\Carbon::parse($data['invoice_date'])->format('Y-m-d');
-        $data['receipte_date'] = \Carbon\Carbon::parse($data['receipte_date'])->format('Y-m-d');
-        $data['mfg_date'] = \Carbon\Carbon::parse($data['mfg_date'])->format('Y-m-d');
-        $data['exp_date'] = \Carbon\Carbon::parse($data['exp_date'])->format('Y-m-d');
-        $data['analysis_date'] = \Carbon\Carbon::parse($data['analysis_date'])->format('Y-m-d');
-
-        if ($data['samples'][0]['sampling_date_from'] != null) {
-            $data['samples'][0]['sampling_date_from'] = \Carbon\Carbon::parse($data['samples'][0]['sampling_date_from'])->format('Y-m-d');
-        }
-        if ($data['samples'][0]['sampling_date_to'] != null) {
-            $data['samples'][0]['sampling_date_to'] = \Carbon\Carbon::parse($data['samples'][0]['sampling_date_to'])->format('Y-m-d');
-        }
-
-
-        if ($data['customer_id'] == null or $data['customer_id'] == 0) {
-            $data['customer_id'] = array(
-                "id" => "",
-                "company_name" => "",
-                "deleted_at" => ""
-            );
-        }
-        if ($data['supplier_id'] == null) {
-            $data['supplier_id'] = array(
-                "id" => "",
-                "company_name" => "",
-                "supplier_name" => ""
-            );
-        }
-        if ($data['manufacturer_id'] == null) {
-            $data['manufacturer_id'] = array(
-                "id" => "",
-                "company_name" => "",
-                "manufacturer_name" => ""
-            );
-        }
-        if ($data['created_by'] == null) {
-            $data['created_by'] = array(
-                "id" => "",
-                "first_name" => "",
-                "middle_name" => "",
-                "last_name" => ""
-            );
-        }
-        if ($data['updated_by'] == null) {
-            $data['updated_by'] = array(
-                "id" => "",
-                "first_name" => "",
-                "middle_name" => "",
-                "last_name" => ""
-            );
-        }
-
-        $len = count($data['tests']);
-        $i = 0;
-        for ($i = 0; $i < $len; $i++) {
-            if (!isset($data['tests'][$i]['parent'])) {
-                $data['tests'][$i]['parent'] = array(
-                    "id" => "",
-                    "parent_name" => ""
-                );
-            }
-            if (isset($data['tests'][$i]['parent']['id'])) {
-                $data['tests'][$i]['parent_id'] = $data['tests'][$i]['parent']['id'];
-            } else {
-                $data['tests'][$i]['parent_id'] = '';
-            }
-
-            if (isset($data['tests'][$i]['chemist_name'])) {
-                $c_id = $data['tests'][$i]['chemist_name'];
-                $chemist_name = User::where('id', $c_id)->withTrashed()->get(['id', 'first_name', 'middle_name', 'last_name', 'deleted_at'])->toarray();
-                if (!empty($chemist_name)) {
-
-                    $chemist_Arr = array(
-                        "id" => $chemist_name[0]['id'],
-                        "first_name" => $chemist_name[0]['first_name'],
-                        "middle_name" => $chemist_name[0]['middle_name'],
-                        "last_name" => $chemist_name[0]['last_name'],
-                        "deleted_at" => $chemist_name[0]['deleted_at']
-                    );
-                    $data['tests'][$i]['chemist'] = $chemist_Arr;
-                } else {
-                    $data['tests'][$i]['chemist'] = array(
-                        "id" => "",
-                        "first_name" => "",
-                        "middle_name" => "",
-                        "last_name" => "",
-                        "deleted_at" => ""
-                    );
-                }
-            } else {
-                $data['tests'][$i]['chemist'] = array(
-                    "id" => "",
-                    "first_name" => "",
-                    "middle_name" => "",
-                    "last_name" => "",
-                    "deleted_at" => ""
-                );
-            }
-        }
-        $chemist_id = Position::where('position_title', 'Chemist')->get('id');
-        $chemist_id = $chemist_id->toarray();
-        $chemist_data =  Employee::join('user_company_info as company', 'company.users_id', 'users.id')
-            ->where('company.mst_positions_id', $chemist_id[0]['id'])
-            ->where('users.is_active', 1)
-            ->where('users.is_approved', "Approved")
-            ->where('users.mst_companies_id', $loggedInUserData['company_id'])
-            ->get(['users.id', 'users.first_name', 'users.middle_name', 'users.last_name', 'users.deleted_at'])->toarray();
-
-        if ($chemist_data) {
-
-            $tests_len = count($data['tests']);
-            if ($tests_len > 0) {
-                for ($i = 0; $i < $tests_len; $i++) {
-                    if ($data['tests'][$i]['chemist']['deleted_at'] == null || $data['tests'][$i]['chemist']['deleted_at'] == '') {
-                        $data['chemist_dropdown'] = $chemist_data;
-                    } else {
-                        if (!in_array($data['tests'][$i]['chemist'], $chemist_data)) {
-                            array_push($chemist_data, $data['tests'][$i]['chemist']);
-                            $data['chemist_dropdown'] = $chemist_data;
-                        }
-                    }
-                }
-            } else {
-                $data['chemist_dropdown'] = $chemist_data;
-            }
-        } else {
-            $data['chemist_dropdown'] = array(
-                "id" => "",
-                "first_name" => "",
-                "middle_name" => "",
-                "last_name" => "",
-                "deleted_at" => ""
-            );
-        }
-
-        //Approved Status Dropdown Start
-        if ($data['tests'] != null || !empty($data['tests'])) {
-            foreach ($data['tests'] as $key => $item) {
-                if ($item['approved'] == "Pending") {
-                    $data['tests'][$key]['approved_dropdown'] = array(
-                        "approved" => "Assigned"
-                    );
-                } elseif ($item['approved'] == "Assigned") {
-
-                    $data['tests'][$key]['approved_dropdown'] = array(
-                        "approved" => "ForApproval"
-                    );
-                } elseif ($item['approved'] == "ForApproval") {
-                    $data['tests'][$key]['approved_dropdown'] = array(
-                        "approved" =>
-                        "Approved"
-
-                    );
-                } else {
-                    if ($item['approved'] == "Approved" || $item['approved'] == "Rejected") {
-                        $data['tests'][$key]['approved_dropdown'] = array(
-                            "approved" => ""
-                        );
-                    } else {
-                        if ($item['approved'] == Null || $item['approved'] == "") {
-                            $data['tests'][$key]['approved_dropdown'] = array(
-                                "approved" => "Pending"
-                            );
-                        }
-                    }
-                }
-            }
-        }
-        //Approved Status Dropdown End
-        //Result Dropdown Start
-        $result_dropdown = BookingTest::select('result')
-            ->whereNotNull('result')
-            ->where('result', '<>', '')
-            ->distinct()
-            ->get()
-            ->toarray();
-        if (!empty($result_dropdown)) {
-            $data['result_dropdown'] = $result_dropdown;
-        } else {
-            $data['result_dropdown'] = array(
-                "result" => ""
-            );
-        }
-        //Result Dropdown End
-        $data = $this->contact_type($type = '', $data, true);
-        $data = $this->get_products($data);
-
-        if ($is_mail_data != '') {
-            return $data;
-        } else {
-            return Helper::response("This Booking Shown Successfully", Response::HTTP_OK, true, $data);
+        try {
+            $data = ViewBooking::with('samples', 'tests')->where('id', $id)
+                ->get()->each(function ($item) {
+                    $item->append('customer_dropdown', 'manufacturer_dropdown', 'supplier_dropdown');
+                })->toarray();
+            return Helper::response("Booking data shown successfully", Response::HTTP_OK, true, $data);
+        } catch (Exception $e) {
+            $pending_assigned_tests = array();
+            return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $pending_assigned_tests);
         }
     }
 

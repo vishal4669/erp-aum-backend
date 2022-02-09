@@ -12,7 +12,7 @@ use App\Helpers\Helper;
 use Log;
 use App\Models\Customer;
 use App\Models\Employee;
-
+use DB;
 use function Symfony\Component\VarDumper\Dumper\esc;
 
 class CommonController extends Controller
@@ -78,6 +78,16 @@ class CommonController extends Controller
         try {
             $data = Country::where('is_active', 1)->get();
             return Helper::response("All Countries List Shown Successfully", Response::HTTP_OK, true, $data);
+        } catch (Exception $e) {
+            $data = array();
+            return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);
+        }
+    }
+    public function listCurrency(Request $request)
+    {
+        try {
+            $data = DB::table('currency')->get();
+            return Helper::response("All Currencies List Shown Successfully", Response::HTTP_OK, true, $data);
         } catch (Exception $e) {
             $data = array();
             return Helper::response(trans("message.something_went_wrong"), $e->getStatusCode(), false, $data);

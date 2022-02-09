@@ -623,9 +623,9 @@ class BookingController extends Controller
     public function addupdateBookingSample($booking_samples, $booking_id)
     {
 
-        
+
         if (!empty($booking_samples)) {
-            
+
             $loggedInUserData = Helper::getUserData();
             $booking_sample_data = array(
                 "booking_id" => (isset($booking_id) ? $booking_id : 0),
@@ -653,7 +653,7 @@ class BookingController extends Controller
                 "is_active" => 1,
                 "selected_year" => $loggedInUserData['selected_year'],
             );
-            
+
             $sample_detail_exist = BookingSampleDetail::where('booking_id', $booking_id)->get();
             if (count($sample_detail_exist) > 0) {
                 $booking_sample_data['updated_by'] = $loggedInUserData['logged_in_user_id'];

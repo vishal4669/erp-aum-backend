@@ -123,9 +123,9 @@ class EmployeeController extends Controller
                 $data = Employee::with(['address', 'right', 'company', 'education', 'employment', 'document'])
                     ->where('users.is_resigned', 1)
                     ->where('deleted_at', NULL); //deleted data not require condition
-                    //  ->where('users.is_active', 1) not needed is active condition
-                    //->where('users.selected_year', $loggedInUserData['selected_year'])
-                    // ->where('users.mst_companies_id', $loggedInUserData['company_id']);
+                //  ->where('users.is_active', 1) not needed is active condition
+                //->where('users.selected_year', $loggedInUserData['selected_year'])
+                // ->where('users.mst_companies_id', $loggedInUserData['company_id']);
                 if ($is_reporting_authority) {
                     $data  = $data->where('users.is_reporting_authority', 1);
                 }
@@ -401,11 +401,11 @@ class EmployeeController extends Controller
             }
             DB::commit();
             $id = $users_id;
-            // $is_mail_data = True;
-            // if (!empty($request->address) && $request->address[0]['address_type'] == 1 && $request->address[0]['email'] != null && $request->address[0]['email'] != '') {
-            //     $send_email_to = $request->address[0]['email'];
-            //     Mail::to(users: $send_email_to)->send(new WelcomeUserMail($req));
-            // }
+            $is_mail_data = True;
+            if (!empty($request->address) && $request->address[0]['address_type'] == 1 && $request->address[0]['email'] != null && $request->address[0]['email'] != '') {
+                $send_email_to = $request->address[0]['email'];
+                Mail::to(users: $send_email_to)->send(new WelcomeUserMail($req));
+            }
 
 
             Log::info("Employee Created with details : " . json_encode($request->all()));

@@ -1,17 +1,13 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\ModelViews;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use DB;
 
-class BookingTest extends Model
+class ViewBookingTests extends Model
 {
     use HasFactory;
-    use SoftDeletes;
-
     protected $fillable = [
         "mst_companies_id",
         "booking_id",
@@ -50,6 +46,16 @@ class BookingTest extends Model
         "selected_year",
         "copied_from_year",
         "is_active",
-        "deleted_at"
+        "deleted_at",
+        "parent_name",
+        "parent_deleted_at",
+        "test_name",
+        "test_deleted_at",
+        "method_name",
+        "method_deleted_at",
+        "unit_name",
+        "unit_deleted_at",
+        "chemist_name",
+        "chemist_deleted_at"
     ];
 }

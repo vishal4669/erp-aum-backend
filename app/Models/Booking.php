@@ -49,6 +49,10 @@ class Booking extends Model
         "discipline",
         "booking_group",
         "statement_of_conformity",
+        "invoice_no",
+        "invoice_date",
+        "coa_release_date",
+        "block",
         "created_by",
         "updated_by",
         "created_at",
@@ -58,6 +62,4 @@ class Booking extends Model
         "is_active",
         "deleted_at"
     ];
-
 }
-?>

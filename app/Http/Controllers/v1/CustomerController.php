@@ -81,7 +81,8 @@ class CustomerController extends Controller
                 )
                     ->where('contact_type', $customer_type);
             } else {
-                $data = ViewCustomer::select('id', 'company_name', 'contact_person_name', 'contact_type', 'tally_alias_name', 'home_contact_no', 'is_active');
+                $data = ViewCustomer::select('id', 'company_name', 'contact_person_name', 'contact_type', 'tally_alias_name', 'home_contact_no', 'home_country','is_active');
+                //append home_country for the currency scenario in quotation
             }
             $data = $data
                 ->where('deleted_at', null)
@@ -109,15 +110,16 @@ class CustomerController extends Controller
     {
         try {
             // $loggedInUserData = Helper::getUserData();
-            $data = Customer::select(
+            $data = ViewCustomer::select(
                 'id',
-                'Company_name',
+                'mst_companies_id',
+                'company_name',
                 'contact_person_name',
-                'tally_alias_name'
-            )
-                ->with('home_contact_no:id,mst_customer_id,contact_no as account_admin_contact_no,home_qc_contact_no,contact_info_type')
-                ->with('other_contact_no:id,mst_customer_id,contact_no as qa_contact_no,contact_info_type')
-                ->get();
+                'tally_alias_name',
+                'home_contact_no as account_admin_contact_no',
+                'home_qc_contact_no',
+                'other_contact_no as qa_contact_no',
+            )->get();
             $data_arr = $data->isEmpty();
 
             if ($data_arr) {
@@ -158,7 +160,6 @@ class CustomerController extends Controller
         DB::beginTransaction();
         try {
             $rules = [
-
                 'company_name' => 'required|string|max:255',
                 'gst_number' => 'required|max:15|regex:/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/',
                 'user_name' => 'required|max:255',
@@ -299,7 +300,7 @@ class CustomerController extends Controller
 
             $data = ViewCustomer::with('contact_person')
                 ->where('id', $id)
-                ->where('is_active', 1)->get();
+                ->where('deleted_at',null)->get();
 
             return Helper::response("Customer Data Shown Successfully", Response::HTTP_OK, true, $data);
         } catch (Exception $e) {
@@ -404,10 +405,10 @@ class CustomerController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //  return Helper::response("data", Response::HTTP_OK, false, $request->all());
+         // return Helper::response("data", Response::HTTP_OK, false, $request->get('customer_contact_info')['other_contact_info'][0]);
         $req = $request->all();
-        // $someArray = json_decode($req['contact_person_data'], true);
-        // $req['contact_person_data'] = $someArray;
+        $someArray = json_decode($req['contact_person_data'], true);
+        $req['contact_person_data'] = $someArray;
         $apipass = Customer::where('id', $id)->value('password');
         $apilogo = Customer::where('id', $id)->value('logo');
         $apipan = CustomerContactInfo::where('mst_customer_id', $id)->where('contact_info_type', 2)->value('other_pan_card_copy');
@@ -570,7 +571,7 @@ class CustomerController extends Controller
             $customer_id = $id;
             $all_req = $request->all();
             // //add customer contact-information
-            $this->addupdateCustomerContactInfo($all_req, $request->get('customer_contact_info'), $customer_id);
+            $this->addupdateCustomerContactInfo($all_req, $request->customer_contact_info, $customer_id);
             $this->addupdateCustomerContactPerson($req['contact_person_data'], $customer_id);
 
             Log::info("Customer updated with details : " . json_encode(array('data' => $input_data, 'id' => $customer_id)));
@@ -594,10 +595,11 @@ class CustomerController extends Controller
      */
     public function addupdateCustomerContactInfo($all_req, $contact_data, $customer_id)
     {
-        //  return $contact_data;
+
         $home_contact_infos = $contact_data['home_contact_info'][0];
         $other_contact_infos = $contact_data['other_contact_info'][0];
         $files = $all_req['customer_contact_info']['other_contact_info'][0]['other_pan_card_copy'];
+
         if ($home_contact_infos['state'] == "null") {
             $h_state = 0;
         } else {
@@ -670,8 +672,11 @@ class CustomerController extends Controller
 
 
                     if ($apipan != $files && $files !== "null") {
+
                         if (array_key_exists("other_pan_card_copy", $all_req['customer_contact_info']['other_contact_info'][0])) {
+
                             if ($files !== null  && $files !== "undefined") {
+
                                 $imageName = date('YmdHis') . "." . $files->getClientOriginalExtension();
                                 $files->move(public_path('images/customers/pancard_copy'), $imageName);
                                 $othercontactArray['other_pan_card_copy'] = $imageName;
@@ -762,19 +767,19 @@ class CustomerController extends Controller
 
                 foreach ($contact_person_data as $contact_data) {
                     if (
-                        !empty($contact_data['contact_person_name']) or
-                        !empty($contact_data['contact_person_mobile']) or
-                        !empty($contact_data['contact_person_email']) or
-                        !empty($contact_data['mst_departments_id']) or
-                        !empty($contact_data['mst_positions_id'])
+                        !empty($contact_data['name']) or
+                        !empty($contact_data['mobile']) or
+                        !empty($contact_data['email']) or
+                        !empty($contact_data['department']) or
+                        !empty($contact_data['position'])
                     ) {
                         $contactpersonArray = array(
                             'mst_customer_id' => $customer_id,
-                            'name' => (isset($contact_data['contact_person_name'])) ? $contact_data['contact_person_name'] : '',
-                            'mobile' => (isset($contact_data['contact_person_mobile'])) ? $contact_data['contact_person_mobile'] : '',
-                            'email' => (isset($contact_data['contact_person_email'])) ? $contact_data['contact_person_email'] : '',
-                            'department' => (isset($contact_data['mst_departments_id'])) ? (int)$contact_data['mst_departments_id'] : 0,
-                            'position' => (isset($contact_data['mst_positions_id'])) ? (int)$contact_data['mst_positions_id'] : 0,
+                            'name' => (isset($contact_data['name'])) ? $contact_data['name'] : '',
+                            'mobile' => (isset($contact_data['mobile'])) ? $contact_data['mobile'] : '',
+                            'email' => (isset($contact_data['email'])) ? $contact_data['email'] : '',
+                            'department' => (isset($contact_data['department'])) ? (int)$contact_data['department'] : 0,
+                            'position' => (isset($contact_data['position'])) ? (int)$contact_data['position'] : 0,
                             'created_by' => $loggedInUserData['logged_in_user_id'], //edited
                             'updated_by' => $loggedInUserData['logged_in_user_id']
                         );

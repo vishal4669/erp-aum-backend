@@ -152,7 +152,6 @@ Route::group(['middleware' => ['jwt.verify'], 'prefix' => 'v1'], function () {
     Route::get('getproduct/{id}', 'App\Http\Controllers\v1\MstProductController@show');
     Route::post('editProduct/{id}', 'App\Http\Controllers\v1\MstProductController@update');
     Route::post('deleteProduct/{id}', 'App\Http\Controllers\v1\MstProductController@destroy');
-    Route::get('exportproductlist', 'App\Http\Controllers\v1\MstProductController@exportlist');
     Route::get('copyfromGeneric', 'App\Http\Controllers\v1\MstProductController@copy_fromGeneric');
     Route::get('methodDropdown', 'App\Http\Controllers\v1\MstProductController@method_dropdown');
 
@@ -229,7 +228,7 @@ Route::group(['middleware' => ['jwt.verify'], 'prefix' => 'v1'], function () {
     Route::get('generateQuotationNo', 'App\Http\Controllers\v1\QuotationController@generateQuotationNo');
     Route::get('getProductSamples/{id}', 'App\Http\Controllers\v1\QuotationController@getProductSamples');
     Route::get('quotationDropdown', function () {
-        return config('global.booking_dropdown');
+        return config('global.quotation_dropdown');
     });
 
     //Customer Price List
@@ -248,6 +247,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('isUniqUsername', 'App\Http\Controllers\v1\CommonController@uniq_username');
     Route::get('listStates', 'App\Http\Controllers\v1\CommonController@listStates');
     Route::get('listCountries', 'App\Http\Controllers\v1\CommonController@listCountries');
+    Route::get('listCurrency', 'App\Http\Controllers\v1\CommonController@listCurrency');
     Route::get('countriesWiseStates/{id}', 'App\Http\Controllers\v1\CommonController@countriesWiseStates');
     //clear cache
     Route::get('/clear/route', 'App\Http\Controllers\v1\CommonController@clearRoute');
