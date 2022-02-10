@@ -926,6 +926,8 @@ class BookingController extends Controller
             $data = ViewBooking::with('samples', 'tests')->where('id', $id)
                 ->get()->each(function ($item) {
                     $item->append('customer_dropdown', 'manufacturer_dropdown', 'supplier_dropdown');
+                    $item['samples']->append('product_dropdown');
+                    $item['tests']->append('parent_name','test_name','method_name','unit_name','chemist_dropdown');
                 })->toarray();
             return Helper::response("Booking data shown successfully", Response::HTTP_OK, true, $data);
         } catch (Exception $e) {

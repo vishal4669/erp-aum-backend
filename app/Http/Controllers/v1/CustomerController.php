@@ -81,7 +81,7 @@ class CustomerController extends Controller
                 )
                     ->where('contact_type', $customer_type);
             } else {
-                $data = ViewCustomer::select('id', 'company_name', 'contact_person_name', 'contact_type', 'tally_alias_name', 'home_contact_no', 'home_country','is_active');
+                $data = ViewCustomer::select('id', 'company_name', 'contact_person_name', 'contact_type', 'tally_alias_name', 'home_contact_no', 'home_country', 'is_active');
                 //append home_country for the currency scenario in quotation
             }
             $data = $data
@@ -155,13 +155,14 @@ class CustomerController extends Controller
     {
 
         $req = $request->all();
-        // $someArray = json_decode($req['contact_person_data'], true);
-        // $req['contact_person_data'] = $someArray;
+        $someArray = json_decode($req['contact_person_data'], true);
+        $req['contact_person_data'] = $someArray;
+
         DB::beginTransaction();
         try {
             $rules = [
                 'company_name' => 'required|string|max:255',
-                'gst_number' => 'required|max:15|regex:/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/',
+                'gst_number' => 'required|regex:/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/',
                 'user_name' => 'required|max:255',
                 'password' => 'required|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,15}$/',
                 'customer_contact_info.home_contact_info.*.home_pan_card' => 'nullable|regex:/[A-Z]{5}[0-9]{4}[A-Z]{1}/',
@@ -180,14 +181,15 @@ class CustomerController extends Controller
                 'customer_contact_info.home_contact_info.*.home_qc_contact_no' => 'nullable|min:10|max:10',
                 'customer_contact_info.home_contact_info.*.home_landline' => 'nullable|regex:/^[0-9]\d{2,4}-\d{6,8}$/',
                 'customer_contact_info.other_contact_info.*.contact_no' => 'nullable|min:10|max:10',
-                'contact_person_data.*.contact_person_mobile' => 'nullable|min:10|max:10',
-                'contact_person_data.*.contact_person_email' => 'nullable|email',
+                'contact_person_data.*.mobile' => 'nullable|min:10|max:10',
+                'contact_person_data.*.email' => 'nullable|email',
             ];
 
             $messages = [
                 'company_name.required' => 'Company name field is required.',
                 'company_name.max' => 'Company name should not me greater than 255 characters.',
-                'gst_number.regex' => 'GST No Field is Required.',
+                'gst_number.required' => 'GST No field is required.',
+                'gst_number.regex' => 'GST No is Invalid.',
                 'user_name.required' => 'User name field is required.',
                 'user_name.email' => 'Please enter valid email for User name',
                 'user_name.max' => 'User name should not me greater than 255 characters.',
@@ -214,9 +216,9 @@ class CustomerController extends Controller
                 'customer_contact_info.home_contact_info.*.home_landline.regex' => 'please enter valid landline number for home "xxx-xxxxxxxx"',
                 'customer_contact_info.other_contact_info.*.contact_no.min' => 'please enter minimum 10 digits for other QA Contact No',
                 'customer_contact_info.other_contact_info.*.contact_no.max' => 'please enter maximum 10 digits for other QA Contact No',
-                'contact_person_data.*.contact_person_mobile.min' => 'please enter minimum 10 digits for contact person mobile no',
-                'contact_person_data.*.contact_person_mobile.max' => 'please enter maximum 10 digits for contact person mobile no',
-                'contact_person_data.*.contact_person_email.email' => 'Please enter valid email for contact person',
+                'contact_person_data.*.mobile.min' => 'please enter minimum 10 digits for contact person mobile no',
+                'contact_person_data.*.mobile.max' => 'please enter maximum 10 digits for contact person mobile no',
+                'contact_person_data.*.email.email' => 'Please enter valid email for contact person',
             ];
 
             $validator = Validator::make($req, $rules, $messages);
@@ -300,7 +302,7 @@ class CustomerController extends Controller
 
             $data = ViewCustomer::with('contact_person')
                 ->where('id', $id)
-                ->where('deleted_at',null)->get();
+                ->where('deleted_at', null)->get();
 
             return Helper::response("Customer Data Shown Successfully", Response::HTTP_OK, true, $data);
         } catch (Exception $e) {
@@ -405,7 +407,7 @@ class CustomerController extends Controller
      */
     public function update(Request $request, $id)
     {
-         // return Helper::response("data", Response::HTTP_OK, false, $request->get('customer_contact_info')['other_contact_info'][0]);
+        // return Helper::response("data", Response::HTTP_OK, false, $request->get('customer_contact_info')['other_contact_info'][0]);
         $req = $request->all();
         $someArray = json_decode($req['contact_person_data'], true);
         $req['contact_person_data'] = $someArray;
@@ -458,8 +460,8 @@ class CustomerController extends Controller
                 'customer_contact_info.home_contact_info.*.home_qc_contact_no' => 'nullable|min:10|max:10',
                 'customer_contact_info.home_contact_info.*.home_landline' => 'nullable|regex:/^[0-9]\d{2,4}-\d{6,8}$/',
                 'customer_contact_info.other_contact_info.*.contact_no' => 'nullable|min:10|max:10',
-                'contact_person_data.*.contact_person_mobile' => 'nullable|min:10|max:10',
-                'contact_person_data.*.contact_person_email' => 'nullable|email',
+                'contact_person_data.*.mobile' => 'nullable|min:10|max:10',
+                'contact_person_data.*.email' => 'nullable|email',
                 'customer_contact_info.other_contact_info.*.street_1' => 'nullable|max:100',
                 'customer_contact_info.other_contact_info.*.street_2' => 'nullable|max:100',
                 'customer_contact_info.home_contact_info.*.street_1' => 'nullable|max:100',
@@ -469,7 +471,8 @@ class CustomerController extends Controller
             $messages1 = [
                 'company_name.required' => 'Company name field is required.',
                 'company_name.max' => 'Company name should not me greater than 255 characters.',
-                'gst_number.regex' => 'GST No Field is Required.',
+                'gst_number.required' => 'GST No Field is Required.',
+                'gst_number.regex' => 'GST No Field is Invalid.',
                 'user_name.required' => 'User name field is required.',
                 'user_name.max' => 'User name should not me greater than 255 characters.',
                 'password.required' => 'password field is required.',
@@ -497,9 +500,9 @@ class CustomerController extends Controller
                 'customer_contact_info.home_contact_info.*.home_landline.regex' => 'please enter valid landline number for home example: "xxx-xxxxxxxx"',
                 'customer_contact_info.other_contact_info.*.contact_no.min' => 'please enter minimum 10 digits for other QA Contact No',
                 'customer_contact_info.other_contact_info.*.contact_no.max' => 'please enter maximum 10 digits for other QA Contact No',
-                'contact_person_data.*.contact_person_mobile.min' => 'please enter minimum 10 digits for contact person mobile no',
-                'contact_person_data.*.contact_person_mobile.max' => 'please enter maximum 10 digits for contact person mobile no',
-                'contact_person_data.*.contact_person_email.email' => 'Please enter valid email for contact person',
+                'contact_person_data.*.mobile.min' => 'please enter minimum 10 digits for contact person mobile no',
+                'contact_person_data.*.mobile.max' => 'please enter maximum 10 digits for contact person mobile no',
+                'contact_person_data.*.email.email' => 'Please enter valid email for contact person',
             ];
 
             $validator1 = Validator::make($req, $rules1, $messages1);

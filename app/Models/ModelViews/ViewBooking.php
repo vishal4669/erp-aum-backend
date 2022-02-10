@@ -154,7 +154,6 @@ class ViewBooking extends Model
     /**
      * Get the customer dropdown associated with the ViewBooking 
      * with deleted scenario :ambed customer who is associated with this booking and is deleted:
-     * @return \Illuminate\Database\Eloquent\Relations\HasManny
      */
     public function getManufacturerDropdownAttribute()
     {
